@@ -1,0 +1,330 @@
+:root {
+    --text: black;
+    --bg-primary: white;
+    --bg-secondary: white;
+}
+
+.gl-listWrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .pluginList {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-content: start;
+        gap: 1rem;
+        padding: 1rem;
+        height: 100%;
+        background-color: var(--bg-primary);
+        border-radius: 10px;
+        color: var(--text);
+        flex: 1;
+        overflow-y: auto;
+        height: 100%;
+
+        .empty {
+            width: 100%;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            grid-column-end: span 2;
+            padding-top: 1rem;
+        }
+    }
+    
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: start;
+        align-items: center;
+    }
+    
+    button {
+        cursor: pointer;
+        width: 43px;
+        height: 43px;
+        border: none;
+        background-color: transparent;
+    }
+    
+    svg {
+        fill: var(--text);
+    }
+    
+    .plugin {
+        padding: 1rem;
+        height: 200px;
+        background-color: var(--bg-secondary);
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;
+
+        .info {
+            flex-grow: 1;
+        }
+
+        .top {
+            width: 100%;
+            display: flex;
+
+            input {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .author {
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .description {
+            font-size: 1rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    }
+}
+
+
+.gl-modalBG {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.15s;
+}
+
+.codeCakeEditor {
+    border-radius: 0.2rem;
+}
+
+.gl-modal {
+    min-width: 25%;
+    min-height: 200px;
+    max-height: 80%;
+    max-width: 80%;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-primary);
+    color: var(--text);
+    animation: zoomIn ease-out 0.15s;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .content {
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    > .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1rem;
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+
+            &.close {
+                background-color: transparent;
+                text-decoration: underline;
+            }
+
+            &.primary {
+                background-color: #178635;
+                color: white;
+            }
+            
+            &.danger {
+                background-color: #ff4d4f;
+                color: white;
+            }
+        }
+    }
+}
+
+.gl-row {
+    display: flex;
+    gap: 8px;
+}
+
+* > .gl-wrench {
+    padding: 8px 12px;
+}
+
+.gl-wrench {
+    width: 20px;
+    height: 20px;
+
+    svg {
+        fill: white;
+        width: 20px;
+        height: 20px;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.gl-join {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .openPlugins {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: rgb(30, 7, 107);
+        height: 36px;
+        width: 40px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgb(43, 10, 155);
+        }
+
+        svg {
+            fill: white;
+        }
+    }
+}
+
+.gl-homeWrench {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    &.light {
+        .text {
+            color: white;
+
+            &:hover {
+                color: white;
+            }
+        }
+
+        svg {
+            fill: white;
+        }
+    }
+
+    .text {
+        font-size: 18px;
+        color: rgb(22, 119, 255);
+        font-weight: bold;
+        cursor: pointer;
+        
+
+        &:hover {
+            color: #69b1ff;
+        }
+    }
+}
+
+div:has(> * > * > .gl-hostWrench) {
+    margin-right: 8px;
+}
+
+.gl-hostWrench {
+    display: flex;
+}
+
+.gl-1dHostPluginBtn {
+    padding: 6px 14px;
+    background-color: rgb(131, 131, 131);
+    border-radius: 4px;
+    margin-right: 8px;
+    color: white;
+    transition: transform 0.23s ease 0s;
+    border: none;
+    font-weight: 900;
+    font-size: 24px;
+    box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;
+
+    &:hover {
+        transform: scale(1.04);
+    }
+}
+
+.gl-1dHostGameWrench {
+    width: 25px;
+    height: 25px;
+
+    svg {
+        fill: white;
+        transform: translate(6px, -1px);
+    }
+}
+
+.gl-1dGameWrench {
+    width: 23px;
+    height: 23px;
+
+    svg {
+        fill: white;
+    }
+}
+
+.gl-1dGameWrenchJoin {
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    
+    svg {
+        fill: white;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.3);
+    }
+    to {
+        transform: scale(1);
+    }
+}
