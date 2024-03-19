@@ -66,6 +66,8 @@ export async function initPlugins() {
     log('Plugins loaded');
 }
 
+initPlugins();
+
 export function savePlugins(newPlugins: Plugin[]) {
     plugins = newPlugins;
     let pluginObjs = plugins.map(p => ({ script: p.script, enabled: p.enabled }));
