@@ -2,7 +2,6 @@
     This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
 */
 
-import { initPlugins } from "../loadPlugins";
 import { getUnsafeWindow, log } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
@@ -14,6 +13,7 @@ export default class Parcel extends EventTarget {
     _parcelModuleCache = {};
     _parcelModules = {};
     reqIntercepts: Intercept[] = [];
+    readyToIntercept = true;
     // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
 
     constructor() {
@@ -45,17 +45,25 @@ export default class Parcel extends EventTarget {
     // }
 
     async reloadExistingScript() {
-        let existingScript = document.querySelector('script[src*="index"]') as HTMLScriptElement;
+        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
+        if(existingScripts.length > 0) this.readyToIntercept = false;
 
-        if(existingScript) {
+        await new Promise(res => window.addEventListener('load', res));
+
+        // nuke the dom
+        document.querySelector("#root")?.remove();
+        let newRoot = document.createElement('div');
+        newRoot.id = 'root';
+        document.body.appendChild(newRoot);
+        
+        this.readyToIntercept = true;
+
+        for(let existingScript of existingScripts) {
             // re-import the script since it's already loaded
-            log('The script has already loaded, re-importing...')
+            log(existingScript, 'has already loaded, re-importing...')
     
             let res = await fetch(existingScript.src);
             let text = await res.text();
-
-            // load the plugins after the original script is done
-            await initPlugins();
         
             let script = document.createElement('script');
             script.textContent = text;
@@ -63,8 +71,6 @@ export default class Parcel extends EventTarget {
             document.head.appendChild(script);
 
             existingScript.remove();
-        } else {
-            initPlugins();
         }
     }
 
@@ -73,9 +79,6 @@ export default class Parcel extends EventTarget {
     
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
-                if(moduleName === '7fa7k') {
-                    console.log("IMPORTED THAT THINGAMABORP (CACHED)");
-                }
                 return this._parcelModuleCache[moduleName].exports;
             }
     
@@ -91,19 +94,17 @@ export default class Parcel extends EventTarget {
                 this._parcelModuleCache[moduleName] = moduleObject;
     
                 moduleCallback.call(moduleObject.exports, moduleObject, moduleObject.exports);
-    
-                if(moduleName === '7fa7k') {
-                    console.log("IMPORTED THAT THINGAMABORP");
-                }
 
                 // run intercepts
-                for (let intercept of this.reqIntercepts) {
-                    if (intercept.match(moduleObject.exports)) {
-                        let returned = intercept.callback?.(moduleObject.exports);
-                        if(returned) moduleObject.exports = returned;
-
-                        if(intercept.once) {
-                            this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                if(this.readyToIntercept) {
+                    for (let intercept of this.reqIntercepts) {
+                        if (intercept.match(moduleObject.exports)) {
+                            let returned = intercept.callback?.(moduleObject.exports);
+                            if(returned) moduleObject.exports = returned;
+    
+                            if(intercept.once) {
+                                this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                            }
                         }
                     }
                 }
