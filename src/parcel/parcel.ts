@@ -2,24 +2,42 @@
     This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
 */
 
+import { initPlugins } from "../loadPlugins";
 import { getUnsafeWindow, log } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
 
-export default class Parcel {
+type Intercept = { id?: string, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean };
+
+export default class Parcel extends EventTarget {
     _parcelModuleCache = {};
     _parcelModules = {};
-    reqIntercepts: { match: (exports: any) => boolean, callback: (exports: any) => any }[] = [];
+    reqIntercepts: Intercept[] = [];
     // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
 
     constructor() {
+        super();
+
         this.setup();
         this.reloadExistingScript();
     }
 
-    interceptRequire(match: (exports: any) => boolean, callback: (exports: any) => any) {
-        this.reqIntercepts.push({ match, callback });
+    interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
+        if(!match || !callback) throw new Error('match and callback are required');
+        let intercept: Intercept = { match, callback, once };
+        if(id) intercept.id = id;
+        this.reqIntercepts.push(intercept);
+
+        // return a cancel function
+        return () => {
+            let index = this.reqIntercepts.indexOf(intercept);
+            if(index !== -1) this.reqIntercepts.splice(index, 1);
+        }
+    }
+
+    stopIntercepts(id: string) {
+        this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
     }
     
     // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
@@ -28,12 +46,16 @@ export default class Parcel {
 
     async reloadExistingScript() {
         let existingScript = document.querySelector('script[src*="index"]') as HTMLScriptElement;
+
         if(existingScript) {
             // re-import the script since it's already loaded
             log('The script has already loaded, re-importing...')
     
             let res = await fetch(existingScript.src);
             let text = await res.text();
+
+            // load the plugins after the original script is done
+            await initPlugins();
         
             let script = document.createElement('script');
             script.textContent = text;
@@ -41,6 +63,8 @@ export default class Parcel {
             document.head.appendChild(script);
 
             existingScript.remove();
+        } else {
+            initPlugins();
         }
     }
 
@@ -49,6 +73,9 @@ export default class Parcel {
     
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
+                if(moduleName === '7fa7k') {
+                    console.log("IMPORTED THAT THINGAMABORP (CACHED)");
+                }
                 return this._parcelModuleCache[moduleName].exports;
             }
     
@@ -65,11 +92,19 @@ export default class Parcel {
     
                 moduleCallback.call(moduleObject.exports, moduleObject, moduleObject.exports);
     
+                if(moduleName === '7fa7k') {
+                    console.log("IMPORTED THAT THINGAMABORP");
+                }
+
                 // run intercepts
                 for (let intercept of this.reqIntercepts) {
                     if (intercept.match(moduleObject.exports)) {
-                        let returned = intercept.callback(moduleObject.exports);
+                        let returned = intercept.callback?.(moduleObject.exports);
                         if(returned) moduleObject.exports = returned;
+
+                        if(intercept.once) {
+                            this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                        }
                     }
                 }
     
@@ -81,6 +116,11 @@ export default class Parcel {
         // @ts-ignore
         ).register = (moduleName, moduleCallback) => {
             this._parcelModules[moduleName] = moduleCallback;
+
+            // remove it from the cache if it's already been loaded
+            if (moduleName in this._parcelModuleCache) {
+                delete this._parcelModuleCache[moduleName];
+            }
             
             // this is really the only way to tell functions apart without evaluating them
             // let str = moduleCallback.toString();

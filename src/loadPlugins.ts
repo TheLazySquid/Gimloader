@@ -6,28 +6,38 @@ export class Plugin {
     headers: Record<string, string>;
     return: any;
 
-    constructor(script: string, enabled = true) {
+    constructor(script: string, enabled = true, initial = false) {
         this.script = script;
         this.enabled = enabled;
     
         this.headers = parseHeader(script);
 
-        if(enabled) {
-            this.enable();
+        // we are going to manually call enable on the first load
+        if(enabled && !initial) {
+            this.enable(initial);
         }
     }
 
-    async enable() {
+    async enable(initial: boolean = false) {
         this.enabled = true;
-
-        log(`Loaded plugin: ${this.headers.name}`);
 
         // create a blob from the script and import it
         let blob = new Blob([this.script], { type: 'application/javascript' });
         let url = URL.createObjectURL(blob);
-
+        
         let returnVal = await import(url);
         this.return = returnVal;
+
+        log(`Loaded plugin: ${this.headers.name}`);
+        
+        if(!initial) {
+            if(this.headers.reloadRequired === 'true' || this.headers.reloadRequired === '') {
+                let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
+                if(reload) {
+                    location.reload();
+                }
+            }
+        }
     }
 
     disable() {
@@ -43,10 +53,18 @@ export class Plugin {
 
 export let plugins: Plugin[] = [];
 
-let pluginScripts = JSON.parse(getValue('plugins', '[]')!);
+export async function initPlugins() {
+    let pluginScripts = JSON.parse(getValue('plugins', '[]')!);
 
-plugins = pluginScripts.map((p: { script: string, enabled: boolean }) =>
-    new Plugin(p.script, p.enabled));
+    for(let plugin of pluginScripts) {
+        let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
+        plugins.push(pluginObj);
+    }
+
+    await Promise.all(plugins.map(p => p.enable(true)));
+
+    log('Plugins loaded');
+}
 
 export function savePlugins(newPlugins: Plugin[]) {
     plugins = newPlugins;
@@ -59,7 +77,8 @@ function parseHeader(code: string) {
     let headers: Record<string, string> = {
         name: "Unnamed Plugin",
         description: "No description provided",
-        author: "Unknown Author"
+        author: "Unknown Author",
+        reloadRequired: "false"
     };
     
     // parse the JSDoc header at the start (if it exists)
