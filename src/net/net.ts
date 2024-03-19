@@ -28,7 +28,7 @@ export class BlueboatIntercept extends EventTarget {
 
         let me = this;
 
-        loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes("this.socketListener()"), exports => {
+        loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes("this.socketListener()"), exports => {
             let nativeRoom = exports.default;
             
             return function() {
@@ -74,7 +74,7 @@ export class ColyseusIntercept extends EventTarget {
         let me = this;
 
         // somewhat taken from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/game.ts
-        loader.parcel.interceptRequire(exports => exports?.OnJoinedRoom, exports => {
+        loader.parcel.interceptRequire(null, exports => exports?.OnJoinedRoom, exports => {
             let nativeOnJoined = exports.OnJoinedRoom;
             delete exports.OnJoinedRoom;
             

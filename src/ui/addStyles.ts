@@ -1,8 +1,11 @@
 let styles: Map<string, HTMLStyleElement[]> = new Map();
 
-export function addStyles(id: string, styleString: string) {
+export async function addStyles(id: string, styleString: string) {
     let style = document.createElement('style');
     style.innerHTML = styleString;
+
+    // wait for document to be ready
+    if(!document.head) await new Promise(res => document.addEventListener('DOMContentLoaded', res, { once: true }));
     document.head.appendChild(style);
 
     // add to map

@@ -14,6 +14,7 @@ import Net from './net/net';
 import HotkeyManager from './hotkeyManager/hotkeyManager';
 import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
+import Patcher from './patcher/patcher';
 
 export class GimkitLoader extends EventTarget {
     version: string = version;
@@ -29,6 +30,7 @@ export class GimkitLoader extends EventTarget {
     parcel: Parcel = new Parcel();
     net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
+    patcher: Patcher = new Patcher();
     UI = {
         showModal,
         addStyles,
@@ -57,14 +59,14 @@ export class GimkitLoader extends EventTarget {
 
     exposeValues() {
         // window.stores
-        this.parcel.interceptRequire(exports => exports?.default?.characters, exports => {
+        this.parcel.interceptRequire(null, exports => exports?.default?.characters, exports => {
             this.stores = exports.default;
             window.stores = exports.default;
             getUnsafeWindow().stores = exports.default;
         })
 
         // window.platformerPhysics
-        this.parcel.interceptRequire(exports => exports?.CharacterPhysicsConsts, exports => {
+        this.parcel.interceptRequire(null, exports => exports?.CharacterPhysicsConsts, exports => {
             this.platformerPhysics = exports.CharacterPhysicsConsts;
             window.platformerPhysics = exports.CharacterPhysicsConsts;
             getUnsafeWindow().platformerPhysics = exports.CharacterPhysicsConsts;
@@ -72,18 +74,17 @@ export class GimkitLoader extends EventTarget {
     }
 
     getReact() {
-        this.parcel.interceptRequire(exports => exports?.useState, exports => {
+        this.parcel.interceptRequire(null, exports => exports?.useState, exports => {
             if (this.React) return;
             this.React = exports;
-            log('React instance found, creating UI...');
         })
 
-        this.parcel.interceptRequire(exports => exports?.createRoot, exports => {
+        this.parcel.interceptRequire(null, exports => exports?.createRoot, exports => {
             if (this.ReactDOM) return;
             this.ReactDOM = exports;
         })
 
-        this.parcel.interceptRequire(exports => exports?.default?.useNotification, exports => {
+        this.parcel.interceptRequire(null, exports => exports?.default?.useNotification, exports => {
             this.notification = exports.default;
         })
     }

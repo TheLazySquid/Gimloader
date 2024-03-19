@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.1.0
+// @version     0.2.0
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 var gimloader = (function (exports) {
   'use strict';
 
-  var version = "0.1.0";
+  var version = "0.2.0";
 
   var styles$1 = ":root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}\n\n.gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  width: 30px;\n  height: 30px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.5rem;\n  font-weight: 600;\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .author {\n  font-size: 0.8rem;\n  font-weight: normal;\n}\n.gl-listWrap .plugin .description {\n  font-size: 1rem;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}";
 
@@ -122,22 +122,31 @@ var gimloader = (function (exports) {
       enabled;
       headers;
       return;
-      constructor(script, enabled = true) {
+      constructor(script, enabled = true, initial = false) {
           this.script = script;
           this.enabled = enabled;
           this.headers = parseHeader(script);
-          if (enabled) {
-              this.enable();
+          // we are going to manually call enable on the first load
+          if (enabled && !initial) {
+              this.enable(initial);
           }
       }
-      async enable() {
+      async enable(initial = false) {
           this.enabled = true;
-          log(`Loaded plugin: ${this.headers.name}`);
           // create a blob from the script and import it
           let blob = new Blob([this.script], { type: 'application/javascript' });
           let url = URL.createObjectURL(blob);
           let returnVal = await import(url);
           this.return = returnVal;
+          log(`Loaded plugin: ${this.headers.name}`);
+          if (!initial) {
+              if (this.headers.reloadRequired === 'true' || this.headers.reloadRequired === '') {
+                  let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
+                  if (reload) {
+                      location.reload();
+                  }
+              }
+          }
       }
       disable() {
           this.enabled = false;
@@ -148,8 +157,15 @@ var gimloader = (function (exports) {
       }
   }
   let plugins = [];
-  let pluginScripts = JSON.parse(getValue('plugins', '[]'));
-  plugins = pluginScripts.map((p) => new Plugin(p.script, p.enabled));
+  async function initPlugins() {
+      let pluginScripts = JSON.parse(getValue('plugins', '[]'));
+      for (let plugin of pluginScripts) {
+          let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
+          plugins.push(pluginObj);
+      }
+      await Promise.all(plugins.map(p => p.enable(true)));
+      log('Plugins loaded');
+  }
   function savePlugins(newPlugins) {
       plugins = newPlugins;
       let pluginObjs = plugins.map(p => ({ script: p.script, enabled: p.enabled }));
@@ -159,7 +175,8 @@ var gimloader = (function (exports) {
       let headers = {
           name: "Unnamed Plugin",
           description: "No description provided",
-          author: "Unknown Author"
+          author: "Unknown Author",
+          reloadRequired: "false"
       };
       // parse the JSDoc header at the start (if it exists)
       let closingIndex = code.indexOf('*/');
@@ -804,11 +821,8 @@ var gimloader = (function (exports) {
       // add a hotkey shift+p to open the plugin manager
       loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
       // add the button to the creative screen and the host screen
-      loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
-          let native = exports.default;
-          delete exports.default;
-          exports.default = function () {
-              const res = native.apply(this, arguments);
+      loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
+          loader.patcher.after(null, exports, "default", (_, __, res) => {
               if (res?.props?.className?.includes?.('light-shadow flex between')) {
                   let nativeType = res.props.children[1].type.type;
                   res.props.children[1].type.type = function () {
@@ -841,31 +855,24 @@ var gimloader = (function (exports) {
                   res.props.children = [res.props.children, newBtn];
               }
               return res;
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the wrench button to the join screen
-      loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes('type:"secondary"'), exports => {
-          let nativeDefault = exports.default;
-          delete exports.default;
-          exports.default = function () {
-              let res = nativeDefault.apply(this, arguments);
+      loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('type:"secondary"'), exports => {
+          loader.patcher.after(null, exports, 'default', (_, __, res) => {
               let newButton = loader.React.createElement('button', {
                   className: 'openPlugins',
                   dangerouslySetInnerHTML: { __html: wrench },
                   onClick: openPluginManager
               });
               return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton]);
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the button to the home screen
-      loader.parcel.interceptRequire(exports => exports?.SpaceContext, exports => {
-          let nativeDefault = exports.default;
-          delete exports.default;
-          exports.default = function (props, ...args) {
+      loader.parcel.interceptRequire(null, exports => exports?.SpaceContext, exports => {
+          loader.patcher.before(null, exports, 'default', (_, args) => {
               let light = location.href.includes("/creative");
-              if (props.children?.some?.((c) => c?.key === 'creative')) {
+              if (args[0].children?.some?.((c) => c?.key === 'creative')) {
                   let icon = loader.React.createElement('div', {
                       className: 'icon',
                       dangerouslySetInnerHTML: { __html: wrench }
@@ -877,21 +884,16 @@ var gimloader = (function (exports) {
                       className: `gl-homeWrench ${light ? 'light' : ''}`,
                       onClick: openPluginManager
                   }, [icon, text]);
-                  props.children.splice(0, 0, newEl);
+                  args[0].children.splice(0, 0, newEl);
               }
-              let res = nativeDefault.apply(this, [props, ...args]);
-              return res;
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the button to the host screen before the game starts
-      loader.parcel.interceptRequire(
+      loader.parcel.interceptRequire(null, 
       // the } is there for a reason
       exports => exports?.default?.toString?.().includes('customHorizontalPadding}'), exports => {
           let nativeDefault = exports.default;
-          delete exports.default;
-          exports.default = function () {
-              let res = nativeDefault.apply(this, arguments);
+          loader.patcher.after(null, exports, 'default', (_, __, res) => {
               let btnContents = loader.React.createElement('div', {
                   className: "gl-hostWrench"
               }, [
@@ -912,15 +914,11 @@ var gimloader = (function (exports) {
                   res.props.children = [newBtn, res.props.children];
               }
               return res;
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the button to 1d host screens
-      loader.parcel.interceptRequire(exports => exports?.default?.displayName?.includes?.('inject-with-gameOptions-gameValues-players-kit-ui'), exports => {
-          let nativeRender = exports.default.render;
-          delete exports.default.render;
-          exports.default.render = function () {
-              let res = nativeRender.apply(this, arguments);
+      loader.parcel.interceptRequire(null, exports => exports?.default?.displayName?.includes?.('inject-with-gameOptions-gameValues-players-kit-ui'), exports => {
+          loader.patcher.after(null, exports.default, 'render', (_, __, res) => {
               let nativeType = res.type;
               delete res.type;
               res.type = function () {
@@ -939,19 +937,16 @@ var gimloader = (function (exports) {
                   return res;
               };
               return res;
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the button to the 1d host screen while in-game
       // we need to do this to intercept the stupid mobx wrapper which is a massive pain
-      loader.parcel.interceptRequire(exports => exports?.__decorate, exports => {
-          let nativeDec = exports.__decorate;
-          delete exports.__decorate;
-          exports.__decorate = function () {
-              if (arguments[1]?.toString?.()?.includes("Toggle Music")) {
-                  let nativeRender = arguments[1].prototype.render;
-                  arguments[1].prototype.render = function () {
-                      let res = nativeRender.apply(this, arguments);
+      loader.parcel.interceptRequire(null, exports => exports?.__decorate, exports => {
+          loader.patcher.before(null, exports, '__decorate', (_, args) => {
+              if (args[1]?.toString?.()?.includes("Toggle Music")) {
+                  let nativeRender = args[1].prototype.render;
+                  args[1].prototype.render = function () {
+                      let res = nativeRender.apply(this, args);
                       let children = res.props.children[2].props.children.props.children;
                       let newEl = loader.React.createElement(children[1].type, {
                           icon: loader.React.createElement('div', {
@@ -965,19 +960,18 @@ var gimloader = (function (exports) {
                       return res;
                   };
               }
-              return nativeDec.apply(this, arguments);
-          };
-          return exports;
-      });
+          });
+      }, true);
       // add the button to the 1d game screen
-      loader.parcel.interceptRequire(exports => exports?.observer &&
+      loader.parcel.interceptRequire(null, exports => exports?.observer &&
           exports.Provider, exports => {
-          let nativeObserver = exports.observer;
-          delete exports.observer;
-          exports.observer = function () {
-              if (arguments[0]?.toString?.().includes('"aria-label":"Menu"')) {
-                  let nativeArgs = arguments[0];
-                  arguments[0] = function () {
+          // let nativeObserver = exports.observer;
+          // delete exports.observer;
+          // exports.observer = function() {
+          loader.patcher.before(null, exports, 'observer', (_, args) => {
+              if (args[0]?.toString?.().includes('"aria-label":"Menu"')) {
+                  let nativeArgs = args[0];
+                  args[0] = function () {
                       let res = nativeArgs.apply(this, arguments);
                       // for when we're still on the join screen
                       if (res?.props?.children?.props?.children?.props?.src === '/client/img/svgLogoWhite.svg') {
@@ -1003,27 +997,39 @@ var gimloader = (function (exports) {
                       return res;
                   };
               }
-              return nativeObserver.apply(this, arguments);
-          };
-      });
+          });
+      }, true);
   }
 
   /*
       This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
   */
-  // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
-  // who in turn copied it from the parcel source code.
-  class Parcel {
+  class Parcel extends EventTarget {
       _parcelModuleCache = {};
       _parcelModules = {};
       reqIntercepts = [];
       // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
       constructor() {
+          super();
           this.setup();
           this.reloadExistingScript();
       }
-      interceptRequire(match, callback) {
-          this.reqIntercepts.push({ match, callback });
+      interceptRequire(id, match, callback, once = false) {
+          if (!match || !callback)
+              throw new Error('match and callback are required');
+          let intercept = { match, callback, once };
+          if (id)
+              intercept.id = id;
+          this.reqIntercepts.push(intercept);
+          // return a cancel function
+          return () => {
+              let index = this.reqIntercepts.indexOf(intercept);
+              if (index !== -1)
+                  this.reqIntercepts.splice(index, 1);
+          };
+      }
+      stopIntercepts(id) {
+          this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
       }
       // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
       //     this.regIntercepts.push({ match, callback });
@@ -1035,17 +1041,25 @@ var gimloader = (function (exports) {
               log('The script has already loaded, re-importing...');
               let res = await fetch(existingScript.src);
               let text = await res.text();
+              // load the plugins after the original script is done
+              await initPlugins();
               let script = document.createElement('script');
               script.textContent = text;
               script.type = "module";
               document.head.appendChild(script);
               existingScript.remove();
           }
+          else {
+              initPlugins();
+          }
       }
       setup() {
           let requireHook;
           ((requireHook = (moduleName) => {
               if (moduleName in this._parcelModuleCache) {
+                  if (moduleName === '7fa7k') {
+                      console.log("IMPORTED THAT THINGAMABORP (CACHED)");
+                  }
                   return this._parcelModuleCache[moduleName].exports;
               }
               if (moduleName in this._parcelModules) {
@@ -1057,12 +1071,18 @@ var gimloader = (function (exports) {
                   };
                   this._parcelModuleCache[moduleName] = moduleObject;
                   moduleCallback.call(moduleObject.exports, moduleObject, moduleObject.exports);
+                  if (moduleName === '7fa7k') {
+                      console.log("IMPORTED THAT THINGAMABORP");
+                  }
                   // run intercepts
                   for (let intercept of this.reqIntercepts) {
                       if (intercept.match(moduleObject.exports)) {
-                          let returned = intercept.callback(moduleObject.exports);
+                          let returned = intercept.callback?.(moduleObject.exports);
                           if (returned)
                               moduleObject.exports = returned;
+                          if (intercept.once) {
+                              this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                          }
                       }
                   }
                   return moduleObject.exports;
@@ -1072,6 +1092,10 @@ var gimloader = (function (exports) {
           // @ts-ignore
           ).register = (moduleName, moduleCallback) => {
               this._parcelModules[moduleName] = moduleCallback;
+              // remove it from the cache if it's already been loaded
+              if (moduleName in this._parcelModuleCache) {
+                  delete this._parcelModuleCache[moduleName];
+              }
               // this is really the only way to tell functions apart without evaluating them
               // let str = moduleCallback.toString();
               // for(let intercept of this.regIntercepts) {
@@ -1115,7 +1139,7 @@ var gimloader = (function (exports) {
       constructor(loader, net) {
           super();
           let me = this;
-          loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes("this.socketListener()"), exports => {
+          loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes("this.socketListener()"), exports => {
               let nativeRoom = exports.default;
               return function () {
                   let room = new nativeRoom(...arguments);
@@ -1150,7 +1174,7 @@ var gimloader = (function (exports) {
           super();
           let me = this;
           // somewhat taken from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/game.ts
-          loader.parcel.interceptRequire(exports => exports?.OnJoinedRoom, exports => {
+          loader.parcel.interceptRequire(null, exports => exports?.OnJoinedRoom, exports => {
               let nativeOnJoined = exports.OnJoinedRoom;
               delete exports.OnJoinedRoom;
               net.type = 'Colyseus';
@@ -1221,9 +1245,12 @@ var gimloader = (function (exports) {
   }
 
   let styles = new Map();
-  function addStyles(id, styleString) {
+  async function addStyles(id, styleString) {
       let style = document.createElement('style');
       style.innerHTML = styleString;
+      // wait for document to be ready
+      if (!document.head)
+          await new Promise(res => document.addEventListener('DOMContentLoaded', res, { once: true }));
       document.head.appendChild(style);
       // add to map
       if (!styles.has(id))
@@ -1239,6 +1266,140 @@ var gimloader = (function (exports) {
       styles.delete(id);
   }
 
+  // this patcher implementation is based on the one used by BetterDiscord
+  class Patcher {
+      patches = new Map();
+      unpatchers = new Map();
+      applyPatches(object, property) {
+          const properties = this.patches.get(object);
+          if (!properties)
+              return;
+          const patches = properties.get(property);
+          if (!patches)
+              return;
+          delete object[property];
+          // reset the property to its original value
+          object[property] = patches.original;
+          // apply all patches
+          for (const patch of patches.patches) {
+              let original = object[property];
+              switch (patch.point) {
+                  case 'before':
+                      object[property] = function () {
+                          patch.callback(this, arguments);
+                          return original.apply(this, arguments);
+                      };
+                      break;
+                  case 'after':
+                      object[property] = function () {
+                          let returnValue = original.apply(this, arguments);
+                          let newReturn = patch.callback(this, arguments, returnValue);
+                          if (newReturn)
+                              return newReturn;
+                          return returnValue;
+                      };
+                      break;
+                  case 'instead':
+                      object[property] = function () {
+                          return patch.callback(this, arguments);
+                      };
+                      break;
+              }
+          }
+      }
+      addPatch(object, property, patch) {
+          if (!this.patches.has(object)) {
+              this.patches.set(object, new Map([[property, { original: object[property], patches: [] }]]));
+          }
+          const properties = this.patches.get(object);
+          if (!properties)
+              return;
+          if (!properties.has(property)) {
+              properties.set(property, { original: object[property], patches: [] });
+          }
+          const patches = properties.get(property);
+          if (!patches)
+              return;
+          patches.patches.push(patch);
+          // apply patches to the object
+          this.applyPatches(object, property);
+      }
+      getRemovePatch(id, object, property, patch) {
+          let unpatch = () => {
+              if (id) {
+                  // remove the patch from the id's list of unpatchers
+                  const unpatchers = this.unpatchers.get(id);
+                  if (unpatchers) {
+                      const index = unpatchers.indexOf(unpatch);
+                      if (index !== -1) {
+                          unpatchers.splice(index, 1);
+                      }
+                  }
+              }
+              // remove the patch from the patches map
+              if (!this.patches.has(object))
+                  return;
+              const properties = this.patches.get(object);
+              if (!properties)
+                  return;
+              if (!properties.has(property))
+                  return;
+              const patches = properties.get(property);
+              if (!patches)
+                  return;
+              const index = patches.patches.indexOf(patch);
+              if (index === -1)
+                  return;
+              patches.patches.splice(index, 1);
+              // apply patches to the object
+              this.applyPatches(object, property);
+              // if the list of patches is empty, remove the property from the map
+              if (patches.patches.length === 0) {
+                  properties.delete(property);
+              }
+              // if the map of properties is empty, remove the object from the map
+              if (properties.size === 0) {
+                  this.patches.delete(object);
+              }
+          };
+          if (id) {
+              if (!this.unpatchers.has(id)) {
+                  this.unpatchers.set(id, [unpatch]);
+              }
+              else {
+                  this.unpatchers.get(id)?.push(unpatch);
+              }
+          }
+          return unpatch;
+      }
+      after(id, object, property, callback) {
+          let patch = { callback, point: 'after' };
+          this.addPatch(object, property, patch);
+          let remove = this.getRemovePatch(id, object, property, patch);
+          return remove;
+      }
+      before(id, object, property, callback) {
+          let patch = { callback, point: 'before' };
+          this.addPatch(object, property, patch);
+          let remove = this.getRemovePatch(id, object, property, patch);
+          return remove;
+      }
+      instead(id, object, property, callback) {
+          let patch = { callback, point: 'instead' };
+          this.addPatch(object, property, patch);
+          let remove = this.getRemovePatch(id, object, property, patch);
+          return remove;
+      }
+      unpatchAll(id) {
+          const unpatchers = this.unpatchers.get(id);
+          if (!unpatchers)
+              return;
+          for (const unpatcher of unpatchers) {
+              unpatcher();
+          }
+      }
+  }
+
   class GimkitLoader extends EventTarget {
       version = version;
       React;
@@ -1250,6 +1411,7 @@ var gimloader = (function (exports) {
       parcel = new Parcel();
       net = new Net(this);
       hotkeys = new HotkeyManager();
+      patcher = new Patcher();
       UI = {
           showModal,
           addStyles,
@@ -1272,31 +1434,30 @@ var gimloader = (function (exports) {
       }
       exposeValues() {
           // window.stores
-          this.parcel.interceptRequire(exports => exports?.default?.characters, exports => {
+          this.parcel.interceptRequire(null, exports => exports?.default?.characters, exports => {
               this.stores = exports.default;
               window.stores = exports.default;
               getUnsafeWindow().stores = exports.default;
           });
           // window.platformerPhysics
-          this.parcel.interceptRequire(exports => exports?.CharacterPhysicsConsts, exports => {
+          this.parcel.interceptRequire(null, exports => exports?.CharacterPhysicsConsts, exports => {
               this.platformerPhysics = exports.CharacterPhysicsConsts;
               window.platformerPhysics = exports.CharacterPhysicsConsts;
               getUnsafeWindow().platformerPhysics = exports.CharacterPhysicsConsts;
           });
       }
       getReact() {
-          this.parcel.interceptRequire(exports => exports?.useState, exports => {
+          this.parcel.interceptRequire(null, exports => exports?.useState, exports => {
               if (this.React)
                   return;
               this.React = exports;
-              log('React instance found, creating UI...');
           });
-          this.parcel.interceptRequire(exports => exports?.createRoot, exports => {
+          this.parcel.interceptRequire(null, exports => exports?.createRoot, exports => {
               if (this.ReactDOM)
                   return;
               this.ReactDOM = exports;
           });
-          this.parcel.interceptRequire(exports => exports?.default?.useNotification, exports => {
+          this.parcel.interceptRequire(null, exports => exports?.default?.useNotification, exports => {
               this.notification = exports.default;
           });
       }

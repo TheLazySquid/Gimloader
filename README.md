@@ -1,6 +1,6 @@
 # Gimloader
 
-This is a Gimkit plugin loader and manager, based on a trick first used in [Gimhook](https://codeberg.org/gimhook/gimhook).
+This is a Gimkit plugin loader and manager, based on a trick first used in [Gimhook](https://codeberg.org/gimhook/gimhook) with an API inspired by [BetterDiscord](https://docs.betterdiscord.app/api/).
 
 ## Installation
 
@@ -27,6 +27,10 @@ At any point, you can open the mod menu by pressing `alt + p`.
 </details>
 
 Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/).
+
+## Known Issues
+
+Sometimes the script will not get loaded in time to intercept some important modules, which can prevent some plugins from work. I'm trying to come up with a solution, but for now please hang tight.
 
 ## Development
 
@@ -64,9 +68,13 @@ These are both internal Gimkit modules that are used in 2d gamemodes and contain
 
 ### GL.parcel
 
-`GL.parcel.interceptRequire(match(exports: any) => boolean, (exports: any) => any)`
+`GL.parcel.interceptRequire(id: string | null, match(exports: any) => boolean, (exports: any) => any, once: boolean): () => void`
 
-Whenever a module is imported by Gimkit that has exports that match the first argument, the second argument will be called with the exports. Returning something from the callback will modify the exports of the module.
+Whenever a module is imported by Gimkit that has exports that match the second argument, the third argument will be called with the exports. Returning something from the callback will modify the exports of the module. Requires an ID to be used for when the plugin is unloaded. Returns a function that will remove the interceptor. If once is true, the interceptor will only fire once.
+
+`GL.parcel.stopIntercepts(id: string)`
+
+Removes all interceptors with the given ID. You should use this in your onStop function if you added any interceptors.
 
 ### GL.net
 
@@ -121,6 +129,26 @@ Adds a style to the page with a given id. There can be multiple styles with the 
 `GL.UI.removeStyle(id: string)`
 
 Removes all styles with the given id. Mostly used for cleanup.
+
+### GL.patcher
+
+This patcher API is inspired by [BetterDiscord's Patcher](https://docs.betterdiscord.app/api/patcher). It allows you to patch functions on objects, which is most useful for modifying what modules export.
+
+`GL.patcher.after(id: string | null, object: object, method: string, callback: (this: any, ...args: IArguments[], returnVal: any) => any): () => void`
+
+After the method to patch is called, the callback will be called, which allows you to edit the return value to your liking. Requires an ID to be used for when the plugin is unloaded. Returns a function that will remove the patch.
+
+`GL.patcher.before(id: string | null, object: object, method: string, callback: (this: any, ...args: IArguments[]) => any): () => void`
+
+Before the patched method is run you are given the arguments that will be passed to the method. You can modify these arguments and they will be passed to the method. 
+
+`GL.patcher.instead(id: string | null, object: object, method: string, callback: (this: any, ...args: IArguments[]) => any): () => void`
+
+Instead of the method being called, the callback will be called. This is useful for when you want to completely replace a method.
+
+`GL.patcher.unpatchAll(id: string)`
+
+Removes all patches with a given ID. You should use this in your onStop function if you added any patches.
 
 ### Events
 

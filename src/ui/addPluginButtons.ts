@@ -28,13 +28,8 @@ export function addPluginButtons(loader: GimkitLoader) {
     loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
     
     // add the button to the creative screen and the host screen
-    loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
-        let native = exports.default;
-        delete exports.default;
-
-        exports.default = function() {
-            const res = native.apply(this, arguments);
-
+    loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
+        loader.patcher.after(null, exports, "default", (_, __, res) => {
             if(res?.props?.className?.includes?.('light-shadow flex between')) {
                 let nativeType = res.props.children[1].type.type;
                 res.props.children[1].type.type = function() {
@@ -73,40 +68,28 @@ export function addPluginButtons(loader: GimkitLoader) {
             }
 
             return res;
-        }
-
-        return exports;
-    })
+        })
+    }, true)
 
     // add the wrench button to the join screen
-    loader.parcel.interceptRequire(exports => exports?.default?.toString?.().includes('type:"secondary"'), exports => {
-        let nativeDefault = exports.default;
-        delete exports.default;
-
-        exports.default = function() {
-            let res = nativeDefault.apply(this, arguments);
-
+    loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('type:"secondary"'), exports => {
+        loader.patcher.after(null, exports, 'default', (_, __, res) => {
             let newButton = loader.React.createElement('button', {
                 className: 'openPlugins',
                 dangerouslySetInnerHTML: { __html: wrench },
                 onClick: openPluginManager
             });
 
-            return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton]);
-        }
-
-        return exports;
-    })
+            return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton])
+        });
+    }, true)
 
     // add the button to the home screen
-    loader.parcel.interceptRequire(exports => exports?.SpaceContext, exports => {      
-        let nativeDefault = exports.default;
-        delete exports.default;
-
-        exports.default = function(props: any, ...args: any[]) {
+    loader.parcel.interceptRequire(null, exports => exports?.SpaceContext, exports => {
+        loader.patcher.before(null, exports, 'default', (_, args) => {
             let light = location.href.includes("/creative")
             
-            if(props.children?.some?.((c: any) => c?.key === 'creative')) {
+            if(args[0].children?.some?.((c: any) => c?.key === 'creative')) {
                 let icon = loader.React.createElement('div', {
                     className: 'icon',
                     dangerouslySetInnerHTML: { __html: wrench }
@@ -118,29 +101,20 @@ export function addPluginButtons(loader: GimkitLoader) {
                     className: `gl-homeWrench ${light ? 'light' : ''}`,
                     onClick: openPluginManager
                 }, [icon, text])
-
-                props.children.splice(0, 0, newEl);
+    
+                args[0].children.splice(0, 0, newEl);
             }
-            
-            let res = nativeDefault.apply(this, [props, ...args]);
-
-            return res;
-        }
-
-        return exports;
-    })
+        })
+    }, true)
 
     // add the button to the host screen before the game starts
-    loader.parcel.interceptRequire(
+    loader.parcel.interceptRequire(null, 
         // the } is there for a reason
     exports => exports?.default?.toString?.().includes('customHorizontalPadding}'),
     exports => {
         let nativeDefault = exports.default;
-        delete exports.default;
 
-        exports.default = function() {
-            let res = nativeDefault.apply(this, arguments);
-
+        loader.patcher.after(null, exports, 'default', (_, __, res) => {
             let btnContents = loader.React.createElement('div', {
                 className: "gl-hostWrench"
             }, [
@@ -164,20 +138,14 @@ export function addPluginButtons(loader: GimkitLoader) {
             }
 
             return res;
-        }
-
-        return exports;
-    })
+        })
+    }, true)
 
     // add the button to 1d host screens
-    loader.parcel.interceptRequire(
+    loader.parcel.interceptRequire(null, 
     exports => exports?.default?.displayName?.includes?.('inject-with-gameOptions-gameValues-players-kit-ui'),
     exports => {
-        let nativeRender = exports.default.render;
-        delete exports.default.render;
-        
-        exports.default.render = function() {
-            let res = nativeRender.apply(this, arguments);
+        loader.patcher.after(null, exports.default, 'render', (_, __, res) => {
             let nativeType = res.type;
             
             delete res.type;
@@ -204,22 +172,17 @@ export function addPluginButtons(loader: GimkitLoader) {
             }
             
             return res
-        }
-        
-        return exports;
-    })
+        })
+    }, true)
     
     // add the button to the 1d host screen while in-game
     // we need to do this to intercept the stupid mobx wrapper which is a massive pain
-    loader.parcel.interceptRequire(exports => exports?.__decorate, exports => {
-        let nativeDec = exports.__decorate;
-        delete exports.__decorate;
-
-        exports.__decorate = function() {
-            if(arguments[1]?.toString?.()?.includes("Toggle Music")) {
-                let nativeRender = arguments[1].prototype.render;
-                arguments[1].prototype.render = function() {
-                    let res = nativeRender.apply(this, arguments);
+    loader.parcel.interceptRequire(null, exports => exports?.__decorate, exports => {
+        loader.patcher.before(null, exports, '__decorate', (_, args) => {
+            if(args[1]?.toString?.()?.includes("Toggle Music")) {
+                let nativeRender = args[1].prototype.render;
+                args[1].prototype.render = function() {
+                    let res = nativeRender.apply(this, args);
                     let children = res.props.children[2].props.children.props.children
 
                     let newEl = loader.React.createElement(children[1].type, {
@@ -236,23 +199,20 @@ export function addPluginButtons(loader: GimkitLoader) {
                     return res;
                 }
             }
-
-            return nativeDec.apply(this, arguments);
-        }
-
-        return exports;
-    })
+        })
+    }, true)
 
     // add the button to the 1d game screen
-    loader.parcel.interceptRequire(exports => exports?.observer &&
+    loader.parcel.interceptRequire(null, exports => exports?.observer &&
     exports.Provider, exports => {
-        let nativeObserver = exports.observer;
-        delete exports.observer;
+        // let nativeObserver = exports.observer;
+        // delete exports.observer;
 
-        exports.observer = function() {
-            if(arguments[0]?.toString?.().includes('"aria-label":"Menu"')) {
-                let nativeArgs = arguments[0];
-                arguments[0] = function() {
+        // exports.observer = function() {
+        loader.patcher.before(null, exports, 'observer', (_, args) => {
+            if(args[0]?.toString?.().includes('"aria-label":"Menu"')) {
+                let nativeArgs = args[0];
+                args[0] = function() {
                     let res = nativeArgs.apply(this, arguments);
 
                     // for when we're still on the join screen
@@ -284,8 +244,6 @@ export function addPluginButtons(loader: GimkitLoader) {
                     return res;
                 }
             }
-
-            return nativeObserver.apply(this, arguments);
-        }
-    })
+        })
+    }, true);
 }
