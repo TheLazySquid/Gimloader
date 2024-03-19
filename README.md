@@ -30,7 +30,7 @@ Once in the mod menu, you can create or import plugins with the two buttons at t
 
 ## Known Issues
 
-Sometimes the script will not get loaded in time to intercept some important modules, which can prevent some plugins from work. I'm trying to come up with a solution, but for now please hang tight.
+Sometimes the script will not get loaded in time to intercept some important modules, which can prevent some plugins from working. I'm trying to come up with a solution, but for now please hang tight.
 
 ## Development
 
