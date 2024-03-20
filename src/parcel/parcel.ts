@@ -47,6 +47,7 @@ export default class Parcel extends EventTarget {
     async reloadExistingScript() {
         let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
         if(existingScripts.length > 0) this.readyToIntercept = false;
+        else return;
 
         await new Promise(res => window.addEventListener('load', res));
 
