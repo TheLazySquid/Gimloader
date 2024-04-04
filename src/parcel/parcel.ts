@@ -68,6 +68,22 @@ export default class Parcel extends EventTarget {
             let res = await fetch(existingScript.src);
             let text = await res.text();
         
+            // nasty hack to prevent the browser from caching other scripts (might be useful later)
+            // let index: number = 0;
+            // while((index = text.indexOf('import(', index)) !== -1) {
+            //     let nesting = 1;
+            //     index += 7;
+
+            //     // this assumes that the parenthesis are balanced
+            //     while(nesting !== 0) {
+            //         index++;
+            //         if(text[index] === '(') nesting++;
+            //         if(text[index] === ')') nesting--;
+            //     }
+
+            //     text = text.slice(0, index) + `+'?t='+Date.now()` + text.slice(index);
+            // }
+            
             let script = document.createElement('script');
             script.textContent = text;
             script.type = "module";
@@ -79,6 +95,7 @@ export default class Parcel extends EventTarget {
 
     setup() {
         let requireHook: (moduleName: string) => void;
+        let nativeParcelRequire = getUnsafeWindow()["parcelRequire388b"];
     
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
@@ -115,11 +132,16 @@ export default class Parcel extends EventTarget {
                 return moduleObject.exports;
             }
     
+            if(nativeParcelRequire) {
+                return nativeParcelRequire(moduleName);
+            }
+
             throw new Error(`Cannot find module '${moduleName}'`);
         }
         // @ts-ignore
         ).register = (moduleName, moduleCallback) => {
             this._parcelModules[moduleName] = moduleCallback;
+            nativeParcelRequire?.register(moduleName, moduleCallback);
         });
 
         Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
