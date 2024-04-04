@@ -58,6 +58,8 @@ export default class Parcel extends EventTarget {
         document.body.appendChild(newRoot);
         
         this.readyToIntercept = true;
+        this._parcelModuleCache = {};
+        this._parcelModules = {};
 
         for(let existingScript of existingScripts) {
             // re-import the script since it's already loaded
@@ -118,25 +120,6 @@ export default class Parcel extends EventTarget {
         // @ts-ignore
         ).register = (moduleName, moduleCallback) => {
             this._parcelModules[moduleName] = moduleCallback;
-
-            // remove it from the cache if it's already been loaded
-            if (moduleName in this._parcelModuleCache) {
-                delete this._parcelModuleCache[moduleName];
-            }
-            
-            // this is really the only way to tell functions apart without evaluating them
-            // let str = moduleCallback.toString();
-            // for(let intercept of this.regIntercepts) {
-            //     if(intercept.match instanceof RegExp) {
-            //         if(intercept.match.test(str)) {
-            //             intercept.callback(moduleCallback);
-            //         }
-            //     } else {
-            //         if(str.includes(intercept.match)) {
-            //             intercept.callback(moduleCallback);
-            //         }
-            //     }
-            // }
         });
 
         Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
