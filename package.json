@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rollup -c",
     "fullbuild": "rollup -c -w full",
-    "postinstall": "tsc"
+    "buildTypes": "tsc"
   },
   "bin": {
     "gimloader": "./buildTools/cli.js",
