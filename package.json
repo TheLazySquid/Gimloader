@@ -1,13 +1,18 @@
 {
   "name": "gimloader",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
+  "types": "gimloader.d.ts",
   "scripts": {
     "build": "rollup -c",
     "fullbuild": "rollup -c -w full",
-    "postinstall": "patch-package"
+    "postinstall": "tsc"
+  },
+  "bin": {
+    "gimloader": "./buildTools/cli.js",
+    "gl": "./buildTools/cli.js"
   },
   "repository": {
     "type": "git",
@@ -30,12 +35,9 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/gimloader": "file:",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
     "@types/tampermonkey": "^5.0.2",
-    "patch-package": "^8.0.0",
-    "rollup": "^4.12.1",
     "rollup-plugin-sass": "^1.12.21",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-svelte": "^7.2.0",
@@ -44,6 +46,8 @@
     "tslib": "^2.6.2"
   },
   "dependencies": {
-    "codecake": "^0.4.1"
+    "codecake": "^0.4.2",
+    "rollup": "^4.14.1",
+    "yargs": "^17.7.2"
   }
 }

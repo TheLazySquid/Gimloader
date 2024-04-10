@@ -300,16 +300,13 @@ var gimloader = (function (exports) {
       if (!options?.readOnly && editor.contentEditable !== "plaintext-only") {
           editor.setAttribute("contenteditable", "true");
           editor.addEventListener("paste", event => {
-              let insertText = event.clipboardData.getData("text/plain");
+              const insertText = event.clipboardData.getData("text/plain");
               event.preventDefault();
-
-              // Insert text at cursor position
+              // insert text at cursor position
               const sel = window.getSelection();
               const range = sel.getRangeAt(0);
               range.deleteContents();
               range.insertNode(document.createTextNode(insertText));
-
-              // Update editor
               update(10);
           });
       }

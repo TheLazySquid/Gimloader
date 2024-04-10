@@ -7,3 +7,17 @@ declare module '*.svg' {
     const content: string;
     export default content;
 }
+
+declare const GL: import('./src/index').GimkitLoader;
+/** @deprecated Use GL.stores */
+declare const stores: any;
+/** @deprecated Use GL.platformerPhysics */
+declare const platformerPhysics: any;
+
+interface Window {
+    GL: import('./src/index').GimkitLoader;
+    /** @deprecated Use GL.stores */
+    stores: any;
+    /** @deprecated Use GL.platformerPhysics */
+    platformerPhysics: any;
+}

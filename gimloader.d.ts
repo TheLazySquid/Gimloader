@@ -1,4 +1,4 @@
-import type { GimkitLoader } from './src/index';
+import { GimkitLoader } from './types/src/index';
 
 declare global {
     const GL: GimkitLoader;
