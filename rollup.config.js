@@ -47,6 +47,7 @@ export default {
         string({ include: ['**/*.css', '**/*.svg'] }),
         typescript({
             jsx: "react",
+            tsconfig: false,
             compilerOptions: {
                 target: "es2022",
                 resolveJsonModule: true,
