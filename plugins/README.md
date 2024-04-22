@@ -11,3 +11,7 @@ This plugin allows you to use devices instantly, without waiting for their meter
 ## [SaveGameOptions](./SaveGameOptions.js)
 
 This plugin will automatically save and load settings for live games between sessions.
+
+## [CameraControl](./CameraControl.js)
+
+When using this plugin you can scroll and your camera will zoom in and out. You can also hit Shift + F to enable freecam, which you can move around with the arrow keys. Zooming out to much can lead to lag or crashes.
