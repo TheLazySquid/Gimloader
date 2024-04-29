@@ -28,7 +28,8 @@ export default class Patcher {
             switch(patch.point) {
                 case 'before':
                     object[property] = function() {
-                        patch.callback(this, arguments);
+                        let cancel = patch.callback(this, arguments);
+                        if(cancel) return
                         return original.apply(this, arguments);
                     }
                     break;
@@ -47,6 +48,15 @@ export default class Patcher {
                     }
                     break;
             }
+
+            // copy over prototypes and attributes
+            for(let key of Object.getOwnPropertyNames(patches.original)) {
+                try {
+                    object[property][key] = patches.original[key];
+                } catch (e) {}
+            }
+    
+            Object.setPrototypeOf(object[property], Object.getPrototypeOf(patches.original));
         }
     }
 

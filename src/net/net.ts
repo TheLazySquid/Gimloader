@@ -1,4 +1,4 @@
-import type { GimkitLoader } from "../index";
+import type { Gimloader } from "../index";
 import { log } from "../util";
 
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
@@ -13,7 +13,7 @@ export default class Net {
         return this.type == 'Blueboat' ? this.blueboat : this.colyseus;
     }
 
-    constructor(loader: GimkitLoader) {
+    constructor(loader: Gimloader) {
         this.blueboat = new BlueboatIntercept(loader, this);
         this.colyseus = new ColyseusIntercept(loader, this);
     }
@@ -23,7 +23,7 @@ export class BlueboatIntercept extends EventTarget {
     room: any | null = null;
     blueboatLoaded: boolean = false;
 
-    constructor(loader: GimkitLoader, net: Net) {
+    constructor(loader: Gimloader, net: Net) {
         super();
 
         let me = this;
@@ -69,7 +69,7 @@ export class ColyseusIntercept extends EventTarget {
     room: any | null = null;
     colyseusLoaded: boolean = false;
 
-    constructor(loader: GimkitLoader, net: Net) {
+    constructor(loader: Gimloader, net: Net) {
         super();
         let me = this;
 

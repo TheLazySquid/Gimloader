@@ -1,4 +1,4 @@
-import type { GimkitLoader } from "../index";
+import type { Gimloader } from "../index";
 import wrench from '../../assets/wrench.svg';
 import showModal from "./modal";
 import PluginManager from "./PluginManager";
@@ -23,7 +23,7 @@ function openPluginManager() {
     })
 }
 
-export function addPluginButtons(loader: GimkitLoader) {
+export function addPluginButtons(loader: Gimloader) {
     // add a hotkey shift+p to open the plugin manager
     loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
     
