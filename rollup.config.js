@@ -48,6 +48,7 @@ export default {
         typescript({
             jsx: "react",
             tsconfig: false,
+            include: ["./src/**/*", "main.d.ts"],
             compilerOptions: {
                 target: "es2022",
                 resolveJsonModule: true,

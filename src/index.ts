@@ -16,7 +16,7 @@ import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 
-export class GimkitLoader extends EventTarget {
+export class Gimloader extends EventTarget {
     version: string = version;
 
     React: typeof React;
@@ -49,12 +49,8 @@ export class GimkitLoader extends EventTarget {
     }
 
     injectSheetsAndScripts() {
-        let sheet = new CSSStyleSheet();
-        sheet.replace(styles);
-        let codeCakeSheet = new CSSStyleSheet();
-        codeCakeSheet.replace(codeCakeStyles);
-        
-        document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet, codeCakeSheet];
+        this.UI.addStyles(null, styles);
+        this.UI.addStyles(null, codeCakeStyles);
     }
 
     exposeValues() {
@@ -90,6 +86,6 @@ export class GimkitLoader extends EventTarget {
     }
 }
 
-let loader = new GimkitLoader();
+let loader = new Gimloader();
 window.GL = loader;
 getUnsafeWindow().GL = loader;

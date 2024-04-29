@@ -6,7 +6,7 @@ import HotkeyManager from './hotkeyManager/hotkeyManager';
 import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
-export declare class GimkitLoader extends EventTarget {
+export declare class Gimloader extends EventTarget {
     version: string;
     React: typeof React;
     ReactDOM: typeof ReactDOM;

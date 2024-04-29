@@ -1,14 +1,14 @@
-import { GimkitLoader } from './types/src/index';
+import { Gimloader } from './types/src/index';
 
 declare global {
-    const GL: GimkitLoader;
+    const GL: Gimloader;
     /** @deprecated Use GL.stores */
     const stores: any;
     /** @deprecated Use GL.platformerPhysics */
     const platformerPhysics: any;
     
     interface Window {
-        GL: GimkitLoader;
+        GL: Gimloader;
         /** @deprecated Use GL.stores */
         stores: any;
         /** @deprecated Use GL.platformerPhysics */
