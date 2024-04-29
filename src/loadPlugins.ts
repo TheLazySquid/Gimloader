@@ -61,7 +61,7 @@ export async function initPlugins() {
         plugins.push(pluginObj);
     }
 
-    await Promise.all(plugins.map(p => p.enable(true)));
+    await Promise.all(plugins.map(p => p.enabled && p.enable(true)));
 
     log('Plugins loaded');
 }
