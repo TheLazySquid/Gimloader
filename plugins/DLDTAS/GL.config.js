@@ -12,6 +12,6 @@ export default {
             target: "es2022"
         }),
         sass(),
-        string({ include: ['**/*.css'] }),
+        string({ include: ['**/*.css', '**/*.svg'] }),
     ]
 }

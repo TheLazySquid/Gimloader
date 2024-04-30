@@ -1,8 +1,8 @@
 /// <reference types="gimloader" />
 
-import { init } from "./inputEnterer";
 // @ts-ignore
 import styles from './styles.scss';
+import { createUI } from "./ui";
 
 GL.UI.addStyles("TAS", styles);
 
@@ -23,7 +23,7 @@ GL.parcel.interceptRequire("TAS", exports => exports?.PhysicsManager, exports =>
         constructor() {
             super(...arguments);
             startTasBtn.addEventListener("click", () => {
-                init(this)
+                createUI(this)
             });
         }
     }

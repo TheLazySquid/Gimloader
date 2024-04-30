@@ -3,6 +3,8 @@
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
  */
+var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 99999999999;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable .btns button {\n  height: 30px;\n  width: 30px;\n  text-align: center;\n}\n#inputTable table {\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable tr {\n  height: 22px;\n}\n#inputTable td, #inputTable th {\n  height: 22px;\n  width: 75px;\n  text-align: center;\n}\n\n#controlCountdown {\n  position: fixed;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 50px;\n  color: black;\n}";
+
 let canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -15,6 +17,13 @@ window.addEventListener("resize", () => {
 function initOverlay() {
     document.body.appendChild(canvas);
     setInterval(render, 1000 / 15);
+}
+let renderHitbox = true;
+function hideHitbox() {
+    renderHitbox = false;
+}
+function showHitbox() {
+    renderHitbox = true;
 }
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -36,6 +45,8 @@ function render() {
     ctx.fillText(posText, canvas.width - 10, canvas.height - 20);
     ctx.strokeText(velText, canvas.width - 10, canvas.height - 40);
     ctx.fillText(velText, canvas.width - 10, canvas.height - 40);
+    if (!renderHitbox)
+        return;
     // convert the position to screen space
     x = (x * 100) - cX + window.innerWidth / 2;
     y = (y * 100) - cY + window.innerHeight / 2;
@@ -57,6 +68,17 @@ function render() {
     ctx.arc(x, y + halfHeight, radius, 0, Math.PI);
     ctx.stroke();
 }
+
+var Keycodes;
+(function (Keycodes) {
+    Keycodes[Keycodes["LeftArrow"] = 37] = "LeftArrow";
+    Keycodes[Keycodes["RightArrow"] = 39] = "RightArrow";
+    Keycodes[Keycodes["UpArrow"] = 38] = "UpArrow";
+    Keycodes[Keycodes["W"] = 87] = "W";
+    Keycodes[Keycodes["A"] = 65] = "A";
+    Keycodes[Keycodes["D"] = 68] = "D";
+    Keycodes[Keycodes["Space"] = 32] = "Space";
+})(Keycodes || (Keycodes = {}));
 
 function generatePhysicsInput(frame, lastFrame) {
     let jump = frame.up && !lastFrame?.up;
@@ -86,31 +108,196 @@ function generatePhysicsInput(frame, lastFrame) {
         angle = 225;
     return { angle, jump, _jumpKeyPressed: frame.up };
 }
+function save(frames) {
+    let saveList = [];
+    for (let frame of frames) {
+        let { translation, state, ...save } = frame;
+        saveList.push(save);
+    }
+    localStorage.setItem("frames", JSON.stringify(saveList));
+    return saveList;
+}
+
+let lasers = [];
+GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
+    for (let i = 0; i < packet.detail.changes.length; i++) {
+        let device = packet.detail.changes[i];
+        if (lasers.some(l => l.id === device[0])) {
+            packet.detail.changes.splice(i, 1);
+            i -= 1;
+        }
+    }
+});
+function updateLasers(frame) {
+    if (lasers.length === 0) {
+        lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
+    }
+    // lasers turn on for 36 frames and off for 30 frames
+    let states = GL.stores.world.devices.states;
+    let devices = GL.stores.phaser.scene.worldManager.devices;
+    let active = frame % 66 < 36;
+    for (let laser of lasers) {
+        states.get(laser.id).properties.set("GLOBAL_active", active);
+        devices.getDeviceById(laser.id).onStateUpdateFromServer("GLOBAL_active", active);
+    }
+}
+
+class TASTools {
+    physicsManager;
+    nativeStep;
+    physics;
+    rb;
+    inputManager;
+    values;
+    updateTable;
+    getPhysicsInput;
+    slowdownAmount = 1;
+    slowdownDelayedFrames = 0;
+    constructor(physicsManager, values, updateTable) {
+        this.physicsManager = physicsManager;
+        this.values = values;
+        this.updateTable = updateTable;
+        this.nativeStep = physicsManager.physicsStep;
+        physicsManager.physicsStep = (dt) => {
+            // only rerender, rather than running the physics loop
+            GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
+        };
+        this.physics = GL.stores.phaser.mainCharacter.physics;
+        this.rb = this.physics.getBody().rigidBody;
+        this.inputManager = GL.stores.phaser.scene.inputManager;
+        this.getPhysicsInput = this.inputManager.getPhysicsInput;
+        this.resetPos();
+    }
+    resetPos() {
+        // hardcoded, for now
+        this.rb.setTranslation({
+            "x": 33.87,
+            "y": 638.38
+        }, true);
+    }
+    startPlaying() {
+        let { frames } = this.values;
+        this.slowdownDelayedFrames = 0;
+        this.physicsManager.physicsStep = (dt) => {
+            this.slowdownDelayedFrames++;
+            if (this.slowdownDelayedFrames < this.slowdownAmount)
+                return;
+            this.slowdownDelayedFrames = 0;
+            updateLasers(this.values.currentFrame);
+            // set the inputs
+            let frame = frames[this.values.currentFrame];
+            if (frame) {
+                let translation = this.rb.translation();
+                frames[this.values.currentFrame].translation = { x: translation.x, y: translation.y };
+                frames[this.values.currentFrame].state = JSON.stringify(this.physics.state);
+                let input = generatePhysicsInput(frame, frames[this.values.currentFrame - 1]);
+                this.inputManager.getPhysicsInput = () => input;
+            }
+            this.setMoveSpeed();
+            // step the game
+            this.nativeStep(dt);
+            // advance the frame
+            this.values.currentFrame++;
+            this.updateTable();
+        };
+    }
+    stopPlaying() {
+        this.physicsManager.physicsStep = (dt) => {
+            // only rerender, rather than running the physics loop
+            GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
+        };
+    }
+    startControlling() {
+        this.slowdownDelayedFrames = 0;
+        this.inputManager.getPhysicsInput = this.getPhysicsInput;
+        this.physicsManager.physicsStep = (dt) => {
+            // check if we should slow down the game
+            this.slowdownDelayedFrames++;
+            if (this.slowdownDelayedFrames < this.slowdownAmount)
+                return;
+            this.slowdownDelayedFrames = 0;
+            let keys = this.inputManager.keyboard.heldKeys;
+            // log the inputs and translation/state
+            let left = keys.has(Keycodes.LeftArrow) || keys.has(Keycodes.A);
+            let right = keys.has(Keycodes.RightArrow) || keys.has(Keycodes.D);
+            let up = keys.has(Keycodes.UpArrow) || keys.has(Keycodes.W) || keys.has(Keycodes.Space);
+            let translation = this.rb.translation();
+            let state = JSON.stringify(this.physics.state);
+            this.values.frames[this.values.currentFrame] = { left, right, up, translation, state };
+            this.setMoveSpeed();
+            this.nativeStep(dt);
+            // update the current frame
+            this.values.currentFrame++;
+            this.updateTable();
+        };
+    }
+    stopControlling() {
+        this.physicsManager.physicsStep = (dt) => {
+            // only rerender, rather than running the physics loop
+            GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
+        };
+    }
+    advanceFrame() {
+        let frame = this.values.frames[this.values.currentFrame];
+        if (!frame)
+            return;
+        updateLasers(this.values.currentFrame);
+        this.setMoveSpeed();
+        // log the current translation and state
+        let translation = this.rb.translation();
+        frame.translation = { x: translation.x, y: translation.y };
+        frame.state = JSON.stringify(this.physics.state);
+        // generate the input
+        let lastFrame = this.values.frames[this.values.currentFrame - 1];
+        let input = generatePhysicsInput(frame, lastFrame);
+        this.inputManager.getPhysicsInput = () => input;
+        // step the game
+        this.nativeStep(0);
+        this.values.currentFrame++;
+    }
+    setSlowdown(amount) {
+        this.slowdownAmount = amount;
+        this.slowdownDelayedFrames = 0;
+    }
+    // this function should only ever be used when going back in time
+    setFrame(number) {
+        let frame = this.values.frames[number];
+        if (!frame || !frame.translation || !frame.state)
+            return;
+        this.values.currentFrame = number;
+        this.rb.setTranslation(frame.translation, true);
+        this.physics.state = JSON.parse(frame.state);
+    }
+    setMoveSpeed() {
+        GL.stores.me.movementSpeed = 310;
+    }
+}
+
+var controller = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M7.97,16L5,19C4.67,19.3 4.23,19.5 3.75,19.5A1.75,1.75 0 0,1 2,17.75V17.5L3,10.12C3.21,7.81 5.14,6 7.5,6H16.5C18.86,6 20.79,7.81 21,10.12L22,17.5V17.75A1.75,1.75 0 0,1 20.25,19.5C19.77,19.5 19.33,19.3 19,19L16.03,16H7.97M7,8V10H5V11H7V13H8V11H10V10H8V8H7M16.5,8A0.75,0.75 0 0,0 15.75,8.75A0.75,0.75 0 0,0 16.5,9.5A0.75,0.75 0 0,0 17.25,8.75A0.75,0.75 0 0,0 16.5,8M14.75,9.75A0.75,0.75 0 0,0 14,10.5A0.75,0.75 0 0,0 14.75,11.25A0.75,0.75 0 0,0 15.5,10.5A0.75,0.75 0 0,0 14.75,9.75M18.25,9.75A0.75,0.75 0 0,0 17.5,10.5A0.75,0.75 0 0,0 18.25,11.25A0.75,0.75 0 0,0 19,10.5A0.75,0.75 0 0,0 18.25,9.75M16.5,11.5A0.75,0.75 0 0,0 15.75,12.25A0.75,0.75 0 0,0 16.5,13A0.75,0.75 0 0,0 17.25,12.25A0.75,0.75 0 0,0 16.5,11.5Z\" /></svg>";
 
 let frames = JSON.parse(localStorage.getItem("frames") || "[]");
-let currentFrame = 0;
-let rowOffset = 0;
-function init(physicsManager) {
-    let nativeStep = physicsManager.physicsStep;
-    physicsManager.physicsStep = (dt) => {
-        // only rerender, rather than running the physics loop
-        GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
-    };
+let values = { frames, currentFrame: 0 };
+function createUI(physicsManager) {
+    let rowOffset = 0;
     initOverlay();
-    let physics = GL.stores.phaser.mainCharacter.physics;
-    let rb = physics.getBody().rigidBody;
-    let inputManager = GL.stores.phaser.scene.inputManager;
-    rb.setTranslation({
-        "x": 33.87,
-        "y": 638.38
-    }, true);
+    let tools = new TASTools(physicsManager, values, () => {
+        scrollTable();
+        updateTable();
+    });
     let div = document.createElement("div");
     div.id = "inputTable";
     div.innerHTML = `
     <div class="btns">
+        <button id="speeddown">&#9194;</button>
+        <span id="speed">1x</span>
+        <button id="speedup" disabled>&#9193;</button>
+    </div>
+    <div class="btns">
+        <button id="reset">&#8634;</button>
         <button id="backFrame">&larr;</button>
         <button id="play">&#9654;</button>
         <button id="advanceFrame">&rarr;</button>
+        <button id="control">${controller}</button>
         <button id="download">&#11123;</button>
         <button id="upload">&#11121;</button>
     </div>
@@ -122,43 +309,36 @@ function init(physicsManager) {
             <th>Jump</th>
         </tr>
     </table>`;
+    // prevent accidentally clicking the buttons with space/enter
+    div.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("keydown", (e) => e.preventDefault());
+    });
     // add listeners to the buttons
     div.querySelector("#advanceFrame")?.addEventListener("click", (e) => onStep(e));
     div.querySelector("#backFrame")?.addEventListener("click", (e) => onBack(e));
     let playing = false;
+    let controlling = false;
     let playBtn = div.querySelector("#play");
     playBtn?.addEventListener("click", () => {
-        playing = !playing;
+        if (controlling)
+            return;
+        setPlaying(!playing);
+    });
+    function setPlaying(value) {
+        playing = value;
         playBtn.innerHTML = playing ? "&#9209;" : "&#9654;";
         if (playing) {
-            physicsManager.physicsStep = (dt) => {
-                // set the inputs
-                let frame = frames[currentFrame];
-                if (frame) {
-                    let translation = rb.translation();
-                    frames[currentFrame].translation = { x: translation.x, y: translation.y };
-                    frames[currentFrame].state = JSON.stringify(physics.state);
-                    let input = generatePhysicsInput(frame, frames[currentFrame - 1]);
-                    inputManager.getPhysicsInput = () => input;
-                }
-                // step the game
-                nativeStep(dt);
-                // advance the frame
-                currentFrame++;
-                scrollTable();
-                updateTable();
-            };
+            tools.startPlaying();
+            hideHitbox();
         }
         else {
-            physicsManager.physicsStep = (dt) => {
-                // only rerender, rather than running the physics loop
-                GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
-            };
+            tools.stopPlaying();
+            showHitbox();
         }
-    });
+    }
     // download the frames as a json file
     div.querySelector("#download")?.addEventListener("click", () => {
-        let data = JSON.stringify(save(), null, 4);
+        let data = JSON.stringify(save(values.frames), null, 4);
         let blob = new Blob([data], { type: "text/plain" });
         let url = URL.createObjectURL(blob);
         let a = document.createElement("a");
@@ -169,6 +349,9 @@ function init(physicsManager) {
     });
     // upload a json file
     div.querySelector("#upload")?.addEventListener("click", () => {
+        setControlling(false);
+        setPlaying(false);
+        tools.stopPlaying();
         let input = document.createElement("input");
         input.type = "file";
         input.accept = ".json";
@@ -183,44 +366,123 @@ function init(physicsManager) {
                 if (typeof data !== "string")
                     return;
                 frames = JSON.parse(data);
-                currentFrame = 0;
+                values.currentFrame = 0;
                 rowOffset = 0;
                 updateTable();
             };
             reader.readAsText(file);
         });
     });
-    let rows = Math.floor(window.innerHeight / 26) - 1;
+    div.querySelector("#reset")?.addEventListener("click", () => {
+        let conf = confirm("Are you sure you want to reset?");
+        if (!conf)
+            return;
+        setPlaying(false);
+        setControlling(false);
+        values.frames = [];
+        values.currentFrame = 0;
+        rowOffset = 0;
+        tools.resetPos();
+        tools.stopPlaying();
+        updateTable();
+    });
+    let controlBtn = div.querySelector("#control");
+    controlBtn.addEventListener("click", () => {
+        if (playing)
+            return;
+        setControlling(!controlling);
+    });
+    let countdownDiv = document.createElement("div");
+    countdownDiv.id = "controlCountdown";
+    let countdownContent = document.createElement("div");
+    countdownDiv.appendChild(countdownContent);
+    let activateTimeout;
+    function setControlling(value) {
+        controlling = value;
+        controlBtn.innerHTML = controlling ? "&#9209;" : controller;
+        if (controlling) {
+            countdownContent.style.display = "block";
+            countdownContent.innerHTML = "3";
+            // start the countdown
+            setTimeout(() => countdownContent.innerHTML = "2", 1000);
+            setTimeout(() => countdownContent.innerHTML = "1", 2000);
+            activateTimeout = setTimeout(() => {
+                countdownContent.innerHTML = "";
+                countdownContent.style.display = "none";
+                tools.startControlling();
+            }, 3000);
+            hideHitbox();
+        }
+        else {
+            clearTimeout(activateTimeout);
+            countdownContent.style.display = "none";
+            tools.stopControlling();
+            showHitbox();
+        }
+    }
+    let slowdowns = [1, 2, 4, 8, 12, 20];
+    let slowdownIndex = 0;
+    let speedupBtn = div.querySelector("#speedup");
+    let speeddownBtn = div.querySelector("#speeddown");
+    let speed = div.querySelector("#speed");
+    function updateSlowdown() {
+        if (slowdownIndex === 0)
+            speed.innerText = "1x";
+        else
+            speed.innerText = `1/${slowdowns[slowdownIndex]}x`;
+        // disable the buttons if necessary
+        if (slowdownIndex === 0)
+            speedupBtn.setAttribute("disabled", "true");
+        else
+            speedupBtn.removeAttribute("disabled");
+        if (slowdownIndex === slowdowns.length - 1)
+            speeddownBtn.setAttribute("disabled", "true");
+        else
+            speeddownBtn.removeAttribute("disabled");
+    }
+    speeddownBtn.addEventListener("click", () => {
+        slowdownIndex++;
+        tools.setSlowdown(slowdowns[slowdownIndex]);
+        updateSlowdown();
+    });
+    speedupBtn.addEventListener("click", () => {
+        slowdownIndex--;
+        tools.setSlowdown(slowdowns[slowdownIndex]);
+        updateSlowdown();
+    });
+    let rows = Math.floor((window.innerHeight - 60) / 26) - 1;
     let dragging = false;
     let draggingChecked = false;
     let props = ["left", "right", "up"];
     window.addEventListener("mouseup", () => dragging = false);
     for (let i = 0; i < rows; i++) {
         let row = document.createElement("tr");
-        row.innerHTML = `<td></td>`;
+        row.innerHTML = `<td>${i}</td>`;
         // add the checkboxes to the frames array
         for (let j = 0; j < props.length; j++) {
             let data = document.createElement("td");
             let input = document.createElement("input");
             input.type = "checkbox";
             const checkPos = () => {
-                if (i + rowOffset <= currentFrame) {
-                    currentFrame = i + rowOffset - 1;
-                    setFrame(i + rowOffset);
+                if (i + rowOffset <= values.currentFrame) {
+                    values.currentFrame = i + rowOffset;
+                    tools.setFrame(i + rowOffset);
+                    scrollTable();
+                    updateTable();
                 }
             };
             // add listeners
             data.addEventListener("mousedown", () => {
                 dragging = true;
-                draggingChecked = !frames[i + rowOffset][props[j]];
-                frames[i + rowOffset][props[j]] = draggingChecked;
+                draggingChecked = !values.frames[i + rowOffset][props[j]];
+                values.frames[i + rowOffset][props[j]] = draggingChecked;
                 input.checked = draggingChecked;
                 checkPos();
             });
             data.addEventListener("mouseenter", () => {
                 if (!dragging)
                     return;
-                frames[i + rowOffset][props[j]] = draggingChecked;
+                values.frames[i + rowOffset][props[j]] = draggingChecked;
                 input.checked = draggingChecked;
                 checkPos();
             });
@@ -231,74 +493,12 @@ function init(physicsManager) {
         updateTable();
         div.querySelector("table")?.appendChild(row);
     }
-    function save() {
-        let saveList = [];
-        for (let frame of frames) {
-            let { translation, state, ...save } = frame;
-            saveList.push(save);
-        }
-        localStorage.setItem("frames", JSON.stringify(saveList));
-        return saveList;
-    }
-    // periodically save the current translation and state
-    setInterval(save, 60000);
-    window.addEventListener("beforeunload", save);
-    function onStep(event) {
-        if (playing)
-            return;
-        if (event.shiftKey) {
-            for (let i = 0; i < 5; i++) {
-                advanceFrame();
-            }
-        }
-        else {
-            advanceFrame();
-        }
-        scrollTable();
-        updateTable();
-    }
-    function onBack(event) {
-        if (playing)
-            return;
-        if (event.shiftKey) {
-            setFrame(Math.max(0, currentFrame - 5));
-        }
-        else {
-            setFrame(Math.max(0, currentFrame - 1));
-        }
-        scrollTable();
-        updateTable();
-    }
-    function advanceFrame() {
-        let frame = frames[currentFrame];
-        if (!frame)
-            return;
-        // log the current translation and state
-        let translation = rb.translation();
-        frame.translation = { x: translation.x, y: translation.y };
-        frame.state = JSON.stringify(physics.state);
-        // generate the input
-        let lastFrame = frames[currentFrame - 1];
-        let input = generatePhysicsInput(frame, lastFrame);
-        inputManager.getPhysicsInput = () => input;
-        // step the game
-        nativeStep(0);
-        currentFrame++;
-    }
-    // this function should only ever be used when going back in time
-    function setFrame(number) {
-        let frame = frames[number];
-        if (!frame || !frame.translation || !frame.state)
-            return;
-        rb.setTranslation(frame.translation, true);
-        physics.state = JSON.parse(frame.state);
-        currentFrame = number;
-    }
     function updateTable() {
         let table = div.querySelector("table");
         let rowEls = table?.querySelectorAll("tr:not(:first-child)");
         if (!rowEls)
             return;
+        let frames = values.frames;
         rowOffset = Math.max(0, rowOffset);
         // add frames to the array if they don't exist
         for (let i = frames.length; i < rowOffset + rowEls.length; i++) {
@@ -308,7 +508,7 @@ function init(physicsManager) {
         }
         for (let i = 0; i < rowEls.length; i++) {
             let row = rowEls[i];
-            row.classList.toggle("active", i + rowOffset === currentFrame);
+            row.classList.toggle("active", i + rowOffset === values.currentFrame);
             // update the row
             let frame = frames[i + rowOffset];
             if (!frame)
@@ -322,10 +522,38 @@ function init(physicsManager) {
     }
     function scrollTable() {
         // if the currentFrame is within 3 of the top or bottom, move the table
-        if (currentFrame - rowOffset < 3)
-            rowOffset = currentFrame - 3;
-        else if (currentFrame - rowOffset > rows - 3)
-            rowOffset = currentFrame - (rows - 3);
+        if (values.currentFrame - rowOffset < 3) {
+            rowOffset = values.currentFrame - 3;
+        }
+        else if (values.currentFrame - rowOffset > rows - 3) {
+            rowOffset = values.currentFrame - (rows - 3);
+        }
+    }
+    function onStep(event) {
+        if (playing || controlling)
+            return;
+        if (event.shiftKey) {
+            for (let i = 0; i < 5; i++) {
+                tools.advanceFrame();
+            }
+        }
+        else {
+            tools.advanceFrame();
+        }
+        scrollTable();
+        updateTable();
+    }
+    function onBack(event) {
+        if (playing || controlling)
+            return;
+        if (event.shiftKey) {
+            tools.setFrame(Math.max(0, values.currentFrame - 5));
+        }
+        else {
+            tools.setFrame(Math.max(0, values.currentFrame - 1));
+        }
+        scrollTable();
+        updateTable();
     }
     // move the table when scrolling
     window.addEventListener("wheel", (e) => {
@@ -341,12 +569,15 @@ function init(physicsManager) {
             onBack(e);
         }
     });
+    // periodically save the current translation and state
+    setInterval(() => save(values.frames), 60000);
+    window.addEventListener("beforeunload", () => save(values.frames));
     document.body.appendChild(div);
+    document.body.appendChild(countdownDiv);
 }
 
-var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 99999999999;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable table {\n  height: 100%;\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr {\n  height: 20px;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable td, #inputTable th {\n  width: 75px;\n  text-align: center;\n}";
-
 /// <reference types="gimloader" />
+// @ts-ignore
 GL.UI.addStyles("TAS", styles);
 let startTasBtn = document.createElement("button");
 startTasBtn.id = "startTasBtn";
@@ -362,7 +593,7 @@ GL.parcel.interceptRequire("TAS", exports => exports?.PhysicsManager, exports =>
         constructor() {
             super(...arguments);
             startTasBtn.addEventListener("click", () => {
-                init(this);
+                createUI(this);
             });
         }
     };

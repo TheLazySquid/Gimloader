@@ -35,28 +35,49 @@
         gap: 5px;
         align-items: center;
         justify-content: center;
+
+        button {
+            height: 30px;
+            width: 30px;
+            text-align: center;
+        }
     }
 
     table {
-        height: 100%;
         table-layout: fixed;
         user-select: none;
     }
 
-    tr {
-        height: 20px;
-
-        &.active {
-            background-color: rgba(0, 138, 197, 0.892) !important;
-        }
+    tr.active {
+        background-color: rgba(0, 138, 197, 0.892) !important;
     }
 
     tr:nth-child(even) {
         background-color: rgba(0, 0, 0, 0.1);
     }
 
+    tr {
+        height: 22px;
+    }
+    
     td, th {
+        height: 22px;
         width: 75px;
         text-align: center;
     }
+}
+
+#controlCountdown {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: black;
 }

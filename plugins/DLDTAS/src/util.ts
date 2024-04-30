@@ -26,3 +26,14 @@ export function generatePhysicsInput(frame: IFrameInfo, lastFrame?: IFrameInfo) 
 
     return { angle, jump, _jumpKeyPressed: frame.up };
 }
+
+export function save(frames: IFrameInfo[]) {
+    let saveList: IFrameInfo[] = [];
+    for(let frame of frames) {
+        let { translation, state, ...save } = frame
+        saveList.push(save)
+    }
+    localStorage.setItem("frames", JSON.stringify(saveList))
+
+    return saveList
+}

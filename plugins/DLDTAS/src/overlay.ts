@@ -15,6 +15,16 @@ export function initOverlay() {
     setInterval(render, 1000 / 15);
 }
 
+let renderHitbox = true;
+
+export function hideHitbox() {
+    renderHitbox = false;
+}
+
+export function showHitbox() {
+    renderHitbox = true;
+}
+
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -39,6 +49,8 @@ function render() {
     ctx.fillText(posText, canvas.width - 10, canvas.height - 20);
     ctx.strokeText(velText, canvas.width - 10, canvas.height - 40);
     ctx.fillText(velText, canvas.width - 10, canvas.height - 40);
+
+    if(!renderHitbox) return;
 
     // convert the position to screen space
     x = (x * 100) - cX + window.innerWidth / 2;

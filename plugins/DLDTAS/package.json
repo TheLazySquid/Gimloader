@@ -1,6 +1,6 @@
 {
   "name": "platformertas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A TAS tool for Gimkit platformer modes",
   "main": "build/PlatformerTAS.js",
   "type": "module",
@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "gimloader": "file:../..",
+    "gimloader": "github:TheLazySquid/Gimloader",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
