@@ -80,6 +80,7 @@ var Keycodes;
     Keycodes[Keycodes["Space"] = 32] = "Space";
 })(Keycodes || (Keycodes = {}));
 
+const defaultState = '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}';
 function generatePhysicsInput(frame, lastFrame) {
     let jump = frame.up && !lastFrame?.up;
     /* The angle is determined like so: 0 for right, 180 for left etc.
@@ -166,14 +167,15 @@ class TASTools {
         this.rb = this.physics.getBody().rigidBody;
         this.inputManager = GL.stores.phaser.scene.inputManager;
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
-        this.resetPos();
+        this.reset();
     }
-    resetPos() {
+    reset() {
         // hardcoded, for now
         this.rb.setTranslation({
             "x": 33.87,
             "y": 638.38
         }, true);
+        this.physics.state = JSON.parse(defaultState);
     }
     startPlaying() {
         let { frames } = this.values;
@@ -365,7 +367,8 @@ function createUI(physicsManager) {
                 let data = reader.result;
                 if (typeof data !== "string")
                     return;
-                frames = JSON.parse(data);
+                values.frames = JSON.parse(data);
+                tools.reset();
                 values.currentFrame = 0;
                 rowOffset = 0;
                 updateTable();
@@ -382,7 +385,7 @@ function createUI(physicsManager) {
         values.frames = [];
         values.currentFrame = 0;
         rowOffset = 0;
-        tools.resetPos();
+        tools.reset();
         tools.stopPlaying();
         updateTable();
     });

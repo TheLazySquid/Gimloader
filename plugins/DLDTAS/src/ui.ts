@@ -108,7 +108,8 @@ export function createUI(physicsManager: any) {
                 let data = reader.result;
                 if(typeof data !== "string") return;
 
-                frames = JSON.parse(data)
+                values.frames = JSON.parse(data)
+                tools.reset();
                 values.currentFrame = 0;
                 rowOffset = 0;
                 updateTable();
@@ -128,7 +129,7 @@ export function createUI(physicsManager: any) {
         values.frames = []
         values.currentFrame = 0;
         rowOffset = 0;
-        tools.resetPos();
+        tools.reset();
         tools.stopPlaying();
         updateTable();
     })

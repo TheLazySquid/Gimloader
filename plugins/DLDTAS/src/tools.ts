@@ -1,5 +1,5 @@
 import { ISharedValues, Keycodes } from "../types"
-import { generatePhysicsInput } from "./util";
+import { defaultState, generatePhysicsInput } from "./util";
 import { updateLasers } from "./updateLasers";
 
 export default class TASTools {
@@ -31,15 +31,17 @@ export default class TASTools {
 
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
 
-        this.resetPos();
+        this.reset();
     }
 
-    resetPos() {
+    reset() {
         // hardcoded, for now
         this.rb.setTranslation({
             "x": 33.87,
             "y": 638.38
         }, true);
+
+        this.physics.state = JSON.parse(defaultState);
     }
 
     startPlaying() {
