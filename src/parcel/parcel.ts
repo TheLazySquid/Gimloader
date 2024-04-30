@@ -19,8 +19,10 @@ export default class Parcel extends EventTarget {
     constructor() {
         super();
 
-        this.setup();
-        this.reloadExistingScript();
+        window.addEventListener('load', () => {
+            this.setup();
+            this.reloadExistingScript();
+        })
     }
 
     interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
@@ -39,17 +41,27 @@ export default class Parcel extends EventTarget {
     stopIntercepts(id: string) {
         this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
     }
-    
-    // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
-    //     this.regIntercepts.push({ match, callback });
-    // }
+
+    async decachedImport(url: string) {
+        let src = new URL(url, location.origin).href;
+
+        let res = await fetch(src);
+        let text = await res.text();
+
+        // nasty hack to prevent the browser from caching other scripts
+        text = text.replaceAll('import(', 'window.GL.parcel.decachedImport(');
+        text = text.replaceAll('import.meta.url', `'${src}'`)
+
+        let blob = new Blob([text], { type: 'application/javascript' });
+        let blobUrl = URL.createObjectURL(blob);
+
+        return import(blobUrl);
+    }
 
     async reloadExistingScript() {
         let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
         if(existingScripts.length > 0) this.readyToIntercept = false;
         else return;
-
-        await new Promise(res => window.addEventListener('load', res));
 
         // nuke the dom
         document.querySelector("#root")?.remove();
@@ -64,30 +76,8 @@ export default class Parcel extends EventTarget {
         for(let existingScript of existingScripts) {
             // re-import the script since it's already loaded
             log(existingScript, 'has already loaded, re-importing...')
-    
-            let res = await fetch(existingScript.src);
-            let text = await res.text();
-        
-            // nasty hack to prevent the browser from caching other scripts (might be useful later)
-            // let index: number = 0;
-            // while((index = text.indexOf('import(', index)) !== -1) {
-            //     let nesting = 1;
-            //     index += 7;
-
-            //     // this assumes that the parenthesis are balanced
-            //     while(nesting !== 0) {
-            //         index++;
-            //         if(text[index] === '(') nesting++;
-            //         if(text[index] === ')') nesting--;
-            //     }
-
-            //     text = text.slice(0, index) + `+'?t='+Date.now()` + text.slice(index);
-            // }
             
-            let script = document.createElement('script');
-            script.textContent = text;
-            script.type = "module";
-            document.head.appendChild(script);
+            this.decachedImport(existingScript.src);
 
             existingScript.remove();
         }

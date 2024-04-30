@@ -8,7 +8,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.2.7
+// @version     0.2.8
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,7 +17,7 @@
 var gimloader = (function (exports) {
   'use strict';
 
-  var version = "0.2.7";
+  var version = "0.2.8";
 
   var styles$1 = ":root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}\n\n.gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  width: 30px;\n  height: 30px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.5rem;\n  font-weight: 600;\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .author {\n  font-size: 0.8rem;\n  font-weight: normal;\n}\n.gl-listWrap .plugin .description {\n  font-size: 1rem;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}";
 
@@ -33,14 +33,6 @@ var gimloader = (function (exports) {
       return window;
   }
   const useGM = typeof GM_getValue !== 'undefined';
-  function setValue(key, value) {
-      if (useGM) {
-          GM_setValue(key, value);
-      }
-      else {
-          localStorage.setItem(`gl-${key}`, value);
-      }
-  }
   function getValue(key, defaultValue) {
       if (useGM) {
           return GM_getValue(key, defaultValue);
@@ -49,8 +41,6 @@ var gimloader = (function (exports) {
           return localStorage.getItem(`gl-${key}`) ?? defaultValue;
       }
   }
-
-  var wrench = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z\" /></svg>";
 
   function showModal(content, options) {
       let bgEl = document.createElement("div");
@@ -109,14 +99,6 @@ var gimloader = (function (exports) {
       return closeModal;
   }
 
-  var plusBoxOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z\" /></svg>";
-
-  var pencilOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z\" /></svg>";
-
-  var importSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z\" /></svg>";
-
-  var deleteSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z\" /></svg>";
-
   class Plugin {
       script;
       enabled;
@@ -167,11 +149,6 @@ var gimloader = (function (exports) {
       log('Plugins loaded');
   }
   initPlugins();
-  function savePlugins(newPlugins) {
-      plugins = newPlugins;
-      let pluginObjs = plugins.map(p => ({ script: p.script, enabled: p.enabled }));
-      setValue('plugins', JSON.stringify(pluginObjs));
-  }
   function parseHeader(code) {
       let headers = {
           name: "Unnamed Plugin",
@@ -220,786 +197,6 @@ var gimloader = (function (exports) {
   }
 
   /*
-   * CodeCake Editor
-  */
-
-  const insertText = text => {
-      const sel = window.getSelection();
-      const range = sel.getRangeAt(0);
-      const textElement = document.createTextNode(text);
-      range.insertNode(textElement);
-      range.setStartAfter(textElement);
-      sel.removeAllRanges();
-      sel.addRange(range);
-  };
-
-  const getCodeBeforeOrAfter = (parent, dir) => {
-      const {startContainer, startOffset, endContainer, endOffset} = window.getSelection().getRangeAt(0);
-      const range = document.createRange();
-      range.selectNodeContents(parent);
-      dir === -1 ? range.setEnd(startContainer, startOffset) : range.setStart(endContainer, endOffset);
-      return range.toString();
-  };
-
-  const debounce = fn => {
-      let timer = null;
-      return wait => {
-          clearTimeout(timer);
-          wait === 1 ? fn() : (timer = window.setTimeout(fn, wait)); 
-      };
-  };
-
-  const getTextNodeAtPosition = (root, index) => {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, el => {
-          if (index > el.textContent.length){
-              index = index - el.textContent.length;
-              return NodeFilter.FILTER_REJECT
-          }
-          return NodeFilter.FILTER_ACCEPT;
-      });
-      return {
-          node: walker.nextNode() || root,
-          position: index,
-      };
-  };
-
-  const getEditorTemplate = () => {
-      const templateContent = [
-          `<div class="codecake">`,
-          `    <div class="codecake-gutters" style="display:none;">`,
-          `        <div class="codecake-gutter codecake-lines" style="display:none;"></div>`,
-          `    </div>`,
-          `    <div class="codecake-editor" spellcheck="false" autocorrect="off"></div>`, 
-          `</div>`,
-      ];
-      const templateElement = document.createElement("template");
-      templateElement.innerHTML = templateContent.join("").trim();
-      return templateElement.content.firstChild;
-  };
-
-  // Create a new instance of the code editor
-  const create = (parent, options = {}) => {
-      let prevCode = "";
-      let focus = false;
-      let escKeyPressed = false;
-      const listeners = {}; // Store events listeners
-      const tab = options?.indentWithTabs ? "\t" : " ".repeat(options.tabSize || 4);
-      const endl = String.fromCharCode(10);
-      const autoIndent = options?.autoIndent ?? true;
-      const addClosing = options?.addClosing ?? true;
-      const openChars = `[({"'`, closeChars = `])}"'`;
-      const hlg = options?.highlight ?? ((c, l) => highlight(c, l));
-      parent.appendChild(getEditorTemplate());
-      const editor = parent.querySelector(".codecake-editor");
-      const lines = parent.querySelector(".codecake-lines");
-      !options?.readOnly && editor.setAttribute("contenteditable", "plaintext-only");
-      (options?.className || "").split(" ").filter(c => !!c).forEach(c => parent.querySelector(".codecake").classList.add(c));
-      options?.lineNumbers && (parent.querySelector(".codecake-gutters").style.display = "");
-      options?.lineNumbers && (lines.style.display = "");
-      // 'plaintext-only' mode is not supported in Firefox
-      if (!options?.readOnly && editor.contentEditable !== "plaintext-only") {
-          editor.setAttribute("contenteditable", "true");
-          editor.addEventListener("paste", event => {
-              const insertText = event.clipboardData.getData("text/plain");
-              event.preventDefault();
-              // insert text at cursor position
-              const sel = window.getSelection();
-              const range = sel.getRangeAt(0);
-              range.deleteContents();
-              range.insertNode(document.createTextNode(insertText));
-              update(10);
-          });
-      }
-      if (options?.lineWrap) {
-          editor.classList.add("codecake-linewrapping");
-      }
-      // Manage code
-      const setCode = (newCode, wait) => {
-          editor.textContent = newCode;
-          prevCode = editor.textContent || "";
-          update(wait ?? 50);
-      };
-      const getCode = () => editor.textContent || "";
-      const getCodeBefore = () => getCodeBeforeOrAfter(editor, -1);
-      const getCodeAfter = () => getCodeBeforeOrAfter(editor, +1);
-      // Position managers
-      const savePosition = () => {
-          const range = window.getSelection().getRangeAt(0);
-          range.setStart(editor, 0);
-          return range.toString().length;
-      };
-      const restorePosition = index => {
-          const selection = window.getSelection();
-          const pos = getTextNodeAtPosition(editor, index);
-          selection.removeAllRanges();
-          const range = new Range();
-          range.setStart(pos.node, pos.position);
-          selection.addRange(range);
-      };
-      // Debounce code update
-      const update = debounce(() => {
-          const position = focus && savePosition();
-          let currentCode = getCode();
-          if (!currentCode.endsWith(endl)) {
-              currentCode = currentCode + endl;
-              editor.textContent = currentCode;
-          }
-          const newText = typeof hlg === "function" ? hlg(currentCode, options.language || "") : currentCode;
-          editor.innerHTML = `<span class="line">` + newText.split("\n").join(`</span>\n<span class="line">`) + `</span>`;
-          if (options?.lineNumbers) {
-              const linesC = Array.from(editor.querySelectorAll(`span.line`)).map((line, index) => {
-                  return `<div style="height:${line.getBoundingClientRect().height}px;">${index + 1}</div>`;
-              });
-              lines.innerHTML = linesC.join("");
-          }
-          (typeof listeners["change"] === "function") && listeners["change"](currentCode);
-          focus && restorePosition(position);
-      });
-      // Register editor events listeners
-      editor.addEventListener("keydown", event => {
-          (typeof listeners["keydown"] === "function") && (listeners["keydown"](event));
-          if (!event.defaultPrevented && !options?.readOnly) {
-              prevCode = getCode();
-              // Handle inserting new line
-              if (event.key === "Enter" && autoIndent) {
-                  event.preventDefault();
-                  const lines = getCodeBefore().split(endl);
-                  const extraLine = /^[)}\]]/.test(getCodeAfter());
-                  const pos = savePosition();
-                  const lastLine = lines[lines.length - 1];
-                  const lastIndentation = (/^([\s]*)/.exec(lastLine))?.[0] || "";
-                  const lastChar = lastLine.trim().slice(-1);
-                  const indentation = lastIndentation + (/[\[\{]/.test(lastChar) ? tab : "");
-                  setCode(prevCode.substring(0, pos) + endl + indentation + (extraLine ? (endl + lastIndentation) : "") + prevCode.substring(pos, prevCode.length), 1);
-                  restorePosition(pos + 1 + indentation.length);
-              }
-              // Handle backspace
-              else if (event.key === "Backspace" || (event.key === "Tab" && !escKeyPressed && event.shiftKey)) {
-                  if (window.getSelection().type === "Caret") {
-                      let removeChars = 0;
-                      const pos = savePosition();
-                      const lines = prevCode.slice(0, pos).split(endl);
-                      const line = lines[lines.length - 1] || ""; 
-                      if (line !== "" && line.trim() === "") {
-                          event.preventDefault();
-                          removeChars = (line.length % tab.length === 0) ? tab.length : line.length % tab.length;
-                          setCode(prevCode.substring(0, pos - removeChars) + prevCode.substring(pos, prevCode.length), 1);
-                      }
-                      restorePosition(pos - removeChars);
-                  }
-              }
-              // Handle insert tab
-              else if (event.key === "Tab" && !escKeyPressed && !event.shiftKey) {
-                  event.preventDefault();
-                  insertText(tab);
-              }
-              // Skip closing char
-              else if (addClosing && closeChars.includes(event.key) && getCodeAfter().charAt(0) === event.key) {
-                  event.preventDefault();
-                  restorePosition(savePosition() + 1);
-              }
-              // Handle closing chars
-              else if (addClosing && openChars.includes(event.key)) {
-                  event.preventDefault();
-                  const [start, end] = [getCodeBefore().length, getCodeAfter().length];
-                  const pos = savePosition();
-                  const wrapText = (prevCode.length - start - end > 0) ? prevCode.substring(start, prevCode.length - end) : "";
-                  setCode(prevCode.substring(0, pos - wrapText.length) + event.key + wrapText + closeChars[openChars.indexOf(event.key)] + prevCode.substring(pos, prevCode.length), 1);
-                  restorePosition(pos + 1);
-              }
-              // Save if escape key has been pressed to avoid trapping keyboard focus
-              escKeyPressed = event.key === "Escape";
-          }
-      });
-      editor.addEventListener("keyup", event => {
-          (typeof listeners["keyup"] === "function") && (listeners["keyup"](event));
-          if (!event.defaultPrevented && !options?.readOnly && prevCode !== getCode()) {
-              return update(250);
-          }
-      });
-      editor.addEventListener("focus", () => focus = true);
-      editor.addEventListener("blur", () => focus = false);
-      editor.addEventListener("scroll", () => lines.style.top = `-${editor.scrollTop}px`);
-      editor.addEventListener("paste", () => update(10));
-      // Initialize editor values
-      options?.code ? setCode(options?.code) : update(1);
-      return {
-          getCode: () => getCode(),
-          setCode: code => setCode(code || "", 1),
-          onChange: listener => (listeners["change"] = listener),
-          onKeyDown: listener => (listeners["keydown"] = listener),
-          onKeyUp: listener => (listeners["keyup"] = listener),
-      };
-  };
-
-
-  /*
-   * CodeCake Syntax highlight
-  */
-
-  const escape = text => {
-      return text.replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-  };
-
-  const jsKeywords = [
-      "as", "async", "await", "break", "case", "catch", "class", "const", "continue", "constructor", "debugger", "default",
-      "delete", "do", "else", "export", "extends", "finally", "for", "from", "function", "if", "implements", "import",
-      "in", "instanceof", "let", "new", "of", "return", "static", "super", "switch", "symbol", "this", "throw",
-      "try", "typeof", "undefined", "var", "void", "while", "with", "yield",
-  ];
-
-  const cssConstants = [
-      "absolute", "relative", "fixed", "sticky", "bold", "normal", "auto", "none", "solid", "dashed",
-      "sans-serif", "sans", "serif", "monospace", "red", "white", "black", "blue", "yellow", "green", "orange", "gray",
-  ];
-
-  // Languajes definition
-  const languages = {
-      html: {
-          aliases: [],
-          rules: [
-              {
-                  starts: /^<!--/,
-                  ends: /-->/,
-                  rules: [
-                      {regex: /^(.+)/, token: "comment"},
-                  ],
-              },
-              {
-                  regex: /^(<([\w]+)(?![^>]*\/>)[^>]*>)/,
-                  rules: [
-                      {
-                          regex: /^(<[\w]+)/,
-                          rules: [
-                              {regex: /^(<)/, token: "punctuation"},
-                              {regex: /^([\w]+)/, token: "tag"},
-                          ],
-                      },
-                      {
-                          regex: /^([\w\.\-\_]+="[^"]+")/,
-                          rules: [
-                              {regex: /^([\w\.\-\_]+)/, token: "attr"},
-                              {regex: /^(=)/, token: "punctuation"},
-                              {regex: /^(".*?")/, token: "string"},
-                          ],
-                      },
-                      {regex: /^(>)/, token: "punctuation"},
-                  ],
-              },
-              {
-                  regex: /^(<\/[\w]+>)/,
-                  rules: [
-                      {regex: /^([<\/>])/, token: "punctuation"},
-                      {regex: /^([\w]+)/, token: "tag"},
-                  ],
-              },
-          ],
-      },
-      javascript: {
-          aliases: ["js", "jsx"],
-          rules: [
-              {regex: /^(\/\/.*)/, token: "comment"},
-              {
-                  starts: /^\/\*/,
-                  ends: /\*\//,
-                  rules: [
-                      {regex: /^(.+)/, token: "comment"},
-                  ],
-              },
-              {regex: /^(\'.*?\')|^(\".*?\")/, token: "string"},
-              {
-                  regex: /^(\`[^\`]*?\`)/,
-                  rules: [
-                      {regex: /^(.+)/, token: "string"},
-                  ],
-              },
-              {regex: new RegExp(`^\\b(${jsKeywords.join("|")})\\b`), token: "keyword"},
-              {regex: /^\b(true|false|null)\b/, token: "constant"},
-              {regex: /^([+-]?([0-9]*[.])?[0-9]+)\b/, token: "number"},
-              {regex: /^([{}[\](\):;\\.,])/, token: "punctuation"},
-              {
-                  regex: /^(<(?:=>|[^>])+(?:\/)?>)/,
-                  rules: [
-                      {
-                          regex: /^(<\/?[\w]+)/,
-                          rules: [
-                              {regex: /^(<)/, token: "punctuation"},
-                              {regex: /^([\w]+)/, token: "tag"},
-                          ],
-                      },
-                      {
-                          regex: /^([\w\.\-\_]+=(?:"[^"]*"|\{[^\}]*}))/,
-                          rules: [
-                              {regex: /^([\w\.\-\_]+)/, token: "attr"},
-                              {regex: /^(=)/, token: "punctuation"},
-                              {regex: /^("(?:.)*?"|\{(?:.)*?})/, token: "string"},
-                          ],
-                      },
-                      {regex: /^(>)/, token: "punctuation"},
-                  ],
-              },
-              {regex: /^([?!&@~\/\-+*%=<>|])/, token: "operator"},
-              {
-                  regex: /^([a-zA-Z][\w]*\s*\()/,
-                  rules: [
-                      {regex: /^([^\(]+)/, token: "title function"},
-                      {regex: /^(\()/, token: "punctuation"},
-                  ],
-              },
-              {regex: /^([\w]+)/, token: "word"},
-          ],
-      },
-      css: {
-          aliases: [],
-          rules: [
-              {
-                  starts: /^\/\*/,
-                  ends: /\*\//,
-                  rules: [
-                      {regex: /^(.+)/, token: "comment"},
-                  ],
-              },
-              {regex: /^([{},;])/, token: "punctuation"},
-              {regex: /^(@(font-face|import|keyframes))/, token: "keyword"},
-              {
-                  regex: /^([a-z\-]+\s*:\s*[^;\n]+);/,
-                  rules: [
-                      {
-                          regex: /^([a-z\-]+\s*:)/,
-                          rules: [
-                              {regex: /^([a-z\-]+)/, token: "attribute"},
-                              {regex: /^(:)/, token: "punctuation"},
-                          ],
-                      },
-                      {regex: /^(#[\da-f]{3,8})/, token: "constant"},
-                      {regex: /^([+-]?([0-9]*[.])?[0-9]+)/, token: "number"},
-                      {regex: /^(\'(?:.)*?\')|^(\"(?:.)*?\")/, token: "string"},
-                      {regex: new RegExp(`^\\b(${cssConstants.join("|")})\\b`), token: "constant"},
-                      {regex: /^\b(cm|mm|in|px|pt|pc|em|rem|vw|vh)\b/, token: "unit"},
-                  ],
-              },
-              {regex: /^(::?[a-z]+)/, token: "selector-pseudo"},
-              {regex: /^(\[[^\]]+\])/, token: "selector-attr"},
-              {regex: /^(\.[\w\-\_]+)/, token: "selector-class"},
-              {regex: /^(\#[\w\-\_]+)/, token: "selector-id"},
-              {regex: /^(body|html|a|div|table|td|tr|th|input|button|textarea|label|form|svg|g|path|rect|circle|ul|li|ol)\b/, token: "selector-tag"},
-              {regex: /^(\'(?:.)*?\')|^(\"(?:.)*?\")/, token: "string"},
-          ],
-      },
-      markdown: {
-          aliases: ["md"],
-          rules: [
-              {regex: /^(#{1,6}[^\n]+)/, token: "section"},
-              {regex: /^(\`{3}[^\`{3}]+\`{3})/, token: "code"},
-              {regex: /^(\`[^\`\n]+\`)/, token: "code"},
-              {regex: /^ *([\*\-+:]|\d+\.) /, token: "bullet"},
-              {regex: /^(\*{2}[^\*\n]+\*{2})/, token: "strong"},
-              {regex: /^(\*[^\*\n]+\*)/, token: "emphasis"},
-              {
-                  regex: /^(!?\[[^\]\n]*]\([^\)\n]+\))/,
-                  rules: [
-                      {
-                          regex: /^(\[.+\])/,
-                          rules: [
-                              {regex: /^([^\[\]]+)/, token: "string"},
-                          ],
-                      },
-                      {
-                          regex: /^(\(.+\))/,
-                          rules: [
-                              {regex: /^([^\(\)]+)/, token: "link"},
-                          ],
-                      }
-                  ],
-              },
-              {regex: /^(\> [^\n]+)/, token: "quote"},
-          ],
-      },
-  };
-
-  const getRule = (rules, str) => {
-      return rules.find(rule => {
-          if (rule.starts) {
-              return rule.starts.test(str) && rule.ends.test(str);
-          }
-          return rule.regex.test(str);
-      });
-  };
-
-  const getMatch = (rule, str) => {
-      if (rule.starts) {
-          const match = rule.ends.exec(str);
-          return str.substring(0, match.index + match[0].length);
-      }
-      return rule.regex.exec(str)[0];
-  };
-
-  const _highlight = (code, rules) => {
-      let text = "", i = 0;
-      while (i < code.length) {
-          const subCode = code.substring(i);
-          const rule = getRule(rules, subCode);
-          if (rule) {
-              const match = getMatch(rule, subCode);
-              if (match.length > 0) {
-                  text = text + (rule.rules ? _highlight(match, rule.rules) : `<span class="token-${rule.token}">${escape(match)}</span>`);
-                  i = i + match.length;
-                  continue;
-              }
-          }
-          text = text + escape(code[i]);
-          i = i + 1;
-      }
-      return text;
-  };
-
-  const highlight = (code, language = "javascript") => {
-      return _highlight(code, languages[language]?.rules || []);
-  };
-
-  function showCodeEditor(plugins, setPlugins, plugin) {
-      let editorDiv = document.createElement("div");
-      editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
-      let editor = create(editorDiv, {
-          language: "javascript",
-          highlight: highlight,
-          className: "codecake-dark codeCakeEditor",
-          lineNumbers: true
-      });
-      editor.setCode(plugin.script);
-      showModal(editorDiv, {
-          title: "Edit Plugin Code",
-          style: "width: 50%",
-          buttons: [
-              {
-                  text: "cancel",
-                  style: "close"
-              }, {
-                  text: "save",
-                  style: "primary",
-                  onClick() {
-                      plugin.disable();
-                      plugin.script = editor.getCode();
-                      plugin.enable();
-                      let newPlugins = [...plugins];
-                      savePlugins(newPlugins);
-                      setPlugins(newPlugins);
-                  }
-              }
-          ]
-      });
-  }
-  // can't be bothered with the type
-  function createPlugin(plugins, setPlugins) {
-      let editorDiv = document.createElement("div");
-      editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
-      let editor = create(editorDiv, {
-          language: "javascript",
-          highlight: highlight,
-          className: "codecake-dark codeCakeEditor",
-          lineNumbers: true
-      });
-      const defaultCode = `/**
-* @name New Plugin
-* @description A new plugin
-* @author Your Name Here
-*/`;
-      editor.setCode(defaultCode);
-      showModal(editorDiv, {
-          title: "Create New Plugin",
-          style: "width: 50%",
-          buttons: [
-              {
-                  text: "cancel",
-                  style: "close"
-              }, {
-                  text: "save",
-                  style: "primary",
-                  onClick() {
-                      let newPlugins = [...plugins, new Plugin(editor.getCode())];
-                      setPlugins(newPlugins);
-                      savePlugins(newPlugins);
-                  }
-              }
-          ]
-      });
-  }
-
-  function PluginManager() {
-      const React = GL.React;
-      const [plugins$1, setPlugins] = React.useState(plugins);
-      const filePickerInput = React.useRef(null);
-      function importFile() {
-          filePickerInput.current?.click();
-          filePickerInput.current?.addEventListener("change", async () => {
-              let file = filePickerInput.current?.files?.[0];
-              if (!file)
-                  return;
-              // read the file
-              let reader = new FileReader();
-              reader.addEventListener("load", () => {
-                  let code = reader.result;
-                  // @ts-ignore compiler option is set but vscode can't tell
-                  code = code.replaceAll("\r\n", "\n");
-                  let plugin = new Plugin(code);
-                  let newPlugins = [...plugins$1, plugin];
-                  setPlugins(newPlugins);
-                  savePlugins(newPlugins);
-              });
-              reader.readAsText(file);
-          });
-      }
-      function deletePlugin(plugin) {
-          let confirm = window.confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
-          if (!confirm)
-              return;
-          let newPlugins = plugins$1.filter(p => p !== plugin);
-          setPlugins(newPlugins);
-          savePlugins(newPlugins);
-      }
-      return (React.createElement("div", { className: "gl-listWrap" },
-          React.createElement("div", { className: "header" },
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
-              React.createElement("input", { type: "file", style: { display: "none" }, accept: ".js", ref: filePickerInput }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins$1, setPlugins) })),
-          React.createElement("div", { className: "pluginList" },
-              plugins$1.map((plugin, index) => {
-                  return (React.createElement("div", { key: index, className: "plugin" },
-                      React.createElement("div", { className: "info" },
-                          React.createElement("div", { className: "top" },
-                              React.createElement("div", { className: "name" }, plugin.headers.name),
-                              React.createElement("input", { type: "checkbox", checked: plugin.enabled, onInput: e => {
-                                      if (!e.currentTarget.checked) {
-                                          plugin.enable();
-                                      }
-                                      else {
-                                          plugin.disable();
-                                      }
-                                      // this re-renders all the plugins (bad) but I don't care
-                                      let newPlugins = [...plugins$1];
-                                      setPlugins(newPlugins);
-                                      savePlugins(newPlugins);
-                                  } })),
-                          React.createElement("div", { className: "author" },
-                              "by ",
-                              plugin.headers.author),
-                          React.createElement("div", { className: "description" }, plugin.headers.description)),
-                      React.createElement("div", { className: "buttons" },
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins$1, setPlugins, plugin) }),
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deletePlugin(plugin) }))));
-              }),
-              plugins$1.length === 0 ?
-                  React.createElement("div", { className: "empty" }, "No plugins! Create or import one to get started.")
-                  : null)));
-  }
-
-  let modalOpen = false;
-  function openPluginManager() {
-      if (modalOpen)
-          return;
-      modalOpen = true;
-      showModal(GL.React.createElement(PluginManager), {
-          title: 'Manage Plugins',
-          style: "width: 50%; height: 80%",
-          closeOnBackgroundClick: true,
-          buttons: [
-              {
-                  text: "close",
-                  style: "primary"
-              }
-          ],
-          onClosed: () => modalOpen = false
-      });
-  }
-  function addPluginButtons(loader) {
-      // add a hotkey shift+p to open the plugin manager
-      loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
-      // add the button to the creative screen and the host screen
-      loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
-          loader.patcher.after(null, exports, "default", (_, __, res) => {
-              if (res?.props?.className?.includes?.('light-shadow flex between')) {
-                  let nativeType = res.props.children[1].type.type;
-                  res.props.children[1].type.type = function () {
-                      let res = nativeType.apply(this, arguments);
-                      // make sure we haven't already added the button
-                      if (res.props.children.some((c) => c?.props?.tooltip === 'Plugins'))
-                          return res;
-                      let btnType = res.props.children[0].type;
-                      res.props.children.splice(0, 0, loader.React.createElement(btnType, {
-                          tooltip: 'Plugins',
-                          children: loader.React.createElement('div', {
-                              className: 'gl-wrench',
-                              dangerouslySetInnerHTML: { __html: wrench }
-                          }),
-                          onClick: openPluginManager
-                      }));
-                      return res;
-                  };
-              }
-              if (res?.props?.children?.props?.tooltip === 'Options') {
-                  res.props.className = 'gl-row';
-                  let newBtn = res.props.children.type({
-                      tooltip: 'Plugins',
-                      children: loader.React.createElement('div', {
-                          className: 'gl-wrench',
-                          dangerouslySetInnerHTML: { __html: wrench }
-                      }),
-                      onClick: openPluginManager
-                  });
-                  res.props.children = [res.props.children, newBtn];
-              }
-              return res;
-          });
-      }, true);
-      // add the wrench button to the join screen
-      loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('type:"secondary"'), exports => {
-          loader.patcher.after(null, exports, 'default', (_, __, res) => {
-              let newButton = loader.React.createElement('button', {
-                  className: 'openPlugins',
-                  dangerouslySetInnerHTML: { __html: wrench },
-                  onClick: openPluginManager
-              });
-              return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton]);
-          });
-      }, true);
-      // add the button to the home screen
-      loader.parcel.interceptRequire(null, exports => exports?.SpaceContext, exports => {
-          loader.patcher.before(null, exports, 'default', (_, args) => {
-              let light = location.href.includes("/creative");
-              if (args[0].children?.some?.((c) => c?.key === 'creative')) {
-                  let icon = loader.React.createElement('div', {
-                      className: 'icon',
-                      dangerouslySetInnerHTML: { __html: wrench }
-                  });
-                  let text = loader.React.createElement('div', {
-                      className: "text"
-                  }, "Plugins");
-                  let newEl = loader.React.createElement('div', {
-                      className: `gl-homeWrench ${light ? 'light' : ''}`,
-                      onClick: openPluginManager
-                  }, [icon, text]);
-                  args[0].children.splice(0, 0, newEl);
-              }
-          });
-      }, true);
-      // add the button to the host screen before the game starts
-      loader.parcel.interceptRequire(null, 
-      // the } is there for a reason
-      exports => exports?.default?.toString?.().includes('customHorizontalPadding}'), exports => {
-          let nativeDefault = exports.default;
-          loader.patcher.after(null, exports, 'default', (_, __, res) => {
-              let btnContents = loader.React.createElement('div', {
-                  className: "gl-hostWrench"
-              }, [
-                  loader.React.createElement('div', {
-                      className: 'gl-wrench',
-                      dangerouslySetInnerHTML: { __html: wrench }
-                  }),
-                  loader.React.createElement('div', {}, "Plugins")
-              ]);
-              let newBtn = nativeDefault.apply(this, [{
-                      children: btnContents,
-                      onClick: openPluginManager,
-                      customColor: "#01579b",
-                      className: 'gl-hostWrenchBtn'
-                  }]);
-              let name = res?.props?.children?.props?.children?.[2]?.props?.children?.props?.children?.[1];
-              if (name === 'Rewards') {
-                  res.props.children = [newBtn, res.props.children];
-              }
-              return res;
-          });
-      }, true);
-      // add the button to 1d host screens
-      loader.parcel.interceptRequire(null, exports => exports?.default?.displayName?.includes?.('inject-with-gameOptions-gameValues-players-kit-ui'), exports => {
-          loader.patcher.after(null, exports.default, 'render', (_, __, res) => {
-              let nativeType = res.type;
-              delete res.type;
-              res.type = function () {
-                  let res = new nativeType(...arguments);
-                  let nativeRender = res.render;
-                  delete res.render;
-                  res.render = function () {
-                      let res = nativeRender.apply(this, arguments);
-                      let newBtn = loader.React.createElement('button', {
-                          className: 'gl-1dHostPluginBtn',
-                          onClick: openPluginManager
-                      }, 'Plugins');
-                      res.props.children = [newBtn, res.props.children];
-                      return res;
-                  };
-                  return res;
-              };
-              return res;
-          });
-      }, true);
-      // add the button to the 1d host screen while in-game
-      // we need to do this to intercept the stupid mobx wrapper which is a massive pain
-      loader.parcel.interceptRequire(null, exports => exports?.__decorate, exports => {
-          loader.patcher.before(null, exports, '__decorate', (_, args) => {
-              if (args[1]?.toString?.()?.includes("Toggle Music")) {
-                  let nativeRender = args[1].prototype.render;
-                  args[1].prototype.render = function () {
-                      let res = nativeRender.apply(this, args);
-                      let children = res.props.children[2].props.children.props.children;
-                      let newEl = loader.React.createElement(children[1].type, {
-                          icon: loader.React.createElement('div', {
-                              className: 'gl-1dHostGameWrench',
-                              dangerouslySetInnerHTML: { __html: wrench }
-                          }),
-                          onClick: openPluginManager,
-                          tooltipMessage: "Plugins"
-                      });
-                      children.splice(0, 0, newEl);
-                      return res;
-                  };
-              }
-          });
-      }, true);
-      // add the button to the 1d game screen
-      loader.parcel.interceptRequire(null, exports => exports?.observer &&
-          exports.Provider, exports => {
-          // let nativeObserver = exports.observer;
-          // delete exports.observer;
-          // exports.observer = function() {
-          loader.patcher.before(null, exports, 'observer', (_, args) => {
-              if (args[0]?.toString?.().includes('"aria-label":"Menu"')) {
-                  let nativeArgs = args[0];
-                  args[0] = function () {
-                      let res = nativeArgs.apply(this, arguments);
-                      // for when we're still on the join screen
-                      if (res?.props?.children?.props?.children?.props?.src === '/client/img/svgLogoWhite.svg') {
-                          let props = res.props.children.props;
-                          props.children = [props.children, loader.React.createElement('div', {
-                                  className: 'gl-1dGameWrenchJoin',
-                                  style: { cursor: 'pointer' },
-                                  dangerouslySetInnerHTML: { __html: wrench },
-                                  onClick: openPluginManager
-                              })];
-                          return res;
-                      }
-                      let children = res?.props?.children?.[0]?.props?.children?.props?.children;
-                      if (!children)
-                          return res;
-                      let newEl = loader.React.createElement(children[1].type, {
-                          onClick: openPluginManager,
-                      }, loader.React.createElement('div', {
-                          className: 'gl-1dGameWrench',
-                          dangerouslySetInnerHTML: { __html: wrench }
-                      }));
-                      children.splice(3, 0, newEl);
-                      return res;
-                  };
-              }
-          });
-      }, true);
-  }
-
-  /*
       This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
   */
   class Parcel extends EventTarget {
@@ -1010,8 +207,10 @@ var gimloader = (function (exports) {
       // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
       constructor() {
           super();
-          this.setup();
-          this.reloadExistingScript();
+          window.addEventListener('load', () => {
+              this.setup();
+              this.reloadExistingScript();
+          });
       }
       interceptRequire(id, match, callback, once = false) {
           if (!match || !callback)
@@ -1030,16 +229,23 @@ var gimloader = (function (exports) {
       stopIntercepts(id) {
           this.reqIntercepts = this.reqIntercepts.filter(intercept => intercept.id !== id);
       }
-      // interceptRegister(match: string | RegExp, callback: (exports: any) => any) {
-      //     this.regIntercepts.push({ match, callback });
-      // }
+      async decachedImport(url) {
+          let src = new URL(url, location.origin).href;
+          let res = await fetch(src);
+          let text = await res.text();
+          // nasty hack to prevent the browser from caching other scripts
+          text = text.replaceAll('import(', 'window.GL.parcel.decachedImport(');
+          text = text.replaceAll('import.meta.url', `'${src}'`);
+          let blob = new Blob([text], { type: 'application/javascript' });
+          let blobUrl = URL.createObjectURL(blob);
+          return import(blobUrl);
+      }
       async reloadExistingScript() {
           let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])');
           if (existingScripts.length > 0)
               this.readyToIntercept = false;
           else
               return;
-          await new Promise(res => window.addEventListener('load', res));
           // nuke the dom
           document.querySelector("#root")?.remove();
           let newRoot = document.createElement('div');
@@ -1051,25 +257,7 @@ var gimloader = (function (exports) {
           for (let existingScript of existingScripts) {
               // re-import the script since it's already loaded
               log(existingScript, 'has already loaded, re-importing...');
-              let res = await fetch(existingScript.src);
-              let text = await res.text();
-              // nasty hack to prevent the browser from caching other scripts (might be useful later)
-              // let index: number = 0;
-              // while((index = text.indexOf('import(', index)) !== -1) {
-              //     let nesting = 1;
-              //     index += 7;
-              //     // this assumes that the parenthesis are balanced
-              //     while(nesting !== 0) {
-              //         index++;
-              //         if(text[index] === '(') nesting++;
-              //         if(text[index] === ')') nesting--;
-              //     }
-              //     text = text.slice(0, index) + `+'?t='+Date.now()` + text.slice(index);
-              // }
-              let script = document.createElement('script');
-              script.textContent = text;
-              script.type = "module";
-              document.head.appendChild(script);
+              this.decachedImport(existingScript.src);
               existingScript.remove();
           }
       }
@@ -1439,7 +627,6 @@ var gimloader = (function (exports) {
           this.injectSheetsAndScripts();
           this.getReact();
           this.exposeValues();
-          addPluginButtons(this);
       }
       injectSheetsAndScripts() {
           this.UI.addStyles(null, styles$1);

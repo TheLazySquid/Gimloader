@@ -24,6 +24,8 @@ function openPluginManager() {
 }
 
 export function addPluginButtons(loader: Gimloader) {
+    return
+
     // add a hotkey shift+p to open the plugin manager
     loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
     
