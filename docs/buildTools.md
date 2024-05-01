@@ -31,7 +31,9 @@ The build tools are configured using a GL.config.js file in the root of your pro
 
 ### Optional Properties
 
+- `version`: The version of the plugin to be displayed. This has no effect on the plugin itself.
 - `plugins`: Under the hood, Gimloader uses rollup to bundle projects. This property allows you to pass in an array of [rollup plugins](https://rollupjs.org/configuration-options/#output-plugins) to use. Ex: `plugins: [someRollupPlugin()]`.
+- `reloadRequired`: Whether or not the plugin requires a reload to take effect. This is optional, and defaults to false. If set to true, the user will be prompted to reload their page when the plugin is enabled.
 - `rollupOptions`: Anything in here will be passed to Rollup's `rollup` function.
 - `outputOptions`: Anything in here will be passed to Rollup's `bundle.write`.
 

@@ -11,7 +11,7 @@ function openPluginManager() {
     modalOpen = true;
     showModal(GL.React.createElement(PluginManager), {
         title: 'Manage Plugins',
-        style: "width: 50%; height: 80%",
+        style: "width: clamp(600px, 50%, 90%); height: 80%",
         closeOnBackgroundClick: true,
         buttons: [
             {

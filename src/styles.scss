@@ -11,7 +11,7 @@
 
     .pluginList {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         align-content: start;
         gap: 1rem;
         padding: 1rem;
@@ -38,6 +38,13 @@
         width: 100%;
         justify-content: start;
         align-items: center;
+
+        .right {
+            padding-right: 5px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
     }
     
     button {
@@ -46,6 +53,11 @@
         height: 43px;
         border: none;
         background-color: transparent;
+        transition: transform 0.23s ease 0s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
     }
     
     svg {
@@ -79,6 +91,11 @@
             font-size: 1.5rem;
             font-weight: 600;
             flex-grow: 1;
+        }
+
+        .version {
+            padding-left: 5px;
+            font-size: 0.8rem;
         }
 
         .author {

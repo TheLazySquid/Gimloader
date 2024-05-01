@@ -32,7 +32,7 @@ Once in the mod menu, you can create or import plugins with the two buttons at t
 
 ### Plugin Structure
 
-Plugins should start with a jsdoc comment that looks like this to give some information about the plugin:
+Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](/docs/headers.md)).
 
 ```javascript
 /**

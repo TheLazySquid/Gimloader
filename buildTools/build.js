@@ -3,12 +3,21 @@ import { rollup } from 'rollup';
 import { pathToFileURL } from 'url';
 import { join } from 'path';
 
-function addMeta(name, description, author) {
+function addMeta(config) {
     let meta = `/**
- * @name ${name}
- * @description ${description}
- * @author ${author}
- */\n`;
+ * @name ${config.name}
+ * @description ${config.description}
+ * @author ${config.author}`;
+
+    if(config.version) {
+        meta += `\n * @version ${config.version}`;
+    }
+
+    if(config.reloadRequired === true) {
+        meta += '\n * @reloadRequired true';
+    }
+
+    meta += '\n */\n';
 
     return {
         name: 'addMeta',
@@ -55,7 +64,7 @@ export default async function build() {
     }
 
     let plugins = config.default.plugins ?? [];
-    plugins.push(addMeta(config.default.name, config.default.description, config.default.author));
+    plugins.push(addMeta(config.default));
 
     // build the plugin
     const bundle = await rollup({
@@ -71,4 +80,5 @@ export default async function build() {
     });
 
     console.log('Build complete!');
+    process.exit(0);
 }

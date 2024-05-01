@@ -1,6 +1,6 @@
 import * as CodeCake from "codecake"
 import showModal from "./modal";
-import { savePlugins } from "../loadPlugins";
+import { parseHeader, savePlugins } from "../loadPlugins";
 import { Plugin } from "../loadPlugins";
 
 export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugin) {
@@ -29,6 +29,7 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
                 onClick() {
                     plugin.disable();
                     plugin.script = editor.getCode();
+                    plugin.headers = parseHeader(plugin.script)
                     plugin.enable();
                     let newPlugins = [...plugins];
                     savePlugins(newPlugins);
