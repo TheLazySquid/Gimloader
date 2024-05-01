@@ -75,11 +75,12 @@ export function savePlugins(newPlugins: Plugin[]) {
     setValue('plugins', JSON.stringify(pluginObjs));
 }
 
-function parseHeader(code: string) {
+export function parseHeader(code: string) {
     let headers: Record<string, string> = {
         name: "Unnamed Plugin",
         description: "No description provided",
         author: "Unknown Author",
+        version: null,
         reloadRequired: "false"
     };
     
