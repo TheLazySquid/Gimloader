@@ -19,10 +19,15 @@ export default class Parcel extends EventTarget {
     constructor() {
         super();
 
-        window.addEventListener('load', () => {
-            this.setup();
-            this.reloadExistingScript();
-        })
+        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
+        if(existingScripts.length > 0) {
+            this.readyToIntercept = false;
+            window.addEventListener('load', () => {
+                this.setup();
+                this.reloadExistingScripts(existingScripts);
+            })
+        }
+        else this.setup();
     }
 
     interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
@@ -58,17 +63,19 @@ export default class Parcel extends EventTarget {
         return import(blobUrl);
     }
 
-    async reloadExistingScript() {
-        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
-        if(existingScripts.length > 0) this.readyToIntercept = false;
-        else return;
-
+    async reloadExistingScripts(existingScripts: NodeListOf<HTMLScriptElement>) {
         // nuke the dom
         document.querySelector("#root")?.remove();
         let newRoot = document.createElement('div');
         newRoot.id = 'root';
         document.body.appendChild(newRoot);
         
+        // remove all global variables
+        let vars = ["__mobxGlobals", "__mobxInstanceCount"]
+        for(let v of vars) {
+            if(v in window) delete window[v];
+        }
+
         this.readyToIntercept = true;
         this._parcelModuleCache = {};
         this._parcelModules = {};
