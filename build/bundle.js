@@ -168,6 +168,22 @@ var gimloader = (function (exports) {
           version: null,
           reloadRequired: "false"
       };
+      // parse headers for gimhook mods
+      if (code.startsWith("// gimhook: ")) {
+          try {
+              let gimhookHeader = JSON.parse(code.slice(11, code.indexOf('\n')).trim());
+              if (gimhookHeader.name)
+                  headers.name = gimhookHeader.name;
+              if (gimhookHeader.description)
+                  headers.description = gimhookHeader.description;
+              if (gimhookHeader.author)
+                  headers.author = gimhookHeader.author;
+              if (gimhookHeader.version)
+                  headers.version = gimhookHeader.version;
+          }
+          catch (e) { }
+          return headers;
+      }
       // parse the JSDoc header at the start (if it exists)
       let closingIndex = code.indexOf('*/');
       if (!(code.trimStart().startsWith('/**')) || closingIndex === -1) {
@@ -662,7 +678,7 @@ var gimloader = (function (exports) {
       editor.setCode(plugin.script);
       showModal(editorDiv, {
           title: "Edit Plugin Code",
-          style: "width: 50%",
+          style: "width: 90%",
           buttons: [
               {
                   text: "cancel",
@@ -1035,10 +1051,22 @@ var gimloader = (function (exports) {
           else
               this.setup();
       }
+      onModuleRequired(id, callback) {
+          let intercept = { type: 'moduleRequired', callback };
+          if (id)
+              intercept.id = id;
+          this.reqIntercepts.push(intercept);
+          // return a cancel function
+          return () => {
+              let index = this.reqIntercepts.indexOf(intercept);
+              if (index !== -1)
+                  this.reqIntercepts.splice(index, 1);
+          };
+      }
       interceptRequire(id, match, callback, once = false) {
           if (!match || !callback)
               throw new Error('match and callback are required');
-          let intercept = { match, callback, once };
+          let intercept = { type: 'interceptRequire', match, callback, once };
           if (id)
               intercept.id = id;
           this.reqIntercepts.push(intercept);
@@ -1104,13 +1132,19 @@ var gimloader = (function (exports) {
                   // run intercepts
                   if (this.readyToIntercept) {
                       for (let intercept of this.reqIntercepts) {
-                          if (intercept.match(moduleObject.exports)) {
-                              let returned = intercept.callback?.(moduleObject.exports);
-                              if (returned)
-                                  moduleObject.exports = returned;
-                              if (intercept.once) {
-                                  this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                          if (intercept.type === 'interceptRequire') {
+                              // check for matches for the moduleRequired intercepts
+                              if (intercept.match(moduleObject.exports)) {
+                                  let returned = intercept.callback?.(moduleObject.exports);
+                                  if (returned)
+                                      moduleObject.exports = returned;
+                                  if (intercept.once) {
+                                      this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                                  }
                               }
+                          }
+                          else {
+                              intercept.callback(moduleObject);
                           }
                       }
                   }
@@ -1428,6 +1462,78 @@ var gimloader = (function (exports) {
       }
   }
 
+  // spec: https://codeberg.org/gimhook/gimhook/src/branch/master/docs/sdk/api.md
+  // Several features were recently removed from gimhook which this polyfill actually adds back
+  // This means that more gimhook mods are compatible with gimloader than gimhook lol
+  function gimhookPolyfill(gimloader) {
+      let gimhook = {
+          game: { isGameActive: false, is2DGamemode: false },
+          ui: {},
+          graphics: { player: {}, camera: {} },
+          hooks: { require: [], message: [], join: [] },
+          addHook(type, callback) {
+              switch (type) {
+                  case "require":
+                      gimloader.parcel.onModuleRequired(null, callback);
+                      break;
+                  case "message":
+                      // this could also work for blueboat but Gimhook doesn't do that
+                      gimloader.net.colyseus.addEventListener("*", (packet) => {
+                          // if the function returns true then other handlers should theoretically be skipped, but this is not implemented
+                          callback(packet.detail.channel, packet.detail.message);
+                      });
+                      break;
+                  case "join":
+                      gimloader.addEventListener("loadEnd", () => {
+                          callback();
+                      });
+                      break;
+                  default:
+                      return;
+              }
+              gimhook.hooks[type].push(callback);
+          },
+          getHooks(type) {
+              return gimhook.hooks[type];
+          }
+      };
+      // gimhook.graphics.player
+      const getPlayer = () => {
+          return gimloader.stores?.phaser?.mainCharacter;
+      };
+      gimhook.graphics.player.getPlayer = getPlayer;
+      gimhook.graphics.player.getPosition = () => {
+          return getPlayer()?.body ?? { x: 0, y: 0 };
+      };
+      gimhook.graphics.player.setPosition = (x, y) => {
+          getPlayer()?.physics?.getBody?.()?.rigidBody.setTranslation({ x: x / 100, y: y / 100 });
+      };
+      // gimhook.graphics.camera
+      const getCamera = () => {
+          return gimloader.stores?.phaser?.scene?.cameras?.cameras?.[0];
+      };
+      gimhook.graphics.camera.getCamera = getCamera;
+      gimhook.graphics.camera.getZoom = () => {
+          return getCamera()?.zoom;
+      };
+      gimhook.graphics.camera.setZoom = (zoom) => {
+          getCamera()?.setZoom(zoom);
+      };
+      // gimhook.game
+      gimloader.addEventListener("loadEnd", () => {
+          gimhook.game.isGameActive = true;
+          if (gimloader.net.type === "Colyseus") {
+              gimhook.game.is2DGamemode = true;
+          }
+      });
+      // gimhook.ui
+      gimhook.ui.toaster = (message) => {
+          gimloader.notification.open({ message });
+      };
+      window.gimhook = gimhook;
+      getUnsafeWindow().gimhook = gimhook;
+  }
+
   class Gimloader extends EventTarget {
       version = version;
       React;
@@ -1452,6 +1558,8 @@ var gimloader = (function (exports) {
           this.getReact();
           this.exposeValues();
           addPluginButtons(this);
+          // create a polyfill for gimhook
+          gimhookPolyfill(this);
       }
       injectSheetsAndScripts() {
           this.UI.addStyles(null, styles$1);

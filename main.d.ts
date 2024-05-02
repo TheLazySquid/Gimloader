@@ -13,6 +13,8 @@ declare const GL: import('./src/index').Gimloader;
 declare const stores: any;
 /** @deprecated Use GL.platformerPhysics */
 declare const platformerPhysics: any;
+/** @deprecated Polyfills for Gimhook mods. Please use the built-in modding API */
+declare const gimhook: any;
 
 interface Window {
     GL: import('./src/index').Gimloader;
@@ -20,4 +22,6 @@ interface Window {
     stores: any;
     /** @deprecated Use GL.platformerPhysics */
     platformerPhysics: any;
+    /** @deprecated Polyfills for Gimhook mods. Please use the built-in modding API */
+    gimhook: any;
 }

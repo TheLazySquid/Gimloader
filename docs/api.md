@@ -12,9 +12,17 @@ These are both internal Gimkit modules that are used in 2d gamemodes and contain
 
 ### GL.parcel
 
-`GL.parcel.interceptRequire(id: string | null, match(exports: any) => boolean, (exports: any) => any, once: boolean): () => void`
+`GL.parcel.interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean): () => void`
 
 Whenever a module is imported by Gimkit that has exports that match the second argument, the third argument will be called with the exports. Returning something from the callback will modify the exports of the module. Requires an ID to be used for when the plugin is unloaded. Returns a function that will remove the interceptor. If once is true, the interceptor will only fire once.
+
+`GL.parcel.onModuleRequired(id: string | null, callback: (module: any) => void): () => void`
+
+The callback is called whenever a module is imported by Gimkit. It is passed an object with the following properties:
+- id: the id of the module
+- exports: the exports of the module
+
+Requires an ID to be used for when the plugin is unloaded. Returns a function that will remove the listener.
 
 `GL.parcel.stopIntercepts(id: string)`
 
