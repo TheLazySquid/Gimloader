@@ -7,7 +7,15 @@ import { getUnsafeWindow } from './util';
 
 export function gimhookPolyfill(gimloader: Gimloader) {
     let gimhook: any = {
-        game: { isGameActive: false, is2DGamemode: false },
+        game: {
+            isGameActive: false,
+            is2DGamemode: false,
+            get colyseusInstance() {
+                return {
+                    room: gimloader.net.colyseus.room
+                }
+            }
+        },
         ui: {},
         graphics: { player: {}, camera: {} },
         hooks: { require: [], message: [], join: [] },
