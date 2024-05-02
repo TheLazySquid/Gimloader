@@ -7,7 +7,21 @@ import { getUnsafeWindow, log } from "../util";
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
 
-type Intercept = { id?: string, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean };
+export interface IModuleRequired {
+    type: 'moduleRequired';
+    id?: string;
+    callback: (module: any) => void;
+}
+
+export interface IInterceptRequire {
+    type: 'interceptRequire';
+    id?: string;
+    match: (exports: any) => boolean;
+    callback: (exports: any) => any;
+    once: boolean;
+}
+
+type Intercept = IModuleRequired | IInterceptRequire;
 
 export default class Parcel extends EventTarget {
     _parcelModuleCache = {};
@@ -30,9 +44,21 @@ export default class Parcel extends EventTarget {
         else this.setup();
     }
 
+    onModuleRequired(id: string | null, callback: (module: any) => void) {
+        let intercept: Intercept = { type: 'moduleRequired', callback };
+        if(id) intercept.id = id;
+        this.reqIntercepts.push(intercept);
+
+        // return a cancel function
+        return () => {
+            let index = this.reqIntercepts.indexOf(intercept);
+            if(index !== -1) this.reqIntercepts.splice(index, 1);
+        }
+    }
+
     interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once: boolean = false) {
         if(!match || !callback) throw new Error('match and callback are required');
-        let intercept: Intercept = { match, callback, once };
+        let intercept: Intercept = { type: 'interceptRequire', match, callback, once };
         if(id) intercept.id = id;
         this.reqIntercepts.push(intercept);
 
@@ -115,13 +141,18 @@ export default class Parcel extends EventTarget {
                 // run intercepts
                 if(this.readyToIntercept) {
                     for (let intercept of this.reqIntercepts) {
-                        if (intercept.match(moduleObject.exports)) {
-                            let returned = intercept.callback?.(moduleObject.exports);
-                            if(returned) moduleObject.exports = returned;
-    
-                            if(intercept.once) {
-                                this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                        if(intercept.type === 'interceptRequire') {
+                            // check for matches for the moduleRequired intercepts
+                            if (intercept.match(moduleObject.exports)) {
+                                let returned = intercept.callback?.(moduleObject.exports);
+                                if(returned) moduleObject.exports = returned;
+        
+                                if(intercept.once) {
+                                    this.reqIntercepts.splice(this.reqIntercepts.indexOf(intercept), 1);
+                                }
                             }
+                        } else {
+                            intercept.callback(moduleObject);
                         }
                     }
                 }

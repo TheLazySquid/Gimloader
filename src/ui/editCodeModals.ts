@@ -18,7 +18,7 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
 
     showModal(editorDiv, {
         title: "Edit Plugin Code",
-        style: "width: 50%",
+        style: "width: 90%",
         buttons: [
             {
                 text: "cancel",

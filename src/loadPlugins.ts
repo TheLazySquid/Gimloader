@@ -83,6 +83,20 @@ export function parseHeader(code: string) {
         version: null,
         reloadRequired: "false"
     };
+
+    // parse headers for gimhook mods
+    if(code.startsWith("// gimhook: ")) {
+        try {
+            let gimhookHeader = JSON.parse(code.slice(11, code.indexOf('\n')).trim());
+            
+            if(gimhookHeader.name) headers.name = gimhookHeader.name;
+            if(gimhookHeader.description) headers.description = gimhookHeader.description;
+            if(gimhookHeader.author) headers.author = gimhookHeader.author;
+            if(gimhookHeader.version) headers.version = gimhookHeader.version;
+        } catch(e) {}
+
+        return headers;
+    }
     
     // parse the JSDoc header at the start (if it exists)
     let closingIndex = code.indexOf('*/');

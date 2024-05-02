@@ -15,6 +15,7 @@ import HotkeyManager from './hotkeyManager/hotkeyManager';
 import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
+import { gimhookPolyfill } from './gimhookPolyfill';
 
 export class Gimloader extends EventTarget {
     version: string = version;
@@ -46,6 +47,9 @@ export class Gimloader extends EventTarget {
         this.exposeValues();
 
         addPluginButtons(this);
+
+        // create a polyfill for gimhook
+        gimhookPolyfill(this);
     }
 
     injectSheetsAndScripts() {

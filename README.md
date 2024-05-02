@@ -28,6 +28,10 @@ At any point, you can open the mod menu by pressing `alt + p`.
 
 Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/).
 
+## Gimhook Compatibility
+
+Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have a Gimhook mod that doesn't work with Gimloader, please open an issue.
+
 ## Development
 
 ### Plugin Structure
