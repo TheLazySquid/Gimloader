@@ -2,6 +2,8 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
+ * @version 0.1.1
+ * @reloadRequired true
  */
 var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 99999999999;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable .btns button {\n  height: 30px;\n  width: 30px;\n  text-align: center;\n}\n#inputTable table {\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable tr {\n  height: 22px;\n}\n#inputTable td, #inputTable th {\n  height: 22px;\n  width: 75px;\n  text-align: center;\n}\n\n#controlCountdown {\n  position: fixed;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 50px;\n  color: black;\n}";
 
@@ -121,6 +123,7 @@ function save(frames) {
 
 let lasers = [];
 GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
+    console.log(packet.detail);
     for (let i = 0; i < packet.detail.changes.length; i++) {
         let device = packet.detail.changes[i];
         if (lasers.some(l => l.id === device[0])) {
@@ -137,8 +140,18 @@ function updateLasers(frame) {
     let states = GL.stores.world.devices.states;
     let devices = GL.stores.phaser.scene.worldManager.devices;
     let active = frame % 66 < 36;
+    if (!states.has(lasers[0].id)) {
+        lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
+    }
     for (let laser of lasers) {
-        states.get(laser.id).properties.set("GLOBAL_active", active);
+        if (!states.has(laser.id)) {
+            let propsMap = new Map();
+            propsMap.set("GLOBAL_active", active);
+            states.set(laser.id, { properties: propsMap });
+        }
+        else {
+            states.get(laser.id).properties.set("GLOBAL_active", active);
+        }
         devices.getDeviceById(laser.id).onStateUpdateFromServer("GLOBAL_active", active);
     }
 }
@@ -267,6 +280,7 @@ class TASTools {
         if (!frame || !frame.translation || !frame.state)
             return;
         this.values.currentFrame = number;
+        updateLasers(this.values.currentFrame);
         this.rb.setTranslation(frame.translation, true);
         this.physics.state = JSON.parse(frame.state);
     }
@@ -467,8 +481,7 @@ function createUI(physicsManager) {
             let input = document.createElement("input");
             input.type = "checkbox";
             const checkPos = () => {
-                if (i + rowOffset <= values.currentFrame) {
-                    values.currentFrame = i + rowOffset;
+                if (i + rowOffset < values.currentFrame) {
                     tools.setFrame(i + rowOffset);
                     scrollTable();
                     updateTable();

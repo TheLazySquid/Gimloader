@@ -160,6 +160,7 @@ export default class TASTools {
 
         this.values.currentFrame = number;
 
+        updateLasers(this.values.currentFrame);
         this.rb.setTranslation(frame.translation, true)
         this.physics.state = JSON.parse(frame.state)
     }

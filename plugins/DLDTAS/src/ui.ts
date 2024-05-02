@@ -220,8 +220,7 @@ export function createUI(physicsManager: any) {
             input.type = "checkbox"
 
             const checkPos = () => {
-                if(i + rowOffset <= values.currentFrame) {
-                    values.currentFrame = i + rowOffset;
+                if(i + rowOffset < values.currentFrame) {
                     tools.setFrame(i + rowOffset)
                     scrollTable();
                     updateTable();
