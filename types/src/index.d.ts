@@ -6,6 +6,7 @@ import HotkeyManager from './hotkeyManager/hotkeyManager';
 import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
+import ContextMenu from './contextMenu/contextMenu';
 export declare class Gimloader extends EventTarget {
     version: string;
     React: typeof React;
@@ -18,6 +19,7 @@ export declare class Gimloader extends EventTarget {
     net: Net;
     hotkeys: HotkeyManager;
     patcher: Patcher;
+    contextMenu: ContextMenu;
     UI: {
         showModal: typeof showModal;
         addStyles: typeof addStyles;

@@ -10,3 +10,4 @@ export declare class Plugin {
 export declare let plugins: Plugin[];
 export declare function initPlugins(): Promise<void>;
 export declare function savePlugins(newPlugins: Plugin[]): void;
+export declare function parseHeader(code: string): Record<string, string>;
