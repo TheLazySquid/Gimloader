@@ -4,7 +4,7 @@ import type * as React from 'react';
 import type * as ReactDOM from 'react-dom/client';
 
 // @ts-ignore vscode struggles to find the declaration in ../main.d.ts
-import styles from './styles.scss';
+import styles from './css/styles.scss';
 // @ts-ignore
 import codeCakeStyles from 'codecake/codecake.css';
 import { getUnsafeWindow, log } from './util';
@@ -16,6 +16,7 @@ import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import { gimhookPolyfill } from './gimhookPolyfill';
+import ContextMenu from './contextMenu/contextMenu';
 
 export class Gimloader extends EventTarget {
     version: string = version;
@@ -32,6 +33,7 @@ export class Gimloader extends EventTarget {
     net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
     patcher: Patcher = new Patcher();
+    contextMenu: ContextMenu = new ContextMenu(this);
     UI = {
         showModal,
         addStyles,

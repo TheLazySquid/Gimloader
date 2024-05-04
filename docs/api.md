@@ -102,6 +102,17 @@ Instead of the method being called, the callback will be called. This is useful 
 
 Removes all patches with a given ID. You should use this in your onStop function if you added any patches.
 
+
+### GL.contextMenu
+
+`GL.contextMenu.showContextMenu(options: DropdownProps, x: number, y: number): () => void`
+
+This displays an [ant-design dropdown](https://ant.design/components/dropdown) at the given x and y coordinates. The options are the same as the options for the dropdown component. Returns a function that will remove the context menu.
+
+`GL.contextMenu.createReactContextMenu(options: DropdownProps, element: ReactElement): ReactElement`
+
+Will attach a dropdown menu to a given react element. The options are the same as the options for the dropdown component.
+
 ### Events
 
 Gimloader also has a few events that you can listen to:

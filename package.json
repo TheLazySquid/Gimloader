@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -38,6 +38,7 @@
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
     "@types/tampermonkey": "^5.0.2",
+    "antd": "^5.17.0",
     "rollup-plugin-sass": "^1.12.21",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-svelte": "^7.2.0",

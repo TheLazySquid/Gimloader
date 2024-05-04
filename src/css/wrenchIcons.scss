@@ -1,0 +1,139 @@
+
+.gl-row {
+    display: flex;
+    gap: 8px;
+}
+
+* > .gl-wrench {
+    padding: 8px 12px;
+}
+
+.gl-wrench {
+    width: 20px;
+    height: 20px;
+
+    svg {
+        fill: white;
+        width: 20px;
+        height: 20px;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.gl-join {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .openPlugins {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: rgb(30, 7, 107);
+        height: 36px;
+        width: 40px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgb(43, 10, 155);
+        }
+
+        svg {
+            fill: white;
+        }
+    }
+}
+
+.gl-homeWrench {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    &.light {
+        .text {
+            color: white;
+
+            &:hover {
+                color: white;
+            }
+        }
+
+        svg {
+            fill: white;
+        }
+    }
+
+    .text {
+        font-size: 18px;
+        color: rgb(22, 119, 255);
+        font-weight: bold;
+        cursor: pointer;
+        
+
+        &:hover {
+            color: #69b1ff;
+        }
+    }
+}
+
+div:has(> * > * > .gl-hostWrench) {
+    margin-right: 8px;
+}
+
+.gl-hostWrench {
+    display: flex;
+}
+
+.gl-1dHostPluginBtn {
+    padding: 6px 14px;
+    background-color: rgb(131, 131, 131);
+    border-radius: 4px;
+    margin-right: 8px;
+    color: white;
+    transition: transform 0.23s ease 0s;
+    border: none;
+    font-weight: 900;
+    font-size: 24px;
+    box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;
+
+    &:hover {
+        transform: scale(1.04);
+    }
+}
+
+.gl-1dHostGameWrench {
+    width: 25px;
+    height: 25px;
+
+    svg {
+        fill: white;
+        transform: translate(6px, -1px);
+    }
+}
+
+.gl-1dGameWrench {
+    width: 23px;
+    height: 23px;
+
+    svg {
+        fill: white;
+    }
+}
+
+.gl-1dGameWrenchJoin {
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    
+    svg {
+        fill: white;
+    }
+}
