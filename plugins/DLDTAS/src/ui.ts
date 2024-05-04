@@ -208,6 +208,7 @@ export function createUI(physicsManager: any) {
     let props = ["left", "right", "up"]
 
     window.addEventListener("mouseup", () => dragging = false)
+    let closePopup: Function;
 
     for (let i = 0; i < rows; i++) {
         let row = document.createElement("tr")
@@ -228,7 +229,10 @@ export function createUI(physicsManager: any) {
             }
 
             // add listeners
-            data.addEventListener("mousedown", () => {
+            data.addEventListener("mousedown", (e) => {
+                // check that it's a left click
+                if(e.button !== 0) return;
+
                 dragging = true;
                 draggingChecked = !values.frames[i + rowOffset][props[j]]
                 values.frames[i + rowOffset][props[j]] = draggingChecked
@@ -250,6 +254,34 @@ export function createUI(physicsManager: any) {
         }
 
         updateTable();
+
+        // add a context menu
+        row.addEventListener("contextmenu", (e) => {
+            if(closePopup) closePopup();
+
+            e.preventDefault();
+            e.stopPropagation();
+            closePopup = GL.contextMenu.showContextMenu({ menu: { items: [
+                {
+                    key: '1',
+                    label: 'Delete',
+                    onClick: () => {
+                        frames.splice(i + rowOffset, 1)
+                        updateTable()
+                        closePopup();
+                    }
+                },
+                {
+                    key: '2',
+                    label: 'Insert Frame Before',
+                    onClick: () => {
+                        frames.splice(i + rowOffset, 0, { right: false, left: false, up: false })
+                        updateTable()
+                        closePopup();
+                    }
+                }
+            ] } }, e.clientX, e.clientY)
+        }, { capture: true })
 
         div.querySelector("table")?.appendChild(row)
     }

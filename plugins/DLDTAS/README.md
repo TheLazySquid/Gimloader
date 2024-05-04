@@ -13,3 +13,5 @@ When you start a game, a "Start TAS" button will appear in the top left. Clickin
 If at any point you want to take manual control of the character, hit the controller button and a countdown will start. Afterwards, all your actions will be recorded until you hit the button again to stop recording.
 
 You can also change the speed of the game with the buttons at the top. Be warned that anything below 1x speed may look jerky.
+
+Also, right clicking on a frame lets you either delete it or insert a blank one before it.
