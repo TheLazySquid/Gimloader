@@ -1,4 +1,4 @@
-import { Gimloader } from './types/src/index';
+import { Gimloader } from './types/src/gimloader';
 
 declare global {
     const GL: Gimloader;

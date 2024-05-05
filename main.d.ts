@@ -8,7 +8,7 @@ declare module '*.svg' {
     export default content;
 }
 
-declare const GL: import('./src/index').Gimloader;
+declare const GL: import('./src/gimloader').Gimloader;
 /** @deprecated Use GL.stores */
 declare const stores: any;
 /** @deprecated Use GL.platformerPhysics */
@@ -17,7 +17,7 @@ declare const platformerPhysics: any;
 declare const gimhook: any;
 
 interface Window {
-    GL: import('./src/index').Gimloader;
+    GL: import('./src/gimloader').Gimloader;
     /** @deprecated Use GL.stores */
     stores: any;
     /** @deprecated Use GL.platformerPhysics */

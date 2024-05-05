@@ -1,7 +1,7 @@
-var gimloader = (function (exports) {
+(function () {
   'use strict';
 
-  var version = "0.3.1";
+  var version = "0.4.0";
 
   var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap .header .right {\n  padding-right: 5px;\n  flex-grow: 1;\n  display: flex;\n  justify-content: flex-end;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  width: 30px;\n  height: 30px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.5rem;\n  font-weight: 600;\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .plugin .author {\n  font-size: 0.8rem;\n  font-weight: normal;\n}\n.gl-listWrap .plugin .description {\n  font-size: 1rem;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
@@ -144,21 +144,25 @@ var gimloader = (function (exports) {
           this.return = null;
       }
   }
-  let plugins = [];
-  async function initPlugins() {
-      let pluginScripts = JSON.parse(getValue('plugins', '[]'));
-      for (let plugin of pluginScripts) {
-          let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
-          plugins.push(pluginObj);
+  class PluginManager {
+      plugins = [];
+      constructor() {
+          this.init();
       }
-      await Promise.all(plugins.map(p => p.enabled && p.enable(true)));
-      log('Plugins loaded');
-  }
-  initPlugins();
-  function savePlugins(newPlugins) {
-      plugins = newPlugins;
-      let pluginObjs = plugins.map(p => ({ script: p.script, enabled: p.enabled }));
-      setValue('plugins', JSON.stringify(pluginObjs));
+      async init() {
+          let pluginScripts = JSON.parse(getValue('plugins', '[]'));
+          for (let plugin of pluginScripts) {
+              let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
+              this.plugins.push(pluginObj);
+          }
+          await Promise.all(this.plugins.map(p => p.enabled && p.enable(true)));
+          log('Plugins loaded');
+      }
+      save(newPlugins) {
+          this.plugins = newPlugins;
+          let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
+          setValue('plugins', JSON.stringify(pluginObjs));
+      }
   }
   function parseHeader(code) {
       let headers = {
@@ -666,7 +670,7 @@ var gimloader = (function (exports) {
       return _highlight(code, languages[language]?.rules || []);
   };
 
-  function showCodeEditor(plugins, setPlugins, plugin) {
+  function showCodeEditor(plugins, setPlugins, plugin, pluginManager) {
       let editorDiv = document.createElement("div");
       editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
       let editor = create(editorDiv, {
@@ -692,7 +696,7 @@ var gimloader = (function (exports) {
                       plugin.headers = parseHeader(plugin.script);
                       plugin.enable();
                       let newPlugins = [...plugins];
-                      savePlugins(newPlugins);
+                      pluginManager.save(newPlugins);
                       setPlugins(newPlugins);
                   }
               }
@@ -700,7 +704,7 @@ var gimloader = (function (exports) {
       });
   }
   // can't be bothered with the type
-  function createPlugin(plugins, setPlugins) {
+  function createPlugin(plugins, setPlugins, pluginManager) {
       let editorDiv = document.createElement("div");
       editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
       let editor = create(editorDiv, {
@@ -728,16 +732,16 @@ var gimloader = (function (exports) {
                   onClick() {
                       let newPlugins = [...plugins, new Plugin(editor.getCode())];
                       setPlugins(newPlugins);
-                      savePlugins(newPlugins);
+                      pluginManager.save(newPlugins);
                   }
               }
           ]
       });
   }
 
-  function PluginManager() {
+  function PluginManagerUI({ pluginManager }) {
       const React = GL.React;
-      const [plugins$1, setPlugins] = React.useState(plugins);
+      const [plugins, setPlugins] = React.useState(pluginManager.plugins);
       const filePickerInput = React.useRef(null);
       function importFile() {
           filePickerInput.current?.click();
@@ -752,9 +756,9 @@ var gimloader = (function (exports) {
                   // @ts-ignore compiler option is set but vscode can't tell
                   code = code.replaceAll("\r\n", "\n");
                   let plugin = new Plugin(code);
-                  let newPlugins = [...plugins$1, plugin];
+                  let newPlugins = [...plugins, plugin];
                   setPlugins(newPlugins);
-                  savePlugins(newPlugins);
+                  pluginManager.save(newPlugins);
               });
               reader.readAsText(file);
           });
@@ -763,36 +767,36 @@ var gimloader = (function (exports) {
           let confirm = window.confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
           if (!confirm)
               return;
-          let newPlugins = plugins$1.filter(p => p !== plugin);
+          let newPlugins = plugins.filter(p => p !== plugin);
           setPlugins(newPlugins);
-          savePlugins(newPlugins);
+          pluginManager.save(newPlugins);
       }
       function enableAll() {
-          let newPlugins = plugins$1.map(p => {
+          let newPlugins = plugins.map(p => {
               p.enable();
               return p;
           });
           setPlugins(newPlugins);
-          savePlugins(newPlugins);
+          pluginManager.save(newPlugins);
       }
       function disableAll() {
-          let newPlugins = plugins$1.map(p => {
+          let newPlugins = plugins.map(p => {
               p.disable();
               return p;
           });
           setPlugins(newPlugins);
-          savePlugins(newPlugins);
+          pluginManager.save(newPlugins);
       }
       return (React.createElement("div", { className: "gl-listWrap" },
           React.createElement("div", { className: "header" },
               React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
               React.createElement("input", { type: "file", style: { display: "none" }, accept: ".js", ref: filePickerInput }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins$1, setPlugins) }),
+              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins, setPlugins, pluginManager) }),
               React.createElement("div", { className: "right" },
                   React.createElement("button", { dangerouslySetInnerHTML: { __html: checkBold }, title: "Enable All", onClick: enableAll }),
                   React.createElement("button", { dangerouslySetInnerHTML: { __html: closeThick }, title: "Disable All", onClick: disableAll }))),
           React.createElement("div", { className: "pluginList" },
-              plugins$1.map((plugin, index) => {
+              plugins.map((plugin, index) => {
                   return (React.createElement("div", { key: index, className: "plugin" },
                       React.createElement("div", { className: "info" },
                           React.createElement("div", { className: "top" },
@@ -810,29 +814,29 @@ var gimloader = (function (exports) {
                                           plugin.disable();
                                       }
                                       // this re-renders all the plugins (bad) but I don't care
-                                      let newPlugins = [...plugins$1];
+                                      let newPlugins = [...plugins];
                                       setPlugins(newPlugins);
-                                      savePlugins(newPlugins);
+                                      pluginManager.save(newPlugins);
                                   } })),
                           React.createElement("div", { className: "author" },
                               "by ",
                               plugin.headers.author),
                           React.createElement("div", { className: "description" }, plugin.headers.description)),
                       React.createElement("div", { className: "buttons" },
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins$1, setPlugins, plugin) }),
+                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins, setPlugins, plugin, pluginManager) }),
                           React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deletePlugin(plugin) }))));
               }),
-              plugins$1.length === 0 ?
+              plugins.length === 0 ?
                   React.createElement("div", { className: "empty" }, "No plugins! Create or import one to get started.")
                   : null)));
   }
 
   let modalOpen = false;
-  function openPluginManager() {
+  function openPluginManager(pluginManager) {
       if (modalOpen)
           return;
       modalOpen = true;
-      showModal(GL.React.createElement(PluginManager), {
+      showModal(GL.React.createElement(PluginManagerUI, { pluginManager }), {
           title: 'Manage Plugins',
           style: "width: clamp(600px, 50%, 90%); height: 80%",
           closeOnBackgroundClick: true,
@@ -845,9 +849,9 @@ var gimloader = (function (exports) {
           onClosed: () => modalOpen = false
       });
   }
-  function addPluginButtons(loader) {
+  function addPluginButtons(loader, pluginManager) {
       // add a hotkey shift+p to open the plugin manager
-      loader.hotkeys.add(new Set(['alt', 'p']), openPluginManager);
+      loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager(pluginManager));
       // add the button to the creative screen and the host screen
       loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
           loader.patcher.after(null, exports, "default", (_, __, res) => {
@@ -865,7 +869,7 @@ var gimloader = (function (exports) {
                               className: 'gl-wrench',
                               dangerouslySetInnerHTML: { __html: wrench }
                           }),
-                          onClick: openPluginManager
+                          onClick: () => openPluginManager(pluginManager)
                       }));
                       return res;
                   };
@@ -878,7 +882,7 @@ var gimloader = (function (exports) {
                           className: 'gl-wrench',
                           dangerouslySetInnerHTML: { __html: wrench }
                       }),
-                      onClick: openPluginManager
+                      onClick: () => openPluginManager(pluginManager)
                   });
                   res.props.children = [res.props.children, newBtn];
               }
@@ -891,7 +895,7 @@ var gimloader = (function (exports) {
               let newButton = loader.React.createElement('button', {
                   className: 'openPlugins',
                   dangerouslySetInnerHTML: { __html: wrench },
-                  onClick: openPluginManager
+                  onClick: () => openPluginManager(pluginManager)
               });
               return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton]);
           });
@@ -910,7 +914,7 @@ var gimloader = (function (exports) {
                   }, "Plugins");
                   let newEl = loader.React.createElement('div', {
                       className: `gl-homeWrench ${light ? 'light' : ''}`,
-                      onClick: openPluginManager
+                      onClick: () => openPluginManager(pluginManager)
                   }, [icon, text]);
                   args[0].children.splice(0, 0, newEl);
               }
@@ -933,7 +937,7 @@ var gimloader = (function (exports) {
               ]);
               let newBtn = nativeDefault.apply(this, [{
                       children: btnContents,
-                      onClick: openPluginManager,
+                      onClick: () => openPluginManager(pluginManager),
                       customColor: "#01579b",
                       className: 'gl-hostWrenchBtn'
                   }]);
@@ -957,7 +961,7 @@ var gimloader = (function (exports) {
                       let res = nativeRender.apply(this, arguments);
                       let newBtn = loader.React.createElement('button', {
                           className: 'gl-1dHostPluginBtn',
-                          onClick: openPluginManager
+                          onClick: () => openPluginManager(pluginManager)
                       }, 'Plugins');
                       res.props.children = [newBtn, res.props.children];
                       return res;
@@ -981,7 +985,7 @@ var gimloader = (function (exports) {
                               className: 'gl-1dHostGameWrench',
                               dangerouslySetInnerHTML: { __html: wrench }
                           }),
-                          onClick: openPluginManager,
+                          onClick: () => openPluginManager(pluginManager),
                           tooltipMessage: "Plugins"
                       });
                       children.splice(0, 0, newEl);
@@ -1008,7 +1012,7 @@ var gimloader = (function (exports) {
                                   className: 'gl-1dGameWrenchJoin',
                                   style: { cursor: 'pointer' },
                                   dangerouslySetInnerHTML: { __html: wrench },
-                                  onClick: openPluginManager
+                                  onClick: () => openPluginManager(pluginManager)
                               })];
                           return res;
                       }
@@ -1016,7 +1020,7 @@ var gimloader = (function (exports) {
                       if (!children)
                           return res;
                       let newEl = loader.React.createElement(children[1].type, {
-                          onClick: openPluginManager,
+                          onClick: () => openPluginManager(pluginManager),
                       }, loader.React.createElement('div', {
                           className: 'gl-1dGameWrench',
                           dangerouslySetInnerHTML: { __html: wrench }
@@ -1622,7 +1626,7 @@ var gimloader = (function (exports) {
           this.injectSheetsAndScripts();
           this.getReact();
           this.exposeValues();
-          addPluginButtons(this);
+          addPluginButtons(this, new PluginManager());
           // create a polyfill for gimhook
           gimhookPolyfill(this);
       }
@@ -1660,12 +1664,18 @@ var gimloader = (function (exports) {
           });
       }
   }
-  let loader = new Gimloader();
-  window.GL = loader;
-  getUnsafeWindow().GL = loader;
 
-  exports.Gimloader = Gimloader;
+  if (location.host === "www.gimkit.com") {
+      let loader = new Gimloader();
+      window.GL = loader;
+      getUnsafeWindow().GL = loader;
+  }
+  else if (location.host === "thelazysquid.github.io" && location.pathname === "/gimloader/") {
+      let pluginScripts = JSON.parse(getValue('plugins', '[]'));
+      getUnsafeWindow().GLInstall = function (script) {
+          pluginScripts.push({ script, enabled: true });
+          setValue('plugins', JSON.stringify(pluginScripts));
+      };
+  }
 
-  return exports;
-
-})({});
+})();

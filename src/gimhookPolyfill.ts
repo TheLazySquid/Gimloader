@@ -1,4 +1,4 @@
-import type { Gimloader } from './index'
+import type { Gimloader } from './gimloader'
 import { getUnsafeWindow } from './util';
 
 // spec: https://codeberg.org/gimhook/gimhook/src/branch/master/docs/sdk/api.md

@@ -51,28 +51,32 @@ export class Plugin {
     }
 }
 
-export let plugins: Plugin[] = [];
+export default class PluginManager {
+    plugins: Plugin[] = [];
 
-export async function initPlugins() {
-    let pluginScripts = JSON.parse(getValue('plugins', '[]')!);
-
-    for(let plugin of pluginScripts) {
-        let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
-        plugins.push(pluginObj);
+    constructor() {
+        this.init();
     }
 
-    await Promise.all(plugins.map(p => p.enabled && p.enable(true)));
+    async init() {
+        let pluginScripts = JSON.parse(getValue('plugins', '[]')!);
 
-    log('Plugins loaded');
-}
+        for(let plugin of pluginScripts) {
+            let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
+            this.plugins.push(pluginObj);
+        }
+    
+        await Promise.all(this.plugins.map(p => p.enabled && p.enable(true)));
+    
+        log('Plugins loaded');
+    }
 
-initPlugins();
-
-export function savePlugins(newPlugins: Plugin[]) {
-    plugins = newPlugins;
-    let pluginObjs = plugins.map(p => ({ script: p.script, enabled: p.enabled }));
-
-    setValue('plugins', JSON.stringify(pluginObjs));
+    save(newPlugins: Plugin[]) {
+        this.plugins = newPlugins;
+        let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
+    
+        setValue('plugins', JSON.stringify(pluginObjs));
+    }
 }
 
 export function parseHeader(code: string) {

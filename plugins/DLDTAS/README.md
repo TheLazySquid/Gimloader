@@ -4,7 +4,7 @@ This is a plugin that allows you to record and playback TASes in Don't Look Down
 
 ## Installation
 
-Copy the plugin from [here](./build/DLDTAS.js) and paste it into Gimloader.
+Click [here](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js) to install the plugin with Gimloader downloaded.
 
 ## Usage
 
