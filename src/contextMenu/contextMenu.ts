@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { Gimloader } from "../index";
+import type { Gimloader } from "../gimloader";
 import type { DropdownProps } from 'antd';
 
 export default class ContextMenu {

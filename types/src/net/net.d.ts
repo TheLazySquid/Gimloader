@@ -1,4 +1,4 @@
-import type { Gimloader } from "../index";
+import type { Gimloader } from "../gimloader";
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
 export default class Net {
     blueboat: BlueboatIntercept;

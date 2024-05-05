@@ -1,9 +1,9 @@
 import * as CodeCake from "codecake"
 import showModal from "./modal";
-import { parseHeader, savePlugins } from "../loadPlugins";
+import PluginManager, { parseHeader } from "../loadPlugins";
 import { Plugin } from "../loadPlugins";
 
-export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugin) {
+export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugin, pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -32,7 +32,7 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
                     plugin.headers = parseHeader(plugin.script)
                     plugin.enable();
                     let newPlugins = [...plugins];
-                    savePlugins(newPlugins);
+                    pluginManager.save(newPlugins);
                     setPlugins(newPlugins);
                 }
             }
@@ -41,7 +41,7 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
 }
 
 // can't be bothered with the type
-export  function createPlugin(plugins: Plugin[], setPlugins: any) {
+export function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -73,7 +73,7 @@ export  function createPlugin(plugins: Plugin[], setPlugins: any) {
                 onClick() {
                     let newPlugins = [...plugins, new Plugin(editor.getCode())];
                     setPlugins(newPlugins);
-                    savePlugins(newPlugins);
+                    pluginManager.save(newPlugins);
                 }
             }
         ]

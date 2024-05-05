@@ -5,13 +5,13 @@ import deleteSvg from "../../assets/delete.svg";
 import checkBold from "../../assets/check-bold.svg";
 import closeThick from "../../assets/close-thick.svg";
 
-import { Plugin, plugins as pluginList, savePlugins } from "../loadPlugins";
+import PluginManager, { Plugin } from "../loadPlugins";
 import { createPlugin, showCodeEditor } from "../ui/editCodeModals";
 
-export default function PluginManager() {
+export default function PluginManagerUI({ pluginManager }: { pluginManager: PluginManager }) {
     const React = GL.React;
     
-    const [plugins, setPlugins] = React.useState(pluginList);
+    const [plugins, setPlugins] = React.useState(pluginManager.plugins);
     const filePickerInput = React.useRef<HTMLInputElement>(null);
 
     function importFile() {
@@ -34,7 +34,7 @@ export default function PluginManager() {
                 let newPlugins = [...plugins, plugin];
 
                 setPlugins(newPlugins);
-                savePlugins(newPlugins);
+                pluginManager.save(newPlugins);
             })
 
             reader.readAsText(file);
@@ -48,7 +48,7 @@ export default function PluginManager() {
         let newPlugins = plugins.filter(p => p !== plugin);
 
         setPlugins(newPlugins);
-        savePlugins(newPlugins);
+        pluginManager.save(newPlugins);
     }
 
     function enableAll() {
@@ -58,7 +58,7 @@ export default function PluginManager() {
         });
 
         setPlugins(newPlugins);
-        savePlugins(newPlugins);
+        pluginManager.save(newPlugins);
     }
 
     function disableAll() {
@@ -68,7 +68,7 @@ export default function PluginManager() {
         });
 
         setPlugins(newPlugins);
-        savePlugins(newPlugins);
+        pluginManager.save(newPlugins);
     }
 
     return (
@@ -79,7 +79,7 @@ export default function PluginManager() {
                 <input type="file" style={{ display: "none" }}
                 accept=".js" ref={filePickerInput} />
                 <button dangerouslySetInnerHTML={{ __html: plusBoxOutline }}
-                onClick={() => createPlugin(plugins, setPlugins)}></button>
+                onClick={() => createPlugin(plugins, setPlugins, pluginManager)}></button>
                 <div className="right">
                     <button dangerouslySetInnerHTML={{ __html: checkBold }} title="Enable All"
                     onClick={enableAll}></button>
@@ -110,7 +110,7 @@ export default function PluginManager() {
                                         // this re-renders all the plugins (bad) but I don't care
                                         let newPlugins = [...plugins];
                                         setPlugins(newPlugins);
-                                        savePlugins(newPlugins);
+                                        pluginManager.save(newPlugins);
                                     }} />
                                 </div>
                                 <div className="author">by {plugin.headers.author}</div>
@@ -118,7 +118,7 @@ export default function PluginManager() {
                             </div>
                             <div className="buttons">
                                 <button dangerouslySetInnerHTML={{ __html: pencilOutline }}
-                                onClick={() => showCodeEditor(plugins, setPlugins, plugin)}>
+                                onClick={() => showCodeEditor(plugins, setPlugins, plugin, pluginManager)}>
                                 </button>
                                 <button dangerouslySetInnerHTML={{ __html: deleteSvg }}
                                 onClick={() => deletePlugin(plugin)}>

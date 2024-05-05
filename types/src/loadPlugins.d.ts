@@ -7,7 +7,10 @@ export declare class Plugin {
     enable(initial?: boolean): Promise<void>;
     disable(): void;
 }
-export declare let plugins: Plugin[];
-export declare function initPlugins(): Promise<void>;
-export declare function savePlugins(newPlugins: Plugin[]): void;
+export default class PluginManager {
+    plugins: Plugin[];
+    constructor();
+    init(): Promise<void>;
+    save(newPlugins: Plugin[]): void;
+}
 export declare function parseHeader(code: string): Record<string, string>;

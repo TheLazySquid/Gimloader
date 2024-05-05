@@ -1,2 +1,5 @@
 /// <reference types="react" />
-export default function PluginManager(): import("react").JSX.Element;
+import PluginManager from "../loadPlugins";
+export default function PluginManagerUI({ pluginManager }: {
+    pluginManager: PluginManager;
+}): import("react").JSX.Element;

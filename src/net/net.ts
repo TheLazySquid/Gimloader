@@ -1,4 +1,4 @@
-import type { Gimloader } from "../index";
+import type { Gimloader } from "../gimloader";
 import { log } from "../util";
 
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
