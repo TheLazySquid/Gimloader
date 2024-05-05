@@ -58,6 +58,10 @@ Adds a hotkey to be called whenever all the keys are pressed. The keys MUST be i
 
 Removes a hotkey.
 
+`GL.hotkey.releaseAll()`
+
+This indicates that all keys should be released. This should be used when keys get released without a keyup event happening. For example, if a hotkey opens an alert, the `keyup` event will never be fired, and the hotkey manager has no way of knowing that the key has been released.
+
 ### GL.UI
 
 `GL.UI.showModal(element: ReactElement | HTMLElement, options?: object)`

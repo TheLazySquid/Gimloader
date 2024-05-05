@@ -15,6 +15,10 @@ export default class HotkeyManager {
         });
     }
 
+    releaseAll() {
+        this.pressedKeys.clear();
+    }
+
     checkHotkeys(event: KeyboardEvent) {
         for (let [hotkey, run] of this.hotkeys.entries()) {
             if (this.pressedKeys.size < hotkey.size) continue;

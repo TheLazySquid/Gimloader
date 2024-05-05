@@ -19,3 +19,7 @@ When using this plugin you can scroll and your camera will zoom in and out. You 
 ## DLDTAS [code]('./DLDTAS') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js)
 
 This is a plugin that allows you to record and play back TASes in Don't Look Down. This is more complex and uses the [build tools]('../buildTools') to compile.
+
+## CharacterCustomization [code](./CharacterCustomization.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization.js)
+
+This plugin allows you to equip any skin/trail by entering its ID, which can be found on the [Gimkit Wiki](https://gimkit.fandom.com/). In game, hit alt + s to switch skins and alt + t to switch trails.
