@@ -1,6 +1,6 @@
 {
   "name": "platformertas",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A TAS tool for Gimkit platformer modes",
   "main": "build/PlatformerTAS.js",
   "type": "module",

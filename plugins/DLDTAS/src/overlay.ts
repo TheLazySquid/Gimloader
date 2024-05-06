@@ -9,8 +9,44 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 })
 
+let propHitboxes: any[] = [];
+
 export function initOverlay() {
     document.body.appendChild(canvas);
+
+    let scene = GL.stores.phaser.scene;
+    let props = scene.worldManager.devices.allDevices.filter((d: any) => d.deviceOption?.id === "prop")
+
+    // create prop hitboxes
+    for(let prop of props) {
+        for(let collider of prop.colliders.list) {
+            let { x, y, h, w, angle, r1, r2 } = collider.options;
+
+            x += prop.x;
+            y += prop.y;
+
+            if(r1 && r2) {
+                if(r1 < 0 || r2 < 0) continue;
+                let ellipse = scene.add.ellipse(x, y, r1 * 2, r2 * 2, 0xff0000)
+                    .setDepth(99999999999)
+                    .setStrokeStyle(3, 0xff0000)
+                ellipse.angle = angle;
+                ellipse.isFilled = false;
+                ellipse.isStroked = true;
+
+                propHitboxes.push(ellipse);
+            } else {
+                let rect = scene.add.rectangle(x, y, w, h, 0xff0000)
+                    .setDepth(99999999999)
+                    .setStrokeStyle(3, 0xff0000)                    
+                rect.angle = angle;
+                rect.isFilled = false;
+                rect.isStroked = true;
+
+                propHitboxes.push(rect);
+            }
+        }
+    }
 
     setInterval(render, 1000 / 15);
 }
@@ -18,10 +54,18 @@ export function initOverlay() {
 let renderHitbox = true;
 
 export function hideHitbox() {
+    for(let prop of propHitboxes) {
+        prop.visible = false;
+    }
+
     renderHitbox = false;
 }
 
 export function showHitbox() {
+    for(let prop of propHitboxes) {
+        prop.visible = true;
+    }
+
     renderHitbox = true;
 }
 

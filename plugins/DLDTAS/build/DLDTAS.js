@@ -2,7 +2,7 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.1.3
  * @reloadRequired true
  */
 var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 1000;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable .btns button {\n  height: 30px;\n  width: 30px;\n  text-align: center;\n}\n#inputTable table {\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable tr {\n  height: 22px;\n}\n#inputTable td, #inputTable th {\n  height: 22px;\n  width: 75px;\n  text-align: center;\n}\n\n#controlCountdown {\n  position: fixed;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 50px;\n  color: black;\n}";
@@ -16,15 +16,52 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+let propHitboxes = [];
 function initOverlay() {
     document.body.appendChild(canvas);
+    let scene = GL.stores.phaser.scene;
+    let props = scene.worldManager.devices.allDevices.filter((d) => d.deviceOption?.id === "prop");
+    // create prop hitboxes
+    for (let prop of props) {
+        for (let collider of prop.colliders.list) {
+            let { x, y, h, w, angle, r1, r2 } = collider.options;
+            x += prop.x;
+            y += prop.y;
+            if (r1 && r2) {
+                if (r1 < 0 || r2 < 0)
+                    continue;
+                let ellipse = scene.add.ellipse(x, y, r1 * 2, r2 * 2, 0xff0000)
+                    .setDepth(99999999999)
+                    .setStrokeStyle(3, 0xff0000);
+                ellipse.angle = angle;
+                ellipse.isFilled = false;
+                ellipse.isStroked = true;
+                propHitboxes.push(ellipse);
+            }
+            else {
+                let rect = scene.add.rectangle(x, y, w, h, 0xff0000)
+                    .setDepth(99999999999)
+                    .setStrokeStyle(3, 0xff0000);
+                rect.angle = angle;
+                rect.isFilled = false;
+                rect.isStroked = true;
+                propHitboxes.push(rect);
+            }
+        }
+    }
     setInterval(render, 1000 / 15);
 }
 let renderHitbox = true;
 function hideHitbox() {
+    for (let prop of propHitboxes) {
+        prop.visible = false;
+    }
     renderHitbox = false;
 }
 function showHitbox() {
+    for (let prop of propHitboxes) {
+        prop.visible = true;
+    }
     renderHitbox = true;
 }
 function render() {
