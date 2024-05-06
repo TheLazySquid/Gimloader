@@ -27,9 +27,28 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
                 text: "save",
                 style: "primary",
                 onClick() {
+                    let code = editor.getCode();
+                    let headers = parseHeader(code);
+
+                    // check whether the new name is already taken
+                    for(let i = 0; i < plugins.length; i++) {
+                        let checkPlugin = plugins[i];
+                        if(plugin === checkPlugin) continue;
+
+                        if(checkPlugin.headers.name === headers.name) {
+                            let conf = confirm(`A plugin named ${headers.name} already exists. Do you want to overwrite it?`)
+                            if(!conf) return true;
+
+                            plugins.splice(i, 1);
+
+                            // shouldn't happen, but just in case
+                            i--;
+                        }
+                    }
+
                     plugin.disable();
-                    plugin.script = editor.getCode();
-                    plugin.headers = parseHeader(plugin.script)
+                    plugin.script = code;
+                    plugin.headers = headers;
                     plugin.enable();
                     let newPlugins = [...plugins];
                     pluginManager.save(newPlugins);
@@ -71,7 +90,25 @@ export function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: 
                 text: "save",
                 style: "primary",
                 onClick() {
-                    let newPlugins = [...plugins, new Plugin(editor.getCode())];
+                    let code = editor.getCode();
+                    let headers = parseHeader(code);
+
+                    // check whether the new name is already taken
+                    for(let i = 0; i < plugins.length; i++) {
+                        let checkPlugin = plugins[i];
+
+                        if(checkPlugin.headers.name === headers.name) {
+                            let conf = confirm(`A plugin named ${headers.name} already exists. Do you want to overwrite it?`)
+                            if(!conf) return true;
+
+                            plugins.splice(i, 1);
+
+                            // shouldn't happen, but just in case
+                            i--;
+                        }
+                    }
+
+                    let newPlugins = [...plugins, new Plugin(code)];
                     setPlugins(newPlugins);
                     pluginManager.save(newPlugins);
                 }

@@ -1,7 +1,7 @@
 export interface IModalButton {
     text: string;
     style?: "primary" | "danger" | "close";
-    onClick?: (event: MouseEvent) => void;
+    onClick?: (event: MouseEvent) => boolean | void;
 }
 
 export interface IModalOptions {
