@@ -35,8 +35,12 @@ export default function showModal(content: HTMLElement | ReactElement, options?:
             buttonEl.classList.add(button.style ?? "primary");
 
             buttonEl.addEventListener("click", (e) => {
+                if(button.onClick) {
+                    let cancel = button.onClick(e);
+                    if(cancel) return;
+                }
+                
                 closeModal();
-                if(button.onClick) button.onClick(e);
             })
 
             buttons.appendChild(buttonEl);
