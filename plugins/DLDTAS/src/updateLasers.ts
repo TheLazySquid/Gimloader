@@ -17,7 +17,9 @@ let laserHotkey = new Set(['alt', 'l']);
 
 export function initLasers(values: ISharedValues) {
     GL.hotkeys.add(laserHotkey, () => {
-        let offset = prompt("Enter the laser offset (in frames, from 0 to 65):")
+        GL.hotkeys.releaseAll();
+
+        let offset = prompt(`Enter the laser offset in frames, from 0 to 65 (currently ${laserOffset})`)
         if(offset === null) return;
 
         let parsed = parseInt(offset);
@@ -42,6 +44,8 @@ export function setLaserOffset(offset: number) {
 }
 
 export function updateLasers(frame: number) {
+    console.log("Laser frame:", frame);
+
     if(lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d: any) => d.laser)
     }

@@ -129,7 +129,6 @@ export default class TASTools {
         let frame = this.values.frames[this.values.currentFrame]
         if(!frame) return
 
-        updateLasers(this.values.currentFrame);
         this.setMoveSpeed();
 
         // log the current translation and state
@@ -147,6 +146,8 @@ export default class TASTools {
         this.nativeStep(0);
         
         this.values.currentFrame++;
+
+        updateLasers(this.values.currentFrame);
     }
 
     setSlowdown(amount: number) {
