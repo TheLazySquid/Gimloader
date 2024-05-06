@@ -23,3 +23,7 @@ This is a plugin that allows you to record and play back TASes in Don't Look Dow
 ## CharacterCustomization [code](./CharacterCustomization.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization.js)
 
 This plugin allows you to equip any skin/trail by entering its ID, which can be found on the [Gimkit Wiki](https://gimkit.fandom.com/). In game, hit alt + s to switch skins and alt + t to switch trails. This can only be seen by you, and it has no impact on gameplay.
+
+## BringBackBoosts [code](./BringBackBoosts.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js)
+
+This plugin restores boosts in 2D platformer gamemodes. This is used in conjunction with DLDTAS to keep boosts working.
