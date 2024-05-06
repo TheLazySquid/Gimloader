@@ -1,6 +1,6 @@
 import { ISharedValues, Keycodes } from "../types"
 import { defaultState, generatePhysicsInput } from "./util";
-import { updateLasers } from "./updateLasers";
+import { initLasers, updateLasers } from "./updateLasers";
 
 export default class TASTools {
     physicsManager: any;
@@ -32,6 +32,7 @@ export default class TASTools {
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
 
         this.reset();
+        initLasers(this.values);
     }
 
     reset() {

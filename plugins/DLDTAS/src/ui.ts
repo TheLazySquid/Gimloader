@@ -4,6 +4,7 @@ import TASTools from "./tools";
 import { save } from "./util";
 // @ts-ignore
 import controller from '../assets/controller.svg';
+import { getLaserOffset, setLaserOffset } from "./updateLasers";
 
 let frames: IFrameInfo[] = JSON.parse(localStorage.getItem("frames") || "[]")
 let values: ISharedValues = { frames, currentFrame: 0 }
@@ -77,7 +78,11 @@ export function createUI(physicsManager: any) {
 
     // download the frames as a json file
     div.querySelector("#download")?.addEventListener("click", () => {
-        let data = JSON.stringify(save(values.frames), null, 4);
+        let data = JSON.stringify({
+            frames: save(values.frames),
+            laserOffset: getLaserOffset()
+        }, null, 4);
+
         let blob = new Blob([data], { type: "text/plain" });
         let url = URL.createObjectURL(blob);
 
@@ -108,7 +113,16 @@ export function createUI(physicsManager: any) {
                 let data = reader.result;
                 if(typeof data !== "string") return;
 
-                values.frames = JSON.parse(data)
+                let parsed = JSON.parse(data);
+                
+                // compatibility with older versions
+                if(Array.isArray(parsed)) {
+                    values.frames = parsed;
+                } else {
+                    values.frames = parsed.frames;
+                    setLaserOffset(parsed.laserOffset);
+                }
+                
                 tools.reset();
                 values.currentFrame = 0;
                 rowOffset = 0;

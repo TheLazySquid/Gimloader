@@ -2,7 +2,7 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
- * @version 0.1.3
+ * @version 0.1.4
  * @reloadRequired true
  */
 var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 1000;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable .btns button {\n  height: 30px;\n  width: 30px;\n  text-align: center;\n}\n#inputTable table {\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable tr {\n  height: 22px;\n}\n#inputTable td, #inputTable th {\n  height: 22px;\n  width: 75px;\n  text-align: center;\n}\n\n#controlCountdown {\n  position: fixed;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 50px;\n  color: black;\n}";
@@ -159,8 +159,8 @@ function save(frames) {
 }
 
 let lasers = [];
+let laserOffset = parseInt(localStorage.getItem("laserOffset") ?? '0');
 GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
-    console.log(packet.detail);
     for (let i = 0; i < packet.detail.changes.length; i++) {
         let device = packet.detail.changes[i];
         if (lasers.some(l => l.id === device[0])) {
@@ -169,6 +169,28 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
         }
     }
 });
+let laserHotkey = new Set(['alt', 'l']);
+function initLasers(values) {
+    GL.hotkeys.add(laserHotkey, () => {
+        let offset = prompt("Enter the laser offset (in frames, from 0 to 65):");
+        if (offset === null)
+            return;
+        let parsed = parseInt(offset);
+        if (isNaN(parsed) || parsed < 0 || parsed > 65) {
+            alert("Invalid offset");
+            return;
+        }
+        setLaserOffset(parsed);
+        updateLasers(values.currentFrame);
+    }, true);
+}
+function getLaserOffset() {
+    return laserOffset;
+}
+function setLaserOffset(offset) {
+    laserOffset = offset;
+    localStorage.setItem("laserOffset", offset.toString());
+}
 function updateLasers(frame) {
     if (lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
@@ -176,7 +198,7 @@ function updateLasers(frame) {
     // lasers turn on for 36 frames and off for 30 frames
     let states = GL.stores.world.devices.states;
     let devices = GL.stores.phaser.scene.worldManager.devices;
-    let active = frame % 66 < 36;
+    let active = (frame + laserOffset) % 66 < 36;
     if (!states.has(lasers[0].id)) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
     }
@@ -218,6 +240,7 @@ class TASTools {
         this.inputManager = GL.stores.phaser.scene.inputManager;
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
         this.reset();
+        initLasers(this.values);
     }
     reset() {
         // hardcoded, for now
@@ -391,7 +414,10 @@ function createUI(physicsManager) {
     }
     // download the frames as a json file
     div.querySelector("#download")?.addEventListener("click", () => {
-        let data = JSON.stringify(save(values.frames), null, 4);
+        let data = JSON.stringify({
+            frames: save(values.frames),
+            laserOffset: getLaserOffset()
+        }, null, 4);
         let blob = new Blob([data], { type: "text/plain" });
         let url = URL.createObjectURL(blob);
         let a = document.createElement("a");
@@ -418,7 +444,15 @@ function createUI(physicsManager) {
                 let data = reader.result;
                 if (typeof data !== "string")
                     return;
-                values.frames = JSON.parse(data);
+                let parsed = JSON.parse(data);
+                // compatibility with older versions
+                if (Array.isArray(parsed)) {
+                    values.frames = parsed;
+                }
+                else {
+                    values.frames = parsed.frames;
+                    setLaserOffset(parsed.laserOffset);
+                }
                 tools.reset();
                 values.currentFrame = 0;
                 rowOffset = 0;

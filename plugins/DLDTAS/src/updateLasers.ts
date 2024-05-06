@@ -1,7 +1,9 @@
+import { ISharedValues } from "../types";
+
 let lasers: any[] = [];
+let laserOffset: number = parseInt(localStorage.getItem("laserOffset") ?? '0');
 
 GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
-    console.log(packet.detail)
     for(let i = 0; i < packet.detail.changes.length; i++) {
         let device = packet.detail.changes[i];
         if(lasers.some(l => l.id === device[0])) {
@@ -11,6 +13,34 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
     }
 })
 
+let laserHotkey = new Set(['alt', 'l']);
+
+export function initLasers(values: ISharedValues) {
+    GL.hotkeys.add(laserHotkey, () => {
+        let offset = prompt("Enter the laser offset (in frames, from 0 to 65):")
+        if(offset === null) return;
+
+        let parsed = parseInt(offset);
+
+        if(isNaN(parsed) || parsed < 0 || parsed > 65) {
+            alert("Invalid offset")
+            return;
+        }
+
+        setLaserOffset(parsed);
+        updateLasers(values.currentFrame);
+    }, true)
+}
+
+export function getLaserOffset() {
+    return laserOffset;
+}
+
+export function setLaserOffset(offset: number) {
+    laserOffset = offset;
+    localStorage.setItem("laserOffset", offset.toString());
+}
+
 export function updateLasers(frame: number) {
     if(lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d: any) => d.laser)
@@ -19,7 +49,7 @@ export function updateLasers(frame: number) {
     // lasers turn on for 36 frames and off for 30 frames
     let states = GL.stores.world.devices.states
     let devices = GL.stores.phaser.scene.worldManager.devices
-    let active = frame % 66 < 36;
+    let active = (frame + laserOffset) % 66 < 36;
 
     if(!states.has(lasers[0].id)) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d: any) => d.laser)

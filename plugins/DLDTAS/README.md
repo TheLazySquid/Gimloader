@@ -15,3 +15,7 @@ If at any point you want to take manual control of the character, hit the contro
 You can also change the speed of the game with the buttons at the top. Be warned that anything below 1x speed may look jerky.
 
 Also, right clicking on a frame lets you either delete it or insert a blank one before it.
+
+### Lasers
+
+Lasers turn on for 36 frames and then off for 30. They only appear if the host has started the game. When the TAS hits a laser, nothing happens, so its up to you, the TASer, to avoid them. You can change the cycle that the lasers are on by hitting alt + l.
