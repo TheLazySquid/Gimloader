@@ -76,7 +76,7 @@ Shows a customizable modal with the given element as the content. It accepts the
   - `text`: The text of the button
   - `onClick`: A function to call when the button is clicked
   - `style`: Either "primary", "danger" or "close". This will apply styles to the button.
-- `onClose`: A function to call when the modal is closed
+- `onClose`: A function to call when the modal is closed. Returning true from this will cancel the close.
 
 `GL.UI.addStyle(id: string, style: string)`
 
@@ -116,6 +116,20 @@ This displays an [ant-design dropdown](https://ant.design/components/dropdown) a
 `GL.contextMenu.createReactContextMenu(options: DropdownProps, element: ReactElement): ReactElement`
 
 Will attach a dropdown menu to a given react element. The options are the same as the options for the dropdown component.
+
+### GL.pluginManager
+
+`GL.pluginManager.plugins: Plugin[]`
+
+A list of all the plugins that are currently loaded.
+
+`GL.pluginManager.getPlugin(name: string): Plugin`
+
+Returns a plugin with a given name, or null if it doesn't exist.
+
+`GL.pluginManager.isEnabled(name: string): boolean`
+
+Returns whether or not a plugin is exists and is enabled.
 
 ### Events
 

@@ -40,6 +40,7 @@ export class Gimloader extends EventTarget {
         addStyles,
         removeStyles
     }
+    pluginManager: PluginManager = new PluginManager();
 
     constructor() {
         super();
@@ -49,7 +50,7 @@ export class Gimloader extends EventTarget {
         this.getReact();
         this.exposeValues();
 
-        addPluginButtons(this, new PluginManager());
+        addPluginButtons(this, this.pluginManager);
 
         // create a polyfill for gimhook
         gimhookPolyfill(this);

@@ -7,6 +7,7 @@ import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import ContextMenu from './contextMenu/contextMenu';
+import PluginManager from './loadPlugins';
 export declare class Gimloader extends EventTarget {
     version: string;
     React: typeof React;
@@ -25,6 +26,7 @@ export declare class Gimloader extends EventTarget {
         addStyles: typeof addStyles;
         removeStyles: typeof removeStyles;
     };
+    pluginManager: PluginManager;
     constructor();
     injectSheetsAndScripts(): void;
     exposeValues(): void;

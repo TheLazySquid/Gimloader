@@ -1,10 +1,34 @@
 /**
  * @name BringBackBoosts
- * @description Restores boosts in Don't Look Down
+ * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @reloadRequired true
  */
+
+if(!GL.pluginManager.isEnabled("DLDTAS")) {
+    // disable the physics state from the server
+    GL.parcel.interceptRequire("TAS", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
+        let ignoreServer = false;
+    
+        // prevent colyseus from complaining that nothing is registered
+        GL.patcher.instead("TAS", exports, "default", (_, args) => {
+            args[0].onMessage("PHYSICS_STATE", (packet) => {
+                if(ignoreServer) return;
+                moveCharToPos(packet.x / 100, packet.y / 100);
+            })
+        })
+
+        setTimeout(() => ignoreServer = true, 1000);
+    })
+    
+    function moveCharToPos(x, y) {
+        let rb = GL.stores?.phaser?.mainCharacter?.physics?.getBody().rigidBody
+        if(!rb) return;
+    
+        rb.setTranslation({ x, y }, true);
+    }
+}
 
 // WARNING: The code used in this has been taken from minified Gimkit code and therefore is nearly unreadable. Proceed with caution.
 var r, g;
