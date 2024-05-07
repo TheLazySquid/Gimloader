@@ -26,4 +26,4 @@ This plugin allows you to equip any skin/trail by entering its ID, which can be 
 
 ## BringBackBoosts [code](./BringBackBoosts.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js)
 
-This plugin restores boosts in 2D platformer gamemodes. This is used in conjunction with DLDTAS to keep boosts working.
+This plugin restores boosts in 2D platformer gamemodes. This is used in conjunction with DLDTAS to keep boosts working. When using this, you will quickly desync and nobody else will be able to see you move.

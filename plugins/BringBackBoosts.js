@@ -2,7 +2,7 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.1.2
  * @reloadRequired true
  */
 
@@ -10,16 +10,24 @@ if(!GL.pluginManager.isEnabled("DLDTAS")) {
     // disable the physics state from the server
     GL.parcel.interceptRequire("TAS", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
         let ignoreServer = false;
+
+        let ignoreTimeout;
     
         // prevent colyseus from complaining that nothing is registered
         GL.patcher.instead("TAS", exports, "default", (_, args) => {
             args[0].onMessage("PHYSICS_STATE", (packet) => {
                 if(ignoreServer) return;
                 moveCharToPos(packet.x / 100, packet.y / 100);
+
+                if(!ignoreServer) {
+                    if(ignoreTimeout) clearTimeout(ignoreTimeout);
+                    ignoreTimeout = setTimeout(() => {
+                        console.log("[BBB] Server is being ignored")
+                        ignoreServer = true
+                    }, 2500);
+                }
             })
         })
-
-        setTimeout(() => ignoreServer = true, 1000);
     })
     
     function moveCharToPos(x, y) {
