@@ -12,5 +12,7 @@ export default class PluginManager {
     constructor();
     init(): Promise<void>;
     save(newPlugins: Plugin[]): void;
+    getPlugin(name: string): Plugin;
+    isEnabled(name: string): boolean;
 }
 export declare function parseHeader(code: string): Record<string, string>;

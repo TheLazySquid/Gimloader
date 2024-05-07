@@ -77,6 +77,15 @@ export default class PluginManager {
     
         setValue('plugins', JSON.stringify(pluginObjs));
     }
+
+    getPlugin(name: string) {
+        return this.plugins.find(p => p.headers.name === name) ?? null;
+    }
+
+    isEnabled(name: string) {
+        let plugin = this.getPlugin(name);
+        return plugin?.enabled ?? false;
+    }
 }
 
 export function parseHeader(code: string) {

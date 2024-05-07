@@ -14,7 +14,7 @@ At the top of your plugin you should include a jsdoc comment to give Gimloader s
 
 The fields are as follows:
 
-- `name`: The name of the plugin. This is displayed in the plugin list, and will the the name of the file generated with the [build tools](./buildTools.md).
+- `name`: The name of the plugin. This is displayed in the plugin list, and will the the name of the file generated with the [build tools](./buildTools.md). Plugins must have unique names.
 - `description`: A description of the plugin. This is displayed in the plugin list.
 - `author`: The author of the plugin. This is displayed in the plugin list.
 - `version`: The version of the plugin. This is optional, and has no effect on the plugin. Is displayed in the plugin list.
