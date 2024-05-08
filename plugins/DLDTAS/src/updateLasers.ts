@@ -44,8 +44,6 @@ export function setLaserOffset(offset: number) {
 }
 
 export function updateLasers(frame: number) {
-    console.log("Laser frame:", frame);
-
     if(lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d: any) => d.laser)
     }
