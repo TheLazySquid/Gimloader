@@ -2,7 +2,7 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.1.3
  * @reloadRequired true
  */
 
@@ -16,7 +16,8 @@ if(!GL.pluginManager.isEnabled("DLDTAS")) {
         // prevent colyseus from complaining that nothing is registered
         GL.patcher.instead("TAS", exports, "default", (_, args) => {
             args[0].onMessage("PHYSICS_STATE", (packet) => {
-                if(ignoreServer) return;
+                // teleports are allowed
+                if(ignoreServer && !packet.teleport) return;
                 moveCharToPos(packet.x / 100, packet.y / 100);
 
                 if(!ignoreServer) {
