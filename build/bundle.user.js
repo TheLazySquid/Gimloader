@@ -9,16 +9,17 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.4.3
+// @version     0.4.4
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_deleteValue
+// @grant       GM.registerMenuCommand
 // ==/UserScript==
 (function () {
   'use strict';
 
-  var version = "0.4.3";
+  var version = "0.4.4";
 
   var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap .header .right {\n  padding-right: 5px;\n  flex-grow: 1;\n  display: flex;\n  justify-content: flex-end;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  width: 30px;\n  height: 30px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.5rem;\n  font-weight: 600;\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .plugin .author {\n  font-size: 0.8rem;\n  font-weight: normal;\n}\n.gl-listWrap .plugin .description {\n  font-size: 1rem;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
@@ -167,7 +168,6 @@
   class PluginManager {
       plugins = [];
       constructor() {
-          this.init();
       }
       async init() {
           let pluginScripts = JSON.parse(getValue('plugins', '[]'));
@@ -909,6 +909,7 @@
   function addPluginButtons(loader, pluginManager) {
       // add a hotkey shift+p to open the plugin manager
       loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager(pluginManager));
+      GM.registerMenuCommand("Open Plugin Manager", () => openPluginManager(pluginManager));
       // add the button to the creative screen and the host screen
       loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
           loader.patcher.after(null, exports, "default", (_, __, res) => {
@@ -1093,24 +1094,66 @@
   /*
       This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
   */
+  // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
+  // who in turn copied it from the parcel source code.
+  const scriptSelector = 'script[src*="index"]:not([nomodule])';
   class Parcel extends EventTarget {
+      gimloader;
       _parcelModuleCache = {};
       _parcelModules = {};
       reqIntercepts = [];
       readyToIntercept = true;
-      // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
-      constructor() {
+      constructor(loader) {
           super();
-          let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])');
-          if (existingScripts.length > 0) {
-              this.readyToIntercept = false;
-              window.addEventListener('load', () => {
-                  this.setup();
-                  this.reloadExistingScripts(existingScripts);
+          this.gimloader = loader;
+          // When the page would navigate to /host (which can't be reloaded or it breaks)
+          // just redirect to /gimloaderHostRedirect, from where we'll do our thing
+          this.interceptRequire(null, exports => exports?.AsyncNewTab, exports => {
+              GL.patcher.after(null, exports, "AsyncNewTab", (_, __, returnVal) => {
+                  GL.patcher.before(null, returnVal, "openTab", (_, args) => {
+                      args[0] = args[0].replace("/host", "/gimloaderHostRedirect");
+                  });
               });
+          });
+          if (location.href.includes('/gimloaderHostRedirect')) {
+              this.hostRedirect();
           }
-          else
-              this.setup();
+          else {
+              let existingScripts = document.querySelectorAll(scriptSelector);
+              if (existingScripts.length > 0) {
+                  this.readyToIntercept = false;
+                  window.addEventListener('load', () => {
+                      this.setup();
+                      this.reloadExistingScripts(existingScripts);
+                  });
+              }
+              else
+                  this.setup();
+          }
+      }
+      async hostRedirect() {
+          let hostUrl = location.href.replace('/gimloaderHostRedirect', '/host');
+          let res = await fetch(hostUrl);
+          let text = await res.text();
+          let parser = new DOMParser();
+          let doc = parser.parseFromString(text, 'text/html');
+          if (document.readyState !== "complete") {
+              await new Promise(resolve => window.addEventListener('load', resolve));
+          }
+          // redo the DOM
+          this.setup();
+          this.nukeDom();
+          document.documentElement.innerHTML = doc.documentElement.innerHTML;
+          GL.addStyleSheets();
+          // change url back to /host
+          history.replaceState(null, '', hostUrl);
+          // re-import the scripts
+          let existingScripts = document.querySelectorAll(scriptSelector);
+          this.reloadExistingScripts(existingScripts);
+      }
+      emptyModules() {
+          this._parcelModuleCache = {};
+          this._parcelModules = {};
       }
       onModuleRequired(id, callback) {
           let intercept = { type: 'moduleRequired', callback };
@@ -1154,6 +1197,17 @@
       }
       async reloadExistingScripts(existingScripts) {
           // nuke the dom
+          this.nukeDom();
+          this.readyToIntercept = true;
+          this.emptyModules();
+          for (let existingScript of existingScripts) {
+              // re-import the script since it's already loaded
+              log(existingScript, 'has already loaded, re-importing...');
+              this.decachedImport(existingScript.src);
+              existingScript.remove();
+          }
+      }
+      nukeDom() {
           document.querySelector("#root")?.remove();
           let newRoot = document.createElement('div');
           newRoot.id = 'root';
@@ -1164,17 +1218,9 @@
               if (v in window)
                   delete window[v];
           }
-          this.readyToIntercept = true;
-          this._parcelModuleCache = {};
-          this._parcelModules = {};
-          for (let existingScript of existingScripts) {
-              // re-import the script since it's already loaded
-              log(existingScript, 'has already loaded, re-importing...');
-              this.decachedImport(existingScript.src);
-              existingScript.remove();
-          }
       }
       setup() {
+          this.gimloader.pluginManager.init();
           let requireHook;
           let nativeParcelRequire = getUnsafeWindow()["parcelRequire388b"];
           ((requireHook = (moduleName) => {
@@ -1231,17 +1277,26 @@
   }
 
   class Net {
+      loader;
       blueboat;
       colyseus;
       type = 'Unknown';
+      is1dHost = false;
+      constructor(loader) {
+          this.loader = loader;
+          this.blueboat = new BlueboatIntercept(loader, this);
+          this.colyseus = new ColyseusIntercept(loader, this);
+          this.loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes("hasReceivedHostStaticState"), () => {
+              this.is1dHost = true;
+          });
+      }
       get active() {
           if (this.type == 'Unknown')
               return null;
           return this.type == 'Blueboat' ? this.blueboat : this.colyseus;
       }
-      constructor(loader) {
-          this.blueboat = new BlueboatIntercept(loader, this);
-          this.colyseus = new ColyseusIntercept(loader, this);
+      get isHost() {
+          return this.is1dHost || GL.stores.session.amIGameOwner;
       }
   }
   class BlueboatIntercept extends EventTarget {
@@ -1298,7 +1353,7 @@
                   colyseus.room.dispatchMessage = function (channel, message) {
                       if (!me.colyseusLoaded) {
                           me.colyseusLoaded = true;
-                          loader.dispatchEvent(new CustomEvent('loadEnd'));
+                          loader.awaitColyseusLoad();
                           log("Colyseus game finished loading");
                       }
                       me.dispatchEvent(new CustomEvent(channel, { detail: message }));
@@ -1670,28 +1725,28 @@
       modules = {};
       stores;
       platformerPhysics;
-      parcel = new Parcel();
+      pluginManager = new PluginManager();
+      patcher = new Patcher();
+      parcel = new Parcel(this);
       net = new Net(this);
       hotkeys = new HotkeyManager();
-      patcher = new Patcher();
       contextMenu = new ContextMenu(this);
       UI = {
           showModal,
           addStyles,
           removeStyles
       };
-      pluginManager = new PluginManager();
       constructor() {
           super();
           log('GimkitLoader v' + this.version + ' loaded');
-          this.injectSheetsAndScripts();
+          this.addStyleSheets();
           this.getReact();
           this.exposeValues();
           addPluginButtons(this, this.pluginManager);
           // create a polyfill for gimhook
           gimhookPolyfill(this);
       }
-      injectSheetsAndScripts() {
+      addStyleSheets() {
           this.UI.addStyles(null, styles$1);
           this.UI.addStyles(null, codeCakeStyles);
       }
@@ -1723,6 +1778,22 @@
           this.parcel.interceptRequire(null, exports => exports?.default?.useNotification, exports => {
               this.notification = exports.default;
           });
+      }
+      awaitColyseusLoad() {
+          let loading = GL.stores.loading;
+          let me = GL.stores.me;
+          // error message
+          if (me.nonDismissMessage.title && me.nonDismissMessage.description)
+              return;
+          if (loading.completedInitialLoad &&
+              loading.loadedInitialTerrain &&
+              loading.loadedInitialDevices &&
+              me.completedInitialPlacement) {
+              this.dispatchEvent(new CustomEvent('loadEnd'));
+          }
+          else {
+              setTimeout(() => this.awaitColyseusLoad(), 50);
+          }
       }
   }
 

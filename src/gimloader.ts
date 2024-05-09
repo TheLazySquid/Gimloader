@@ -30,23 +30,23 @@ export class Gimloader extends EventTarget {
     stores: any;
     platformerPhysics: any;
 
-    parcel: Parcel = new Parcel();
+    pluginManager: PluginManager = new PluginManager();
+    patcher: Patcher = new Patcher();
+    parcel: Parcel = new Parcel(this);
     net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
-    patcher: Patcher = new Patcher();
     contextMenu: ContextMenu = new ContextMenu(this);
     UI = {
         showModal,
         addStyles,
         removeStyles
     }
-    pluginManager: PluginManager = new PluginManager();
 
     constructor() {
         super();
         log('GimkitLoader v' + this.version + ' loaded');
 
-        this.injectSheetsAndScripts();
+        this.addStyleSheets();
         this.getReact();
         this.exposeValues();
 
@@ -56,7 +56,7 @@ export class Gimloader extends EventTarget {
         gimhookPolyfill(this);
     }
 
-    injectSheetsAndScripts() {
+    addStyleSheets() {
         this.UI.addStyles(null, styles);
         this.UI.addStyles(null, codeCakeStyles);
     }
@@ -91,5 +91,24 @@ export class Gimloader extends EventTarget {
         this.parcel.interceptRequire(null, exports => exports?.default?.useNotification, exports => {
             this.notification = exports.default;
         })
+    }
+
+    awaitColyseusLoad() {
+        let loading = GL.stores.loading;
+        let me = GL.stores.me;
+        
+        // error message
+        if(me.nonDismissMessage.title && me.nonDismissMessage.description) return;
+
+        if(
+            loading.completedInitialLoad &&
+            loading.loadedInitialTerrain &&
+            loading.loadedInitialDevices &&
+            me.completedInitialPlacement
+        ) {
+            this.dispatchEvent(new CustomEvent('loadEnd'));
+        } else {
+            setTimeout(() => this.awaitColyseusLoad(), 50);
+        }
     }
 }
