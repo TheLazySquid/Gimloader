@@ -4,18 +4,31 @@ import { log } from "../util";
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
 
 export default class Net {
+    loader: Gimloader;
     blueboat: BlueboatIntercept;
     colyseus: ColyseusIntercept;
     type: NetType = 'Unknown';
-    
+    is1dHost: boolean = false;
+
+    constructor(loader: Gimloader) {
+        this.loader = loader;
+
+        this.blueboat = new BlueboatIntercept(loader, this);
+        this.colyseus = new ColyseusIntercept(loader, this);
+
+        this.loader.parcel.interceptRequire(null,
+            exports => exports?.default?.toString?.().includes("hasReceivedHostStaticState"), () => {
+                this.is1dHost = true;
+        })
+    }
+
     get active() {
         if (this.type == 'Unknown') return null;
         return this.type == 'Blueboat' ? this.blueboat : this.colyseus;
     }
 
-    constructor(loader: Gimloader) {
-        this.blueboat = new BlueboatIntercept(loader, this);
-        this.colyseus = new ColyseusIntercept(loader, this);
+    get isHost() {
+        return this.is1dHost || GL.stores.session.amIGameOwner;
     }
 }
 
@@ -92,7 +105,7 @@ export class ColyseusIntercept extends EventTarget {
                 colyseus.room.dispatchMessage = function(channel: string, message: any) {
                     if(!me.colyseusLoaded) {
                         me.colyseusLoaded = true;
-                        loader.dispatchEvent(new CustomEvent('loadEnd'))
+                        loader.awaitColyseusLoad();
                         log("Colyseus game finished loading")
                     }
 

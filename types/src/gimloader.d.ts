@@ -16,19 +16,20 @@ export declare class Gimloader extends EventTarget {
     modules: Record<string, any>;
     stores: any;
     platformerPhysics: any;
+    pluginManager: PluginManager;
+    patcher: Patcher;
     parcel: Parcel;
     net: Net;
     hotkeys: HotkeyManager;
-    patcher: Patcher;
     contextMenu: ContextMenu;
     UI: {
         showModal: typeof showModal;
         addStyles: typeof addStyles;
         removeStyles: typeof removeStyles;
     };
-    pluginManager: PluginManager;
     constructor();
-    injectSheetsAndScripts(): void;
+    addStyleSheets(): void;
     exposeValues(): void;
     getReact(): void;
+    awaitColyseusLoad(): void;
 }

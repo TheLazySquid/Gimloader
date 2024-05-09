@@ -17,3 +17,19 @@ export interface IHotkey {
     callback: (event: KeyboardEvent) => void;
     preventDefault: boolean;
 }
+
+export interface IModuleRequired {
+    type: 'moduleRequired';
+    id?: string;
+    callback: (module: any) => void;
+}
+
+export interface IInterceptRequire {
+    type: 'interceptRequire';
+    id?: string;
+    match: (exports: any) => boolean;
+    callback: (exports: any) => any;
+    once: boolean;
+}
+
+export type Intercept = IModuleRequired | IInterceptRequire;

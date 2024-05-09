@@ -55,7 +55,6 @@ export default class PluginManager {
     plugins: Plugin[] = [];
 
     constructor() {
-        this.init();
     }
 
     async init() {

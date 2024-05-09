@@ -27,6 +27,8 @@ function openPluginManager(pluginManager: PluginManager) {
 export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager) {
     // add a hotkey shift+p to open the plugin manager
     loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager(pluginManager));
+
+    GM.registerMenuCommand("Open Plugin Manager", () => openPluginManager(pluginManager));
     
     // add the button to the creative screen and the host screen
     loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {

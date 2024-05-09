@@ -2,46 +2,85 @@
     This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
 */
 
+import type { Gimloader } from "../gimloader";
+import type { Intercept } from "../types";
 import { getUnsafeWindow, log } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
 
-export interface IModuleRequired {
-    type: 'moduleRequired';
-    id?: string;
-    callback: (module: any) => void;
-}
-
-export interface IInterceptRequire {
-    type: 'interceptRequire';
-    id?: string;
-    match: (exports: any) => boolean;
-    callback: (exports: any) => any;
-    once: boolean;
-}
-
-type Intercept = IModuleRequired | IInterceptRequire;
+const scriptSelector = 'script[src*="index"]:not([nomodule])'
 
 export default class Parcel extends EventTarget {
+    gimloader: Gimloader;
+
     _parcelModuleCache = {};
     _parcelModules = {};
     reqIntercepts: Intercept[] = [];
     readyToIntercept = true;
-    // regIntercepts: { match: string | RegExp, callback: (exports: any) => any }[] = [];
 
-    constructor() {
+    constructor(loader: Gimloader) {
         super();
 
-        let existingScripts = document.querySelectorAll('script[src*="index"]:not([nomodule])') as NodeListOf<HTMLScriptElement>;
-        if(existingScripts.length > 0) {
-            this.readyToIntercept = false;
-            window.addEventListener('load', () => {
-                this.setup();
-                this.reloadExistingScripts(existingScripts);
+        this.gimloader = loader;
+
+        // When the page would navigate to /host (which can't be reloaded or it breaks)
+        // just redirect to /gimloaderHostRedirect, from where we'll do our thing
+        this.interceptRequire(null, exports => exports?.AsyncNewTab, exports => {
+            GL.patcher.after(null, exports, "AsyncNewTab", (_, __, returnVal) => {
+                GL.patcher.before(null, returnVal, "openTab", (_, args) => {
+                    args[0] = args[0].replace("/host", "/gimloaderHostRedirect");
+                })
             })
+        })
+
+        if(location.href.includes('/gimloaderHostRedirect')) {
+            this.hostRedirect();
+        } else {
+            let existingScripts = document.querySelectorAll(scriptSelector) as NodeListOf<HTMLScriptElement>;
+            if(existingScripts.length > 0) {
+                this.readyToIntercept = false;
+                window.addEventListener('load', () => {
+                    this.setup();
+                    this.reloadExistingScripts(existingScripts);
+                })
+            }
+            else this.setup();
         }
-        else this.setup();
+    }
+
+    async hostRedirect() {
+        let hostUrl = location.href.replace('/gimloaderHostRedirect', '/host');
+        let res = await fetch(hostUrl);
+        let text = await res.text();
+
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(text, 'text/html');
+
+        if(document.readyState !== "complete") {
+            await new Promise(resolve => window.addEventListener('load', resolve));
+        }
+
+        // redo the DOM
+        this.setup();
+        this.nukeDom();
+        
+        document.documentElement.innerHTML = doc.documentElement.innerHTML;
+
+        GL.addStyleSheets();
+
+        // change url back to /host
+        history.replaceState(null, '', hostUrl);
+
+        // re-import the scripts
+        let existingScripts = document.querySelectorAll(scriptSelector) as NodeListOf<HTMLScriptElement>;
+
+        this.reloadExistingScripts(existingScripts);
+    }
+
+    emptyModules() {
+        this._parcelModuleCache = {};
+        this._parcelModules = {};
     }
 
     onModuleRequired(id: string | null, callback: (module: any) => void) {
@@ -91,20 +130,10 @@ export default class Parcel extends EventTarget {
 
     async reloadExistingScripts(existingScripts: NodeListOf<HTMLScriptElement>) {
         // nuke the dom
-        document.querySelector("#root")?.remove();
-        let newRoot = document.createElement('div');
-        newRoot.id = 'root';
-        document.body.appendChild(newRoot);
-        
-        // remove all global variables
-        let vars = ["__mobxGlobals", "__mobxInstanceCount"]
-        for(let v of vars) {
-            if(v in window) delete window[v];
-        }
+        this.nukeDom();
 
         this.readyToIntercept = true;
-        this._parcelModuleCache = {};
-        this._parcelModules = {};
+        this.emptyModules();
 
         for(let existingScript of existingScripts) {
             // re-import the script since it's already loaded
@@ -116,7 +145,22 @@ export default class Parcel extends EventTarget {
         }
     }
 
+    nukeDom() {
+        document.querySelector("#root")?.remove();
+        let newRoot = document.createElement('div');
+        newRoot.id = 'root';
+        document.body.appendChild(newRoot);
+        
+        // remove all global variables
+        let vars = ["__mobxGlobals", "__mobxInstanceCount"]
+        for(let v of vars) {
+            if(v in window) delete window[v];
+        }
+    }
+
     setup() {
+        this.gimloader.pluginManager.init();
+
         let requireHook: (moduleName: string) => void;
         let nativeParcelRequire = getUnsafeWindow()["parcelRequire388b"];
     
