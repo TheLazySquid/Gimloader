@@ -1,0 +1,31 @@
+{
+  "name": "autokicker",
+  "version": "0.1.0",
+  "description": "Automatically kicks users in a Gimkit game who match certain rules",
+  "main": "build/AutoKicker.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/TheLazySquid/Gimloader"
+  },
+  "keywords": [
+    "Gimkit",
+    "Gimloader",
+    "Plugin"
+  ],
+  "author": "TheLazySquid",
+  "license": "MIT",
+  "dependencies": {
+    "gimloader": "file:../.."
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.24.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup-plugin-sass": "^1.12.22",
+    "rollup-plugin-string": "^3.0.0"
+  }
+}

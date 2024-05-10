@@ -1,0 +1,95 @@
+#AutoKick-UI {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    
+    .root {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        padding: 10px;
+    }
+
+    .checkboxes {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 5px;
+    }
+
+    .idleDelaySlider {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        input {
+            flex-grow: 1;
+        }
+
+        label {
+            font-size: 12px;
+        }
+    }
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .blacklist {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        max-height: 500px;
+        overflow-y: auto;
+
+        .rule {
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.5);
+
+            .name {
+                flex-grow: 1;
+            }
+
+            .exact {
+                padding: 3px;
+                transition: transform 0.2s;
+                background-color: rgba(0, 0, 0, 0.5);
+                text-decoration: underline;
+                border: none;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+
+            .delete {
+                font-size: 20px;
+                border: none;
+                background-color: transparent;
+                transition: transform 0.2s;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .add {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    }
+}
