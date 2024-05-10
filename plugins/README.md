@@ -32,6 +32,6 @@ This plugin restores boosts in 2D platformer gamemodes. This is used in conjunct
 
 This plugin allows you to save and load states in platformer gamemodes. Save with alt + comma, load with alt + period. This also includes presets for DLD, so hit shift + alt + 1 to warp to summit 1, etc. Only client side, nobody else can see you move.
 
-## AutoKicker [code]('./AutoKicker') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js)
+## AutoKicker [code](./AutoKicker) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js)
 
 This is a plugin that allows you to set rules that allow you to automatically kick players / bots from your game.
