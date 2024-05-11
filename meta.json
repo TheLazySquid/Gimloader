@@ -14,7 +14,8 @@
         "GM_getValue",
         "GM_setValue",
         "GM_deleteValue",
-        "GM.registerMenuCommand"
+        "GM.registerMenuCommand",
+        "GM.xmlHttpRequest"
     ],
     "updateURL": "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js",
     "downloadURL": "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js"

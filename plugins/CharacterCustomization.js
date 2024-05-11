@@ -2,7 +2,8 @@
  * @name CharacterCustomization
  * @description Lets you use whatever character or trail you want client-side. Nobody else can see it.
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization.js
  */
 
 let changeSkinHotkey = new Set(['alt', 's'])

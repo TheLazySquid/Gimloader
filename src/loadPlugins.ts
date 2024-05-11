@@ -93,7 +93,8 @@ export function parseHeader(code: string) {
         description: "No description provided",
         author: "Unknown Author",
         version: null,
-        reloadRequired: "false"
+        reloadRequired: "false",
+        downloadUrl: null
     };
 
     // parse headers for gimhook mods

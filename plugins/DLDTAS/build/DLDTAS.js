@@ -2,8 +2,9 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
  * @reloadRequired true
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js
  */
 var styles = "#startTasBtn {\n  position: fixed;\n  top: 0;\n  left: 0;\n  margin: 5px;\n  padding: 5px;\n  background-color: rgba(0, 0, 0, 0.5);\n  color: white;\n  cursor: pointer;\n  z-index: 99999999999;\n  border-radius: 5px;\n  user-select: none;\n}\n\n#tasOverlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n}\n\n#inputTable {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  z-index: 1000;\n  background-color: rgba(255, 255, 255, 0.5);\n}\n#inputTable .btns {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n  justify-content: center;\n}\n#inputTable .btns button {\n  height: 30px;\n  width: 30px;\n  text-align: center;\n}\n#inputTable table {\n  table-layout: fixed;\n  user-select: none;\n}\n#inputTable tr.active {\n  background-color: rgba(0, 138, 197, 0.892) !important;\n}\n#inputTable tr:nth-child(even) {\n  background-color: rgba(0, 0, 0, 0.1);\n}\n#inputTable tr {\n  height: 22px;\n}\n#inputTable td, #inputTable th {\n  height: 22px;\n  width: 75px;\n  text-align: center;\n}\n\n#controlCountdown {\n  position: fixed;\n  top: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 99999999999;\n  pointer-events: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-size: 50px;\n  color: black;\n}";
 

@@ -2,6 +2,8 @@
  * @name InstantUse
  * @description Instantly use nearby devices without any wait
  * @author TheLazySquid
+ * @version 0.1.0
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js
  */
 
 let hotkey = new Set(['enter'])

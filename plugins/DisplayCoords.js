@@ -2,6 +2,8 @@
  * @name DisplayCoords
  * @description Display the coordinates of the player on the screen in 2d gamemodes
  * @author TheLazySquid
+ * @version 0.1.0
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DisplayCoords.js
  */
 
 let updateInterval, displayDiv;

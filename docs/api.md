@@ -48,6 +48,10 @@ Fires whenever a message is sent on any channel.
 
 Sends a message on a specific channel.
 
+`GL.net.corsRequest`
+
+This allows plugins to use Tampermonkey's GM.xmlHttpRequest to make cross-origin requests. Find the documentation [here](https://www.tampermonkey.net/documentation.php?locale=en#api:GM_xmlhttpRequest).
+
 ### GL.hotkeys
 
 `GL.hotkeys.add(keys: Set<string>, callback: (e: KeyboardEvent) => void, preventDefault?: boolean)`

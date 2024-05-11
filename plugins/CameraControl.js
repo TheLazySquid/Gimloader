@@ -2,6 +2,8 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid
+ * @version 0.1.0
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  */
 
 const freecamHotkey = new Set(["shift", "f"]);

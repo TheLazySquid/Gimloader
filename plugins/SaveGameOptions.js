@@ -3,6 +3,8 @@
  * @description Saves the options for hosting games in between sessions
  * @author TheLazySquid
  * @reloadRequired true
+ * @version 0.1.0
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/SaveGameOptions.js
  */
 
 let latest = null;

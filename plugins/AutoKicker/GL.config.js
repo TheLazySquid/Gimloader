@@ -12,6 +12,7 @@ export default {
     description: "Automatically kicks players from your lobby with a customizable set of rules",
     author: "TheLazySquid",
     version: pkg.version,
+    downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js",
     plugins: [
         sass(),
         string({ include: ['**/*.css', '**/*.svg'] }),

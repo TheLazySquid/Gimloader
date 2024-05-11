@@ -2,8 +2,9 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @reloadRequired true
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  */
 
 let ignoreServer = false;

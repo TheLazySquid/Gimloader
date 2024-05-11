@@ -22,6 +22,8 @@ export default class Net {
         })
     }
 
+    corsRequest = GM.xmlHttpRequest;
+
     get active() {
         if (this.type == 'Unknown') return null;
         return this.type == 'Blueboat' ? this.blueboat : this.colyseus;

@@ -2,8 +2,9 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.3
+ * @version 0.1.4
  * @reloadRequired true
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  */
 
 if(!GL.pluginManager.isEnabled("DLDTAS")) {

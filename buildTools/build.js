@@ -17,6 +17,10 @@ function addMeta(config) {
         meta += '\n * @reloadRequired true';
     }
 
+    if(config.downloadUrl) {
+        meta += `\n * @downloadUrl ${config.downloadUrl}`;
+    }
+
     meta += '\n */\n';
 
     return {

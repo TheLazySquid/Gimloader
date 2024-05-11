@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import sass from 'rollup-plugin-sass';
 import { string } from 'rollup-plugin-string';
-import babel from '@rollup/plugin-babel';
 import fs from 'fs';
 
 let pkg = JSON.parse(fs.readFileSync('./package.json'));
@@ -13,6 +12,7 @@ export default {
     author: "TheLazySquid",
     version: pkg.version,
     reloadRequired: true,
+    downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js",
     plugins: [
         typescript({
             target: "es2022"
