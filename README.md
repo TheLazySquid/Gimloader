@@ -28,6 +28,8 @@ At any point, you can open the mod menu by pressing `alt + p`.
 
 Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/).
 
+You can check for updates to the modloader with the update button at the top left. If it is the first time you do this, Tampermonkey will ask whether to allow Gimloader to use cross-origin resources. Hit "Always allow" so you don't have to do this every time.
+
 ## Gimhook Compatibility
 
 Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have a Gimhook mod that doesn't work with Gimloader, please open an issue.

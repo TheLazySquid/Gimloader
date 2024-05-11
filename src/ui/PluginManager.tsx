@@ -4,9 +4,11 @@ import importSvg from "../../assets/import.svg";
 import deleteSvg from "../../assets/delete.svg";
 import checkBold from "../../assets/check-bold.svg";
 import closeThick from "../../assets/close-thick.svg";
+import update from '../../assets/update.svg';
 
 import PluginManager, { Plugin } from "../loadPlugins";
 import { createPlugin, showCodeEditor } from "../ui/editCodeModals";
+import { checkScriptUpdate, checkPluginUpdate } from "../net/checkScriptUpdate";
 
 export default function PluginManagerUI({ pluginManager }: { pluginManager: PluginManager }) {
     const React = GL.React;
@@ -74,6 +76,8 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
     return (
         <div className="gl-listWrap">
             <div className="header">
+                <button dangerouslySetInnerHTML={{ __html: update }}
+                onClick={checkScriptUpdate}></button>
                 <button dangerouslySetInnerHTML={{ __html: importSvg }}
                 onClick={importFile}></button>
                 <input type="file" style={{ display: "none" }}
@@ -117,6 +121,11 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                                 <div className="description">{plugin.headers.description}</div>
                             </div>
                             <div className="buttons">
+                                {plugin.headers.downloadUrl ? (
+                                    <button dangerouslySetInnerHTML={{ __html: update }}
+                                    onClick={() => checkPluginUpdate(plugin, () => setPlugins([...plugins]))}>
+                                    </button>
+                                ) : null}
                                 <button dangerouslySetInnerHTML={{ __html: pencilOutline }}
                                 onClick={() => showCodeEditor(plugins, setPlugins, plugin, pluginManager)}>
                                 </button>

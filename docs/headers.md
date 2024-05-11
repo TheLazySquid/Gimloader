@@ -9,6 +9,7 @@ At the top of your plugin you should include a jsdoc comment to give Gimloader s
  * @author Your Name
  * @version 1.0.0
  * @reloadRequired true
+ * @downloadUrl https://raw.githubusercontent.com/YourName/YourRepo/main/YourPlugin.js
  */
 ```
 
@@ -19,3 +20,4 @@ The fields are as follows:
 - `author`: The author of the plugin. This is displayed in the plugin list.
 - `version`: The version of the plugin. This is optional, and has no effect on the plugin. Is displayed in the plugin list.
 - `reloadRequired`: Whether or not the plugin requires a reload to take effect. This is optional, and defaults to false. If set to true, the user will be prompted to reload their page when the plugin is enabled.
+- `downloadUrl`: A URL to download the raw plugin from, typically from a Github repo. Without this, the option to check for updates for the plugin will not be available.

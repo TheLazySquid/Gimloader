@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var version = "0.4.4";
+  var version = "0.5.0";
 
   var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap .header .right {\n  padding-right: 5px;\n  flex-grow: 1;\n  display: flex;\n  justify-content: flex-end;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  width: 30px;\n  height: 30px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.5rem;\n  font-weight: 600;\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .plugin .author {\n  font-size: 0.8rem;\n  font-weight: normal;\n}\n.gl-listWrap .plugin .description {\n  font-size: 1rem;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
@@ -108,6 +108,8 @@
 
   var closeThick = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z\" /></svg>";
 
+  var update = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z\" /></svg>";
+
   class Plugin {
       script;
       enabled;
@@ -179,7 +181,8 @@
           description: "No description provided",
           author: "Unknown Author",
           version: null,
-          reloadRequired: "false"
+          reloadRequired: "false",
+          downloadUrl: null
       };
       // parse headers for gimhook mods
       if (code.startsWith("// gimhook: ")) {
@@ -778,6 +781,82 @@
       });
   }
 
+  const scriptUrl = "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js";
+  async function checkScriptUpdate() {
+      const res = await GL.net.corsRequest({ url: scriptUrl })
+          .catch(() => {
+          alert("Failed to check for updates. Did you allow Gimloader to make Cross-Origin requests?");
+      });
+      if (!res)
+          return;
+      const versionPrefix = '// @version';
+      let index = res.responseText.indexOf(versionPrefix) + versionPrefix.length;
+      let incomingVersion = res.responseText.slice(index, res.responseText.indexOf('\n', index)).trim();
+      // compare versions
+      let comparison = compareVersions(version, incomingVersion);
+      if (comparison === 'same')
+          alert("This script is up to date!");
+      else if (comparison === 'newer') {
+          let confirm = window.confirm(`A new version of Gimloader is available! Would you like to update?`);
+          if (confirm) {
+              window.location.href = scriptUrl;
+          }
+      }
+      else {
+          alert("You are using a newer version of Gimloader than the one available on GitHub.");
+      }
+  }
+  async function checkPluginUpdate(plugin, rerender) {
+      if (!plugin.headers.downloadUrl)
+          return;
+      const res = await GL.net.corsRequest({ url: plugin.headers.downloadUrl })
+          .catch(() => {
+          alert("Failed to check for updates. Did you allow Gimloader to make Cross-Origin requests?");
+      });
+      if (!res)
+          return;
+      let incomingHeaders = parseHeader(res.responseText);
+      if (res.responseText === plugin.script)
+          alert("This plugin is up to date!");
+      let confirm;
+      let comparison = compareVersions(plugin.headers.version ?? '', incomingHeaders.version ?? '');
+      let changeStr = `(${plugin.headers.version} -> ${incomingHeaders.version})`;
+      if (comparison === 'same') {
+          confirm = window.confirm(`A different version of ${plugin.headers.name} is available ${changeStr}. Would you like to switch?`);
+      }
+      else if (comparison === 'newer') {
+          confirm = window.confirm(`You are using a newer version of ${plugin.headers.name} than the one available on GitHub ${changeStr}. Would you like to switch?`);
+      }
+      else {
+          confirm = window.confirm(`A new version of ${plugin.headers.name} is available ${changeStr}! Would you like to update?`);
+      }
+      if (confirm) {
+          plugin.disable();
+          plugin.script = res.responseText;
+          plugin.headers = incomingHeaders;
+          plugin.enable();
+      }
+      rerender();
+  }
+  function compareVersions(v1, v2) {
+      if (v1 === v2)
+          return 'same';
+      if (!v1 || !v2)
+          return 'newer';
+      let parts1 = v1.split('.');
+      let parts2 = v2.split('.');
+      for (let i = 0; i < parts1.length; i++) {
+          let p1 = parseInt(parts1[i]);
+          let p2 = parseInt(parts2[i]);
+          if (isNaN(p1) || isNaN(p2))
+              return 'newer';
+          if (p1 !== p2) {
+              return p1 > p2 ? 'newer' : 'older';
+          }
+      }
+      return 'same';
+  }
+
   function PluginManagerUI({ pluginManager }) {
       const React = GL.React;
       const [plugins, setPlugins] = React.useState(pluginManager.plugins);
@@ -828,6 +907,7 @@
       }
       return (React.createElement("div", { className: "gl-listWrap" },
           React.createElement("div", { className: "header" },
+              React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: checkScriptUpdate }),
               React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
               React.createElement("input", { type: "file", style: { display: "none" }, accept: ".js", ref: filePickerInput }),
               React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins, setPlugins, pluginManager) }),
@@ -862,6 +942,7 @@
                               plugin.headers.author),
                           React.createElement("div", { className: "description" }, plugin.headers.description)),
                       React.createElement("div", { className: "buttons" },
+                          plugin.headers.downloadUrl ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: () => checkPluginUpdate(plugin, () => setPlugins([...plugins])) })) : null,
                           React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins, setPlugins, plugin, pluginManager) }),
                           React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deletePlugin(plugin) }))));
               }),
@@ -1272,6 +1353,7 @@
               this.is1dHost = true;
           });
       }
+      corsRequest = GM.xmlHttpRequest;
       get active() {
           if (this.type == 'Unknown')
               return null;
