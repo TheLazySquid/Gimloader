@@ -2,7 +2,7 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.5
+ * @version 0.1.6
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  */
@@ -41,8 +41,11 @@ if(!GL.pluginManager.isEnabled("DLDTAS") && !GL.pluginManager.isEnabled("Savesta
                     y: (translation.y + shape.halfHeight + shape.radius) * 100
                 }
 
+                let states = GL.stores.world.devices.states;
+
                 for(let laser of lasers) {
-                    if(!laser.state.active) continue;
+                    // make sure the laser is active
+                    if(!states.get(laser.id).properties.get("GLOBAL_active")) continue;
 
                     let start = {
                         x: laser.dots[0].options.x + laser.x,

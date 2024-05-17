@@ -2,7 +2,7 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.1.3
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  */
@@ -40,8 +40,11 @@ if(!GL.pluginManager.isEnabled("DLDTAS")) {
                     y: (translation.y + shape.halfHeight + shape.radius) * 100
                 }
 
+                let states = GL.stores.world.devices.states;
+
                 for(let laser of lasers) {
-                    if(!laser.state.active) continue;
+                    // make sure the laser is active
+                    if(!states.get(laser.id).properties.get("GLOBAL_active")) continue;
 
                     let start = {
                         x: laser.dots[0].options.x + laser.x,
