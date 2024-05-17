@@ -8,10 +8,6 @@ This will display the player's coordinates at the top right corner of the screen
 
 This plugin allows you to use devices instantly, without waiting for their meter to fill.
 
-## SaveGameOptions [code](./SaveGameOptions.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/SaveGameOptions.js)
-
-This plugin will automatically save and load settings for live games between sessions.
-
 ## CameraControl [code](./CameraControl.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js)
 
 When using this plugin you can scroll and your camera will zoom in and out. You can also hit Shift + F to enable freecam, which you can move around with the arrow keys. Zooming out to much can lead to lag or crashes.
