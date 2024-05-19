@@ -16,9 +16,9 @@ When using this plugin you can scroll and your camera will zoom in and out. You 
 
 This is a plugin that allows you to record and play back TASes in Don't Look Down. This is more complex and uses the [build tools]('../buildTools') to compile.
 
-## CharacterCustomization [code](./CharacterCustomization.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization.js)
+## CharacterCustomization [code]('./CharacterCustomization/build/CharacterCustomization.js') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js)
 
-This plugin allows you to equip any skin/trail by entering its ID, which can be found on the [Gimkit Wiki](https://gimkit.fandom.com/). In game, hit alt + s to switch skins and alt + t to switch trails. This can only be seen by you, and it has no impact on gameplay.
+This plugin allows you to equip any skin/trail, or even use a custom skin. This works for any 2d platformer. Hit alt + c to open the customization menu. To use a skin, you'll need its ID which can be found on the Gimkit wiki.
 
 ## BringBackBoosts [code](./BringBackBoosts.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js)
 
@@ -31,3 +31,4 @@ This plugin allows you to save and load states in platformer gamemodes. Save wit
 ## AutoKicker [code](./AutoKicker) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js)
 
 This is a plugin that allows you to set rules that allow you to automatically kick players / bots from your game.
+

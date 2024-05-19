@@ -1,0 +1,12 @@
+.characterCustomization {
+    .row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        width: 500px;
+    }
+
+    select {
+        padding: 3px;
+    }
+}

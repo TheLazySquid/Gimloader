@@ -1,0 +1,35 @@
+{
+  "name": "charactercustomization",
+  "version": "0.2.0",
+  "description": "Allows you to use any gim or a custom gim client-side",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheLazySquid/Gimloader.git"
+  },
+  "keywords": [
+    "Plugin",
+    "Gimloader",
+    "Gimkit"
+  ],
+  "author": "TheLazySquid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheLazySquid/Gimloader/issues"
+  },
+  "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
+  "dependencies": {
+    "@babel/preset-react": "^7.24.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "gimloader": "file:../.."
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup-plugin-sass": "^1.12.22",
+    "rollup-plugin-string": "^3.0.0"
+  }
+}
