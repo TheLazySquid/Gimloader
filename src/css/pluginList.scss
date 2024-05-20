@@ -60,7 +60,7 @@
     
     .plugin {
         padding: 1rem;
-        height: 200px;
+        min-height: 200px;
         background-color: var(--bg-secondary);
         border-radius: 6px;
         display: flex;
@@ -73,18 +73,24 @@
 
         .top {
             width: 100%;
+            max-width: 100%;
+            max-height: 100px;
             display: flex;
 
             input {
-                width: 30px;
-                height: 30px;
+                flex-shrink: 0;
+                width: 25px;
+                height: 25px;
             }
         }
 
         .name {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
             flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .version {
@@ -93,12 +99,19 @@
         }
 
         .author {
-            font-size: 0.8rem;
+            font-size: 1rem;
             font-weight: normal;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .description {
-            font-size: 1rem;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow: hidden;
+            white-space: wrap;
+            text-overflow: ellipsis;
         }
 
         .buttons {
