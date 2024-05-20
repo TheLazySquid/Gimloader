@@ -2,10 +2,10 @@
 
 ## Installation
 
-To use Gimloader's build tools, you need to install it in an npm project. You can do this by running the following command:
+To use Gimloader's build tools, you should first install them globally. You can do this by running the following command:
 
 ```bash
-npm install gimloader@github:TheLazySquid/Gimloader
+npm install -g gimloader@github:TheLazySquid/Gimloader
 ```
 
 ## Commands
@@ -14,7 +14,7 @@ When Gimloader is installed in an npm project, it adds the `gimloader` (or `gl`)
 
 ### `gl init`
 
-This initializes a blank GL.config.js file in the root of your project. This file is used to configure the build tools. See the [Configuration](#configuration) section for more information.
+This initializes new project with the neccesary setup. You can select from several plugins to start with. This should be run from within the directory you want to create the project in.
 
 ### `gl build`
 

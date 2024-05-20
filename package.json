@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "codecake": "^0.4.2",
+    "inquirer": "^9.2.22",
     "rollup": "^4.14.1",
     "yargs": "^17.7.2"
   }
