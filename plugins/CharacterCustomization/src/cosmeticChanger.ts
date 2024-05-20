@@ -99,9 +99,14 @@ export default class CosmeticChanger {
         let fileName = localStorage.getItem("cc_customSkinFileName");
         if(!file || !fileName) return;
 
-        let res = await fetch(file);
-        let blob = await res.blob();
-        this.customSkinFile = new File([blob], fileName);
+        let byteString = atob(file.substring(file.indexOf(",") + 1));
+        let ab = new ArrayBuffer(byteString.length);
+        let ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        this.customSkinFile = new File([ab], fileName);
     }
 
     patchSkin(skin: any) {
@@ -123,8 +128,10 @@ export default class CosmeticChanger {
         })
 
         GL.patcher.after("CharacterCustomization", skin, "setupSkin", () => {
-            if(skin.skinId !== unusedSkin) skin.updateSkin(unusedSkin);
-            if(this.skinType === "custom") this.applyCustomSkin();
+            if(this.skinType === "custom") {
+                if(skin.skinId !== unusedSkin) skin.updateSkin(unusedSkin);
+                this.applyCustomSkin();
+            }
         })
     }
 
@@ -247,7 +254,7 @@ export default class CosmeticChanger {
 
         if(!texture) return
         texture._image.src = unusedSkinSrc;
-        texture.addEventListener("load", () => {
+        texture._image.addEventListener("load", () => {
             texture.update();
         }, { once: true })
     }

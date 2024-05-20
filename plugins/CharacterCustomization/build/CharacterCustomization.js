@@ -2,7 +2,7 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js
  */
 function UI({ cosmeticChanger, onSubmit }) {
@@ -132,9 +132,13 @@ class CosmeticChanger {
         let fileName = localStorage.getItem("cc_customSkinFileName");
         if (!file || !fileName)
             return;
-        let res = await fetch(file);
-        let blob = await res.blob();
-        this.customSkinFile = new File([blob], fileName);
+        let byteString = atob(file.substring(file.indexOf(",") + 1));
+        let ab = new ArrayBuffer(byteString.length);
+        let ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        this.customSkinFile = new File([ab], fileName);
     }
     patchSkin(skin) {
         if (this.skinType === "id") {
@@ -155,10 +159,11 @@ class CosmeticChanger {
             }
         });
         GL.patcher.after("CharacterCustomization", skin, "setupSkin", () => {
-            if (skin.skinId !== unusedSkin)
-                skin.updateSkin(unusedSkin);
-            if (this.skinType === "custom")
+            if (this.skinType === "custom") {
+                if (skin.skinId !== unusedSkin)
+                    skin.updateSkin(unusedSkin);
                 this.applyCustomSkin();
+            }
         });
     }
     patchTrail(trail) {
@@ -273,7 +278,7 @@ class CosmeticChanger {
         if (!texture)
             return;
         texture._image.src = unusedSkinSrc;
-        texture.addEventListener("load", () => {
+        texture._image.addEventListener("load", () => {
             texture.update();
         }, { once: true });
     }
