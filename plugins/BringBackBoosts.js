@@ -2,13 +2,15 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.1.6
+ * @version 0.1.7
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  */
 
 if(!GL.pluginManager.isEnabled("DLDTAS") && !GL.pluginManager.isEnabled("Savestates")) {
     let ignoreServer = false;
+    let hurtFrames = 0;
+    let maxHurtFrames = 2;
 
     // disable the physics state from the server
     GL.parcel.interceptRequire("Boosts", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
@@ -42,6 +44,7 @@ if(!GL.pluginManager.isEnabled("DLDTAS") && !GL.pluginManager.isEnabled("Savesta
                 }
 
                 let states = GL.stores.world.devices.states;
+                let hitLaser = false;
 
                 for(let laser of lasers) {
                     // make sure the laser is active
@@ -58,14 +61,20 @@ if(!GL.pluginManager.isEnabled("DLDTAS") && !GL.pluginManager.isEnabled("Savesta
 
                     // check whether the player bounding box overlaps the laser line
                     if(boundingBoxOverlap(start, end, topLeft, bottomRight)) {
-                        GL.notification.error({ message: "You hit a laser!", duration: 3.5 })
-                        showHitLaser = false;
-                        setTimeout(() => {
-                            showHitLaser = true;
-                        }, 500);
+                        hitLaser = true;
                         break;
                     }
                 }
+
+                if(hitLaser) {
+                    hurtFrames++;
+                    if(hurtFrames >= maxHurtFrames) {
+                        hurtFrames = 0;
+                        showHitLaser = false;
+                        GL.notification.error({ message: "You hit a laser!", duration: 3.5 })
+                        setTimeout(() => showHitLaser = true, 500);
+                    }
+                } else hurtFrames = 0;
             })
         }
     

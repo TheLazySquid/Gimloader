@@ -2,13 +2,16 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.1.3
+ * @version 0.1.4
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  */
 
 let ignoreServer = false;
 if(!GL.pluginManager.isEnabled("DLDTAS")) {
+    let hurtFrames = 0;
+    let maxHurtFrames = 2;
+
     // disable the physics state from the server
     GL.parcel.interceptRequire("Savestates", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
         let ignoreTimeout;
@@ -41,6 +44,7 @@ if(!GL.pluginManager.isEnabled("DLDTAS")) {
                 }
 
                 let states = GL.stores.world.devices.states;
+                let hitLaser = false;
 
                 for(let laser of lasers) {
                     // make sure the laser is active
@@ -57,14 +61,20 @@ if(!GL.pluginManager.isEnabled("DLDTAS")) {
 
                     // check whether the player bounding box overlaps the laser line
                     if(boundingBoxOverlap(start, end, topLeft, bottomRight)) {
-                        GL.notification.error({ message: "You hit a laser!", duration: 3.5 })
-                        showHitLaser = false;
-                        setTimeout(() => {
-                            showHitLaser = true;
-                        }, 500);
+                        hitLaser = true;
                         break;
                     }
                 }
+
+                if(hitLaser) {
+                    hurtFrames++;
+                    if(hurtFrames >= maxHurtFrames) {
+                        hurtFrames = 0;
+                        showHitLaser = false;
+                        GL.notification.error({ message: "You hit a laser!", duration: 3.5 })
+                        setTimeout(() => showHitLaser = true, 500);
+                    }
+                } else hurtFrames = 0;
             })
         }
     
