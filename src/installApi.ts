@@ -1,5 +1,4 @@
 import { parseHeader } from "./loadPlugins";
-import { getUnsafeWindow, getValue, setValue } from "./util";
 
 interface IPluginInfo {
     script: string;
@@ -7,10 +6,10 @@ interface IPluginInfo {
 }
 
 export default function initInstallApi() {
-    let pluginInfos: IPluginInfo[] = JSON.parse(getValue('plugins', '[]')!);
+    let pluginInfos: IPluginInfo[] = JSON.parse(GM_getValue('plugins', '[]')!);
     let pluginHeaders = pluginInfos.map((plugin) => parseHeader(plugin.script));
 
-    (getUnsafeWindow() as any).GLInstall = function (script: string) {
+    (unsafeWindow as any).GLInstall = function (script: string) {
         let scriptHeaders = parseHeader(script);
 
         for(let i = 0; i < pluginHeaders.length; i++) {
@@ -25,10 +24,10 @@ export default function initInstallApi() {
         }
 
         pluginInfos.push({ script, enabled: true });
-        setValue('plugins', JSON.stringify(pluginInfos));
+        GM_setValue('plugins', JSON.stringify(pluginInfos));
     };
 
-    (getUnsafeWindow() as any).GLGet = function (name: string) {
+    (unsafeWindow as any).GLGet = function (name: string) {
         let index = pluginHeaders.findIndex((header) => header.name === name);
         if(index === -1) return null;
 

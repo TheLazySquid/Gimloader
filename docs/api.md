@@ -135,6 +135,22 @@ Returns a plugin with a given name, or null if it doesn't exist.
 
 Returns whether or not a plugin is exists and is enabled.
 
+### GL.storage
+
+The storage API allows you to use Tampermonkey storage to save data between sessions. This is cleared when the plguin or Gimloader is uninstalled. This doesn't just have to be a string, it can be any JSON-serializable object (I think).
+
+`GL.storage.getValue(pluginName: string, key: string, defaultValue: any): any`
+
+Gets a value from storage. Returns the default value if the key doesn't exist.
+
+`GL.storage.setValue(pluginName: string, key: string, value: any): void`
+
+Sets a value in storage.
+
+`GL.storage.deleteValue(pluginName: string, key: string): void`
+
+Deletes a value from storage.
+
 ### Events
 
 Gimloader also has a few events that you can listen to:

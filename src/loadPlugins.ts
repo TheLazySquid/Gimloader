@@ -1,4 +1,4 @@
-import { getValue, log, setValue } from "./util";
+import { log } from "./util";
 
 export class Plugin {
     script: string;
@@ -54,11 +54,8 @@ export class Plugin {
 export default class PluginManager {
     plugins: Plugin[] = [];
 
-    constructor() {
-    }
-
     async init() {
-        let pluginScripts = JSON.parse(getValue('plugins', '[]')!);
+        let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
 
         for(let plugin of pluginScripts) {
             let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
@@ -74,7 +71,7 @@ export default class PluginManager {
         this.plugins = newPlugins;
         let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
     
-        setValue('plugins', JSON.stringify(pluginObjs));
+        GM_setValue('plugins', JSON.stringify(pluginObjs));
     }
 
     getPlugin(name: string) {

@@ -9,7 +9,6 @@ export declare class Plugin {
 }
 export default class PluginManager {
     plugins: Plugin[];
-    constructor();
     init(): Promise<void>;
     save(newPlugins: Plugin[]): void;
     getPlugin(name: string): Plugin;
