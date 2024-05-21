@@ -8,6 +8,7 @@ import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import ContextMenu from './contextMenu/contextMenu';
 import PluginManager from './loadPlugins';
+import Storage from './storage/storage';
 export declare class Gimloader extends EventTarget {
     version: string;
     React: typeof React;
@@ -22,6 +23,7 @@ export declare class Gimloader extends EventTarget {
     net: Net;
     hotkeys: HotkeyManager;
     contextMenu: ContextMenu;
+    storage: Storage;
     UI: {
         showModal: typeof showModal;
         addStyles: typeof addStyles;

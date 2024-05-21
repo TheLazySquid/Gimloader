@@ -1,5 +1,4 @@
 import { IFrameInfo } from "../types";
-import { getLaserOffset } from "./updateLasers";
 
 export const defaultState = '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}'
 
@@ -37,7 +36,8 @@ export function save(frames: IFrameInfo[]) {
         saveList.push(save)
     }
 
-    localStorage.setItem("frames", JSON.stringify(saveList))
+    console.log("saving as", saveList)
+    GL.storage.setValue("DLDTAS", "frames", saveList)
 
     return saveList
 }

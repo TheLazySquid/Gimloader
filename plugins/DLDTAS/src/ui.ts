@@ -6,7 +6,8 @@ import { save } from "./util";
 import controller from '../assets/controller.svg';
 import { getLaserOffset, setLaserOffset } from "./updateLasers";
 
-let frames: IFrameInfo[] = JSON.parse(localStorage.getItem("frames") || "[]")
+let frames: IFrameInfo[] = GL.storage.getValue("DLDTAS", "frames", []);
+console.log(frames)
 let values: ISharedValues = { frames, currentFrame: 0 }
 
 export function createUI(physicsManager: any) {

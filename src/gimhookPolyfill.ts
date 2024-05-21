@@ -1,5 +1,4 @@
 import type { Gimloader } from './gimloader'
-import { getUnsafeWindow } from './util';
 
 // spec: https://codeberg.org/gimhook/gimhook/src/branch/master/docs/sdk/api.md
 // Several features were recently removed from gimhook which this polyfill actually adds back
@@ -92,5 +91,5 @@ export function gimhookPolyfill(gimloader: Gimloader) {
     }
 
     window.gimhook = gimhook;
-    getUnsafeWindow().gimhook = gimhook;
+    unsafeWindow.gimhook = gimhook;
 }

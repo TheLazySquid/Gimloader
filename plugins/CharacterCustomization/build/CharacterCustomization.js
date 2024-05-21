@@ -2,7 +2,7 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author TheLazySquid
- * @version 0.2.1
+ * @version 0.2.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js
  */
 function UI({ cosmeticChanger, onSubmit }) {
@@ -67,10 +67,10 @@ fetch(`${base}/calacaTwo.atlas`)
     });
 });
 class CosmeticChanger {
-    skinType = localStorage.getItem("cc_skinType") ?? "default";
-    trailType = localStorage.getItem("cc_trailType") ?? "default";
-    skinId = localStorage.getItem("cc_skinId") ?? "";
-    trailId = localStorage.getItem("cc_trailId") ?? "";
+    skinType = GL.storage.getValue("CharacterCustomization", "skinType", "default");
+    trailType = GL.storage.getValue("CharacterCustomization", "trailType", "default");
+    skinId = GL.storage.getValue("CharacterCustomization", "skinId", "");
+    trailId = GL.storage.getValue("CharacterCustomization", "trailId", "");
     normalSkin = "";
     allowNextSkin = false;
     normalTrail = "";
@@ -128,8 +128,8 @@ class CosmeticChanger {
         }
     }
     async initCustomSkinFile() {
-        let file = localStorage.getItem("cc_customSkinFile");
-        let fileName = localStorage.getItem("cc_customSkinFileName");
+        let file = GL.storage.getValue("CharacterCustomization", "customSkinFile");
+        let fileName = GL.storage.getValue("CharacterCustomization", "customSkinFileName");
         if (!file || !fileName)
             return;
         let byteString = atob(file.substring(file.indexOf(",") + 1));
@@ -212,17 +212,17 @@ class CosmeticChanger {
         this.skinId = skinId;
         this.customSkinFile = customSkinFile;
         // save items to local storage
-        localStorage.setItem("cc_skinType", skinType);
-        localStorage.setItem("cc_skinId", skinId);
+        GL.storage.setValue("CharacterCustomization", "skinType", skinType);
+        GL.storage.setValue("CharacterCustomization", "skinId", skinId);
         if (!customSkinFile) {
-            localStorage.removeItem("cc_customSkinFile");
-            localStorage.removeItem("cc_customSkinFileName");
+            GL.storage.removeValue("CharacterCustomization", "customSkinFile");
+            GL.storage.removeValue("CharacterCustomization", "customSkinFileName");
         }
         else {
             let reader = new FileReader();
             reader.onload = () => {
-                localStorage.setItem("cc_customSkinFile", reader.result);
-                localStorage.setItem("cc_customSkinFileName", customSkinFile.name);
+                GL.storage.setValue("CharacterCustomization", "customSkinFile", reader.result);
+                GL.storage.setValue("CharacterCustomization", "customSkinFileName", customSkinFile.name);
             };
             reader.readAsDataURL(customSkinFile);
         }
@@ -251,8 +251,8 @@ class CosmeticChanger {
         this.trailType = trailType;
         this.trailId = trailId;
         // save items to local storage
-        localStorage.setItem("cc_trailType", trailType);
-        localStorage.setItem("cc_trailId", trailId);
+        GL.storage.setValue("ChracterCustomization", "trailType", trailType);
+        GL.storage.setValue("ChracterCustomization", "trailId", trailId);
         let characterTrail = GL.stores?.phaser?.mainCharacter?.characterTrail;
         if (characterTrail) {
             this.allowNextTrail = true;

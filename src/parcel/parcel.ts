@@ -4,7 +4,7 @@
 
 import type { Gimloader } from "../gimloader";
 import type { Intercept } from "../types";
-import { getUnsafeWindow, log } from "../util";
+import { log } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
@@ -162,7 +162,7 @@ export default class Parcel extends EventTarget {
         this.gimloader.pluginManager.init();
 
         let requireHook: (moduleName: string) => void;
-        let nativeParcelRequire = getUnsafeWindow()["parcelRequire388b"];
+        let nativeParcelRequire = unsafeWindow["parcelRequire388b"];
     
         ((requireHook = (moduleName) => {
             if (moduleName in this._parcelModuleCache) {
@@ -216,7 +216,7 @@ export default class Parcel extends EventTarget {
             nativeParcelRequire?.register(moduleName, moduleCallback);
         });
 
-        Object.defineProperty(getUnsafeWindow(), "parcelRequire388b", {
+        Object.defineProperty(unsafeWindow, "parcelRequire388b", {
             value: requireHook,
             writable: false,
             enumerable: true,

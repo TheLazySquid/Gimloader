@@ -1,7 +1,7 @@
 import { ISharedValues } from "../types";
 
 let lasers: any[] = [];
-let laserOffset: number = parseInt(localStorage.getItem("laserOffset") ?? '0');
+let laserOffset: number = GL.storage.getValue("DLDTAS", "laserOffset", 0);
 
 GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
     for(let i = 0; i < packet.detail.changes.length; i++) {
@@ -40,7 +40,7 @@ export function getLaserOffset() {
 
 export function setLaserOffset(offset: number) {
     laserOffset = offset;
-    localStorage.setItem("laserOffset", offset.toString());
+    GL.storage.getValue("DLDTAS", "laserOffset", offset);
 }
 
 export function updateLasers(frame: number) {

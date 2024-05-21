@@ -49,6 +49,8 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
 
         let newPlugins = plugins.filter(p => p !== plugin);
 
+        GL.storage.removeAllValues(plugin.headers.name);
+
         setPlugins(newPlugins);
         pluginManager.save(newPlugins);
     }

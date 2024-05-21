@@ -7,7 +7,7 @@ import type * as ReactDOM from 'react-dom/client';
 import styles from './css/styles.scss';
 // @ts-ignore
 import codeCakeStyles from 'codecake/codecake.css';
-import { getUnsafeWindow, log } from './util';
+import { log } from './util';
 import { addPluginButtons } from './ui/addPluginButtons';
 import Parcel from './parcel/parcel';
 import Net from './net/net';
@@ -18,6 +18,7 @@ import Patcher from './patcher/patcher';
 import { gimhookPolyfill } from './gimhookPolyfill';
 import ContextMenu from './contextMenu/contextMenu';
 import PluginManager from './loadPlugins';
+import Storage from './storage/storage';
 
 export class Gimloader extends EventTarget {
     version: string = version;
@@ -36,6 +37,7 @@ export class Gimloader extends EventTarget {
     net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
     contextMenu: ContextMenu = new ContextMenu(this);
+    storage: Storage = new Storage();
     UI = {
         showModal,
         addStyles,
@@ -66,14 +68,14 @@ export class Gimloader extends EventTarget {
         this.parcel.interceptRequire(null, exports => exports?.default?.characters, exports => {
             this.stores = exports.default;
             window.stores = exports.default;
-            getUnsafeWindow().stores = exports.default;
+            unsafeWindow.stores = exports.default;
         })
 
         // window.platformerPhysics
         this.parcel.interceptRequire(null, exports => exports?.CharacterPhysicsConsts, exports => {
             this.platformerPhysics = exports.CharacterPhysicsConsts;
             window.platformerPhysics = exports.CharacterPhysicsConsts;
-            getUnsafeWindow().platformerPhysics = exports.CharacterPhysicsConsts;
+            unsafeWindow.platformerPhysics = exports.CharacterPhysicsConsts;
         })
     }
 

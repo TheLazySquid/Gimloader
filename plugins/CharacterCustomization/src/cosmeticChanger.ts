@@ -14,10 +14,10 @@ fetch(`${base}/calacaTwo.atlas`)
     })
 
 export default class CosmeticChanger {
-    skinType: string = localStorage.getItem("cc_skinType") ?? "default";
-    trailType: string = localStorage.getItem("cc_trailType") ?? "default";
-    skinId: string = localStorage.getItem("cc_skinId") ?? "";
-    trailId: string = localStorage.getItem("cc_trailId") ?? "";
+    skinType: string = GL.storage.getValue("CharacterCustomization", "skinType",  "default");
+    trailType: string = GL.storage.getValue("CharacterCustomization", "trailType",  "default");
+    skinId: string = GL.storage.getValue("CharacterCustomization", "skinId",  "");
+    trailId: string = GL.storage.getValue("CharacterCustomization", "trailId",  "");
 
     normalSkin: string = "";
     allowNextSkin: boolean = false;
@@ -95,8 +95,8 @@ export default class CosmeticChanger {
     }
 
     async initCustomSkinFile() {
-        let file = localStorage.getItem("cc_customSkinFile");
-        let fileName = localStorage.getItem("cc_customSkinFileName");
+        let file = GL.storage.getValue("CharacterCustomization", "customSkinFile");
+        let fileName = GL.storage.getValue("CharacterCustomization", "customSkinFileName");
         if(!file || !fileName) return;
 
         let byteString = atob(file.substring(file.indexOf(",") + 1));
@@ -183,16 +183,16 @@ export default class CosmeticChanger {
         this.customSkinFile = customSkinFile;
 
         // save items to local storage
-        localStorage.setItem("cc_skinType", skinType);
-        localStorage.setItem("cc_skinId", skinId);
+        GL.storage.setValue("CharacterCustomization", "skinType", skinType);
+        GL.storage.setValue("CharacterCustomization", "skinId", skinId);
         if(!customSkinFile) {
-            localStorage.removeItem("cc_customSkinFile");
-            localStorage.removeItem("cc_customSkinFileName");
+            GL.storage.removeValue("CharacterCustomization", "customSkinFile");
+            GL.storage.removeValue("CharacterCustomization", "customSkinFileName");
         } else {
             let reader = new FileReader();
             reader.onload = () => {
-                localStorage.setItem("cc_customSkinFile", reader.result as string);
-                localStorage.setItem("cc_customSkinFileName", customSkinFile.name);
+                GL.storage.setValue("CharacterCustomization", "customSkinFile", reader.result as string);
+                GL.storage.setValue("CharacterCustomization", "customSkinFileName", customSkinFile.name);
             }
             reader.readAsDataURL(customSkinFile);
         }
@@ -223,8 +223,8 @@ export default class CosmeticChanger {
         this.trailId = trailId;
 
         // save items to local storage
-        localStorage.setItem("cc_trailType", trailType);
-        localStorage.setItem("cc_trailId", trailId);
+        GL.storage.setValue("ChracterCustomization", "trailType", trailType);
+        GL.storage.setValue("ChracterCustomization", "trailId", trailId);
 
         let characterTrail = GL.stores?.phaser?.mainCharacter?.characterTrail;
         if(characterTrail) {

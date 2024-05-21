@@ -1,6 +1,6 @@
 {
   "name": "charactercustomization",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Allows you to use any gim or a custom gim client-side",
   "main": "src/index.ts",
   "type": "module",

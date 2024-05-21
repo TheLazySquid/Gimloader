@@ -24,7 +24,8 @@ export default class AutoKicker {
     }
 
     loadSettings() {
-        let settings = JSON.parse(localStorage.getItem("AK-Settings") ?? "{}");
+        let settings = GL.storage.getValue("AutoKicker", "Settings", {});
+        console.log("SETTINGS", settings);
 
         this.kickDuplicateNames = settings.kickDuplicateNames ?? false;
         this.kickSkinless = settings.kickSkinless ?? false;
@@ -34,13 +35,13 @@ export default class AutoKicker {
     }
 
     saveSettings() {
-        localStorage.setItem("AK-Settings", JSON.stringify({
+        GL.storage.setValue("AutoKicker", "Settings", {
             kickDuplicateNames: this.kickDuplicateNames,
             kickSkinless: this.kickSkinless,
             blacklist: this.blacklist,
             kickIdle: this.kickIdle,
             idleDelay: this.idleDelay
-        }));
+        });
     }
 
     start() {
