@@ -38,7 +38,7 @@ Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have 
 
 ### Plugin Structure
 
-Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](/docs/headers.md)).
+Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Headers)).
 
 ```javascript
 /**
@@ -58,11 +58,11 @@ export function onStop() {
 
 ### API
 
-The api reference can be found [here](/docs/api.md).
+The api reference can be found [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-API).
 
 ### Build Tools
 
-Gimloader provides an easy way to build more complex plugins. Find more information [here](/docs/buildTools.md).
+Gimloader provides an easy way to build more complex plugins. Find more information [here](https://github.com/TheLazySquid/Gimloader/wiki/Build-Tools).
 
 ### Types
 
