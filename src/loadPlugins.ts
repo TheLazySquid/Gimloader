@@ -44,7 +44,11 @@ export class Plugin {
         this.enabled = false;
 
         if(this.return) {
-            this.return?.onStop?.();
+            try {
+                this.return?.onStop?.();
+            } catch (e) {
+                log(`Error stopping plugin ${this.headers.name}:`, e);
+            }
         }
 
         this.return = null;
