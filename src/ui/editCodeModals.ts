@@ -1,9 +1,10 @@
 import * as CodeCake from "codecake"
 import showModal from "./modal";
-import PluginManager, { parseHeader } from "../loadPlugins";
-import { Plugin } from "../loadPlugins";
+import PluginManager from "../pluginManager/pluginManager"
+import parseHeader from "../pluginManager/parseHeader";
+import Plugin from "../pluginManager/plugin";
 
-export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugin, pluginManager: PluginManager) {
+export function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -46,21 +47,15 @@ export function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugi
                         }
                     }
 
-                    plugin.disable();
-                    plugin.script = code;
-                    plugin.headers = headers;
-                    plugin.enable();
-                    let newPlugins = [...plugins];
-                    pluginManager.save(newPlugins);
-                    setPlugins(newPlugins);
+                    plugin.edit(code, headers);
+                    pluginManager.updatePlugins();
                 }
             }
         ]
     });
 }
 
-// can't be bothered with the type
-export function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: PluginManager) {
+export function createPlugin(plugins: Plugin[], pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -81,7 +76,7 @@ export function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: 
 
     showModal(editorDiv, {
         title: "Create New Plugin",
-        style: "width: 50%",
+        style: "width: 90%",
         buttons: [
             {
                 text: "cancel",
@@ -108,9 +103,7 @@ export function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: 
                         }
                     }
 
-                    let newPlugins = [...plugins, new Plugin(code)];
-                    setPlugins(newPlugins);
-                    pluginManager.save(newPlugins);
+                    pluginManager.createPlugin(code);
                 }
             }
         ]

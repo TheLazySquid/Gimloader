@@ -1,36 +1,22 @@
-import { parseHeader } from "./loadPlugins";
-
-interface IPluginInfo {
-    script: string;
-    enabled: boolean;
-}
+import parseHeader from "./pluginManager/parseHeader";
+import PluginManager from "./pluginManager/pluginManager";
 
 export default function initInstallApi() {
-    let pluginInfos: IPluginInfo[] = JSON.parse(GM_getValue('plugins', '[]')!);
-    let pluginHeaders = pluginInfos.map((plugin) => parseHeader(plugin.script));
+    // create a new plugin manager that doesn't run plugins
+    let pluginManager = new PluginManager(false);
+    pluginManager.init();
 
     (unsafeWindow as any).GLInstall = function (script: string) {
-        let scriptHeaders = parseHeader(script);
-
-        for(let i = 0; i < pluginHeaders.length; i++) {
-            let headers = pluginHeaders[i];
-
-            // confirmation is done on the site
-            if(headers.name === scriptHeaders.name) {
-                pluginInfos.splice(i, 1);
-                pluginHeaders.splice(i, 1);
-                i--;
-            }
+        let headers = parseHeader(script);
+        let existingPlugin = pluginManager.getPlugin(headers.name);
+        if(existingPlugin) {
+            existingPlugin.edit(script, headers);
         }
-
-        pluginInfos.push({ script, enabled: true });
-        GM_setValue('plugins', JSON.stringify(pluginInfos));
+        
+        pluginManager.createPlugin(script);
     };
 
     (unsafeWindow as any).GLGet = function (name: string) {
-        let index = pluginHeaders.findIndex((header) => header.name === name);
-        if(index === -1) return null;
-
-        return pluginInfos[index].script;
+        return pluginManager.getPlugin(name)?.script;
     }
 }

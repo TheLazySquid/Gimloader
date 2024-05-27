@@ -1,3 +1,3 @@
-import { type Plugin } from '../loadPlugins';
+import type Plugin from '../pluginManager/plugin';
 export declare function checkScriptUpdate(): Promise<void>;
-export declare function checkPluginUpdate(plugin: Plugin, rerender: () => void): Promise<void>;
+export declare function checkPluginUpdate(plugin: Plugin): Promise<void>;

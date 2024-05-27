@@ -28,3 +28,7 @@ export interface IInterceptRequire {
     once: boolean;
 }
 export type Intercept = IModuleRequired | IInterceptRequire;
+export interface IPluginInfo {
+    script: string;
+    enabled: boolean;
+}

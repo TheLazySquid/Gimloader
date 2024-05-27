@@ -2,7 +2,7 @@ import type { Gimloader } from "../gimloader";
 import wrench from '../../assets/wrench.svg';
 import showModal from "./modal";
 import PluginManagerUI from "./PluginManager";
-import type PluginManager from "../loadPlugins";
+import type PluginManager from "../pluginManager/pluginManager";
 
 let modalOpen = false;
 
