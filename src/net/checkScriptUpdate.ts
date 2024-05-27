@@ -1,5 +1,6 @@
 import { version } from '../../package.json';
-import { parseHeader, type Plugin } from '../loadPlugins';
+import type Plugin from '../pluginManager/plugin';
+import parseHeader from '../pluginManager/parseHeader';
 
 const scriptUrl = "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js";
 
@@ -18,7 +19,7 @@ export async function checkScriptUpdate() {
     // compare versions
     let comparison = compareVersions(version, incomingVersion);
     if(comparison === 'same') alert("This script is up to date!");
-    else if(comparison === 'newer') {
+    else if(comparison === 'older') {
         let confirm = window.confirm(`A new version of Gimloader is available! Would you like to update?`);
         if(confirm) {
             window.location.href = scriptUrl;
@@ -28,7 +29,7 @@ export async function checkScriptUpdate() {
     }
 }
 
-export async function checkPluginUpdate(plugin: Plugin, rerender: () => void) {
+export async function checkPluginUpdate(plugin: Plugin) {
     if(!plugin.headers.downloadUrl) return;
 
     const res = await GL.net.corsRequest({ url: plugin.headers.downloadUrl })
@@ -39,7 +40,10 @@ export async function checkPluginUpdate(plugin: Plugin, rerender: () => void) {
     if(!res) return;
 
     let incomingHeaders = parseHeader(res.responseText);
-    if(res.responseText === plugin.script) alert("This plugin is up to date!");
+    if(res.responseText === plugin.script) { 
+        alert("This plugin is up to date!");
+        return
+    }
 
     let confirm: boolean;
     let comparison = compareVersions(plugin.headers.version ?? '', incomingHeaders.version ?? '');
@@ -54,13 +58,9 @@ export async function checkPluginUpdate(plugin: Plugin, rerender: () => void) {
     }
 
     if(confirm) {
-        plugin.disable();
-        plugin.script = res.responseText;
-        plugin.headers = incomingHeaders;
-        plugin.enable();
+        plugin.edit(res.responseText, incomingHeaders);
+        GL.pluginManager.updatePlugins();
     }
-
-    rerender();
 }
 
 function compareVersions(v1: string, v2: string): 'same' | 'newer' | 'older' {

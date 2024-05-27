@@ -1,4 +1,4 @@
-import PluginManager from "../loadPlugins";
-import { Plugin } from "../loadPlugins";
-export declare function showCodeEditor(plugins: Plugin[], setPlugins: any, plugin: Plugin, pluginManager: PluginManager): void;
-export declare function createPlugin(plugins: Plugin[], setPlugins: any, pluginManager: PluginManager): void;
+import PluginManager from "../pluginManager/pluginManager";
+import Plugin from "../pluginManager/plugin";
+export declare function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager): void;
+export declare function createPlugin(plugins: Plugin[], pluginManager: PluginManager): void;

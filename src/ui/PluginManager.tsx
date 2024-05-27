@@ -6,7 +6,8 @@ import checkBold from "../../assets/check-bold.svg";
 import closeThick from "../../assets/close-thick.svg";
 import update from '../../assets/update.svg';
 
-import PluginManager, { Plugin } from "../loadPlugins";
+import type PluginManager from "../pluginManager/pluginManager";
+import Plugin from "../pluginManager/plugin";
 import { createPlugin, showCodeEditor } from "../ui/editCodeModals";
 import { checkScriptUpdate, checkPluginUpdate } from "../net/checkScriptUpdate";
 
@@ -15,6 +16,8 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
     
     const [plugins, setPlugins] = React.useState(pluginManager.plugins);
     const filePickerInput = React.useRef<HTMLInputElement>(null);
+
+    pluginManager.reactSetPlugins = setPlugins;
 
     function importFile() {
         filePickerInput.current?.click();
@@ -31,12 +34,7 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
 
                 // @ts-ignore compiler option is set but vscode can't tell
                 code = code.replaceAll("\r\n", "\n")
-                let plugin = new Plugin(code);
-
-                let newPlugins = [...plugins, plugin];
-
-                setPlugins(newPlugins);
-                pluginManager.save(newPlugins);
+                pluginManager.createPlugin(code);
             })
 
             reader.readAsText(file);
@@ -47,32 +45,15 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
         let confirm = window.confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
         if(!confirm) return;
 
-        let newPlugins = plugins.filter(p => p !== plugin);
-
-        GL.storage.removeAllValues(plugin.headers.name);
-
-        setPlugins(newPlugins);
-        pluginManager.save(newPlugins);
+        pluginManager.deletePlugin(plugin);
     }
 
     function enableAll() {
-        let newPlugins = plugins.map(p => {
-            p.enable();
-            return p;
-        });
-
-        setPlugins(newPlugins);
-        pluginManager.save(newPlugins);
+        pluginManager.setAll(true);
     }
 
     function disableAll() {
-        let newPlugins = plugins.map(p => {
-            p.disable();
-            return p;
-        });
-
-        setPlugins(newPlugins);
-        pluginManager.save(newPlugins);
+        pluginManager.setAll(false);
     }
 
     return (
@@ -85,18 +66,16 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                 <input type="file" style={{ display: "none" }}
                 accept=".js" ref={filePickerInput} />
                 <button dangerouslySetInnerHTML={{ __html: plusBoxOutline }}
-                onClick={() => createPlugin(plugins, setPlugins, pluginManager)}></button>
-                <div className="right">
-                    <button dangerouslySetInnerHTML={{ __html: checkBold }} title="Enable All"
-                    onClick={enableAll}></button>
-                    <button dangerouslySetInnerHTML={{ __html: closeThick }} title="Disable All"
-                    onClick={disableAll}></button>
-                </div>
+                onClick={() => createPlugin(plugins, pluginManager)}></button>
+                <button dangerouslySetInnerHTML={{ __html: checkBold }} title="Enable All"
+                onClick={enableAll}></button>
+                <button dangerouslySetInnerHTML={{ __html: closeThick }} title="Disable All"
+                onClick={disableAll}></button>
             </div>
             <div className="pluginList">
-                {plugins.map((plugin, index) => {
+                {plugins.map((plugin) => {
                     return (
-                        <div key={index} className="plugin">
+                        <div key={plugin.headers.name} className="plugin">
                             <div className="info">
                                 <div className="top">
                                     <div className="name">
@@ -107,16 +86,10 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                                         </span> : null}
                                     </div>
                                     <input type="checkbox" checked={plugin.enabled} onInput={e => {
-                                        if(!e.currentTarget.checked) {
-                                            plugin.enable();
-                                        } else {
-                                            plugin.disable();
-                                        }
+                                        if(!e.currentTarget.checked) plugin.enable();
+                                        else plugin.disable();
 
-                                        // this re-renders all the plugins (bad) but I don't care
-                                        let newPlugins = [...plugins];
-                                        setPlugins(newPlugins);
-                                        pluginManager.save(newPlugins);
+                                        pluginManager.save(plugins);
                                     }} />
                                 </div>
                                 <div className="author">by {plugin.headers.author}</div>
@@ -125,11 +98,11 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                             <div className="buttons">
                                 {plugin.headers.downloadUrl ? (
                                     <button dangerouslySetInnerHTML={{ __html: update }}
-                                    onClick={() => checkPluginUpdate(plugin, () => setPlugins([...plugins]))}>
+                                    onClick={() => checkPluginUpdate(plugin)}>
                                     </button>
                                 ) : null}
                                 <button dangerouslySetInnerHTML={{ __html: pencilOutline }}
-                                onClick={() => showCodeEditor(plugins, setPlugins, plugin, pluginManager)}>
+                                onClick={() => showCodeEditor(plugins, plugin, pluginManager)}>
                                 </button>
                                 <button dangerouslySetInnerHTML={{ __html: deleteSvg }}
                                 onClick={() => deletePlugin(plugin)}>

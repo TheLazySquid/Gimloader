@@ -17,7 +17,7 @@ import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import { gimhookPolyfill } from './gimhookPolyfill';
 import ContextMenu from './contextMenu/contextMenu';
-import PluginManager from './loadPlugins';
+import PluginManager from './pluginManager/pluginManager';
 import Storage from './storage/storage';
 
 export class Gimloader extends EventTarget {

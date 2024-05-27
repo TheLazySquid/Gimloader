@@ -7,7 +7,7 @@ import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import ContextMenu from './contextMenu/contextMenu';
-import PluginManager from './loadPlugins';
+import PluginManager from './pluginManager/pluginManager';
 import Storage from './storage/storage';
 export declare class Gimloader extends EventTarget {
     version: string;

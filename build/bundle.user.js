@@ -9,7 +9,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.5.3
+// @version     0.6.0
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -17,13 +17,14 @@
 // @grant       GM_listValues
 // @grant       GM.registerMenuCommand
 // @grant       GM.xmlHttpRequest
+// @grant       GM_addValueChangeListener
 // ==/UserScript==
 (function () {
   'use strict';
 
-  var version = "0.5.3";
+  var version = "0.6.0";
 
-  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap .header .right {\n  padding-right: 5px;\n  flex-grow: 1;\n  display: flex;\n  justify-content: flex-end;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .plugin .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
+  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .pluginList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .pluginList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column-end: span 2;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 43px;\n  height: 43px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n}\n.gl-listWrap .plugin {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .plugin .info {\n  flex-grow: 1;\n}\n.gl-listWrap .plugin .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .plugin .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .plugin .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .plugin .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .plugin .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
   var codeCakeStyles = "/* codecake global styles */\n.codecake {\n    display: flex;\n    font-family: \"Source Code Pro\", monospace;\n    letter-spacing: normal;\n    min-height: 0;\n    padding: 20px;\n    width: 100%;\n}\n.codecake-editor {\n    flex-grow: 1;\n    font-size: 14px;\n    font-weight: 400;\n    height: 100%;\n    line-height: 20px;\n    overflow: auto;\n    overflow-wrap: normal;\n    outline: none;\n    width: 100%;\n    white-space: pre; /* pre-wrap */\n    word-wrap: normal;\n}\n.codecake-gutters {\n    min-height: 0;\n    overflow: hidden;\n    position: relative;\n    width: 48px;\n}\n.codecake-lines {\n    bottom: 0px;\n    color: currentColor;\n    font-size: 12px;\n    line-height: 20px;\n    opacity: 0.5;\n    overflow: hidden;\n    padding-right: 16px;\n    position: absolute;\n    right: 0px;\n    text-align: right;\n    top: 0px;\n}\n.codecake-lines > div {\n    margin-bottom: 4px;\n    min-height: 16px;\n}\n.codecake-lines > div:not(:first-child) {\n    margin-top: 4px;\n}\n\n/* Terrible hack to hide last empty line in editor */\n.codecake-editor .line:last-child,\n.codecake-lines > div:last-child {\n    display: none !important;\n}\n\n/* Editor plugins */\n.codecake-linewrapping {\n    white-space: pre-wrap !important;\n}\n\n/* Editor scrollbar */\n.codecake-editor::-webkit-scrollbar {\n    width: 8px;\n    height: 8px;\n}\n.codecake-editor::-webkit-scrollbar-track {\n    background-color: transparent;\n}\n.codecake-editor::-webkit-scrollbar-thumb {\n    background-color: currentColor;\n    border-radius: 16px;\n}\n.codecake-editor::-webkit-scrollbar-button {\n    display: none;\n}\n.codecake-editor::-webkit-scrollbar-corner {\n    background-color: transparent;\n}\n\n/* codecake light theme */\n.codecake-light {\n    background-color: #fafafa;\n    color: #101623;\n}\n.codecake-light .codecake-editor::-webkit-scrollbar-thumb {\n    background-color: #dedfe3;\n}\n.codecake-light .codecake-editor::-webkit-scrollbar-thumb:hover {\n    background-color: #cbccd2;\n}\n.codecake-light .codecake-lines {\n    /* color: #6cb1c5; */\n    color: #878a98;\n}\n\n.codecake-light .token-operator, \n.codecake-light .token-number,\n.codecake-light .token-unit {\n    color: #e57697;\n}\n.codecake-light .token-punctuation, \n.codecake-light .token-property,\n.codecake-light .token-selector-pseudo,\n.codecake-light .token-selector-attr,\n.codecake-light .token-quote,\n.codecake-light .token-code {\n    color: #3a464e;\n}\n.codecake-light .token-keyword,\n.codecake-light .token-bullet {\n    color: #b351d9;\n}\n.codecake-light .token-constant {\n    color: #20118a;\n}\n.codecake-light .token-attribute,\n.codecake-light .token-tag,\n.codecake-light .token-title.function,\n.codecake-light .token-selector-tag,\n.codecake-light .token-section {\n    color: #3a9ff2;\n}\n.codecake-light .token-attr,\n.codecake-light .token-selector-class,\n.codecake-light .token-link {\n    color: #f38d00;\n}\n.codecake-light .token-string {\n    color: #00a17d;\n}\n.codecake-light .token-comment {\n    color: #969896;\n}\n\n/* codecake dark theme */\n.codecake-dark {\n    background-color: #272b3f;\n    color: #aab2d4;\n}\n.codecake-dark .codecake-editor::-webkit-scrollbar-thumb {\n    background-color: #99aaff15;\n}\n.codecake-dark .codecake-editor::-webkit-scrollbar-thumb:hover {\n    background-color: #99aaff22;\n}\n.codecake-dark .codecake-lines {\n    color: #757ca3;\n}\n\n.codecake-dark .token-attr,\n.codecake-dark .token-selector-tag {\n    color: #80d0ff;\n}\n.codecake-dark .token-comment,\n.codecake-dark .token-quote {\n    color: #58628d;\n}\n.codecake-dark .token-constant, \n.codecake-dark .token-number,\n.codecake-dark .token-bullet,\n.codecake-dark .token-link {\n    color: #ffae80;\n}\n.codecake-dark .token-title.function,\n.codecake-dark .token-section {\n    color: #22c1dd;\n} \n.codecake-dark .token-attribute,\n.codecake-dark .token-tag,\n.codecake-dark .token-code,\n.codecake-dark .token-strong {\n    color: #6e9af7;\n}\n.codecake-dark .token-keyword {\n    color: #af89f5;\n}\n.codecake-dark .token-operator,\n.codecake-dark .token-selector-attr {\n    color: #ad388c;\n}\n.codecake-dark .token-property,\n.codecake-dark .token-selector-class {\n    color: #bdc7f5;\n}\n.codecake-dark .token-selector-pseudo,\n.codecake-dark .token-punctuation,\n.codecake-dark .token-emphasis {\n    color: #8bb3f4;\n}\n.codecake-dark .token-string {\n    color: #9bcd65;\n}\n.codecake-dark .token-unit {\n    color: #dd556e;\n}\n\n/* MonoBlue theme */\n.codecake-monoblue {\n    background-color: #eef2f6;\n    color: #011e48;\n}\n.codecake-monoblue .token-keyword, \n.codecake-monoblue .token-tag,\n.codecake-monoblue .token-selector-tag, \n.codecake-monoblue .token-section {\n    font-weight: bold;\n}\n.codecake-monoblue .token-string,\n.codecake-monoblue .token-section {\n    color: #1086ce;\n}\n.codecake-monoblue .token-comment {\n    color: #8e9eaf;\n}\n.codecake-monoblue .token-code,\n.codecake-monoblue .token-quote,\n.codecake-monoblue .token-tag, \n.codecake-monoblue .token-attr,\n.codecake-monoblue .token-attribute,\n.codecake-monoblue .token-selector-class,\n.codecake-monoblue .token-punctuation {\n    color: #224d84;\n}\n.codecake-monoblue .token-bullet {\n    color: #8fc8f3;\n}\n\n/* One Light theme */\n/* Inspired in https://github.com/akamud/vscode-theme-onelight */\n.codecake-one-light {\n    background-color: #fafafa;\n    color: #393c46;\n}\n.codecake-one-light .token-keyword {\n    color: #a329a1;\n}\n.codecake-one-light .token-string,\n.codecake-one-light .token-attribute {\n    color: #54ac53;\n}\n.codecake-one-light .token-constant {\n    color: #0084bd;\n}\n.codecake-one-light .token-number,\n.codecake-one-light .token-unit,\n.codecake-one-light .token-selector-class,\n.codecake-one-light .token-selector-attr,\n.codecake-one-light .token-selector-pseudo,\n.codecake-one-light .token-attr {\n    color: #a37000;\n}\n.codecake-one-light .token-bullet,\n.codecake-one-light .token-title.function {\n    color: #4279f0;\n}\n.codecake-one-light .token-quote,\n.codecake-one-light .token-comment {\n    color: #a3a4a8;\n}\n.codecake-one-light .token-section,\n.codecake-one-light .token-tag,\n.codecake-one-light .token-selector-tag {\n    color: #e74a3c;\n}\n.codecake-one-light .token-builtin {\n    color: #bb8002;\n}\n\n/* One Dark theme */\n/* Inspired in https://github.com/akamud/vscode-theme-onedark */\n.codecake-one-dark {\n    background-color: #282c34;\n    color: #b6bdc8;\n}\n.codecake-one-dark .token-keyword {\n    color: #ca78e2;\n}\n.codecake-one-dark .token-string,\n.codecake-one-dark .token-attribute {\n    color: #93bd75;\n}\n.codecake-one-dark .token-bullet,\n.codecake-one-dark .token-title.function {\n    color: #62adea;\n}\n.codecake-one-dark .token-constant {\n    color: #5cb6c1;\n}\n.codecake-one-dark .token-quote,\n.codecake-one-dark .token-comment {\n    color: #5f6672;\n}\n.codecake-one-dark .token-number,\n.codecake-one-dark .token-unit,\n.codecake-one-dark .token-selector-class,\n.codecake-one-dark .token-selector-attr,\n.codecake-one-dark .token-selector-pseudo,\n.codecake-one-dark .token-attr {\n    color: #d19761;\n}\n.codecake-one-dark .token-section,\n.codecake-one-dark .token-tag,\n.codecake-one-dark .token-selector-tag {\n    color: #e4727b;\n}\n.codecake-one-dark .token-builtin {\n    color: #e4b867;\n}\n\n/* Common styles */\n.codecake-light .token-strong,\n.codecake-dark .token-strong,\n.codecake-monoblue .token-strong,\n.codecake-one-light .token-strong,\n.codecake-one-dark .token-strong {\n    font-weight: bold;\n}\n.codecake-light .token-emphasis,\n.codecake-dark .token-emphasis,\n.codecake-monoblue .token-emphasis,\n.codecake-one-light .token-emphasis,\n.codecake-one-dark .token-emphasis {\n    font-style: italic;\n}\n";
 
@@ -107,139 +108,6 @@
   var closeThick = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z\" /></svg>";
 
   var update = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z\" /></svg>";
-
-  class Plugin {
-      script;
-      enabled;
-      headers;
-      return;
-      constructor(script, enabled = true, initial = false) {
-          this.script = script;
-          this.enabled = enabled;
-          this.headers = parseHeader(script);
-          // we are going to manually call enable on the first load
-          if (enabled && !initial) {
-              this.enable(initial);
-          }
-      }
-      async enable(initial = false) {
-          this.enabled = true;
-          // create a blob from the script and import it
-          let blob = new Blob([this.script], { type: 'application/javascript' });
-          let url = URL.createObjectURL(blob);
-          let returnVal = await import(url);
-          this.return = returnVal;
-          log(`Loaded plugin: ${this.headers.name}`);
-          if (!initial) {
-              if (this.headers.reloadRequired === 'true' || this.headers.reloadRequired === '') {
-                  let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
-                  if (reload) {
-                      location.reload();
-                  }
-              }
-          }
-      }
-      disable() {
-          this.enabled = false;
-          if (this.return) {
-              try {
-                  this.return?.onStop?.();
-              }
-              catch (e) {
-                  log(`Error stopping plugin ${this.headers.name}:`, e);
-              }
-          }
-          this.return = null;
-      }
-  }
-  class PluginManager {
-      plugins = [];
-      async init() {
-          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
-          for (let plugin of pluginScripts) {
-              let pluginObj = new Plugin(plugin.script, plugin.enabled, true);
-              this.plugins.push(pluginObj);
-          }
-          await Promise.all(this.plugins.map(p => p.enabled && p.enable(true)));
-          log('Plugins loaded');
-      }
-      save(newPlugins) {
-          this.plugins = newPlugins;
-          let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
-          GM_setValue('plugins', JSON.stringify(pluginObjs));
-      }
-      getPlugin(name) {
-          return this.plugins.find(p => p.headers.name === name) ?? null;
-      }
-      isEnabled(name) {
-          let plugin = this.getPlugin(name);
-          return plugin?.enabled ?? false;
-      }
-  }
-  function parseHeader(code) {
-      let headers = {
-          name: "Unnamed Plugin",
-          description: "No description provided",
-          author: "Unknown Author",
-          version: null,
-          reloadRequired: "false",
-          downloadUrl: null
-      };
-      // parse headers for gimhook mods
-      if (code.startsWith("// gimhook: ")) {
-          try {
-              let gimhookHeader = JSON.parse(code.slice(11, code.indexOf('\n')).trim());
-              if (gimhookHeader.name)
-                  headers.name = gimhookHeader.name;
-              if (gimhookHeader.description)
-                  headers.description = gimhookHeader.description;
-              if (gimhookHeader.author)
-                  headers.author = gimhookHeader.author;
-              if (gimhookHeader.version)
-                  headers.version = gimhookHeader.version;
-          }
-          catch (e) { }
-          return headers;
-      }
-      // parse the JSDoc header at the start (if it exists)
-      let closingIndex = code.indexOf('*/');
-      if (!(code.trimStart().startsWith('/**')) || closingIndex === -1) {
-          return headers;
-      }
-      let header = code.slice(0, closingIndex + 2);
-      header = header.slice(3, -2).trim();
-      let lines = header.split('\n');
-      // remove the leading asterisks and trim the lines
-      lines = lines.map(line => {
-          let newLine = line.trimStart();
-          if (newLine.startsWith('*')) {
-              newLine = newLine.slice(1).trim();
-          }
-          return newLine;
-      });
-      let text = lines.join(' ');
-      // go through and find all at symbols followed by non-whitespace
-      // and that don't have a bracket before them if they are a link
-      let validAtIndexes = [];
-      let index = -1;
-      while ((index = text.indexOf('@', index + 1)) !== -1) {
-          if (text[index + 1] === ' ')
-              continue;
-          if (index != 0 && text[index - 1] === '{') {
-              if (text.slice(index + 1, index + 5) === 'link') {
-                  continue;
-              }
-          }
-          validAtIndexes.push(index);
-      }
-      for (let i = 0; i < validAtIndexes.length; i++) {
-          let chunk = text.slice(validAtIndexes[i] + 1, validAtIndexes[i + 1] || text.length);
-          let key = chunk.slice(0, chunk.indexOf(' ') || chunk.length);
-          let value = chunk.slice(key.length).trim();
-          headers[key] = value;
-      }
-      return headers;
-  }
 
   /*
    * CodeCake Editor
@@ -683,7 +551,72 @@
       return _highlight(code, languages[language]?.rules || []);
   };
 
-  function showCodeEditor(plugins, setPlugins, plugin, pluginManager) {
+  function parseHeader(code) {
+      let headers = {
+          name: "Unnamed Plugin",
+          description: "No description provided",
+          author: "Unknown Author",
+          version: null,
+          reloadRequired: "false",
+          downloadUrl: null
+      };
+      // parse headers for gimhook mods
+      if (code.startsWith("// gimhook: ")) {
+          try {
+              let gimhookHeader = JSON.parse(code.slice(11, code.indexOf('\n')).trim());
+              if (gimhookHeader.name)
+                  headers.name = gimhookHeader.name;
+              if (gimhookHeader.description)
+                  headers.description = gimhookHeader.description;
+              if (gimhookHeader.author)
+                  headers.author = gimhookHeader.author;
+              if (gimhookHeader.version)
+                  headers.version = gimhookHeader.version;
+          }
+          catch (e) { }
+          return headers;
+      }
+      // parse the JSDoc header at the start (if it exists)
+      let closingIndex = code.indexOf('*/');
+      if (!(code.trimStart().startsWith('/**')) || closingIndex === -1) {
+          return headers;
+      }
+      let header = code.slice(0, closingIndex + 2);
+      header = header.slice(3, -2).trim();
+      let lines = header.split('\n');
+      // remove the leading asterisks and trim the lines
+      lines = lines.map(line => {
+          let newLine = line.trimStart();
+          if (newLine.startsWith('*')) {
+              newLine = newLine.slice(1).trim();
+          }
+          return newLine;
+      });
+      let text = lines.join(' ');
+      // go through and find all at symbols followed by non-whitespace
+      // and that don't have a bracket before them if they are a link
+      let validAtIndexes = [];
+      let index = -1;
+      while ((index = text.indexOf('@', index + 1)) !== -1) {
+          if (text[index + 1] === ' ')
+              continue;
+          if (index != 0 && text[index - 1] === '{') {
+              if (text.slice(index + 1, index + 5) === 'link') {
+                  continue;
+              }
+          }
+          validAtIndexes.push(index);
+      }
+      for (let i = 0; i < validAtIndexes.length; i++) {
+          let chunk = text.slice(validAtIndexes[i] + 1, validAtIndexes[i + 1] || text.length);
+          let key = chunk.slice(0, chunk.indexOf(' ') || chunk.length);
+          let value = chunk.slice(key.length).trim();
+          headers[key] = value;
+      }
+      return headers;
+  }
+
+  function showCodeEditor(plugins, plugin, pluginManager) {
       let editorDiv = document.createElement("div");
       editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
       let editor = create(editorDiv, {
@@ -720,20 +653,14 @@
                               i--;
                           }
                       }
-                      plugin.disable();
-                      plugin.script = code;
-                      plugin.headers = headers;
-                      plugin.enable();
-                      let newPlugins = [...plugins];
-                      pluginManager.save(newPlugins);
-                      setPlugins(newPlugins);
+                      plugin.edit(code, headers);
+                      pluginManager.updatePlugins();
                   }
               }
           ]
       });
   }
-  // can't be bothered with the type
-  function createPlugin(plugins, setPlugins, pluginManager) {
+  function createPlugin(plugins, pluginManager) {
       let editorDiv = document.createElement("div");
       editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
       let editor = create(editorDiv, {
@@ -750,7 +677,7 @@
       editor.setCode(defaultCode);
       showModal(editorDiv, {
           title: "Create New Plugin",
-          style: "width: 50%",
+          style: "width: 90%",
           buttons: [
               {
                   text: "cancel",
@@ -773,9 +700,7 @@
                               i--;
                           }
                       }
-                      let newPlugins = [...plugins, new Plugin(code)];
-                      setPlugins(newPlugins);
-                      pluginManager.save(newPlugins);
+                      pluginManager.createPlugin(code);
                   }
               }
           ]
@@ -797,7 +722,7 @@
       let comparison = compareVersions(version, incomingVersion);
       if (comparison === 'same')
           alert("This script is up to date!");
-      else if (comparison === 'newer') {
+      else if (comparison === 'older') {
           let confirm = window.confirm(`A new version of Gimloader is available! Would you like to update?`);
           if (confirm) {
               window.location.href = scriptUrl;
@@ -807,7 +732,7 @@
           alert("You are using a newer version of Gimloader than the one available on GitHub.");
       }
   }
-  async function checkPluginUpdate(plugin, rerender) {
+  async function checkPluginUpdate(plugin) {
       if (!plugin.headers.downloadUrl)
           return;
       const res = await GL.net.corsRequest({ url: plugin.headers.downloadUrl })
@@ -817,8 +742,10 @@
       if (!res)
           return;
       let incomingHeaders = parseHeader(res.responseText);
-      if (res.responseText === plugin.script)
+      if (res.responseText === plugin.script) {
           alert("This plugin is up to date!");
+          return;
+      }
       let confirm;
       let comparison = compareVersions(plugin.headers.version ?? '', incomingHeaders.version ?? '');
       let changeStr = `(${plugin.headers.version} -> ${incomingHeaders.version})`;
@@ -832,12 +759,9 @@
           confirm = window.confirm(`A new version of ${plugin.headers.name} is available ${changeStr}! Would you like to update?`);
       }
       if (confirm) {
-          plugin.disable();
-          plugin.script = res.responseText;
-          plugin.headers = incomingHeaders;
-          plugin.enable();
+          plugin.edit(res.responseText, incomingHeaders);
+          GL.pluginManager.updatePlugins();
       }
-      rerender();
   }
   function compareVersions(v1, v2) {
       if (v1 === v2)
@@ -862,6 +786,7 @@
       const React = GL.React;
       const [plugins, setPlugins] = React.useState(pluginManager.plugins);
       const filePickerInput = React.useRef(null);
+      pluginManager.reactSetPlugins = setPlugins;
       function importFile() {
           filePickerInput.current?.click();
           filePickerInput.current?.addEventListener("change", async () => {
@@ -874,10 +799,7 @@
                   let code = reader.result;
                   // @ts-ignore compiler option is set but vscode can't tell
                   code = code.replaceAll("\r\n", "\n");
-                  let plugin = new Plugin(code);
-                  let newPlugins = [...plugins, plugin];
-                  setPlugins(newPlugins);
-                  pluginManager.save(newPlugins);
+                  pluginManager.createPlugin(code);
               });
               reader.readAsText(file);
           });
@@ -886,39 +808,25 @@
           let confirm = window.confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
           if (!confirm)
               return;
-          let newPlugins = plugins.filter(p => p !== plugin);
-          GL.storage.removeAllValues(plugin.headers.name);
-          setPlugins(newPlugins);
-          pluginManager.save(newPlugins);
+          pluginManager.deletePlugin(plugin);
       }
       function enableAll() {
-          let newPlugins = plugins.map(p => {
-              p.enable();
-              return p;
-          });
-          setPlugins(newPlugins);
-          pluginManager.save(newPlugins);
+          pluginManager.setAll(true);
       }
       function disableAll() {
-          let newPlugins = plugins.map(p => {
-              p.disable();
-              return p;
-          });
-          setPlugins(newPlugins);
-          pluginManager.save(newPlugins);
+          pluginManager.setAll(false);
       }
       return (React.createElement("div", { className: "gl-listWrap" },
           React.createElement("div", { className: "header" },
               React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: checkScriptUpdate }),
               React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
               React.createElement("input", { type: "file", style: { display: "none" }, accept: ".js", ref: filePickerInput }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins, setPlugins, pluginManager) }),
-              React.createElement("div", { className: "right" },
-                  React.createElement("button", { dangerouslySetInnerHTML: { __html: checkBold }, title: "Enable All", onClick: enableAll }),
-                  React.createElement("button", { dangerouslySetInnerHTML: { __html: closeThick }, title: "Disable All", onClick: disableAll }))),
+              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(plugins, pluginManager) }),
+              React.createElement("button", { dangerouslySetInnerHTML: { __html: checkBold }, title: "Enable All", onClick: enableAll }),
+              React.createElement("button", { dangerouslySetInnerHTML: { __html: closeThick }, title: "Disable All", onClick: disableAll })),
           React.createElement("div", { className: "pluginList" },
-              plugins.map((plugin, index) => {
-                  return (React.createElement("div", { key: index, className: "plugin" },
+              plugins.map((plugin) => {
+                  return (React.createElement("div", { key: plugin.headers.name, className: "plugin" },
                       React.createElement("div", { className: "info" },
                           React.createElement("div", { className: "top" },
                               React.createElement("div", { className: "name" },
@@ -928,24 +836,19 @@
                                           "v",
                                           plugin.headers.version) : null),
                               React.createElement("input", { type: "checkbox", checked: plugin.enabled, onInput: e => {
-                                      if (!e.currentTarget.checked) {
+                                      if (!e.currentTarget.checked)
                                           plugin.enable();
-                                      }
-                                      else {
+                                      else
                                           plugin.disable();
-                                      }
-                                      // this re-renders all the plugins (bad) but I don't care
-                                      let newPlugins = [...plugins];
-                                      setPlugins(newPlugins);
-                                      pluginManager.save(newPlugins);
+                                      pluginManager.save(plugins);
                                   } })),
                           React.createElement("div", { className: "author" },
                               "by ",
                               plugin.headers.author),
                           React.createElement("div", { className: "description" }, plugin.headers.description)),
                       React.createElement("div", { className: "buttons" },
-                          plugin.headers.downloadUrl ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: () => checkPluginUpdate(plugin, () => setPlugins([...plugins])) })) : null,
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins, setPlugins, plugin, pluginManager) }),
+                          plugin.headers.downloadUrl ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: () => checkPluginUpdate(plugin) })) : null,
+                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showCodeEditor(plugins, plugin, pluginManager) }),
                           React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deletePlugin(plugin) }))));
               }),
               plugins.length === 0 ?
@@ -1783,6 +1686,179 @@
       }
   }
 
+  class Plugin {
+      script;
+      pluginManager;
+      enabled;
+      headers;
+      return;
+      runPlugin;
+      constructor(script, pluginManager, enabled = true, initial = false, runPlugin = true) {
+          this.script = script;
+          this.pluginManager = pluginManager;
+          this.enabled = enabled;
+          this.runPlugin = runPlugin;
+          this.headers = parseHeader(script);
+          // we are going to manually call enable on the first load
+          if (enabled && !initial) {
+              this.enable(initial);
+          }
+      }
+      async enable(initial = false) {
+          this.enabled = true;
+          this.pluginManager.updatePlugins();
+          if (!this.runPlugin)
+              return;
+          // create a blob from the script and import it
+          let blob = new Blob([this.script], { type: 'application/javascript' });
+          let url = URL.createObjectURL(blob);
+          let returnVal = await import(url);
+          this.return = returnVal;
+          log(`Loaded plugin: ${this.headers.name}`);
+          if (!initial) {
+              if (this.headers.reloadRequired === 'true' || this.headers.reloadRequired === '') {
+                  let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
+                  if (reload) {
+                      location.reload();
+                  }
+              }
+          }
+      }
+      disable() {
+          this.enabled = false;
+          this.pluginManager.updatePlugins();
+          if (!this.runPlugin)
+              return;
+          if (this.return) {
+              try {
+                  this.return?.onStop?.();
+              }
+              catch (e) {
+                  log(`Error stopping plugin ${this.headers.name}:`, e);
+              }
+          }
+          this.return = null;
+      }
+      edit(script, headers) {
+          let enabled = this.enabled;
+          this.disable();
+          this.script = script;
+          this.headers = headers;
+          if (enabled)
+              this.enable();
+          this.pluginManager.save(this.pluginManager.plugins);
+          this.pluginManager.updatePlugins();
+      }
+  }
+
+  class PluginManager {
+      plugins = [];
+      runPlugins;
+      reactSetPlugins;
+      updatePluginTimeout;
+      constructor(runPlugins = true) {
+          this.runPlugins = runPlugins;
+      }
+      updatePlugins() {
+          if (this.updatePluginTimeout)
+              clearTimeout(this.updatePluginTimeout);
+          // update next tick
+          this.updatePluginTimeout = setTimeout(() => {
+              this.reactSetPlugins?.([...this.plugins]);
+          });
+      }
+      async init() {
+          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
+          for (let plugin of pluginScripts) {
+              let pluginObj = new Plugin(plugin.script, this, plugin.enabled, true, this.runPlugins);
+              this.plugins.push(pluginObj);
+          }
+          await Promise.all(this.plugins.map(p => p.enabled && p.enable(true)));
+          log('Plugins loaded');
+          // when a plugin is remotely deleted, installed or enabled/disabled reflect that here
+          GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
+              if (!remote)
+                  return;
+              let newPluginInfos = JSON.parse(newVal);
+              let newPlugins = newPluginInfos.map(p => new Plugin(p.script, this, p.enabled, true, this.runPlugins));
+              // check for scripts that were added
+              for (let newPlugin of newPlugins) {
+                  if (!this.getPlugin(newPlugin.headers.name)) {
+                      newPlugin.enable();
+                      this.plugins.push(newPlugin);
+                  }
+              }
+              // check for plugins that were removed
+              for (let plugin of this.plugins) {
+                  if (!newPlugins.find(p => p.headers.name === plugin.headers.name)) {
+                      this.deletePlugin(plugin);
+                  }
+              }
+              // check if any scripts were updated
+              for (let plugin of newPlugins) {
+                  let oldPlugin = this.getPlugin(plugin.headers.name);
+                  if (!oldPlugin)
+                      continue;
+                  if (oldPlugin.script !== plugin.script) {
+                      oldPlugin.edit(plugin.script, plugin.headers);
+                      log(`Updated plugin: ${plugin.headers.name}`);
+                  }
+              }
+              // check if any plugins were enabled/disabled
+              for (let plugin of newPlugins) {
+                  let oldPlugin = this.getPlugin(plugin.headers.name);
+                  if (!oldPlugin)
+                      continue;
+                  if (oldPlugin.enabled !== plugin.enabled) {
+                      if (plugin.enabled)
+                          oldPlugin.enable();
+                      else
+                          oldPlugin.disable();
+                  }
+              }
+              this.updatePlugins();
+          });
+      }
+      save(newPlugins) {
+          this.plugins = newPlugins;
+          let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
+          GM_setValue('plugins', JSON.stringify(pluginObjs));
+      }
+      getPlugin(name) {
+          return this.plugins.find(p => p.headers.name === name) ?? null;
+      }
+      isEnabled(name) {
+          let plugin = this.getPlugin(name);
+          return plugin?.enabled ?? false;
+      }
+      createPlugin(script) {
+          let plugin = new Plugin(script, this, true, false, this.runPlugins);
+          this.plugins.push(plugin);
+          this.save(this.plugins);
+          this.updatePlugins();
+      }
+      deletePlugin(plugin) {
+          let newPlugins = this.plugins.filter(p => p !== plugin);
+          if (window.GL) {
+              GL.storage.removeAllValues(plugin.headers.name);
+          }
+          this.save(newPlugins);
+          this.updatePlugins();
+          log(`Deleted plugin: ${plugin.headers.name}`);
+      }
+      setAll(enabled) {
+          let newPlugins = this.plugins.map(p => {
+              if (enabled)
+                  p.enable();
+              else
+                  p.disable();
+              return p;
+          });
+          this.save(newPlugins);
+          this.updatePlugins();
+      }
+  }
+
   class Storage {
       addNameAndKey(pluginName, key) {
           return `${pluginName}-${key}`;
@@ -1894,27 +1970,19 @@
   }
 
   function initInstallApi() {
-      let pluginInfos = JSON.parse(GM_getValue('plugins', '[]'));
-      let pluginHeaders = pluginInfos.map((plugin) => parseHeader(plugin.script));
+      // create a new plugin manager that doesn't run plugins
+      let pluginManager = new PluginManager(false);
+      pluginManager.init();
       unsafeWindow.GLInstall = function (script) {
-          let scriptHeaders = parseHeader(script);
-          for (let i = 0; i < pluginHeaders.length; i++) {
-              let headers = pluginHeaders[i];
-              // confirmation is done on the site
-              if (headers.name === scriptHeaders.name) {
-                  pluginInfos.splice(i, 1);
-                  pluginHeaders.splice(i, 1);
-                  i--;
-              }
+          let headers = parseHeader(script);
+          let existingPlugin = pluginManager.getPlugin(headers.name);
+          if (existingPlugin) {
+              existingPlugin.edit(script, headers);
           }
-          pluginInfos.push({ script, enabled: true });
-          GM_setValue('plugins', JSON.stringify(pluginInfos));
+          pluginManager.createPlugin(script);
       };
       unsafeWindow.GLGet = function (name) {
-          let index = pluginHeaders.findIndex((header) => header.name === name);
-          if (index === -1)
-              return null;
-          return pluginInfos[index].script;
+          return pluginManager.getPlugin(name)?.script;
       };
   }
 

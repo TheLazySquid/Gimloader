@@ -33,3 +33,8 @@ export interface IInterceptRequire {
 }
 
 export type Intercept = IModuleRequired | IInterceptRequire;
+
+export interface IPluginInfo {
+    script: string;
+    enabled: boolean;
+}
