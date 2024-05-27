@@ -18,6 +18,7 @@ export function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager:
     editor.setCode(plugin.script);
 
     showModal(editorDiv, {
+        id: "core-CodeEditor",
         title: "Edit Plugin Code",
         style: "width: 90%",
         buttons: [
@@ -75,6 +76,7 @@ export function createPlugin(plugins: Plugin[], pluginManager: PluginManager) {
     editor.setCode(defaultCode);
 
     showModal(editorDiv, {
+        id: "core-CodeEditor",
         title: "Create New Plugin",
         style: "width: 90%",
         buttons: [

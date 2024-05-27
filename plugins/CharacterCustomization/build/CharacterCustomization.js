@@ -2,7 +2,7 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.2.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js
  */
 function UI({ cosmeticChanger, onSubmit }) {
@@ -287,8 +287,7 @@ class CosmeticChanger {
 /// <reference types="gimloader" />
 let hotkey = new Set(['alt', 'c']);
 let cosmeticChanger = new CosmeticChanger();
-GL.UI.addStyles("CharacterCustomization", styles);
-GL.hotkeys.add(hotkey, () => {
+function showUI() {
     let submitCallback;
     GL.UI.showModal(GL.React.createElement(UI, {
         cosmeticChanger,
@@ -296,6 +295,7 @@ GL.hotkeys.add(hotkey, () => {
             submitCallback = callback;
         }
     }), {
+        id: "CharacterCustomization",
         title: "Character Customization",
         closeOnBackgroundClick: true,
         buttons: [
@@ -312,7 +312,12 @@ GL.hotkeys.add(hotkey, () => {
             }
         ]
     });
-});
+}
+GL.UI.addStyles("CharacterCustomization", styles);
+GL.hotkeys.add(hotkey, showUI);
+function openSettingsMenu() {
+    showUI();
+}
 function onStop() {
     cosmeticChanger.reset();
     GL.hotkeys.remove(hotkey);
@@ -320,4 +325,4 @@ function onStop() {
     GL.parcel.stopIntercepts("CharacterCustomization");
 }
 
-export { onStop };
+export { onStop, openSettingsMenu };

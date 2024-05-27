@@ -1,7 +1,14 @@
 import type { ReactElement } from "react";
 import type { IModalOptions } from "../types";
 
+let openModals = new Set<string>();
+
 export default function showModal(content: HTMLElement | ReactElement, options?: Partial<IModalOptions>) {
+    if(options?.id) {
+        if(openModals.has(options.id)) return;
+        openModals.add(options.id);
+    }
+
     let bgEl = document.createElement("div");
     bgEl.className = "gl-modalBG";
     
@@ -58,11 +65,14 @@ export default function showModal(content: HTMLElement | ReactElement, options?:
     
     // close the modal when the background is clicked
     modalEl.addEventListener("click", e => e.stopPropagation());
-    if(options?.closeOnBackgroundClick) bgEl.onclick = closeModal;
+    if(options?.closeOnBackgroundClick !== false) bgEl.onclick = closeModal;
     
     document.body.appendChild(bgEl);
     
     function closeModal() {
+        if(options?.id) {
+            openModals.delete(options.id);
+        }
         bgEl.remove();
         if(options?.onClosed) options.onClosed();
     }

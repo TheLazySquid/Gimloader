@@ -7,8 +7,7 @@ import CosmeticChanger from './cosmeticChanger';
 let hotkey = new Set(['alt', 'c']);
 let cosmeticChanger = new CosmeticChanger();
 
-GL.UI.addStyles("CharacterCustomization", styles);
-GL.hotkeys.add(hotkey, () => {
+function showUI() {
     let submitCallback: () => void;
 
     GL.UI.showModal(GL.React.createElement(UI, {
@@ -17,6 +16,7 @@ GL.hotkeys.add(hotkey, () => {
             submitCallback = callback;
         }
     }), {
+        id: "CharacterCustomization",
         title: "Character Customization",
         closeOnBackgroundClick: true,
         buttons: [
@@ -33,8 +33,14 @@ GL.hotkeys.add(hotkey, () => {
             }
         ]
     });
-})
+}
 
+GL.UI.addStyles("CharacterCustomization", styles);
+GL.hotkeys.add(hotkey, showUI);
+
+export function openSettingsMenu() {
+    showUI();
+}
 
 export function onStop() {
     cosmeticChanger.reset();

@@ -74,7 +74,7 @@ export default async function init() {
     ui.log.write('Installing dependencies...');
 
     let devDeps = {
-        'Typescript': '@rollup/plugin-typescript',
+        'Typescript': '@rollup/plugin-typescript gimloader@github:TheLazySquid/Gimloader',
         'Babel': '@rollup/plugin-babel',
         'String': 'rollup-plugin-string',
         'Sass': 'rollup-plugin-sass'
@@ -150,7 +150,12 @@ export default {
             fs.mkdirSync(join(process.cwd(), 'src'));
         }
 
-        fs.writeFileSync(mainPath, `console.log('Hello, World!')`);
+        let starterFile = '';
+
+        if(useTs) starterFile += "/// <reference types='gimloader' />\n\n";
+        starterFile += "console.log('Hello, World!')";
+
+        fs.writeFileSync(mainPath, starterFile);
     }
 
     ui.log.write('Done!');
