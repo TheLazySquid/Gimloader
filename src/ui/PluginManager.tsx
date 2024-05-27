@@ -4,6 +4,7 @@ import importSvg from "../../assets/import.svg";
 import deleteSvg from "../../assets/delete.svg";
 import checkBold from "../../assets/check-bold.svg";
 import closeThick from "../../assets/close-thick.svg";
+import cogOutline from "../../assets/cog-outline.svg";
 import update from '../../assets/update.svg';
 
 import type PluginManager from "../pluginManager/pluginManager";
@@ -99,6 +100,11 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                                 {plugin.headers.downloadUrl ? (
                                     <button dangerouslySetInnerHTML={{ __html: update }}
                                     onClick={() => checkPluginUpdate(plugin)}>
+                                    </button>
+                                ) : null}
+                                {plugin.return?.openSettingsMenu ? (
+                                    <button dangerouslySetInnerHTML={{ __html: cogOutline }}
+                                    onClick={() => plugin.return.openSettingsMenu()}>
                                     </button>
                                 ) : null}
                                 <button dangerouslySetInnerHTML={{ __html: pencilOutline }}

@@ -4,6 +4,7 @@ export interface IModalButton {
     onClick?: (event: MouseEvent) => boolean | void;
 }
 export interface IModalOptions {
+    id: string;
     title: string;
     style: string;
     className: string;

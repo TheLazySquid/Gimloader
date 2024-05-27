@@ -5,6 +5,7 @@ export interface IModalButton {
 }
 
 export interface IModalOptions {
+    id: string;
     title: string;
     style: string;
     className: string;

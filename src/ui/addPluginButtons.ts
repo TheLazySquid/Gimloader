@@ -4,13 +4,9 @@ import showModal from "./modal";
 import PluginManagerUI from "./PluginManager";
 import type PluginManager from "../pluginManager/pluginManager";
 
-let modalOpen = false;
-
 function openPluginManager(pluginManager: PluginManager) {
-    if(modalOpen) return;
-
-    modalOpen = true;
     showModal(GL.React.createElement(PluginManagerUI, { pluginManager }), {
+        id: 'core-PluginManager',
         title: 'Manage Plugins',
         style: "width: clamp(600px, 50%, 90%); height: 80%",
         closeOnBackgroundClick: true,
@@ -19,8 +15,7 @@ function openPluginManager(pluginManager: PluginManager) {
                 text: "close",
                 style: "primary"
             }
-        ],
-        onClosed: () => modalOpen = false
+        ]
     })
 }
 
