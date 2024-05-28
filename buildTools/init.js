@@ -75,7 +75,7 @@ export default async function init() {
 
     let devDeps = {
         'Typescript': '@rollup/plugin-typescript gimloader@github:TheLazySquid/Gimloader',
-        'Babel': '@rollup/plugin-babel',
+        'Babel': '@rollup/plugin-babel @babel/preset-react',
         'String': 'rollup-plugin-string',
         'Sass': 'rollup-plugin-sass'
     }
@@ -87,6 +87,14 @@ export default async function init() {
     }
 
     execSync(installStr, { stdio: 'inherit' });
+
+    // create .babelrc
+    if(answers.plugins.includes('Babel')) {
+        ui.log.write('Creating .babelrc...');
+        fs.writeFileSync(join(process.cwd(), '.babelrc'), JSON.stringify({
+            presets: ['@babel/preset-react']
+        }, null, 4));
+    }
 
     // create GL.config.js
     ui.log.write('Creating GL.config.js...');
