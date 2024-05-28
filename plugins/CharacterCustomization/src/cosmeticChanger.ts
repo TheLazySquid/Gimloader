@@ -1,17 +1,7 @@
-const unusedSkin = "calacaTwo";
-let unusedSkinSrc: string;
-const base = "https://www.gimkit.com/assets/map/characters/spine";
-
-fetch(`${base}/calacaTwo.atlas`)
-    .then(res => res.text())
-    .then(text => {
-        let lines = text.split("\n");
-        fetch(`${base}/${lines[1].trim()}`)
-            .then(res => res.blob())
-            .then(blob => {
-                unusedSkinSrc = URL.createObjectURL(blob);
-            })
-    })
+// @ts-ignore
+import atlas from '../assets/gim_atlas.txt';
+// @ts-ignore
+import json from '../assets/gim_json.txt';
 
 export default class CosmeticChanger {
     skinType: string = GL.storage.getValue("CharacterCustomization", "skinType",  "default");
@@ -28,9 +18,19 @@ export default class CosmeticChanger {
     authId: string = GL.stores?.phaser?.mainCharacter?.id ?? "";
 
     customSkinFile: File | null = null;
+    skinUrl: string | null = null;
 
     constructor() {
         this.initCustomSkinFile();
+
+        GL.addEventListener("loadEnd", () => {
+            if(GL.net.type !== "Colyseus") return;
+            this.loadCustomSkin();
+        })
+
+        if(GL.net.type === "Colyseus") {
+            this.loadCustomSkin();
+        }
 
         let me = this;
 
@@ -94,11 +94,42 @@ export default class CosmeticChanger {
         }
     }
 
+    loadCustomSkin() {
+        if(!this.customSkinFile) return;
+
+        let textureUrl = URL.createObjectURL(this.customSkinFile);
+        this.skinUrl = textureUrl;
+
+        let atlasLines = atlas.split("\n");
+        atlasLines[1] = textureUrl.split("/").pop()!;
+        let atlasBlob = new Blob([atlasLines.join("\n")], {type: "text/plain"});
+        let atlasUrl = URL.createObjectURL(atlasBlob);
+
+        let jsonBlob = new Blob([json], {type: "application/json"});
+        let jsonUrl = URL.createObjectURL(jsonBlob);
+
+        let load = GL.stores.phaser.scene.load;
+        let res = load.spine("customSkin", jsonUrl, atlasUrl);
+        res.start();
+        res.on("complete", () => {
+            URL.revokeObjectURL(textureUrl);
+            URL.revokeObjectURL(atlasUrl);
+            URL.revokeObjectURL(jsonUrl);
+
+            let skin = GL.stores.phaser.mainCharacter?.skin;
+            if(skin && this.skinType === "custom") {
+                this.allowNextSkin = true;
+                skin.updateSkin("customSkin");
+            }
+        })
+    }
+
     async initCustomSkinFile() {
         let file = GL.storage.getValue("CharacterCustomization", "customSkinFile");
         let fileName = GL.storage.getValue("CharacterCustomization", "customSkinFileName");
         if(!file || !fileName) return;
 
+        // stolen from some stackoverflow post
         let byteString = atob(file.substring(file.indexOf(",") + 1));
         let ab = new ArrayBuffer(byteString.length);
         let ia = new Uint8Array(ab);
@@ -112,8 +143,6 @@ export default class CosmeticChanger {
     patchSkin(skin: any) {
         if(this.skinType === "id") {
             skin.updateSkin(this.skinId);
-        } else if (this.skinType === "custom") {
-            skin.updateSkin(unusedSkin);
         }
 
         GL.patcher.before("CharacterCustomization", skin, "updateSkin", (_, args) => {
@@ -123,14 +152,7 @@ export default class CosmeticChanger {
                 this.normalSkin = args[0];
 
                 // cancel the update if we're using a custom skin
-                if(this.skinType === "id") return true;
-            }
-        })
-
-        GL.patcher.after("CharacterCustomization", skin, "setupSkin", () => {
-            if(this.skinType === "custom") {
-                if(skin.skinId !== unusedSkin) skin.updateSkin(unusedSkin);
-                this.applyCustomSkin();
+                if(this.skinType !== "default") return true;
             }
         })
     }
@@ -150,31 +172,6 @@ export default class CosmeticChanger {
                 if(this.trailType === "id") return true;
             }
         })
-    }
-
-    applyCustomSkin() {
-        if(!this.customSkinFile) return;
-
-        let skin = GL.stores?.phaser?.mainCharacter?.skin;
-        if(!skin) return;
-
-        let entries = skin.character.spine.plugin.spineTextures.entries.entries
-        let texture = entries[unusedSkin]?.pages?.[0]?.texture;
-        if(!texture) return;
-
-        if(this.skinType === "custom") {
-            let url = URL.createObjectURL(this.customSkinFile);
-            texture._image.src = url;
-            texture._image.addEventListener("load", () => {
-                texture.update();
-                URL.revokeObjectURL(url);
-            }, { once: true })
-        } else {
-            texture._image.src = unusedSkinSrc;
-            texture._image.addEventListener("load", () => {
-                texture.update();
-            }, { once: true })
-        }
     }
 
     async setSkin(skinType: string, skinId: string, customSkinFile: File | null) {
@@ -197,18 +194,33 @@ export default class CosmeticChanger {
             reader.readAsDataURL(customSkinFile);
         }
 
+        
+        // update the skin
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
         if(skin) {
+            // update the custom skin texture
+            let entries = skin.character.spine.plugin.spineTextures.entries.entries;
+            let texture = entries["customSkin"]?.pages?.[0]?.texture;
+
+            if(texture && this.customSkinFile) {
+                let textureUrl = URL.createObjectURL(this.customSkinFile);
+                this.skinUrl = textureUrl;
+
+                texture._image.src = textureUrl;
+                texture._image.addEventListener("load", () => {
+                    texture.update();
+                    URL.revokeObjectURL(textureUrl);
+                }, {once: true})
+            }
+
             this.allowNextSkin = true;
-            this.applyCustomSkin();
 
             if(skinType === "id") {
                 skin.updateSkin(skinId);
             } else if(skinType === "default") {
                 skin.updateSkin(this.normalSkin);
             } else {
-                // load in the custom skin
-                skin.updateSkin(unusedSkin);
+                skin.updateSkin("customSkin");
             }
         }
     }
@@ -245,17 +257,12 @@ export default class CosmeticChanger {
         }
 
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
-        if(!skin) return;
+        if(skin) {
+            skin.updateSkin(this.normalSkin);
+        }
 
-        skin.updateSkin(this.normalSkin);
-
-        let entries = skin.character.spine.plugin.spineTextures.entries.entries
-        let texture = entries[unusedSkin]?.pages?.[0]?.texture;
-
-        if(!texture) return
-        texture._image.src = unusedSkinSrc;
-        texture._image.addEventListener("load", () => {
-            texture.update();
-        }, { once: true })
+        if(this.skinUrl) {
+            URL.revokeObjectURL(this.skinUrl);
+        }
     }
 }

@@ -15,7 +15,7 @@ export default {
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js",
     plugins: [
         sass(),
-        string({ include: ['**/*.css', '**/*.svg'] }),
+        string({ include: ['**/*.css', '**/*.svg', './assets/*'] }),
         babel({ include: 'src/**/*.tsx', babelHelpers: 'bundled' }),
         typescript({
             jsx: "react",
