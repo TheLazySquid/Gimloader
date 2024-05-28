@@ -1,4 +1,4 @@
-name: "Gimloader Bug Report"
+name: "Plugin Bug Report"
 description: "Create a report for a plugin, not Gimloader itself."
 title: "[Plugin Bug]"
 labels: ["bug", "plugin"]
