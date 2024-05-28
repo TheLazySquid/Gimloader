@@ -1,0 +1,27 @@
+name: "Gimloader Bug Report"
+description: "Create a report for a plugin, not Gimloader itself."
+title: "[Plugin Bug]"
+labels: ["bug", "plugin"]
+body:
+- type: "checkboxes"
+  attributes:
+    label: "I have made sure of the following:"
+    options:
+      - label: "I have updated Gimloader to the latest version"
+        required: true
+      - label: "I have updated the plugin to the latest version"
+        required: true
+- type: "input"
+  attributes:
+    label: "Plugin name"
+    description: "Which plugin is this bug report for? (must be one in this repo)"
+  validations:
+    required: true
+- type: "textarea"
+  attributes:
+    label: "Describe the bug"
+  validations:
+    required: true
+- type: "textarea"
+  attributes:
+    label: "Steps to reproduce (if possible)"
