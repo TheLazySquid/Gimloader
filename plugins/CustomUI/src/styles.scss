@@ -172,6 +172,17 @@
     }
 }
 
+.flex-column.maxAll > .maxWidth > span {
+    &:nth-child(1) > div {
+        background-color: var(--answer-bg-1) !important;
+        color: var(--answer-text-1) !important;
+    }
+    &:nth-child(2) > div {
+        background-color: var(--answer-bg-2) !important;
+        color: var(--answer-text-2) !important;
+    }
+}
+
 .maxAll[style^='pointer-events'] {
     opacity: var(--question-opacity);
 }
