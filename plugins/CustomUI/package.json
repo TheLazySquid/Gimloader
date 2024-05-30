@@ -1,0 +1,20 @@
+{
+  "name": "customui",
+  "version": "0.1.0",
+  "description": "Allows you to customize various things about the Gimkit UI",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/preset-react": "^7.24.6",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "gimloader": "github:TheLazySquid/Gimloader",
+    "rollup-plugin-sass": "^1.12.22",
+    "rollup-plugin-string": "^3.0.0"
+  }
+}

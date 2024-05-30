@@ -1,0 +1,252 @@
+[
+    {
+        "name": "Default",
+        "question": {
+            "background": "#303f9f",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#771322",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#a85c15",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#0d6b33",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#076296",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Haloween",
+        "question": {
+            "background": "#6c2f00",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#9e682a",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#b54730",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#8a9748",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#f1b930",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Night",
+        "question": {
+            "background": "#000a12",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#263238",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#37474f",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#455a64",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#546e7a",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Thanos",
+        "question": {
+            "background": "#0d0019",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#220044",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#330066",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#3e007c",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#4f1787",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Ocean",
+        "question": {
+            "background": "#000063",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#283593",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#076296",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#0277bd",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#1565c0",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Forest",
+        "question": {
+            "background": "#4c3d33",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#385645",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#425c49",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#415641",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#4c6349",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Sunset",
+        "question": {
+            "background": "#7f7496",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#f46f5a",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#ed712d",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#7a596a",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#e8ab3c",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Pastel",
+        "question": {
+            "background": "#ffbfd1",
+            "text": "#434343"
+        },
+        "palette": [
+            {
+                "background": "#ffa69e",
+                "text": "#5b5b5b"
+            },
+            {
+                "background": "#fcf6bf",
+                "text": "#5b5b5b"
+            },
+            {
+                "background": "#d0f4de",
+                "text": "#5b5b5b"
+            },
+            {
+                "background": "#93e1d8",
+                "text": "#5b5b5b"
+            }
+        ]
+    },
+    {
+        "name": "Retro",
+        "question": {
+            "background": "#9c0022",
+            "text": "#ffffff"
+        },
+        "palette": [
+            {
+                "background": "#001d3b",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#ffae52",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#fe5963",
+                "text": "#ffffff"
+            },
+            {
+                "background": "#a71c94",
+                "text": "#ffffff"
+            }
+        ]
+    },
+    {
+        "name": "Pure Gold",
+        "question": {
+            "background": "#000000",
+            "text": "#ffcd2b"
+        },
+        "palette": [
+            {
+                "background": "#ffcd2b",
+                "text": "#000000"
+            },
+            {
+                "background": "#ffc721",
+                "text": "#000000"
+            },
+            {
+                "background": "#ffd147",
+                "text": "#000000"
+            },
+            {
+                "background": "#ffcd38",
+                "text": "#000000"
+            }
+        ]
+    }
+]
