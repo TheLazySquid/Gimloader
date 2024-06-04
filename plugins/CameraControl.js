@@ -2,9 +2,11 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  */
+
+let shiftToZoom = GL.storage.getValue("CameraControl", "shiftToZoom", true);
 
 const freecamHotkey = new Set(["shift", "f"]);
 
@@ -14,7 +16,7 @@ let freecamming = false;
 let freecamPos = {x: 0, y: 0};
 let freecamInterval = null;
 
-let stopProps = [new Set(["arrowleft"]), new Set(["arrowright"]), new Set(["arrowup"]), new Set(["arrowdown"])]
+let stopProps = [new Set(["arrowleft"]), new Set(["arrowright"]), new Set(["arrowup"]), new Set(["arrowdown"])];
 
 GL.hotkeys.add(freecamHotkey, () => {
     let scene = GL.stores?.phaser?.scene;
@@ -63,14 +65,36 @@ GL.hotkeys.add(freecamHotkey, () => {
 }, true)
 
 function onWheel(e) {
+    if(shiftToZoom && !e.shiftKey) return;
+
     let camera = GL.stores?.phaser?.scene?.cameras?.cameras?.[0];
     if(!camera) return;
 
     camera.zoom *= 1 + e.deltaY / 1000;
 }
 
-
 export function onStop() {
     window.removeEventListener("wheel", onWheel);
     GL.hotkeys.remove(freecamHotkey);
+}
+
+export function openSettingsMenu() {
+    let div = document.createElement("div");
+    div.innerHTML = `<label for="shiftToZoom">Shift to Zoom</label>
+    <input type="checkbox" id="shiftToZoom" ${shiftToZoom ? "checked" : ""}>`
+    div.id = "cameraControlSettings";
+
+    div.querySelector("#shiftToZoom").addEventListener("change", (e) => {
+        shiftToZoom = e.target.checked;
+        GL.storage.setValue("CameraControl", "shiftToZoom", shiftToZoom);
+    })
+
+    GL.UI.showModal(div, {
+        id: "CameraControlSettings",
+        title: "Camera Control Settings",
+        buttons: [{
+            text: "Close",
+            type: "primary"
+        }]
+    })
 }

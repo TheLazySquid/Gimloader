@@ -10,7 +10,7 @@ This plugin allows you to use devices instantly, without waiting for their meter
 
 ## CameraControl [code](./CameraControl.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js)
 
-When using this plugin you can scroll and your camera will zoom in and out. You can also hit Shift + F to enable freecam, which you can move around with the arrow keys. Zooming out to much can lead to lag or crashes.
+When using this plugin you can hold shift and scroll to make your camera zoom in and out. You can also hit Shift + F to enable freecam, which you can move around with the arrow keys. Zooming out too much can lead to lag or crashes.
 
 ## DLDTAS [code]('./DLDTAS') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js)
 
