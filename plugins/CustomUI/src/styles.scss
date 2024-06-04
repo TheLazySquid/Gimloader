@@ -135,7 +135,7 @@
     margin-top: -79px;
 }
 
-.useCustomTheme .flex.maxWidth.between.vc + div > div > div, .useCustomTheme [style^='width: 100%'] > [style^='opacity'] > div {
+.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div, .useCustomTheme [style^='width: 100%'] > [style^='opacity'] > div {
     &:nth-child(1) {
         background: var(--question-bg) !important;
         color: var(--question-text) !important;
