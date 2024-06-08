@@ -1,0 +1,57 @@
+*:not(button,
+    button *,
+    .maxAll[data-projection-id][style^="background"],
+    .ant-input-number-input-wrap,
+    img[src='/client/img/svgLogo.svg'],
+    a[href^="/kits"] > div[color="#ffffff"],
+    a[href^="/kits"] > div[color] *,
+    .ant-modal-root > div,
+    .MuiTooltip-popper,
+    .ant-drawer, .ant-drawer-mask,
+    .ML__keyboard,
+    .scroll-y > .maxAll.flex-column > div > div[style^="background"] *,
+    img, .fa-times,
+    div:has(> a[href="/season-ticket"]) *,
+    div:has(> div[style="margin-top: 20px; text-align: center;"]) *,
+    .gl-modalBG, .gl-modalBG *
+){
+    background-color: black !important;
+    color: white !important;
+}
+
+input::placeholder {
+    color: lightgray !important;
+}
+
+.ant-switch:not(.ant-switch-checked) {
+    background-color: gray !important;
+}
+
+.ant-input-number,
+.ant-select-selector {
+    border: 2px solid white !important;
+}
+
+img[src='/client/img/svgLogo.svg'] {
+    filter: invert(1);
+}
+
+.gl-homeWrench svg {
+    fill: white !important;
+}
+
+.ant-modal-wrap {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.ant-btn-primary {
+    color: white !important;
+}
+
+.ant-drawer-close svg {
+    fill: white !important;
+}
+
+.ant-drawer-bottom .ant-drawer-content {
+    border-top: 1px solid white;
+}

@@ -1,5 +1,7 @@
 import { Theme } from './types';
 import defaultThemes from './defaultThemes.json';
+// @ts-ignore
+import darkMode from './darkMode.css';
 
 export default class UIChanger {
     hideTopBar: boolean = GL.storage.getValue("CustomUI", "hideTopBar", false);
@@ -11,10 +13,21 @@ export default class UIChanger {
 
     questionOpacity: number = GL.storage.getValue("CustomUI", "questionOpacity", 1);
 
+    darkTheme: boolean = GL.storage.getValue("CustomUI", "darkTheme", false);
+
     constructor() {
         window.addEventListener("mousemove", this.boundOnMouseMove);
 
         this.onSettingsUpdate();
+
+        if(this.darkTheme && this.shouldApplyDarkMode) {
+            GL.UI.addStyles("CUI-DarkMode", darkMode);
+        }
+    }
+
+    get shouldApplyDarkMode() {
+        return location.pathname !== "/join" &&
+            location.pathname !== "/host";
     }
 
     boundOnMouseMove = this.onMouseMove.bind(this);
@@ -32,7 +45,8 @@ export default class UIChanger {
         customThemes: Theme[],
         themeType: "default" | "custom",
         themeIndex: number,
-        questionOpacity: number
+        questionOpacity: number,
+        darkTheme: boolean
     ) {
         this.hideTopBar = hideTopBar;
         this.useCustomTheme = useCustomTheme;
@@ -40,6 +54,7 @@ export default class UIChanger {
         this.themeType = themeType;
         this.themeIndex = themeIndex;
         this.questionOpacity = questionOpacity;
+        this.darkTheme = darkTheme;
 
         // save settings
         GL.storage.setValue("CustomUI", "hideTopBar", hideTopBar);
@@ -48,8 +63,14 @@ export default class UIChanger {
         GL.storage.setValue("CustomUI", "themeType", themeType);
         GL.storage.setValue("CustomUI", "themeIndex", themeIndex);
         GL.storage.setValue("CustomUI", "questionOpacity", questionOpacity);
+        GL.storage.setValue("CustomUI", "darkTheme", darkTheme);
 
         this.onSettingsUpdate();
+
+        GL.UI.removeStyles("CUI-DarkMode");
+        if(darkTheme && this.shouldApplyDarkMode) {
+            GL.UI.addStyles("CUI-DarkMode", darkMode);
+        }
     }
         
     onSettingsUpdate() {
@@ -83,5 +104,6 @@ export default class UIChanger {
 
     stop() {
         window.removeEventListener("mousemove", this.boundOnMouseMove);
+        GL.UI.removeStyles("CUI-DarkMode");
     }
 }

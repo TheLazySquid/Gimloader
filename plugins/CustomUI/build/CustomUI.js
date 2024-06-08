@@ -2,9 +2,9 @@
  * @name CustomUI
  * @description Allows you to customize various things about the Gimkit UI
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.2.0
  */
-var styles = ".cui-settings {\n  overflow-x: hidden;\n}\n.cui-settings .row {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n}\n.cui-settings .row input[type=range] {\n  flex-grow: 1;\n}\n.cui-settings input {\n  width: 30px;\n  height: 30px;\n}\n\n.themePicker .previews {\n  display: flex;\n  flex-direction: column;\n  gap: 5px;\n}\n.themePicker .addCustomTheme {\n  padding: 3px;\n  border: 1px solid black;\n  width: 100%;\n  text-align: center;\n}\n\n.customTheme {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n}\n.customTheme .delete {\n  cursor: pointer;\n  font-size: 30px;\n  flex-shrink: 0;\n}\n.customTheme .customThemePreview {\n  flex-grow: 1;\n}\n\n.themePreview {\n  text-align: center;\n  cursor: pointer;\n}\n.themePreview > div {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.themePreview > div > div {\n  flex-grow: 1;\n  height: 30px;\n}\n\n.themeCreator {\n  display: flex;\n  height: 100%;\n}\n.themeCreator .pickers {\n  width: 300px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  display: flex;\n  flex-direction: column;\n}\n.themeCreator .pickers .themeNameWrap {\n  width: 100%;\n  padding-right: 3px;\n}\n.themeCreator .pickers .themeName {\n  width: 100%;\n}\n.themeCreator .pickers > div {\n  display: flex;\n  padding-right: 3px;\n}\n.themeCreator .pickers > div > div {\n  flex-grow: 1;\n}\n\n.fullPreview {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  flex-grow: 1;\n}\n.fullPreview .question {\n  width: 100%;\n  height: 30%;\n  font-family: \"Product Sans\", sans-serif;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 50px;\n}\n.fullPreview .answers {\n  flex-grow: 1;\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  width: 100%;\n}\n.fullPreview .answers > div {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-family: \"Product Sans\", sans-serif;\n  font-size: 25px;\n  border: 6px solid rgba(0, 0, 0, 0.3);\n}\n\n.light-shadow.flex.between.vc {\n  transition: margin-top 0.25s ease-in-out;\n}\n\n.slideOutTop .light-shadow.flex.between.vc {\n  margin-top: -79px;\n}\n\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(1), .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(1) {\n  background: var(--question-bg) !important;\n  color: var(--question-text) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div {\n  background: var(--answer-bg-1) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div > div {\n  color: var(--answer-text-1) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div {\n  background: var(--answer-bg-2) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div > div {\n  color: var(--answer-text-2) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div {\n  background: var(--answer-bg-3) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div > div {\n  color: var(--answer-text-3) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div {\n  background: var(--answer-bg-4) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div > div {\n  color: var(--answer-text-4) !important;\n}\n\n.flex-column.maxAll > .maxWidth > span:nth-child(1) > div {\n  background-color: var(--answer-bg-1) !important;\n  color: var(--answer-text-1) !important;\n}\n.flex-column.maxAll > .maxWidth > span:nth-child(2) > div {\n  background-color: var(--answer-bg-2) !important;\n  color: var(--answer-text-2) !important;\n}\n\n.maxAll[style^=pointer-events] {\n  opacity: var(--question-opacity);\n}";
+var styles = ".cui-settings {\n  overflow-x: hidden;\n}\n.cui-settings .row {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n}\n.cui-settings .row input[type=range] {\n  flex-grow: 1;\n}\n.cui-settings input {\n  width: 30px;\n  height: 30px;\n}\n\n.themePicker .previews {\n  display: flex;\n  flex-direction: column;\n  gap: 5px;\n}\n.themePicker .addCustomTheme {\n  padding: 3px;\n  border: 1px solid black;\n  width: 100%;\n  text-align: center;\n}\n\n.customTheme {\n  display: flex;\n  gap: 5px;\n  align-items: center;\n}\n.customTheme .delete {\n  cursor: pointer;\n  font-size: 30px;\n  flex-shrink: 0;\n}\n.customTheme .customThemePreview {\n  flex-grow: 1;\n}\n\n.themePreview {\n  text-align: center;\n  cursor: pointer;\n}\n.themePreview > div {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.themePreview > div > div {\n  flex-grow: 1;\n  height: 30px;\n}\n\n.themeCreator {\n  display: flex;\n  height: 100%;\n}\n.themeCreator .pickers {\n  width: 300px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  display: flex;\n  flex-direction: column;\n}\n.themeCreator .pickers .themeNameWrap {\n  width: 100%;\n  padding-right: 3px;\n}\n.themeCreator .pickers .themeName {\n  width: 100%;\n}\n.themeCreator .pickers > div {\n  display: flex;\n  padding-right: 3px;\n}\n.themeCreator .pickers > div > div {\n  flex-grow: 1;\n}\n\n.fullPreview {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  flex-grow: 1;\n}\n.fullPreview .question {\n  width: 100%;\n  height: 30%;\n  font-family: \"Product Sans\", sans-serif;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 50px;\n}\n.fullPreview .answers {\n  flex-grow: 1;\n  display: grid;\n  grid-template-columns: repeat(2, 1fr);\n  width: 100%;\n}\n.fullPreview .answers > div {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-family: \"Product Sans\", sans-serif;\n  font-size: 25px;\n  border: 6px solid rgba(0, 0, 0, 0.3);\n}\n\n.light-shadow.flex.between.vc {\n  transition: margin-top 0.25s ease-in-out;\n}\n\n.slideOutTop .light-shadow.flex.between.vc {\n  margin-top: -79px;\n}\n\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(1), .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(1) {\n  background: var(--question-bg) !important;\n  color: var(--question-text) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div {\n  background: var(--answer-bg-1) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div > div {\n  color: var(--answer-text-1) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div {\n  background: var(--answer-bg-2) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div > div {\n  color: var(--answer-text-2) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div {\n  background: var(--answer-bg-3) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div > div {\n  color: var(--answer-text-3) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div {\n  background: var(--answer-bg-4) !important;\n}\n.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div > div, .useCustomTheme [style^=\"width: 100%\"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div > div {\n  color: var(--answer-text-4) !important;\n}\n\n.flex-column.maxAll > .maxWidth > span:nth-child(1) > div {\n  background-color: var(--answer-bg-1) !important;\n  color: var(--answer-text-1) !important;\n}\n.flex-column.maxAll > .maxWidth > span:nth-child(2) > div {\n  background-color: var(--answer-bg-2) !important;\n  color: var(--answer-text-2) !important;\n}\n\n.maxAll[style^=pointer-events]:has(.flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div) {\n  opacity: var(--question-opacity);\n}";
 
 function ThemePreview(props) {
     const React = GL.React;
@@ -509,6 +509,7 @@ function UI({ uiChanger, onConfirm }) {
     let [customThemes, setCustomThemes] = React.useState(uiChanger.customThemes);
     let [themeType, setThemeType] = React.useState(uiChanger.themeType);
     let [themeIndex, setThemeIndex] = React.useState(uiChanger.themeIndex);
+    let [darkMode, setDarkMode] = React.useState(uiChanger.darkTheme);
     let [questionOpacity, setQuestionOpacity] = React.useState(uiChanger.questionOpacity);
     // reactively get the active theme based on the theme type and index
     let [activeTheme, setActiveTheme] = React.useState(() => {
@@ -524,7 +525,7 @@ function UI({ uiChanger, onConfirm }) {
             setActiveTheme(customThemes[themeIndex]);
     }, [themeType, themeIndex]);
     onConfirm(() => {
-        uiChanger.updateSettings(hideTopBar, useCustomTheme, customThemes, themeType, themeIndex, questionOpacity);
+        uiChanger.updateSettings(hideTopBar, useCustomTheme, customThemes, themeType, themeIndex, questionOpacity, darkMode);
     });
     const openThemePicker = () => {
         GL.UI.showModal(React.createElement(ThemePicker, { themeType: themeType, setThemeType: setThemeType, themeIndex: themeIndex, setThemeIndex: setThemeIndex, customThemes: customThemes, setCustomThemes: setCustomThemes, activeTheme: activeTheme }), {
@@ -554,8 +555,15 @@ function UI({ uiChanger, onConfirm }) {
             React.createElement("input", { type: "checkbox", checked: useCustomTheme, onChange: e => {
                     setUseCustomTheme(e.target.checked);
                 } })),
-        React.createElement(ThemePreview, { theme: activeTheme, onClick: openThemePicker, text: `Current theme: ${activeTheme.name} ✎` })));
+        React.createElement(ThemePreview, { theme: activeTheme, onClick: openThemePicker, text: `Current theme: ${activeTheme.name} ✎` }),
+        React.createElement("div", { className: "row" },
+            React.createElement("div", null, "Enable Home Screen Dark Mode"),
+            React.createElement("input", { type: "checkbox", checked: darkMode, onChange: e => {
+                    setDarkMode(e.target.checked);
+                } }))));
 }
+
+var darkMode = "*:not(button,\r\n    button *,\r\n    .maxAll[data-projection-id][style^=\"background\"],\r\n    .ant-input-number-input-wrap,\r\n    img[src='/client/img/svgLogo.svg'],\r\n    a[href^=\"/kits\"] > div[color=\"#ffffff\"],\r\n    a[href^=\"/kits\"] > div[color] *,\r\n    .ant-modal-root > div,\r\n    .MuiTooltip-popper,\r\n    .ant-drawer, .ant-drawer-mask,\r\n    .ML__keyboard,\r\n    .scroll-y > .maxAll.flex-column > div > div[style^=\"background\"] *,\r\n    img, .fa-times,\r\n    div:has(> a[href=\"/season-ticket\"]) *,\r\n    div:has(> div[style=\"margin-top: 20px; text-align: center;\"]) *,\r\n    .gl-modalBG, .gl-modalBG *\r\n){\r\n    background-color: black !important;\r\n    color: white !important;\r\n}\r\n\r\ninput::placeholder {\r\n    color: lightgray !important;\r\n}\r\n\r\n.ant-switch:not(.ant-switch-checked) {\r\n    background-color: gray !important;\r\n}\r\n\r\n.ant-input-number,\r\n.ant-select-selector {\r\n    border: 2px solid white !important;\r\n}\r\n\r\nimg[src='/client/img/svgLogo.svg'] {\r\n    filter: invert(1);\r\n}\r\n\r\n.gl-homeWrench svg {\r\n    fill: white !important;\r\n}\r\n\r\n.ant-modal-wrap {\r\n    background-color: rgba(255, 255, 255, 0.25) !important;\r\n}\r\n\r\n.ant-btn-primary {\r\n    color: white !important;\r\n}\r\n\r\n.ant-drawer-close svg {\r\n    fill: white !important;\r\n}\r\n\r\n.ant-drawer-bottom .ant-drawer-content {\r\n    border-top: 1px solid white;\r\n}";
 
 class UIChanger {
     hideTopBar = GL.storage.getValue("CustomUI", "hideTopBar", false);
@@ -564,9 +572,17 @@ class UIChanger {
     themeType = GL.storage.getValue("CustomUI", "themeType", "default");
     themeIndex = GL.storage.getValue("CustomUI", "themeIndex", 0);
     questionOpacity = GL.storage.getValue("CustomUI", "questionOpacity", 1);
+    darkTheme = GL.storage.getValue("CustomUI", "darkTheme", false);
     constructor() {
         window.addEventListener("mousemove", this.boundOnMouseMove);
         this.onSettingsUpdate();
+        if (this.darkTheme && this.shouldApplyDarkMode) {
+            GL.UI.addStyles("CUI-DarkMode", darkMode);
+        }
+    }
+    get shouldApplyDarkMode() {
+        return location.pathname !== "/join" &&
+            location.pathname !== "/host";
     }
     boundOnMouseMove = this.onMouseMove.bind(this);
     onMouseMove(e) {
@@ -575,13 +591,14 @@ class UIChanger {
         let nearTop = e.clientY < 100;
         document.documentElement.classList.toggle("slideOutTop", !nearTop);
     }
-    updateSettings(hideTopBar, useCustomTheme, customThemes, themeType, themeIndex, questionOpacity) {
+    updateSettings(hideTopBar, useCustomTheme, customThemes, themeType, themeIndex, questionOpacity, darkTheme) {
         this.hideTopBar = hideTopBar;
         this.useCustomTheme = useCustomTheme;
         this.customThemes = customThemes;
         this.themeType = themeType;
         this.themeIndex = themeIndex;
         this.questionOpacity = questionOpacity;
+        this.darkTheme = darkTheme;
         // save settings
         GL.storage.setValue("CustomUI", "hideTopBar", hideTopBar);
         GL.storage.setValue("CustomUI", "useCustomTheme", useCustomTheme);
@@ -589,7 +606,12 @@ class UIChanger {
         GL.storage.setValue("CustomUI", "themeType", themeType);
         GL.storage.setValue("CustomUI", "themeIndex", themeIndex);
         GL.storage.setValue("CustomUI", "questionOpacity", questionOpacity);
+        GL.storage.setValue("CustomUI", "darkTheme", darkTheme);
         this.onSettingsUpdate();
+        GL.UI.removeStyles("CUI-DarkMode");
+        if (darkTheme && this.shouldApplyDarkMode) {
+            GL.UI.addStyles("CUI-DarkMode", darkMode);
+        }
     }
     onSettingsUpdate() {
         if (!this.hideTopBar) {
@@ -618,6 +640,7 @@ class UIChanger {
     }
     stop() {
         window.removeEventListener("mousemove", this.boundOnMouseMove);
+        GL.UI.removeStyles("CUI-DarkMode");
     }
 }
 
@@ -627,6 +650,7 @@ let uiChanger = new UIChanger();
 GL.UI.addStyles("CustomUI", styles);
 function onStop() {
     GL.UI.removeStyles("CustomUI");
+    uiChanger.stop();
 }
 function openSettingsMenu() {
     let confirmFunc;

@@ -10,6 +10,7 @@ GL.UI.addStyles("CustomUI", styles);
 
 export function onStop() {
     GL.UI.removeStyles("CustomUI");
+    uiChanger.stop();
 }
 
 export function openSettingsMenu() {

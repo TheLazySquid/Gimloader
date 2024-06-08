@@ -183,6 +183,6 @@
     }
 }
 
-.maxAll[style^='pointer-events'] {
+.maxAll[style^='pointer-events']:has(.flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div) {
     opacity: var(--question-opacity);
 }

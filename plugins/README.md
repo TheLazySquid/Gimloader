@@ -34,4 +34,4 @@ This is a plugin that allows you to set rules that allow you to automatically ki
 
 ## CustomUI [code](./CustomUI) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CustomUI/build/CustomUI.js)
 
-This plugin lets you customize a few things about the Gimkit UI. Most importantly, it lets you make and use custom themes in both 1d and 2d modes.
+This plugin lets you customize a few things about the Gimkit UI. Most importantly, it lets you make and use custom themes in both 1d and 2d modes and adds dark mode.
