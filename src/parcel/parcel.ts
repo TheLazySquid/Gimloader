@@ -10,6 +10,7 @@ import { log } from "../util";
 // who in turn copied it from the parcel source code.
 
 const scriptSelector = 'script[src*="index"]:not([nomodule])'
+const redirectedPages = ['/host', '/settings']
 
 export default class Parcel extends EventTarget {
     gimloader: Gimloader;
@@ -24,18 +25,26 @@ export default class Parcel extends EventTarget {
 
         this.gimloader = loader;
 
-        // When the page would navigate to /host (which can't be reloaded or it breaks)
-        // just redirect to /gimloaderHostRedirect, from where we'll do our thing
+        // When the page would navigate to a page that would normally break
+        // navigate to a page that doesn't exist and from there set up Gimloader
+        // and then load the page that would normally break
         this.interceptRequire(null, exports => exports?.AsyncNewTab, exports => {
             GL.patcher.after(null, exports, "AsyncNewTab", (_, __, returnVal) => {
                 GL.patcher.before(null, returnVal, "openTab", (_, args) => {
-                    args[0] = args[0].replace("/host", "/gimloaderHostRedirect");
+                    let url = new URL(args[0]);
+                    if(redirectedPages.includes(url.pathname)) {
+                        args[0] = "https://www.gimkit.com/gimloaderRedirect?to=" + encodeURIComponent(args[0]);
+                    }
                 })
             })
         })
 
-        if(location.href.includes('/gimloaderHostRedirect')) {
-            this.hostRedirect();
+        if(location.pathname === "/gimloaderRedirect") {
+            let params = new URLSearchParams(location.search);
+            let to = params.get('to');
+            this.redirect(to);
+        } else if(redirectedPages.includes(location.pathname)) {
+            location.href = "https://www.gimkit.com/gimloaderRedirect?to=" + encodeURIComponent(location.href);
         } else {
             let existingScripts = document.querySelectorAll(scriptSelector) as NodeListOf<HTMLScriptElement>;
             if(existingScripts.length > 0) {
@@ -49,9 +58,8 @@ export default class Parcel extends EventTarget {
         }
     }
 
-    async hostRedirect() {
-        let hostUrl = location.href.replace('/gimloaderHostRedirect', '/host');
-        let res = await fetch(hostUrl);
+    async redirect(to: string) {
+        let res = await fetch(to);
         let text = await res.text();
 
         let parser = new DOMParser();
@@ -70,7 +78,7 @@ export default class Parcel extends EventTarget {
         GL.addStyleSheets();
 
         // change url back to /host
-        history.replaceState(null, '', hostUrl);
+        history.replaceState(null, '', to);
 
         // re-import the scripts
         let existingScripts = document.querySelectorAll(scriptSelector) as NodeListOf<HTMLScriptElement>;
