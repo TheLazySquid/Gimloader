@@ -7,7 +7,7 @@ export default class Parcel extends EventTarget {
     reqIntercepts: Intercept[];
     readyToIntercept: boolean;
     constructor(loader: Gimloader);
-    hostRedirect(): Promise<void>;
+    redirect(to: string): Promise<void>;
     emptyModules(): void;
     onModuleRequired(id: string | null, callback: (module: any) => void): () => void;
     interceptRequire(id: string | null, match: (exports: any) => boolean, callback: (exports: any) => any, once?: boolean): () => void;
