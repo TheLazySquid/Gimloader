@@ -6,6 +6,16 @@ This is a Gimkit plugin loader and manager, based on a trick first used in [Gimh
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) for your browser.
 2. Click on [this link](https://raw.githubusercontent.com/TheLazySquid/GimLoader/main/build/bundle.user.js)
+3. Go to [gimkit.com/join](https://www.gimkit.com/join) and there should be a wrench icon next to the join button.
+
+<details>
+<summary>Wrench not appearing (chromium browsers)?</summary>
+
+This is likely to happen on browsers such as Chrome because of anti-userscript measures. You can read the official Tampermonkey guide [here](https://www.tampermonkey.net/faq.php#Q209), but here's a quick step-by step to get it working.
+
+1. Go to the extensions page (`chrome://extensions`, `edge://extensions`, etc.).
+2. Enable developer mode. On Chrome, this is a switch in the top right.
+</details>
 
 ## Usage
 
