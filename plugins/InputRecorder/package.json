@@ -1,26 +1,20 @@
 {
-  "name": "platformertas",
-  "version": "0.2.3",
+  "name": "inputrecorder",
+  "version": "0.1.0",
   "description": "A TAS tool for Gimkit platformer modes",
-  "main": "build/PlatformerTAS.js",
+  "main": "build/InputRecorder.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "Gimkit",
-    "TAS",
     "Plugin"
   ],
   "author": "TheLazySquid",
   "license": "MIT",
   "dependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "gimloader": "file:../..",
-    "yargs": "^17.7.2"
-  },
-  "devDependencies": {
-    "rollup-plugin-sass": "^1.12.22",
-    "rollup-plugin-string": "^3.0.0"
+    "gimloader": "file:../.."
   }
 }

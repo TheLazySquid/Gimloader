@@ -2,13 +2,13 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.1.4
+ * @version 0.1.5
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  */
 
 let ignoreServer = false;
-if(!GL.pluginManager.isEnabled("DLDTAS")) {
+if(!GL.pluginManager.isEnabled("DLDTAS") && !GL.pluginManager.isEnabled("InputRecorder")) {
     let hurtFrames = 0;
     let maxHurtFrames = 2;
 

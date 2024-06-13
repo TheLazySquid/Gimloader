@@ -2,7 +2,7 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.2.3
  * @reloadRequired true
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js
  */
@@ -242,8 +242,7 @@ class TASTools {
         for (let id of physicsManager.bodies.staticBodies) {
             physicsManager.bodies.activeBodies.enableBody(id);
         }
-        // ignore attempts to enable/disable bodies
-        physicsManager.bodies.activeBodies.enableBody = () => { };
+        // ignore attempts to disable bodies
         physicsManager.bodies.activeBodies.disableBody = () => { };
         this.physics = GL.stores.phaser.mainCharacter.physics;
         this.rb = this.physics.getBody().rigidBody;

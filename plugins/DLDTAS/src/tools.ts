@@ -30,8 +30,7 @@ export default class TASTools {
             physicsManager.bodies.activeBodies.enableBody(id)
         }
         
-        // ignore attempts to enable/disable bodies
-        physicsManager.bodies.activeBodies.enableBody = () => {};
+        // ignore attempts to disable bodies
         physicsManager.bodies.activeBodies.disableBody = () => {};
 
         this.physics = GL.stores.phaser.mainCharacter.physics;
