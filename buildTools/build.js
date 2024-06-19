@@ -23,8 +23,10 @@ function addMeta(config) {
         meta += `\n * @downloadUrl ${config.downloadUrl}`;
     }
 
-    for(let lib of config.libs) {
-        meta += `\n * @needsLib ${lib}`;
+    if(config.libs) {
+        for(let lib of config.libs) {
+            meta += `\n * @needsLib ${lib}`;
+        }
     }
 
     meta += '\n */\n';
@@ -68,14 +70,18 @@ export default async function build() {
         }
     }
 
-    if(!Array.isArray(config.default.plugins)) {
-        console.error('GL.config.js plugins field is not an array!');
-        return;
+    if(config.default.plugins) {
+        if(!Array.isArray(config.default.plugins)) {
+            console.error('GL.config.js plugins field is not an array!');
+            return;
+        }
     }
 
-    if(!Array.isArray(config.default.libs)) {
-        console.error('GL.config.js libs field is not an array!');
-        return;
+    if(config.default.libs) {
+        if(!Array.isArray(config.default.libs)) {
+            console.error('GL.config.js libs field is not an array!');
+            return;
+        }
     }
 
     let plugins = config.default.plugins ?? [];
