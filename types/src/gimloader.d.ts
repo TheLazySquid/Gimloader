@@ -17,6 +17,7 @@ export declare class Gimloader extends EventTarget {
     modules: Record<string, any>;
     stores: any;
     platformerPhysics: any;
+    lib: import("./lib/libManager").LibManagerType;
     pluginManager: PluginManager;
     patcher: Patcher;
     parcel: Parcel;

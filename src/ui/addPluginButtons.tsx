@@ -1,11 +1,12 @@
 import type { Gimloader } from "../gimloader";
 import wrench from '../../assets/wrench.svg';
 import showModal from "./modal";
-import PluginManagerUI from "./PluginManager";
-import type PluginManager from "../pluginManager/pluginManager";
+import MenuUI from "./menu/MenuUI";
 
-function openPluginManager(pluginManager: PluginManager) {
-    showModal(GL.React.createElement(PluginManagerUI, { pluginManager }), {
+function openPluginManager() {
+    const React = GL.React;
+
+    showModal(<MenuUI />, {
         id: 'core-PluginManager',
         title: 'Manage Plugins',
         style: "width: clamp(600px, 50%, 90%); height: 80%",
@@ -19,11 +20,11 @@ function openPluginManager(pluginManager: PluginManager) {
     })
 }
 
-export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager) {
+export function addPluginButtons(loader: Gimloader) {
     // add a hotkey shift+p to open the plugin manager
-    loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager(pluginManager));
+    loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager());
 
-    GM.registerMenuCommand("Open Plugin Manager", () => openPluginManager(pluginManager));
+    GM.registerMenuCommand("Open Plugin Manager", () => openPluginManager());
     
     // add the button to the creative screen and the host screen
     loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes('.disable?"none":"all"'), exports => {
@@ -43,7 +44,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                             className: 'gl-wrench',
                             dangerouslySetInnerHTML: { __html: wrench }
                         }),
-                        onClick: () => openPluginManager(pluginManager)
+                        onClick: () => openPluginManager()
                     }))
 
                     return res;
@@ -59,7 +60,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                         className: 'gl-wrench',
                         dangerouslySetInnerHTML: { __html: wrench }
                     }),
-                    onClick: () => openPluginManager(pluginManager)
+                    onClick: () => openPluginManager()
                 })
 
                 res.props.children = [res.props.children, newBtn];
@@ -75,7 +76,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
             let newButton = loader.React.createElement('button', {
                 className: 'openPlugins',
                 dangerouslySetInnerHTML: { __html: wrench },
-                onClick: () => openPluginManager(pluginManager)
+                onClick: () => openPluginManager()
             });
 
             return loader.React.createElement('div', { className: 'gl-join' }, [res, newButton])
@@ -97,7 +98,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                 }, "Plugins")
                 let newEl = loader.React.createElement('div', {
                     className: `gl-homeWrench ${light ? 'light' : ''}`,
-                    onClick: () => openPluginManager(pluginManager)
+                    onClick: () => openPluginManager()
                 }, [icon, text])
     
                 args[0].children.splice(0, 0, newEl);
@@ -125,7 +126,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
 
             let newBtn = nativeDefault.apply(this, [{
                 children: btnContents,
-                onClick: () => openPluginManager(pluginManager),
+                onClick: () => openPluginManager(),
                 customColor: "#01579b",
                 className: 'gl-hostWrenchBtn'
             }])
@@ -158,7 +159,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                     
                     let newBtn = loader.React.createElement('button', {
                         className: 'gl-1dHostPluginBtn',
-                        onClick: () => openPluginManager(pluginManager)
+                        onClick: () => openPluginManager()
                     }, 'Plugins')
                     
                     res.props.children = [newBtn, res.props.children];
@@ -188,7 +189,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                             className: 'gl-1dHostGameWrench',
                             dangerouslySetInnerHTML: { __html: wrench }
                         }),
-                        onClick: () => openPluginManager(pluginManager),
+                        onClick: () => openPluginManager(),
                         tooltipMessage: "Plugins"
                     })
                     
@@ -221,7 +222,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                             className: 'gl-1dGameWrenchJoin',
                             style: { cursor: 'pointer' },
                             dangerouslySetInnerHTML: { __html: wrench },
-                            onClick: () => openPluginManager(pluginManager)
+                            onClick: () => openPluginManager()
                         })];
 
                         return res;
@@ -231,7 +232,7 @@ export function addPluginButtons(loader: Gimloader, pluginManager: PluginManager
                     if(!children) return res;
                     
                     let newEl = loader.React.createElement(children[1].type, {
-                        onClick: () => openPluginManager(pluginManager),
+                        onClick: () => openPluginManager(),
                     }, loader.React.createElement('div', {
                         className: 'gl-1dGameWrench',
                         dangerouslySetInnerHTML: { __html: wrench }

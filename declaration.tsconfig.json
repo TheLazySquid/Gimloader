@@ -1,17 +1,18 @@
 {
     "compilerOptions": {
         "target": "ES2022",
+        "outDir": "types",
+        "declaration": true,
         "module": "ES2022",
         "moduleResolution": "Bundler",
         "jsx": "react",
+        "emitDeclarationOnly": true,
         "skipLibCheck": true,
-        "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
             "$assets/*": ["./assets/*"],
             "$src/*": ["./src/*"]
         }
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx", "main.d.ts"]
+    "include": ["./src/**/*", "main.d.ts"]
 }

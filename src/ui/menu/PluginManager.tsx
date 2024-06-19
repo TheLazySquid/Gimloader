@@ -1,39 +1,43 @@
-import plusBoxOutline from "../../assets/plus-box-outline.svg";
-import pencilOutline from "../../assets/pencil-outline.svg";
-import importSvg from "../../assets/import.svg";
-import deleteSvg from "../../assets/delete.svg";
-import checkBold from "../../assets/check-bold.svg";
-import closeThick from "../../assets/close-thick.svg";
-import cogOutline from "../../assets/cog-outline.svg";
-import update from '../../assets/update.svg';
+import plusBoxOutline from "$assets/plus-box-outline.svg";
+import pencilOutline from "$assets/pencil-outline.svg";
+import importSvg from "$assets/import.svg";
+import deleteSvg from "$assets/delete.svg";
+import checkBold from "$assets/check-bold.svg";
+import closeThick from "$assets/close-thick.svg";
+import cogOutline from "$assets/cog-outline.svg";
+import update from '$assets/update.svg';
+import solidBook from '$assets/solid-book.svg';
 
-import type PluginManager from "../pluginManager/pluginManager";
-import Plugin from "../pluginManager/plugin";
-import { createPlugin, showCodeEditor } from "../ui/editCodeModals";
-import { checkScriptUpdate, checkPluginUpdate } from "../net/checkScriptUpdate";
+import Plugin from "../../pluginManager/plugin";
+import { createPlugin, showPluginCodeEditor } from "../editCodeModals";
+import { checkPluginUpdate } from "../../net/checkUpdates";
+import showErrorMessage from "../showErrorMessage";
+import downloadLibraries from "$src/net/downloadLibraries";
+import LibraryInfo from "./LibraryInfo";
 
-export default function PluginManagerUI({ pluginManager }: { pluginManager: PluginManager }) {
-    const React = GL.React;
+export default function PluginManagerUI() {
+    const { React, pluginManager } = GL;
     
     const [plugins, setPlugins] = React.useState(pluginManager.plugins);
-    const filePickerInput = React.useRef<HTMLInputElement>(null);
 
     pluginManager.reactSetPlugins = setPlugins;
 
     function importFile() {
-        filePickerInput.current?.click();
+        let filePickerInput = document.createElement("input");
+        filePickerInput.accept = ".js";
+        filePickerInput.type = "file";
+        filePickerInput.click();
 
-        filePickerInput.current?.addEventListener("change", async () => {
-            let file = filePickerInput.current?.files?.[0];
+        filePickerInput.addEventListener("change", async () => {
+            let file = filePickerInput.files?.[0];
 
             if(!file) return;
 
             // read the file
             let reader = new FileReader();
-            reader.addEventListener("load", () => {
+            reader.addEventListener("load", async () => {
                 let code = reader.result as string;
 
-                // @ts-ignore compiler option is set but vscode can't tell
                 code = code.replaceAll("\r\n", "\n")
                 pluginManager.createPlugin(code);
             })
@@ -43,40 +47,39 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
     }
 
     function deletePlugin(plugin: Plugin) {
-        let confirm = window.confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
-        if(!confirm) return;
+        let conf = confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
+        if(!conf) return;
 
         pluginManager.deletePlugin(plugin);
     }
 
-    function enableAll() {
-        pluginManager.setAll(true);
-    }
-
-    function disableAll() {
-        pluginManager.setAll(false);
+    function showLibraries(plugin: Plugin) {
+        GL.UI.showModal(<LibraryInfo plugin={plugin} />, {
+            title: "Libraries Required by " + plugin.headers.name,
+            id: "core-libInfo",
+            buttons: [{
+                text: "Close",
+                style: "primary"
+            }]
+        })
     }
 
     return (
         <div className="gl-listWrap">
             <div className="header">
-                <button dangerouslySetInnerHTML={{ __html: update }}
-                onClick={checkScriptUpdate}></button>
                 <button dangerouslySetInnerHTML={{ __html: importSvg }}
                 onClick={importFile}></button>
-                <input type="file" style={{ display: "none" }}
-                accept=".js" ref={filePickerInput} />
                 <button dangerouslySetInnerHTML={{ __html: plusBoxOutline }}
-                onClick={() => createPlugin(plugins, pluginManager)}></button>
+                onClick={() => createPlugin(pluginManager)}></button>
                 <button dangerouslySetInnerHTML={{ __html: checkBold }} title="Enable All"
-                onClick={enableAll}></button>
+                onClick={() => pluginManager.enableAll()}></button>
                 <button dangerouslySetInnerHTML={{ __html: closeThick }} title="Disable All"
-                onClick={disableAll}></button>
+                onClick={() => pluginManager.disableAll()}></button>
             </div>
-            <div className="pluginList">
+            <div className="scriptList">
                 {plugins.map((plugin) => {
                     return (
-                        <div key={plugin.headers.name} className="plugin">
+                        <div key={plugin.headers.name} className="scriptItem">
                             <div className="info">
                                 <div className="top">
                                     <div className="name">
@@ -86,8 +89,11 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                                             v{plugin.headers.version}
                                         </span> : null}
                                     </div>
-                                    <input type="checkbox" checked={plugin.enabled} onInput={e => {
-                                        if(!e.currentTarget.checked) plugin.enable();
+                                    <input type="checkbox" checked={plugin.enabled} onInput={async (e) => {
+                                        if(!e.currentTarget.checked) {
+                                            await plugin.enable()
+                                                .catch((e) => showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`));
+                                        }
                                         else plugin.disable();
 
                                         pluginManager.save(plugins);
@@ -102,13 +108,18 @@ export default function PluginManagerUI({ pluginManager }: { pluginManager: Plug
                                     onClick={() => checkPluginUpdate(plugin)}>
                                     </button>
                                 ) : null}
+                                {plugin.headers.needsLib.length > 0 ? (
+                                    <button dangerouslySetInnerHTML={{ __html: solidBook }}
+                                    onClick={() => showLibraries(plugin)}>
+                                    </button>
+                                ) : null}
                                 {plugin.return?.openSettingsMenu ? (
                                     <button dangerouslySetInnerHTML={{ __html: cogOutline }}
                                     onClick={() => plugin.return.openSettingsMenu()}>
                                     </button>
                                 ) : null}
                                 <button dangerouslySetInnerHTML={{ __html: pencilOutline }}
-                                onClick={() => showCodeEditor(plugins, plugin, pluginManager)}>
+                                onClick={() => showPluginCodeEditor(plugins, plugin, pluginManager)}>
                                 </button>
                                 <button dangerouslySetInnerHTML={{ __html: deleteSvg }}
                                 onClick={() => deletePlugin(plugin)}>
