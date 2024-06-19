@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -9,7 +9,7 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "fullbuild": "rollup -c -w full",
-    "buildTypes": "tsc"
+    "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "bin": {
     "gimloader": "./buildTools/cli.js",
@@ -32,7 +32,6 @@
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
     "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
@@ -42,9 +41,8 @@
     "antd": "^5.17.0",
     "rollup-plugin-sass": "^1.12.21",
     "rollup-plugin-string": "^3.0.0",
-    "rollup-plugin-svelte": "^7.2.0",
+    "rollup-plugin-tsconfig-paths": "^1.5.2",
     "rollup-plugin-userscript-metablock": "^0.3.3",
-    "svelte-preprocess": "^5.1.3",
     "tslib": "^2.6.2"
   },
   "dependencies": {

@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
 
-    .pluginList {
+    .scriptList {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         align-content: start;
@@ -22,7 +22,7 @@
             text-align: center;
             font-size: 2rem;
             font-weight: 600;
-            grid-column-end: span 2;
+            grid-column: 1 / -1;
             padding-top: 1rem;
         }
     }
@@ -36,9 +36,11 @@
     
     button {
         cursor: pointer;
-        width: 43px;
-        height: 43px;
+        width: 28px;
+        height: 28px;
         border: none;
+        padding: 0;
+        margin: 0;
         background-color: transparent;
         transition: transform 0.23s ease 0s;
 
@@ -49,9 +51,11 @@
     
     svg {
         fill: var(--text);
+        width: 100%;
+        height: 100%;
     }
     
-    .plugin {
+    .scriptItem {
         padding: 1rem;
         min-height: 200px;
         background-color: var(--bg-secondary);

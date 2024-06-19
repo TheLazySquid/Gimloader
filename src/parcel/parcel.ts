@@ -4,7 +4,7 @@
 
 import type { Gimloader } from "../gimloader";
 import type { Intercept } from "../types";
-import { log } from "../util";
+import { log, onGimkit } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
@@ -167,6 +167,7 @@ export default class Parcel extends EventTarget {
     }
 
     setup() {
+        if(!onGimkit) return;
         this.gimloader.pluginManager.init();
 
         let requireHook: (moduleName: string) => void;

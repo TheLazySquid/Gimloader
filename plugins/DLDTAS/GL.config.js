@@ -11,8 +11,9 @@ export default {
     description: "Allows you to create TASes for Dont Look Down",
     author: "TheLazySquid",
     version: pkg.version,
-    reloadRequired: true,
+    reloadRequired: 'ingame',
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js",
+    libs: ["DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js"],
     plugins: [
         typescript({
             target: "es2022"

@@ -2,9 +2,10 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author TheLazySquid
- * @version 0.1.0
- * @reloadRequired true
+ * @version 0.1.1
+ * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js
+ * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  */
 let lasers = [];
 GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
@@ -16,8 +17,6 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
         }
     }
 });
-let hurtFrames = 0;
-let maxHurtFrames = 2;
 function updateLasers(frame) {
     if (lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
@@ -40,64 +39,6 @@ function updateLasers(frame) {
         }
         devices.getDeviceById(laser.id).onStateUpdateFromServer("GLOBAL_active", active);
     }
-    let body = GL.stores.phaser.mainCharacter.physics.getBody();
-    let translation = body.rigidBody.translation();
-    let shape = body.collider.shape;
-    let topLeft = {
-        x: (translation.x - shape.radius) * 100,
-        y: (translation.y - shape.halfHeight - shape.radius) * 100
-    };
-    let bottomRight = {
-        x: (translation.x + shape.radius) * 100,
-        y: (translation.y + shape.halfHeight + shape.radius) * 100
-    };
-    let hitLaser = false;
-    for (let laser of lasers) {
-        // make sure the laser is active
-        if (!states.get(laser.id).properties.get("GLOBAL_active"))
-            continue;
-        let start = {
-            x: laser.dots[0].options.x + laser.x,
-            y: laser.dots[0].options.y + laser.y
-        };
-        let end = {
-            x: laser.dots.at(-1).options.x + laser.x,
-            y: laser.dots.at(-1).options.y + laser.y
-        };
-        // check whether the player bounding box overlaps the laser line
-        if (boundingBoxOverlap(start, end, topLeft, bottomRight)) {
-            hitLaser = true;
-            break;
-        }
-    }
-    if (hitLaser) {
-        hurtFrames++;
-        if (hurtFrames >= maxHurtFrames) {
-            hurtFrames = 0;
-            GL.notification.error({ message: "You hit a laser!", duration: 3.5 });
-            setTimeout(() => true, 500);
-        }
-    }
-    else
-        hurtFrames = 0;
-}
-// functions below AI generated there's no way I'm doing that myself
-function boundingBoxOverlap(start, end, topLeft, bottomRight) {
-    // check if the line intersects with any of the bounding box sides
-    return lineIntersects(start, end, topLeft, { x: bottomRight.x, y: topLeft.y }) ||
-        lineIntersects(start, end, topLeft, { x: topLeft.x, y: bottomRight.y }) ||
-        lineIntersects(start, end, { x: bottomRight.x, y: topLeft.y }, bottomRight) ||
-        lineIntersects(start, end, { x: topLeft.x, y: bottomRight.y }, bottomRight);
-}
-function lineIntersects(start1, end1, start2, end2) {
-    let denominator = ((end1.x - start1.x) * (end2.y - start2.y)) - ((end1.y - start1.y) * (end2.x - start2.x));
-    let numerator1 = ((start1.y - start2.y) * (end2.x - start2.x)) - ((start1.x - start2.x) * (end2.y - start2.y));
-    let numerator2 = ((start1.y - start2.y) * (end1.x - start1.x)) - ((start1.x - start2.x) * (end1.y - start1.y));
-    if (denominator == 0)
-        return numerator1 == 0 && numerator2 == 0;
-    let r = numerator1 / denominator;
-    let s = numerator2 / denominator;
-    return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
 }
 
 class Recorder {

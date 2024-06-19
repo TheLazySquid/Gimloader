@@ -9,8 +9,9 @@ export default {
     description: "Records your inputs in Don't Look Down",
     author: "TheLazySquid",
     version: pkg.version,
-    reloadRequired: true,
+    reloadRequired: 'ingame',
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js",
+    libs: ["DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js"],
     plugins: [
         typescript({
             target: "es2022"

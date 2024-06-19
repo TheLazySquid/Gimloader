@@ -53,7 +53,7 @@ export default class Patcher {
             for(let key of Object.getOwnPropertyNames(patches.original)) {
                 try {
                     object[property][key] = patches.original[key];
-                } catch (e) {}
+                } catch {}
             }
     
             Object.setPrototypeOf(object[property], Object.getPrototypeOf(patches.original));

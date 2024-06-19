@@ -15,10 +15,16 @@ function addMeta(config) {
 
     if(config.reloadRequired === true) {
         meta += '\n * @reloadRequired true';
+    } else if(config.reloadRequired === "ingame") {
+        meta += '\n * @reloadRequired ingame';
     }
 
     if(config.downloadUrl) {
         meta += `\n * @downloadUrl ${config.downloadUrl}`;
+    }
+
+    for(let lib of config.libs) {
+        meta += `\n * @needsLib ${lib}`;
     }
 
     meta += '\n */\n';
@@ -64,6 +70,11 @@ export default async function build() {
 
     if(!Array.isArray(config.default.plugins)) {
         console.error('GL.config.js plugins field is not an array!');
+        return;
+    }
+
+    if(!Array.isArray(config.default.libs)) {
+        console.error('GL.config.js libs field is not an array!');
         return;
     }
 

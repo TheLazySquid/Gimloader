@@ -1,5 +1,7 @@
+import downloadLibraries from "$src/net/downloadLibraries";
+import showErrorMessage from "$src/ui/showErrorMessage";
 import { IPluginInfo } from "../types";
-import { log } from "../util";
+import { log, parsePluginHeader } from "../util";
 import Plugin from "./plugin";
 
 export default class PluginManager {
@@ -25,24 +27,36 @@ export default class PluginManager {
         let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
 
         for(let plugin of pluginScripts) {
-            let pluginObj = new Plugin(plugin.script, this, plugin.enabled, true, this.runPlugins);
+            let pluginObj = new Plugin(plugin.script, plugin.enabled, true, this.runPlugins);
             this.plugins.push(pluginObj);
         }
     
-        await Promise.all(this.plugins.map(p => p.enabled && p.enable(true)));
-    
-        log('Plugins loaded');
+        let results = await Promise.allSettled(this.plugins.map(p => p.enabled && p.enable(true)));
+        let fails = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
+
+        if(fails.length > 0) {
+            let msg = fails.map(f => f.reason).join('\n');
+            showErrorMessage(msg, `Failed to enable ${fails.length} plugins`);
+
+            this.save(this.plugins);
+        }
+
+        log('All plugins loaded');
 
         // when a plugin is remotely deleted, installed or enabled/disabled reflect that here
         GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
             if(!remote) return;
             let newPluginInfos: IPluginInfo[] = JSON.parse(newVal);
-            let newPlugins = newPluginInfos.map(p => new Plugin(p.script, this, p.enabled, true, this.runPlugins));
+            let newPlugins = newPluginInfos.map(p => new Plugin(p.script, p.enabled, true, this.runPlugins));
 
             // check for scripts that were added
             for(let newPlugin of newPlugins) {
                 if(!this.getPlugin(newPlugin.headers.name)) {
-                    newPlugin.enable();
+                    newPlugin.enable()
+                        .catch((e: Error) => {
+                            showErrorMessage(e.message, `Failed to enable plugin ${newPlugin.headers.name}`);
+                        });
+
                     this.plugins.push(newPlugin);
                 }
             }
@@ -71,7 +85,12 @@ export default class PluginManager {
                 if(!oldPlugin) continue;
 
                 if(oldPlugin.enabled !== plugin.enabled) {
-                    if(plugin.enabled) oldPlugin.enable();
+                    if(plugin.enabled) {
+                        oldPlugin.enable()
+                            .catch((e: Error) => {
+                                showErrorMessage(e.message, `Failed to enable plugin ${oldPlugin.headers.name}`);
+                            });
+                    }
                     else oldPlugin.disable();
                 }
             }
@@ -80,8 +99,8 @@ export default class PluginManager {
         })
     }
 
-    save(newPlugins: Plugin[]) {
-        this.plugins = newPlugins;
+    save(newPlugins?: Plugin[]) {
+        if(newPlugins) this.plugins = newPlugins;
         let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
     
         GM_setValue('plugins', JSON.stringify(pluginObjs));
@@ -96,14 +115,30 @@ export default class PluginManager {
         return plugin?.enabled ?? false;
     }
 
-    createPlugin(script: string) {
-        let plugin = new Plugin(script, this, true, false, this.runPlugins);
+    async createPlugin(script: string) {
+        let headers = parsePluginHeader(script);
+        let existing = this.getPlugin(headers.name);
+        if(existing) {
+            let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
+            if(!conf) return;
+
+            this.deletePlugin(existing);
+        }
+
+        let plugin = new Plugin(script, false, false, this.runPlugins);
         this.plugins.push(plugin);
-        this.save(this.plugins);
+        this.save();
+        this.updatePlugins();
+
+        let success = await downloadLibraries(plugin.headers.needsLib, plugin.headers.name);
+        if(success) await plugin.enable();
+
+        this.save();
         this.updatePlugins();
     }
 
     deletePlugin(plugin: Plugin) {
+        if(plugin.enabled) plugin.disable();
         let newPlugins = this.plugins.filter(p => p !== plugin);
         
         if(window.GL) {
@@ -116,14 +151,25 @@ export default class PluginManager {
         log(`Deleted plugin: ${plugin.headers.name}`);
     }
 
-    setAll(enabled: boolean) {
-        let newPlugins = this.plugins.map(p => {
-            if(enabled) p.enable();
-            else p.disable();
-            return p;
-        });
+    enableAll() {
+        Promise.allSettled(this.plugins.filter(p => !p.enabled).map(p => p.enable()))
+            .then(results => {
+                let fails = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
+                if(fails.length > 0) {
+                    let msg = fails.map(f => f.reason).join('\n');
+                    showErrorMessage(msg, `Failed to enable ${results.length} plugins`);
+                }
+            })
 
-        this.save(newPlugins);
+        this.save();
         this.updatePlugins();
+    }
+
+    disableAll() {
+        for(let plugin of this.plugins) {
+            if(plugin.enabled) plugin.disable();
+        }
+
+        this.save();
     }
 }

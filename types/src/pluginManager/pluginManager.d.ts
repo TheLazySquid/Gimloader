@@ -7,10 +7,11 @@ export default class PluginManager {
     constructor(runPlugins?: boolean);
     updatePlugins(): void;
     init(): Promise<void>;
-    save(newPlugins: Plugin[]): void;
+    save(newPlugins?: Plugin[]): void;
     getPlugin(name: string): Plugin;
     isEnabled(name: string): boolean;
-    createPlugin(script: string): void;
+    createPlugin(script: string): Promise<void>;
     deletePlugin(plugin: Plugin): void;
-    setAll(enabled: boolean): void;
+    enableAll(): void;
+    disableAll(): void;
 }

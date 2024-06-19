@@ -1,4 +1,4 @@
-# Example Plugins
+# Official Plugins
 
 ## DisplayCoords [code](./DisplayCoords.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DisplayCoords.js)
 
@@ -38,4 +38,4 @@ This plugin lets you customize a few things about the Gimkit UI. Most importantl
 
 ## InputRecorder [code](./InputRecorder) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js)
 
-A modified version of the TAS tool that allows you to record and play back inputs in Don't Look Down. Hit alt+r to start/stop recording, and alt+t to play back a recording.
+A modified version of the TAS tool that allows you to record and play back inputs in Don't Look Down. Hit alt+r to start/stop recording, and alt+b to play back a recording.

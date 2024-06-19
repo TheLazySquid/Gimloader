@@ -36,7 +36,12 @@ export function save(frames: IFrameInfo[]) {
         saveList.push(save)
     }
 
-    console.log("saving as", saveList)
+    // remove unset frames at the end
+    for(let i = saveList.length - 1; i >= 0; i--) {
+        if(saveList[i].right || saveList[i].left || saveList[i].up) break;
+        saveList.pop()
+    }
+
     GL.storage.setValue("DLDTAS", "frames", saveList)
 
     return saveList

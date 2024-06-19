@@ -67,6 +67,14 @@
     }
 }
 
+.gl-errorMsg {
+    white-space: pre-line;
+    background-color: lightgray;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -1,10 +1,12 @@
 import * as CodeCake from "codecake"
 import showModal from "./modal";
 import PluginManager from "../pluginManager/pluginManager"
-import parseHeader from "../pluginManager/parseHeader";
 import Plugin from "../pluginManager/plugin";
+import { parsePluginHeader } from "../util";
+import { LibManagerType } from "$src/lib/libManager";
+import Lib from "$src/lib/lib";
 
-export function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
+export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -30,22 +32,24 @@ export function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager:
                 style: "primary",
                 onClick() {
                     let code = editor.getCode();
-                    let headers = parseHeader(code);
+                    let headers = parsePluginHeader(code);
 
-                    // check whether the new name is already taken
-                    for(let i = 0; i < plugins.length; i++) {
-                        let checkPlugin = plugins[i];
-                        if(plugin === checkPlugin) continue;
+                    let canceled = false;
+                    for(let otherPlugin of pluginManager.plugins) {
+                        if(otherPlugin === plugin) continue;
 
-                        if(checkPlugin.headers.name === headers.name) {
-                            let conf = confirm(`A plugin named ${headers.name} already exists. Do you want to overwrite it?`)
-                            if(!conf) return true;
-
-                            plugins.splice(i, 1);
-
-                            // shouldn't happen, but just in case
-                            i--;
+                        if(otherPlugin.headers.name === headers.name) {
+                            canceled = !confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
+                            break;
                         }
+                    }
+
+                    if(canceled) return;
+
+                    for(let otherPlugin of plugins) {
+                        if(otherPlugin === plugin || otherPlugin.headers.name !== headers.name) continue;
+
+                        pluginManager.deletePlugin(otherPlugin);
                     }
 
                     plugin.edit(code, headers);
@@ -56,7 +60,7 @@ export function showCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager:
     });
 }
 
-export function createPlugin(plugins: Plugin[], pluginManager: PluginManager) {
+export function createPlugin(pluginManager: PluginManager) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
@@ -88,24 +92,79 @@ export function createPlugin(plugins: Plugin[], pluginManager: PluginManager) {
                 style: "primary",
                 onClick() {
                     let code = editor.getCode();
-                    let headers = parseHeader(code);
-
-                    // check whether the new name is already taken
-                    for(let i = 0; i < plugins.length; i++) {
-                        let checkPlugin = plugins[i];
-
-                        if(checkPlugin.headers.name === headers.name) {
-                            let conf = confirm(`A plugin named ${headers.name} already exists. Do you want to overwrite it?`)
-                            if(!conf) return true;
-
-                            plugins.splice(i, 1);
-
-                            // shouldn't happen, but just in case
-                            i--;
-                        }
-                    }
-
                     pluginManager.createPlugin(code);
+                }
+            }
+        ]
+    });
+}
+export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
+    let editorDiv = document.createElement("div");
+    editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
+
+    let editor = CodeCake.create(editorDiv, {
+        language: "javascript",
+        highlight: CodeCake.highlight,
+        className: "codecake-dark codeCakeEditor",
+        lineNumbers: true
+    })
+
+    editor.setCode(lib.script);
+
+    showModal(editorDiv, {
+        id: "core-CodeEditor",
+        title: "Edit Library Code",
+        style: "width: 90%",
+        buttons: [
+            {
+                text: "cancel",
+                style: "close"
+            }, {
+                text: "save",
+                style: "primary",
+                onClick() {
+                    let code = editor.getCode();
+                    libManager.editLib(lib, code);
+                }
+            }
+        ]
+    });
+}
+
+export function createLib(libManager: LibManagerType) {
+    let editorDiv = document.createElement("div");
+    editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
+
+    let editor = CodeCake.create(editorDiv, {
+        language: "javascript",
+        highlight: CodeCake.highlight,
+        className: "codecake-dark codeCakeEditor",
+        lineNumbers: true
+    })
+
+    const defaultCode = `/**
+* @name New Library
+* @description A new library
+* @author Your Name Here
+* @isLibrary true
+*/`
+
+    editor.setCode(defaultCode);
+
+    showModal(editorDiv, {
+        id: "core-CodeEditor",
+        title: "Create New Library",
+        style: "width: 90%",
+        buttons: [
+            {
+                text: "cancel",
+                style: "close"
+            }, {
+                text: "save",
+                style: "primary",
+                onClick() {
+                    let code = editor.getCode();
+                    libManager.createLib(code);
                 }
             }
         ]

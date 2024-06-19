@@ -25,7 +25,7 @@ GL.hotkeys.add(toggleRecordHotkey, () => {
     recorder.toggleRecording();
 }, true);
 
-let playbackHotkey = new Set(["alt", "t"]);
+let playbackHotkey = new Set(["alt", "b"]);
 GL.hotkeys.add(playbackHotkey, () => {
     if(!recorder) return;
 
