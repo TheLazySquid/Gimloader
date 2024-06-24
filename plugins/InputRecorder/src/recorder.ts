@@ -1,5 +1,5 @@
 import { IFrameInfo, IRecording } from "../types"
-import { updateLasers } from "./updateLasers";
+import { stopUpdatingLasers, updateLasers } from "./updateLasers";
 
 export default class Recorder {
     physicsManager: any;
@@ -60,13 +60,14 @@ export default class Recorder {
             this.frames.push(this.inputManager.getPhysicsInput());
 
             this.nativeStep(dt);
-            updateLasers(frames.length);
+            updateLasers(this.frames.length);
         }
     }
 
     stopRecording() {
         this.recording = false;
         this.physicsManager.physicsStep = this.nativeStep;
+        stopUpdatingLasers();
         
         let confirm = window.confirm("Do you want to save the recording?");
         if(!confirm) return;
@@ -122,6 +123,7 @@ export default class Recorder {
 
     stopPlayback() {
         this.playing = false;
+        stopUpdatingLasers();
 
         this.physicsManager.physicsStep = this.nativeStep;
         this.inputManager.getPhysicsInput = this.getPhysicsInput;

@@ -2,7 +2,7 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.1.2
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -17,6 +17,9 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet) => {
         }
     }
 });
+function stopUpdatingLasers() {
+    lasers = [];
+}
 function updateLasers(frame) {
     if (lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d) => d.laser);
@@ -88,12 +91,13 @@ class Recorder {
         this.physicsManager.physicsStep = (dt) => {
             this.frames.push(this.inputManager.getPhysicsInput());
             this.nativeStep(dt);
-            updateLasers(frames.length);
+            updateLasers(this.frames.length);
         };
     }
     stopRecording() {
         this.recording = false;
         this.physicsManager.physicsStep = this.nativeStep;
+        stopUpdatingLasers();
         let confirm = window.confirm("Do you want to save the recording?");
         if (!confirm)
             return;
@@ -135,6 +139,7 @@ class Recorder {
     }
     stopPlayback() {
         this.playing = false;
+        stopUpdatingLasers();
         this.physicsManager.physicsStep = this.nativeStep;
         this.inputManager.getPhysicsInput = this.getPhysicsInput;
     }
@@ -158,7 +163,7 @@ GL.hotkeys.add(toggleRecordHotkey, () => {
     }
     recorder.toggleRecording();
 }, true);
-let playbackHotkey = new Set(["alt", "t"]);
+let playbackHotkey = new Set(["alt", "b"]);
 GL.hotkeys.add(playbackHotkey, () => {
     if (!recorder)
         return;

@@ -1,6 +1,6 @@
 {
   "name": "inputrecorder",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A TAS tool for Gimkit platformer modes",
   "main": "build/InputRecorder.js",
   "type": "module",

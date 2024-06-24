@@ -10,6 +10,10 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
     }
 })
 
+export function stopUpdatingLasers() {
+    lasers = [];
+}
+
 export function updateLasers(frame: number) {
     if(lasers.length === 0) {
         lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter((d: any) => d.laser)
