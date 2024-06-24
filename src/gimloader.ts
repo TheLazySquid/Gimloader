@@ -31,7 +31,7 @@ export class Gimloader extends EventTarget {
     platformerPhysics: any;
 
     lib = makeLibManager();
-    pluginManager: PluginManager = new PluginManager(onGimkit);
+    pluginManager: PluginManager = new PluginManager(this, onGimkit);
     patcher: Patcher = new Patcher();
     parcel: Parcel = new Parcel(this);
     net: Net = new Net(this);
@@ -46,7 +46,7 @@ export class Gimloader extends EventTarget {
 
     constructor() {
         super();
-        log('GimkitLoader v' + this.version + ' loaded');
+        log('Gimloader v' + this.version + ' loaded');
 
         this.addStyleSheets();
         this.getReact();

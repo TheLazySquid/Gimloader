@@ -1,3 +1,4 @@
+import type { Gimloader } from "$src/gimloader";
 import downloadLibraries from "$src/net/downloadLibraries";
 import showErrorMessage from "$src/ui/showErrorMessage";
 import { IPluginInfo } from "../types";
@@ -5,12 +6,14 @@ import { log, parsePluginHeader } from "../util";
 import Plugin from "./plugin";
 
 export default class PluginManager {
+    gimloader: Gimloader;
     plugins: Plugin[] = [];
     runPlugins: boolean;
     reactSetPlugins?: (plugins: Plugin[]) => void;
     updatePluginTimeout: any;
 
-    constructor(runPlugins: boolean = true) {
+    constructor(gimloader: Gimloader, runPlugins: boolean = true) {
+        this.gimloader = gimloader;
         this.runPlugins = runPlugins;
     }
 
@@ -27,7 +30,7 @@ export default class PluginManager {
         let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
 
         for(let plugin of pluginScripts) {
-            let pluginObj = new Plugin(plugin.script, plugin.enabled, true, this.runPlugins);
+            let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled, true, this.runPlugins);
             this.plugins.push(pluginObj);
         }
     
@@ -47,7 +50,7 @@ export default class PluginManager {
         GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
             if(!remote) return;
             let newPluginInfos: IPluginInfo[] = JSON.parse(newVal);
-            let newPlugins = newPluginInfos.map(p => new Plugin(p.script, p.enabled, true, this.runPlugins));
+            let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled, true, this.runPlugins));
 
             // check for scripts that were added
             for(let newPlugin of newPlugins) {
@@ -125,7 +128,7 @@ export default class PluginManager {
             this.deletePlugin(existing);
         }
 
-        let plugin = new Plugin(script, false, false, this.runPlugins);
+        let plugin = new Plugin(this.gimloader, script, false, false, this.runPlugins);
         this.plugins.push(plugin);
         this.save();
         this.updatePlugins();

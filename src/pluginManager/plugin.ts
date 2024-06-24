@@ -1,14 +1,17 @@
+import type { Gimloader } from "$src/gimloader";
 import showErrorMessage from "$src/ui/showErrorMessage";
 import { log, parsePluginHeader } from "../util";
 
 export default class Plugin {
+    gimloader: Gimloader;
     script: string;
     enabled: boolean;
     headers: Record<string, any>;
     return: any;
     runPlugin: boolean;
 
-    constructor(script: string, enabled = true, initial = false, runPlugin = true) {
+    constructor(gimloader: Gimloader, script: string, enabled = true, initial = false, runPlugin = true) {
+        this.gimloader = gimloader;
         this.script = script;
         this.enabled = enabled;
         this.runPlugin = runPlugin;
@@ -29,7 +32,7 @@ export default class Plugin {
             let libObjs = [];
             for(let lib of this.headers.needsLib) {
                 let libName = lib.split('|')[0].trim();
-                let libObj = GL.lib.getLib(libName);
+                let libObj = this.gimloader.lib.getLib(libName);
 
                 if(!libObj) {
                     this.enabled = false;
@@ -49,7 +52,7 @@ export default class Plugin {
                 return;
             }
     
-            GL.pluginManager.updatePlugins();
+            this.gimloader.pluginManager.updatePlugins();
             if(!this.runPlugin) return;
     
             // create a blob from the script and import it
@@ -67,7 +70,7 @@ export default class Plugin {
                         if(
                             this.headers.reloadRequired === 'true' || 
                             this.headers.reloadRequired === '' ||
-                            (this.headers.reloadRequired === 'ingame' && GL.net.type !== "Unknown")
+                            (this.headers.reloadRequired === 'ingame' && this.gimloader.net.type !== "Unknown")
                         ) {
                             let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
                             if(reload) {
@@ -78,7 +81,7 @@ export default class Plugin {
 
                     for(let lib of this.headers.needsLib) {
                         let libName = lib.split('|')[0].trim();
-                        let libObj = GL.lib.getLib(libName);
+                        let libObj = this.gimloader.lib.getLib(libName);
                         libObj.addUsed(this.headers.name);
                     }
 
@@ -97,7 +100,7 @@ export default class Plugin {
 
     disable() {
         this.enabled = false;
-        GL.pluginManager.updatePlugins();
+        this.gimloader.pluginManager.updatePlugins();
         if(!this.runPlugin) return;
 
         if(this.return) {
@@ -110,7 +113,7 @@ export default class Plugin {
 
         for(let lib of this.headers.needsLib) {
             let libName = lib.split('|')[0].trim();
-            let libObj = GL.lib.getLib(libName);
+            let libObj = this.gimloader.lib.getLib(libName);
             if(libObj) libObj.removeUsed(this.headers.name);
         }
 
@@ -124,12 +127,12 @@ export default class Plugin {
         this.headers = headers;
         if(enabled) {
             this.enable()
-                .then(() => GL.pluginManager.save())
+                .then(() => this.gimloader.pluginManager.save())
                 .catch((e) => {
                     showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
                 })
         } else {
-            GL.pluginManager.save();
+            this.gimloader.pluginManager.save();
         }
     }
 }
