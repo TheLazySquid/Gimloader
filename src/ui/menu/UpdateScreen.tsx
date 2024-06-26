@@ -6,6 +6,9 @@ import showErrorMessage from "../showErrorMessage";
 export default function UpdateScreen() {
     const React = GL.React;
 
+    let [plugins, setPlugins] = React.useState(GL.pluginManager.plugins);
+    let [libs, setLibs] = React.useState(Object.values(GL.lib.libs));
+
     let [showingCompleted, setShowingCompleted] = React.useState(false);
     let [completed, setCompleted] = React.useState(0);
     let [total, setTotal] = React.useState(0);
@@ -99,20 +102,26 @@ export default function UpdateScreen() {
             Gimloader v{GL.version}
         </div>
         <h1>Plugins</h1>
-        {GL.pluginManager.plugins.length === 0 && <div>No plugins loaded</div>}
-        {GL.pluginManager.plugins.map((plugin) => {
+        {plugins.length === 0 && <div>No plugins loaded</div>}
+        {plugins.map((plugin) => {
             return (<div key={plugin.headers.name}>
                 {plugin.headers.downloadUrl && <div dangerouslySetInnerHTML={{ __html: update }}
-                className="updateBtn" onClick={() => checkPluginUpdate(plugin)}></div>}
+                className="updateBtn" onClick={() => {
+                    checkPluginUpdate(plugin)
+                        .then(() => setPlugins([...plugins]))
+                }}></div>}
                 {plugin.headers.name} v{plugin.headers.version}
             </div>)
         })}
         <h1>Libraries</h1>
-        {Object.keys(GL.lib.libs).length === 0 && <div>No plugins loaded</div>}
-        {Object.values(GL.lib.libs).map((lib) => {
+        {Object.keys(libs).length === 0 && <div>No plugins loaded</div>}
+        {Object.values(libs).map((lib) => {
             return (<div key={lib.headers.name}>
                 {lib.headers.downloadUrl && <div dangerouslySetInnerHTML={{ __html: update }}
-                className="updateBtn" onClick={() => checkLibUpdate(lib)}></div>}
+                className="updateBtn" onClick={() => {
+                    checkLibUpdate(lib)
+                        .then(() => setLibs(Object.values(GL.lib.libs)))
+                }}></div>}
                 {lib.headers.name} v{lib.headers.version}
             </div>)
         })}

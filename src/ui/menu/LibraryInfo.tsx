@@ -1,12 +1,17 @@
 import type Plugin from "$src/pluginManager/plugin";
+import download from "$assets/download.svg";
+import update from "$assets/update.svg";
+import { checkLibUpdate } from "$src/net/checkUpdates";
+import { downloadLibrary } from "$src/net/downloadLibraries";
+import showErrorMessage from "../showErrorMessage";
 
 export default function LibraryInfo({ plugin }: { plugin: Plugin }) {
     const React = GL.React;
     
-    let libs: [string, string?][] = plugin.headers.needsLib.map(lib => {
+    let [libs, setLibs] = React.useState<[string, string?][]>(plugin.headers.needsLib.map((lib: string) => {
         let parts = lib.split('|');
         return [parts[0].trim(), parts[1]?.trim()];
-    })
+    }));
 
     return (
         <table className="gl-libraryInfo">
@@ -14,6 +19,7 @@ export default function LibraryInfo({ plugin }: { plugin: Plugin }) {
                 <th>Installed?</th>
                 <th>Name</th>
                 <th>URL</th>
+                <th></th>
             </tr>
             {libs.map(lib => {
                 return (
@@ -21,6 +27,23 @@ export default function LibraryInfo({ plugin }: { plugin: Plugin }) {
                         <td>{GL.lib.getLib(lib[0]) ? "Yes" : "No"}</td>
                         <td>{lib[0]}</td>
                         <td className="url">{lib[1] ?? ''}</td>
+                        <td>
+                            {lib[1] && !GL.lib.getLib(lib[0]) && (
+                                <div className="updateBtn" dangerouslySetInnerHTML={{ __html: download }}
+                                onClick={() => {
+                                    downloadLibrary(lib[1])
+                                        .then(() => {
+                                            setLibs([...libs]);
+                                            GL.notification.open({ message: `Downloaded library ${lib[0]}` })
+                                        })
+                                        .catch((err) => showErrorMessage(err, `Failed to download library ${lib[0]}`))
+                                }}></div>
+                            )}
+                            {lib[1] && GL.lib.getLib(lib[0]) && (
+                                <div className="updateBtn" dangerouslySetInnerHTML={{ __html: update }}
+                                onClick={() => checkLibUpdate(GL.lib.getLib(lib[0]))}></div>    
+                            )}
+                        </td>
                     </tr>
                 )
             })}

@@ -73,15 +73,16 @@
         font-size: large;
     }
 
-    .updateBtn {
-        cursor: pointer;
-        transition: transform 0.1s ease;
-        width: 28px;
-        height: 28px;
+}
 
-        &:hover {
-            transform: scale(1.1);
-        }
+:is(.gl-libraryInfo, .gl-updateList) .updateBtn {
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    width: 28px;
+    height: 28px;
+
+    &:hover {
+        transform: scale(1.1);
     }
 }
 

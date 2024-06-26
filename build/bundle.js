@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  var version = "0.7.1";
+  var version = "0.7.2";
 
-  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-updateList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-updateList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-updateList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-updateList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n.gl-updateList .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n.gl-updateList .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
+  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-updateList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-updateList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-updateList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-updateList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
   var codeCakeStyles = "/* codecake global styles */\n.codecake {\n    display: flex;\n    font-family: \"Source Code Pro\", monospace;\n    letter-spacing: normal;\n    min-height: 0;\n    padding: 20px;\n    width: 100%;\n}\n.codecake-editor {\n    flex-grow: 1;\n    font-size: 14px;\n    font-weight: 400;\n    height: 100%;\n    line-height: 20px;\n    overflow: auto;\n    overflow-wrap: normal;\n    outline: none;\n    width: 100%;\n    white-space: pre; /* pre-wrap */\n    word-wrap: normal;\n}\n.codecake-gutters {\n    min-height: 0;\n    overflow: hidden;\n    position: relative;\n    width: 48px;\n}\n.codecake-lines {\n    bottom: 0px;\n    color: currentColor;\n    font-size: 12px;\n    line-height: 20px;\n    opacity: 0.5;\n    overflow: hidden;\n    padding-right: 16px;\n    position: absolute;\n    right: 0px;\n    text-align: right;\n    top: 0px;\n}\n.codecake-lines > div {\n    margin-bottom: 4px;\n    min-height: 16px;\n}\n.codecake-lines > div:not(:first-child) {\n    margin-top: 4px;\n}\n\n/* Terrible hack to hide last empty line in editor */\n.codecake-editor .line:last-child,\n.codecake-lines > div:last-child {\n    display: none !important;\n}\n\n/* Editor plugins */\n.codecake-linewrapping {\n    white-space: pre-wrap !important;\n}\n\n/* Editor scrollbar */\n.codecake-editor::-webkit-scrollbar {\n    width: 8px;\n    height: 8px;\n}\n.codecake-editor::-webkit-scrollbar-track {\n    background-color: transparent;\n}\n.codecake-editor::-webkit-scrollbar-thumb {\n    background-color: currentColor;\n    border-radius: 16px;\n}\n.codecake-editor::-webkit-scrollbar-button {\n    display: none;\n}\n.codecake-editor::-webkit-scrollbar-corner {\n    background-color: transparent;\n}\n\n/* codecake light theme */\n.codecake-light {\n    background-color: #fafafa;\n    color: #101623;\n}\n.codecake-light .codecake-editor::-webkit-scrollbar-thumb {\n    background-color: #dedfe3;\n}\n.codecake-light .codecake-editor::-webkit-scrollbar-thumb:hover {\n    background-color: #cbccd2;\n}\n.codecake-light .codecake-lines {\n    /* color: #6cb1c5; */\n    color: #878a98;\n}\n\n.codecake-light .token-operator, \n.codecake-light .token-number,\n.codecake-light .token-unit {\n    color: #e57697;\n}\n.codecake-light .token-punctuation, \n.codecake-light .token-property,\n.codecake-light .token-selector-pseudo,\n.codecake-light .token-selector-attr,\n.codecake-light .token-quote,\n.codecake-light .token-code {\n    color: #3a464e;\n}\n.codecake-light .token-keyword,\n.codecake-light .token-bullet {\n    color: #b351d9;\n}\n.codecake-light .token-constant {\n    color: #20118a;\n}\n.codecake-light .token-attribute,\n.codecake-light .token-tag,\n.codecake-light .token-title.function,\n.codecake-light .token-selector-tag,\n.codecake-light .token-section {\n    color: #3a9ff2;\n}\n.codecake-light .token-attr,\n.codecake-light .token-selector-class,\n.codecake-light .token-link {\n    color: #f38d00;\n}\n.codecake-light .token-string {\n    color: #00a17d;\n}\n.codecake-light .token-comment {\n    color: #969896;\n}\n\n/* codecake dark theme */\n.codecake-dark {\n    background-color: #272b3f;\n    color: #aab2d4;\n}\n.codecake-dark .codecake-editor::-webkit-scrollbar-thumb {\n    background-color: #99aaff15;\n}\n.codecake-dark .codecake-editor::-webkit-scrollbar-thumb:hover {\n    background-color: #99aaff22;\n}\n.codecake-dark .codecake-lines {\n    color: #757ca3;\n}\n\n.codecake-dark .token-attr,\n.codecake-dark .token-selector-tag {\n    color: #80d0ff;\n}\n.codecake-dark .token-comment,\n.codecake-dark .token-quote {\n    color: #58628d;\n}\n.codecake-dark .token-constant, \n.codecake-dark .token-number,\n.codecake-dark .token-bullet,\n.codecake-dark .token-link {\n    color: #ffae80;\n}\n.codecake-dark .token-title.function,\n.codecake-dark .token-section {\n    color: #22c1dd;\n} \n.codecake-dark .token-attribute,\n.codecake-dark .token-tag,\n.codecake-dark .token-code,\n.codecake-dark .token-strong {\n    color: #6e9af7;\n}\n.codecake-dark .token-keyword {\n    color: #af89f5;\n}\n.codecake-dark .token-operator,\n.codecake-dark .token-selector-attr {\n    color: #ad388c;\n}\n.codecake-dark .token-property,\n.codecake-dark .token-selector-class {\n    color: #bdc7f5;\n}\n.codecake-dark .token-selector-pseudo,\n.codecake-dark .token-punctuation,\n.codecake-dark .token-emphasis {\n    color: #8bb3f4;\n}\n.codecake-dark .token-string {\n    color: #9bcd65;\n}\n.codecake-dark .token-unit {\n    color: #dd556e;\n}\n\n/* MonoBlue theme */\n.codecake-monoblue {\n    background-color: #eef2f6;\n    color: #011e48;\n}\n.codecake-monoblue .token-keyword, \n.codecake-monoblue .token-tag,\n.codecake-monoblue .token-selector-tag, \n.codecake-monoblue .token-section {\n    font-weight: bold;\n}\n.codecake-monoblue .token-string,\n.codecake-monoblue .token-section {\n    color: #1086ce;\n}\n.codecake-monoblue .token-comment {\n    color: #8e9eaf;\n}\n.codecake-monoblue .token-code,\n.codecake-monoblue .token-quote,\n.codecake-monoblue .token-tag, \n.codecake-monoblue .token-attr,\n.codecake-monoblue .token-attribute,\n.codecake-monoblue .token-selector-class,\n.codecake-monoblue .token-punctuation {\n    color: #224d84;\n}\n.codecake-monoblue .token-bullet {\n    color: #8fc8f3;\n}\n\n/* One Light theme */\n/* Inspired in https://github.com/akamud/vscode-theme-onelight */\n.codecake-one-light {\n    background-color: #fafafa;\n    color: #393c46;\n}\n.codecake-one-light .token-keyword {\n    color: #a329a1;\n}\n.codecake-one-light .token-string,\n.codecake-one-light .token-attribute {\n    color: #54ac53;\n}\n.codecake-one-light .token-constant {\n    color: #0084bd;\n}\n.codecake-one-light .token-number,\n.codecake-one-light .token-unit,\n.codecake-one-light .token-selector-class,\n.codecake-one-light .token-selector-attr,\n.codecake-one-light .token-selector-pseudo,\n.codecake-one-light .token-attr {\n    color: #a37000;\n}\n.codecake-one-light .token-bullet,\n.codecake-one-light .token-title.function {\n    color: #4279f0;\n}\n.codecake-one-light .token-quote,\n.codecake-one-light .token-comment {\n    color: #a3a4a8;\n}\n.codecake-one-light .token-section,\n.codecake-one-light .token-tag,\n.codecake-one-light .token-selector-tag {\n    color: #e74a3c;\n}\n.codecake-one-light .token-builtin {\n    color: #bb8002;\n}\n\n/* One Dark theme */\n/* Inspired in https://github.com/akamud/vscode-theme-onedark */\n.codecake-one-dark {\n    background-color: #282c34;\n    color: #b6bdc8;\n}\n.codecake-one-dark .token-keyword {\n    color: #ca78e2;\n}\n.codecake-one-dark .token-string,\n.codecake-one-dark .token-attribute {\n    color: #93bd75;\n}\n.codecake-one-dark .token-bullet,\n.codecake-one-dark .token-title.function {\n    color: #62adea;\n}\n.codecake-one-dark .token-constant {\n    color: #5cb6c1;\n}\n.codecake-one-dark .token-quote,\n.codecake-one-dark .token-comment {\n    color: #5f6672;\n}\n.codecake-one-dark .token-number,\n.codecake-one-dark .token-unit,\n.codecake-one-dark .token-selector-class,\n.codecake-one-dark .token-selector-attr,\n.codecake-one-dark .token-selector-pseudo,\n.codecake-one-dark .token-attr {\n    color: #d19761;\n}\n.codecake-one-dark .token-section,\n.codecake-one-dark .token-tag,\n.codecake-one-dark .token-selector-tag {\n    color: #e4727b;\n}\n.codecake-one-dark .token-builtin {\n    color: #e4b867;\n}\n\n/* Common styles */\n.codecake-light .token-strong,\n.codecake-dark .token-strong,\n.codecake-monoblue .token-strong,\n.codecake-one-light .token-strong,\n.codecake-one-dark .token-strong {\n    font-weight: bold;\n}\n.codecake-light .token-emphasis,\n.codecake-dark .token-emphasis,\n.codecake-monoblue .token-emphasis,\n.codecake-one-light .token-emphasis,\n.codecake-one-dark .token-emphasis {\n    font-style: italic;\n}\n";
 
@@ -964,22 +964,99 @@
       });
   }
 
+  var download = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z\" /></svg>";
+
+  async function downloadLibraries(needsLibs, confirmName) {
+      let missing = [];
+      for (let lib of needsLibs) {
+          let parts = lib.split('|');
+          let libName = parts[0].trim();
+          let libUrl = parts[1]?.trim();
+          if (!GL.lib.getLib(libName)) {
+              missing.push({ libName, libUrl });
+          }
+      }
+      if (missing.length === 0)
+          return true;
+      let downloadable = missing.filter(m => m.libUrl);
+      // wait for user confirmation
+      if (confirmName) {
+          let single = missing.length === 1;
+          let msgStart = `The plugin ${confirmName} is missing ${missing.length} ${single ? 'library' : 'libraries'}.`;
+          if (downloadable.length === 0) {
+              alert(`${msgStart} You will need to manually download and install ${single ? 'it' : 'them'}.`);
+              return false;
+          }
+          let conf = false;
+          if (downloadable.length === missing.length) {
+              conf = confirm(`${msgStart} Would you like to download ${single ? 'it' : 'them'}?`);
+          }
+          else {
+              conf = confirm(msgStart +
+                  ` ${downloadable.length} ${single ? 'is' : 'are'} able to be automatically downloaded. Would you like to do so?` +
+                  " The rest will need to be manually downloaded and installed.");
+          }
+          if (!conf)
+              return false;
+      }
+      let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
+          return new Promise((res, rej) => {
+              GL.net.corsRequest({ url: libUrl })
+                  .then((resp) => res(resp.responseText))
+                  .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
+          });
+      }));
+      let successes = results.filter(r => r.status === 'fulfilled');
+      let libs = successes.map(s => GL.lib.createLib(s.value)).filter(l => l);
+      await Promise.all(libs.map(l => l.enable()));
+      GL.lib.save();
+      GL.lib.updateReact();
+      let failed = results.filter(r => r.status === 'rejected');
+      if (failed.length > 0) {
+          let msg = failed.map(f => f.reason).join('\n');
+          showErrorMessage(msg, `Failed to download ${failed.length} libraries`);
+          return false;
+      }
+      return missing.length === downloadable.length;
+  }
+  async function downloadLibrary(url) {
+      return new Promise((res, rej) => {
+          GL.net.corsRequest({ url })
+              .then((resp) => {
+              GL.lib.createLib(resp.responseText);
+              res();
+          })
+              .catch(() => rej(`Failed to download library from ${url}`));
+      });
+  }
+
   function LibraryInfo({ plugin }) {
       const React = GL.React;
-      let libs = plugin.headers.needsLib.map(lib => {
+      let [libs, setLibs] = React.useState(plugin.headers.needsLib.map((lib) => {
           let parts = lib.split('|');
           return [parts[0].trim(), parts[1]?.trim()];
-      });
+      }));
       return (React.createElement("table", { className: "gl-libraryInfo" },
           React.createElement("tr", null,
               React.createElement("th", null, "Installed?"),
               React.createElement("th", null, "Name"),
-              React.createElement("th", null, "URL")),
+              React.createElement("th", null, "URL"),
+              React.createElement("th", null)),
           libs.map(lib => {
               return (React.createElement("tr", null,
                   React.createElement("td", null, GL.lib.getLib(lib[0]) ? "Yes" : "No"),
                   React.createElement("td", null, lib[0]),
-                  React.createElement("td", { className: "url" }, lib[1] ?? '')));
+                  React.createElement("td", { className: "url" }, lib[1] ?? ''),
+                  React.createElement("td", null,
+                      lib[1] && !GL.lib.getLib(lib[0]) && (React.createElement("div", { className: "updateBtn", dangerouslySetInnerHTML: { __html: download }, onClick: () => {
+                              downloadLibrary(lib[1])
+                                  .then(() => {
+                                  setLibs([...libs]);
+                                  GL.notification.open({ message: `Downloaded library ${lib[0]}` });
+                              })
+                                  .catch((err) => showErrorMessage(err, `Failed to download library ${lib[0]}`));
+                          } })),
+                      lib[1] && GL.lib.getLib(lib[0]) && (React.createElement("div", { className: "updateBtn", dangerouslySetInnerHTML: { __html: update }, onClick: () => checkLibUpdate(GL.lib.getLib(lib[0])) })))));
           })));
   }
 
@@ -1066,6 +1143,8 @@
 
   function UpdateScreen() {
       const React = GL.React;
+      let [plugins, setPlugins] = React.useState(GL.pluginManager.plugins);
+      let [libs, setLibs] = React.useState(Object.values(GL.lib.libs));
       let [showingCompleted, setShowingCompleted] = React.useState(false);
       let [completed, setCompleted] = React.useState(0);
       let [total, setTotal] = React.useState(0);
@@ -1143,19 +1222,25 @@
               "Gimloader v",
               GL.version),
           React.createElement("h1", null, "Plugins"),
-          GL.pluginManager.plugins.length === 0 && React.createElement("div", null, "No plugins loaded"),
-          GL.pluginManager.plugins.map((plugin) => {
+          plugins.length === 0 && React.createElement("div", null, "No plugins loaded"),
+          plugins.map((plugin) => {
               return (React.createElement("div", { key: plugin.headers.name },
-                  plugin.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => checkPluginUpdate(plugin) }),
+                  plugin.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => {
+                          checkPluginUpdate(plugin)
+                              .then(() => setPlugins([...plugins]));
+                      } }),
                   plugin.headers.name,
                   " v",
                   plugin.headers.version));
           }),
           React.createElement("h1", null, "Libraries"),
-          Object.keys(GL.lib.libs).length === 0 && React.createElement("div", null, "No plugins loaded"),
-          Object.values(GL.lib.libs).map((lib) => {
+          Object.keys(libs).length === 0 && React.createElement("div", null, "No plugins loaded"),
+          Object.values(libs).map((lib) => {
               return (React.createElement("div", { key: lib.headers.name },
-                  lib.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => checkLibUpdate(lib) }),
+                  lib.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => {
+                          checkLibUpdate(lib)
+                              .then(() => setLibs(Object.values(GL.lib.libs)));
+                      } }),
                   lib.headers.name,
                   " v",
                   lib.headers.version));
@@ -2022,60 +2107,6 @@
       createReactContextMenu(options, element) {
           return this.gimloader.React.createElement(this.dropdownModule, options, element);
       }
-  }
-
-  async function downloadLibraries(needsLibs, confirmName) {
-      let missing = [];
-      for (let lib of needsLibs) {
-          let parts = lib.split('|');
-          let libName = parts[0].trim();
-          let libUrl = parts[1]?.trim();
-          if (!GL.lib.getLib(libName)) {
-              missing.push({ libName, libUrl });
-          }
-      }
-      if (missing.length === 0)
-          return true;
-      let downloadable = missing.filter(m => m.libUrl);
-      // wait for user confirmation
-      if (confirmName) {
-          let single = missing.length === 1;
-          let msgStart = `The plugin ${confirmName} is missing ${missing.length} ${single ? 'library' : 'libraries'}.`;
-          if (downloadable.length === 0) {
-              alert(`${msgStart} You will need to manually download and install ${single ? 'it' : 'them'}.`);
-              return false;
-          }
-          let conf = false;
-          if (downloadable.length === missing.length) {
-              conf = confirm(`${msgStart} Would you like to download ${single ? 'it' : 'them'}?`);
-          }
-          else {
-              conf = confirm(msgStart +
-                  ` ${downloadable.length} ${single ? 'is' : 'are'} able to be automatically downloaded. Would you like to do so?` +
-                  " The rest will need to be manually downloaded and installed.");
-          }
-          if (!conf)
-              return false;
-      }
-      let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
-          return new Promise((res, rej) => {
-              GL.net.corsRequest({ url: libUrl })
-                  .then((resp) => res(resp.responseText))
-                  .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
-          });
-      }));
-      let successes = results.filter(r => r.status === 'fulfilled');
-      let libs = successes.map(s => GL.lib.createLib(s.value)).filter(l => l);
-      await Promise.all(libs.map(l => l.enable()));
-      GL.lib.save();
-      GL.lib.updateReact();
-      let failed = results.filter(r => r.status === 'rejected');
-      if (failed.length > 0) {
-          let msg = failed.map(f => f.reason).join('\n');
-          showErrorMessage(msg, `Failed to download ${failed.length} libraries`);
-          return false;
-      }
-      return missing.length === downloadable.length;
   }
 
   class Plugin {

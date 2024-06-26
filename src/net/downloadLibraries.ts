@@ -62,3 +62,14 @@ export default async function downloadLibraries(needsLibs: string[], confirmName
 
     return missing.length === downloadable.length;
 }
+
+export async function downloadLibrary(url: string) {
+    return new Promise<void>((res, rej) => {
+        GL.net.corsRequest({ url })
+            .then((resp) => {
+                GL.lib.createLib(resp.responseText);
+                res();
+            })
+            .catch(() => rej(`Failed to download library from ${url}`));
+    })
+}
