@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -79,6 +79,14 @@ const enable = () => {
         "x": 33.87,
         "y": 638.38
     }, true);
+
+    // make the physics deterministic
+    for(let id of physics.bodies.staticBodies) {
+        physics.bodies.activeBodies.enableBody(id)
+    }
+    
+    // ignore attempts to disable bodies
+    physics.bodies.activeBodies.disableBody = () => {};
 }
 
 GL.addEventListener("loadEnd", enable);

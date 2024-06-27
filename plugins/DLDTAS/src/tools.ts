@@ -25,14 +25,6 @@ export default class TASTools {
             GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
         }
 
-        // load all bodies in at once for deterministic physics
-        for(let id of physicsManager.bodies.staticBodies) {
-            physicsManager.bodies.activeBodies.enableBody(id)
-        }
-        
-        // ignore attempts to disable bodies
-        physicsManager.bodies.activeBodies.disableBody = () => {};
-
         this.physics = GL.stores.phaser.mainCharacter.physics;
         this.rb = this.physics.getBody().rigidBody;
         this.inputManager = GL.stores.phaser.scene.inputManager;
