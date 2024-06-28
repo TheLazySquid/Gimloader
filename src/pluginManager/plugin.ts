@@ -36,6 +36,7 @@ export default class Plugin {
 
                 if(!libObj) {
                     this.enabled = false;
+                    this.gimloader.pluginManager.updatePlugins();
                     rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
                     return;
                 }
@@ -49,10 +50,10 @@ export default class Plugin {
                 let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
                 this.enabled = false;
                 rej(err);
+                this.gimloader.pluginManager.updatePlugins();
                 return;
             }
     
-            this.gimloader.pluginManager.updatePlugins();
             if(!this.runPlugin) return;
     
             // create a blob from the script and import it
@@ -63,6 +64,7 @@ export default class Plugin {
                 .then((returnVal) => {
                     this.return = returnVal;
                     this.enabled = true;
+                    this.gimloader.pluginManager.updatePlugins();
             
                     log(`Loaded plugin: ${this.headers.name}`);
                     
@@ -89,6 +91,7 @@ export default class Plugin {
                 })
                 .catch((e) => {
                     this.enabled = false;
+                    this.gimloader.pluginManager.updatePlugins();
                     let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${e}`);
                     rej(err);
                 })
