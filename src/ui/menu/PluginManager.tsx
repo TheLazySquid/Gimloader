@@ -12,7 +12,6 @@ import Plugin from "../../pluginManager/plugin";
 import { createPlugin, showPluginCodeEditor } from "../editCodeModals";
 import { checkPluginUpdate } from "../../net/checkUpdates";
 import showErrorMessage from "../showErrorMessage";
-import downloadLibraries from "$src/net/downloadLibraries";
 import LibraryInfo from "./LibraryInfo";
 
 export default function PluginManagerUI() {
@@ -96,7 +95,7 @@ export default function PluginManagerUI() {
                                         }
                                         else plugin.disable();
 
-                                        pluginManager.save(plugins);
+                                        pluginManager.save();
                                     }} />
                                 </div>
                                 <div className="author">by {plugin.headers.author}</div>

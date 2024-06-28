@@ -9,7 +9,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.7.2
+// @version     0.7.3
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -22,7 +22,7 @@
 (function () {
   'use strict';
 
-  var version = "0.7.2";
+  var version = "0.7.3";
 
   var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-updateList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-updateList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-updateList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-updateList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
@@ -1144,7 +1144,7 @@
                                       }
                                       else
                                           plugin.disable();
-                                      pluginManager.save(plugins);
+                                      pluginManager.save();
                                   } })),
                           React.createElement("div", { className: "author" },
                               "by ",
@@ -2159,6 +2159,7 @@
                   let libObj = this.gimloader.lib.getLib(libName);
                   if (!libObj) {
                       this.enabled = false;
+                      this.gimloader.pluginManager.updatePlugins();
                       rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
                       return;
                   }
@@ -2170,9 +2171,9 @@
                   let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
                   this.enabled = false;
                   rej(err);
+                  this.gimloader.pluginManager.updatePlugins();
                   return;
               }
-              this.gimloader.pluginManager.updatePlugins();
               if (!this.runPlugin)
                   return;
               // create a blob from the script and import it
@@ -2182,6 +2183,7 @@
                   .then((returnVal) => {
                   this.return = returnVal;
                   this.enabled = true;
+                  this.gimloader.pluginManager.updatePlugins();
                   log(`Loaded plugin: ${this.headers.name}`);
                   if (!initial) {
                       if (this.headers.reloadRequired === 'true' ||
@@ -2202,6 +2204,7 @@
               })
                   .catch((e) => {
                   this.enabled = false;
+                  this.gimloader.pluginManager.updatePlugins();
                   let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${e}`);
                   rej(err);
               })
