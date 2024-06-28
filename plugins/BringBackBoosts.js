@@ -75,7 +75,7 @@ GL.parcel.interceptRequire("Boosts", (exports) => exports?.CalculateMovementVelo
         "left" === g ? l = -h : "right" === g && (l = h);
         const B = 0 !== l;
         if (g !== A.physics.state.movement.direction && (B && 0 !== A.physics.state.movement.xVelocity && (A.physics.state.movement.xVelocity = 0), A.physics.state.movement.accelerationTicks = 0, A.physics.state.movement.direction = g), A.physics.state.movement.xVelocity !== l) {
-            A.physics.state.movement.accelerationTicks += useOriginalPhysics ? 1 : 100;
+            A.physics.state.movement.accelerationTicks += useOriginalPhysics ? 100 : 1;
             let t = 0,
                 i = 0;
             A.physics.state.grounded ? B ? (t = o.CharacterPhysicsConsts.movement.ground.accelerationSpeed, i = o.CharacterPhysicsConsts.movement.ground.maxAccelerationSpeed) : t = o.CharacterPhysicsConsts.movement.ground.decelerationSpeed : B ? (t = o.CharacterPhysicsConsts.movement.air.accelerationSpeed, i = o.CharacterPhysicsConsts.movement.air.maxAccelerationSpeed) : t = o.CharacterPhysicsConsts.movement.air.decelerationSpeed;
