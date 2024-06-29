@@ -2,10 +2,42 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
+
+const respawnHeight = 621.093;
+const floorHeight = 638.37;
+let lastCheckpointReached = 0;
+let canRespawn = false;
+
+export function cancelRespawn() {
+    canRespawn = false;
+}
+
+const checkpointCoords = [{
+    x: 38.25554275512695,
+    y: 638.3899536132812
+}, {
+    x: 90.22997283935547,
+    y: 638.377685546875
+}, {
+    x: 285.44000244140625,
+    y: 532.780029296875
+}, {
+    x: 217.5500030517578,
+    y: 500.7799987792969
+}, {
+    x: 400.3399963378906,
+    y: 413.739990234375
+}, {
+    x: 356.5400085449219,
+    y: 351.6600036621094
+}, {
+    x: 401.2699890136719,
+    y: 285.739990234375
+}]
 
 let showLaserWarning = true;
 
@@ -41,6 +73,7 @@ const enable = () => {
         let states = GL.stores.world.devices.states;
         let hitLaser = false;
     
+        // check collision with lasers
         for(let laser of lasers) {
             // make sure the laser is active
             if(!states.get(laser.id).properties.get("GLOBAL_active")) continue;
@@ -71,6 +104,36 @@ const enable = () => {
                 setTimeout(() => showHitLaser = true, 500);
             }
         } else hurtFrames = 0;
+
+        // check if we've reached a checkpoint
+        for(let i = lastCheckpointReached + 1; i < checkpointCoords.length; i++) {
+            let checkpoint = checkpointCoords[i];
+            if(boundingBoxOverlap(topLeft, bottomRight, {
+                x: checkpoint.x * 100,
+                y: checkpoint.y * 100 + 100
+            }, {
+                x: checkpoint.x * 100 + 100,
+                y: checkpoint.y * 100
+            })) {
+                console.log("Reached Checkpoint", i);
+                lastCheckpointReached = i;
+                break;
+            }
+        }
+
+        // check for respawning
+        if(translation.y < respawnHeight) {
+            canRespawn = true;
+        }
+
+        if(canRespawn && translation.y > floorHeight) {
+            canRespawn = false;
+            setTimeout(() => {
+                moveCharToPos(checkpointCoords[lastCheckpointReached].x, checkpointCoords[lastCheckpointReached].y);
+                GL.stores.me.isRespawning = true;
+                setTimeout(() => GL.stores.me.isRespawning = false, 1000);
+            }, 300);
+        }
     })
 
     // move the player to the initial position
