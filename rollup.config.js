@@ -9,35 +9,14 @@ import fs from 'fs';
 import typescriptPaths from 'rollup-plugin-tsconfig-paths';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
-const full = process.argv.includes('full');
-
-let output = [
-    {
-        file: 'build/bundle.js',
-        format: 'iife',
-        name: 'gimloader'
-    }
-]
-
-if(full) {
-    output.push({
-        file: 'build/bundle.user.js',
-        format: 'iife',
-        name: 'gimloader',
-        plugins: [
-            metablock({
-                file: './meta.json',
-                override: {
-                    version: pkg.version
-                }
-            })
-        ]
-    })
-}
 
 export default {
     input: 'src/index.ts',
-    output,
+    output: {
+        file: 'build/bundle.user.js',
+        format: 'iife',
+        name: 'gimloader'
+    },
     plugins: [
         json(),
         babel({ include: 'src/**/*.tsx', babelHelpers: 'bundled' }),
@@ -45,6 +24,12 @@ export default {
         resolve(),
         string({ include: ['**/*.css', '**/*.svg'] }),
         typescriptPaths(),
-        typescript()
+        typescript(),
+        metablock({
+            file: './meta.json',
+            override: {
+                version: pkg.version
+            }
+        })
     ]
 }

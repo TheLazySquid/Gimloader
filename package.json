@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -8,7 +8,6 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "fullbuild": "rollup -c -w full",
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "bin": {
@@ -46,7 +45,13 @@
     "tslib": "^2.6.2"
   },
   "dependencies": {
-    "codecake": "^0.4.2",
+    "@codemirror/commands": "^6.6.0",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.28.2",
+    "@uiw/codemirror-extensions-hyper-link": "^4.22.2",
+    "codemirror": "^6.0.1",
     "inquirer": "^9.2.22",
     "rollup": "^4.14.1",
     "yargs": "^17.7.2"
