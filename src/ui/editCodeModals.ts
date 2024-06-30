@@ -1,23 +1,40 @@
-import * as CodeCake from "codecake"
 import showModal from "./modal";
 import PluginManager from "../pluginManager/pluginManager"
 import Plugin from "../pluginManager/plugin";
 import { parsePluginHeader } from "../util";
 import { LibManagerType } from "$src/lib/libManager";
 import Lib from "$src/lib/lib";
+import { javascript } from "@codemirror/lang-javascript";
+import { basicSetup } from "codemirror";
+import { EditorView, keymap } from "@codemirror/view";
+import { indentWithTab } from "@codemirror/commands";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { EditorState } from "@codemirror/state";
+import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
 
-export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
+function createEditorDiv(defaultText: string) {
     let editorDiv = document.createElement("div");
     editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
 
-    let editor = CodeCake.create(editorDiv, {
-        language: "javascript",
-        highlight: CodeCake.highlight,
-        className: "codecake-dark codeCakeEditor",
-        lineNumbers: true
+    let editor = new EditorView({
+        state: EditorState.create({
+            doc: defaultText,
+            extensions: [
+                basicSetup,
+                oneDark,
+                hyperLink,
+                keymap.of([indentWithTab]),
+                javascript()
+            ]
+        }),
+        parent: editorDiv
     })
 
-    editor.setCode(plugin.script);
+    return { editorDiv, editor };
+}
+
+export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
+    let { editorDiv, editor } = createEditorDiv(plugin.script);
 
     showModal(editorDiv, {
         id: "core-CodeEditor",
@@ -31,7 +48,7 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
                 text: "save",
                 style: "primary",
                 onClick() {
-                    let code = editor.getCode();
+                    let code = editor.state.doc.toString();
                     let headers = parsePluginHeader(code);
 
                     let canceled = false;
@@ -61,23 +78,13 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
 }
 
 export function createPlugin(pluginManager: PluginManager) {
-    let editorDiv = document.createElement("div");
-    editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
-
-    let editor = CodeCake.create(editorDiv, {
-        language: "javascript",
-        highlight: CodeCake.highlight,
-        className: "codecake-dark codeCakeEditor",
-        lineNumbers: true
-    })
-
     const defaultCode = `/**
 * @name New Plugin
 * @description A new plugin
 * @author Your Name Here
 */`
 
-    editor.setCode(defaultCode);
+    let { editorDiv, editor } = createEditorDiv(defaultCode);
 
     showModal(editorDiv, {
         id: "core-CodeEditor",
@@ -91,7 +98,7 @@ export function createPlugin(pluginManager: PluginManager) {
                 text: "save",
                 style: "primary",
                 onClick() {
-                    let code = editor.getCode();
+                    let code = editor.state.doc.toString();
                     pluginManager.createPlugin(code);
                 }
             }
@@ -99,17 +106,7 @@ export function createPlugin(pluginManager: PluginManager) {
     });
 }
 export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
-    let editorDiv = document.createElement("div");
-    editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
-
-    let editor = CodeCake.create(editorDiv, {
-        language: "javascript",
-        highlight: CodeCake.highlight,
-        className: "codecake-dark codeCakeEditor",
-        lineNumbers: true
-    })
-
-    editor.setCode(lib.script);
+    let { editorDiv, editor } = createEditorDiv(lib.script);
 
     showModal(editorDiv, {
         id: "core-CodeEditor",
@@ -123,7 +120,7 @@ export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
                 text: "save",
                 style: "primary",
                 onClick() {
-                    let code = editor.getCode();
+                    let code = editor.state.doc.toString();
                     libManager.editLib(lib, code);
                 }
             }
@@ -132,16 +129,6 @@ export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
 }
 
 export function createLib(libManager: LibManagerType) {
-    let editorDiv = document.createElement("div");
-    editorDiv.addEventListener("keydown", (e) => e.stopPropagation());
-
-    let editor = CodeCake.create(editorDiv, {
-        language: "javascript",
-        highlight: CodeCake.highlight,
-        className: "codecake-dark codeCakeEditor",
-        lineNumbers: true
-    })
-
     const defaultCode = `/**
 * @name New Library
 * @description A new library
@@ -149,7 +136,7 @@ export function createLib(libManager: LibManagerType) {
 * @isLibrary true
 */`
 
-    editor.setCode(defaultCode);
+    let { editorDiv, editor } = createEditorDiv(defaultCode);
 
     showModal(editorDiv, {
         id: "core-CodeEditor",
@@ -163,7 +150,7 @@ export function createLib(libManager: LibManagerType) {
                 text: "save",
                 style: "primary",
                 onClick() {
-                    let code = editor.getCode();
+                    let code = editor.state.doc.toString();
                     libManager.createLib(code);
                 }
             }

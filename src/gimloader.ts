@@ -4,7 +4,6 @@ import type * as React from 'react';
 import type * as ReactDOM from 'react-dom/client';
 
 import styles from './css/styles.scss';
-import codeCakeStyles from 'codecake/codecake.css';
 import { log, onGimkit } from './util';
 import { addPluginButtons } from './ui/addPluginButtons';
 import Parcel from './parcel/parcel';
@@ -60,7 +59,6 @@ export class Gimloader extends EventTarget {
 
     addStyleSheets() {
         this.UI.addStyles(null, styles);
-        this.UI.addStyles(null, codeCakeStyles);
     }
 
     exposeValues() {
