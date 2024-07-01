@@ -125,27 +125,35 @@ export default {
     description: '${answers.description}',
     author: '${answers.author}',
     version: pkg.version,
-    plugins: [
-`;
+    plugins: [`;
+
+    let pluginStrs = [];
 
     if(answers.plugins.includes('Sass')) {
-        config += `        sass(),\n`;
+        pluginStrs.push(`        sass()`);
     }
     if(answers.plugins.includes('String')) {
-        config += `        string({ include: ['**/*.css', '**/*.svg'] }),\n`;
+        pluginStrs.push(`        string({ include: ['**/*.css', '**/*.svg'] })`);
     }
     if(answers.plugins.includes('Babel')) {
-        config += `        babel({ include: ['src/**/*.jsx', 'src/**/*.tsx'], babelHelpers: 'bundled' }),\n`;
-    }
-    if(answers.plugins.includes('Babel')) {
-        config += `        typescript({
+        pluginStrs.push(`        babel({ include: ['src/**/*.jsx', 'src/**/*.tsx'], babelHelpers: 'bundled' })`);
+        if(answers.plugins.includes('Typescript')) {
+            pluginStrs.push(`        typescript({
             jsx: 'react',
             target: 'esnext'
-        }),\n`;
+        })`);
+        }
+    } else if(answers.plugins.includes('Typescript')) {
+        pluginStrs.push(`        typescript({
+            target: 'esnext'
+        })`);
     }
 
-    config += `    ]
-}`;
+    if(pluginStrs.length > 0) {
+        config += "\n" + pluginStrs.join(',\n') + "\n   ]\n};";
+    } else {
+        config += ']\n};';
+    }
 
     fs.writeFileSync(configPath, config);
     ui.log.write('Creating main file...');
