@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -11,6 +11,15 @@ const respawnHeight = 621.093;
 const floorHeight = 638.37;
 let lastCheckpointReached = 0;
 let canRespawn = false;
+
+GL.addEventListener("loadEnd", () => {
+    GL.net.colyseus.room.state.session.gameSession.listen("phase", (phase) => {
+        if(phase === "results") {
+            canRespawn = false;
+            lastCheckpointReached = 0;
+        }
+    })
+})
 
 export function cancelRespawn() {
     canRespawn = false;
@@ -56,6 +65,7 @@ const enable = () => {
     let physics = GL.stores.phaser.scene.worldManager.physics;
     let showHitLaser = true;
     GL.patcher.after("DLDUtils", physics, "physicsStep", () => {
+        if(GL.net.colyseus.room.state.session.gameSession.phase === "results") return;
         if(!showHitLaser || !showLaserWarning) return;
         let body = GL.stores.phaser.mainCharacter.physics.getBody();
         let translation = body.rigidBody.translation();
