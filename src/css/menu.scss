@@ -96,6 +96,10 @@
         background-color: rgb(238, 238, 238);
     }
 
+    td, table {
+        border: 1px solid black;
+    }
+
     .url {
         max-width: 300px;
         text-wrap: wrap;

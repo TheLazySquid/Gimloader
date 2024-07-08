@@ -14,7 +14,8 @@ export function parsePluginHeader(code: string) {
         reloadRequired: "false",
         isLibrary: "false",
         downloadUrl: null,
-        needsLib: []
+        needsLib: [],
+        optionalLib: []
     };
 
     return parseHeader(code, basePluginHeaders);

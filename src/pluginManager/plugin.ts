@@ -30,6 +30,9 @@ export default class Plugin {
     async enable(initial: boolean = false) {
         return new Promise<void>(async (res, rej) => {
             let libObjs = [];
+            let optionalLibObjs = [];
+
+            // load required libs
             for(let lib of this.headers.needsLib) {
                 let libName = lib.split('|')[0].trim();
                 let libObj = this.gimloader.lib.getLib(libName);
@@ -44,7 +47,27 @@ export default class Plugin {
                 libObjs.push(libObj);
             }
 
-            let results = await Promise.allSettled(libObjs.map(lib => lib.enable()));
+            // load optional libs
+            for(let lib of this.headers.optionalLib) {
+                let libName = lib.split('|')[0].trim();
+                let libObj = this.gimloader.lib.getLib(libName);
+
+                if(!libObj) continue;
+                optionalLibObjs.push(libObj);
+            }
+
+            let [results, optionalResults] = await Promise.all([
+                Promise.allSettled(libObjs.map(lib => lib.enable())),
+                Promise.allSettled(optionalLibObjs.map(lib => lib.enable()))
+            ])
+
+            // log errors with optional libs, but don't fail the plugin
+            for(let result of optionalResults) {
+                if(result.status === 'rejected') {
+                    log(`Failed to enable optional library for plugin ${this.headers.name}:`, result.reason);
+                }
+            }
+
             let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
             if(failed.length > 0) {
                 let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
