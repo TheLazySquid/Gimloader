@@ -35,6 +35,10 @@ function addMeta(config) {
         }
     }
 
+    if(config.isLibrary) {
+        meta += '\n * @isLibrary true';
+    }
+
     meta += '\n */\n';
 
     return {
