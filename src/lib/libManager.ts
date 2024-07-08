@@ -57,7 +57,11 @@ const libManagerMethods = {
         headers = headers ?? parseLibHeader(code);
 
         if(lib.headers.name === headers.name) {
-            this.createLib(code, headers, true);
+            let newLib = this.createLib(code, headers, true);
+            if(newLib) {
+                newLib.usedBy = lib.usedBy;
+                if(newLib.usedBy.size > 0) newLib.enable();
+            }
         } else {
             let wentThrough = this.createLib(code, headers);
             if(wentThrough) {

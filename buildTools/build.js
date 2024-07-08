@@ -29,6 +29,12 @@ function addMeta(config) {
         }
     }
 
+    if(config.optionalLibs) {
+        for(let lib of config.optionalLibs) {
+            meta += `\n * @optionalLib ${lib}`;
+        }
+    }
+
     meta += '\n */\n';
 
     return {
@@ -70,17 +76,14 @@ export default async function build() {
         }
     }
 
-    if(config.default.plugins) {
-        if(!Array.isArray(config.default.plugins)) {
-            console.error('GL.config.js plugins field is not an array!');
-            return;
-        }
-    }
+    let optionalArrays = ['libs', 'optionalLibs', 'plugins'];
 
-    if(config.default.libs) {
-        if(!Array.isArray(config.default.libs)) {
-            console.error('GL.config.js libs field is not an array!');
-            return;
+    for(let arr of optionalArrays) {
+        if(config.default[arr]) {
+            if(!Array.isArray(config.default[arr])) {
+                console.error(`GL.config.js ${arr} field is not an array!`);
+                return;
+            }
         }
     }
 
