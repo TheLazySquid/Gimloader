@@ -2,7 +2,7 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.1.3
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -53,6 +53,7 @@ class Recorder {
     getPhysicsInput;
     startPos = { x: 0, y: 0 };
     startState = "";
+    platformerPhysics = "";
     frames = [];
     recording = false;
     playing = false;
@@ -85,6 +86,7 @@ class Recorder {
         this.recording = true;
         this.startPos = this.rb.translation();
         this.startState = JSON.stringify(this.physics.state);
+        this.platformerPhysics = JSON.stringify(GL.platformerPhysics);
         this.frames = [];
         GL.notification.open({ message: "Started Recording" });
         this.inputManager.getPhysicsInput = this.getPhysicsInput;
@@ -105,6 +107,7 @@ class Recorder {
         let json = {
             startPos: this.startPos,
             startState: this.startState,
+            platformerPhysics: this.platformerPhysics,
             frames: this.frames
         };
         let blob = new Blob([JSON.stringify(json)], { type: "application/json" });
@@ -117,8 +120,10 @@ class Recorder {
     }
     async playback(data) {
         this.playing = true;
+        this.platformerPhysics = JSON.stringify(GL.platformerPhysics);
         this.rb.setTranslation(data.startPos, true);
         this.physics.state = JSON.parse(data.startState);
+        Object.assign(GL.platformerPhysics, JSON.parse(data.platformerPhysics));
         this.physicsManager.physicsStep = (dt) => {
             GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
         };
@@ -139,6 +144,7 @@ class Recorder {
     }
     stopPlayback() {
         this.playing = false;
+        Object.assign(GL.platformerPhysics, JSON.parse(this.platformerPhysics));
         stopUpdatingLasers();
         this.physicsManager.physicsStep = this.nativeStep;
         this.inputManager.getPhysicsInput = this.getPhysicsInput;

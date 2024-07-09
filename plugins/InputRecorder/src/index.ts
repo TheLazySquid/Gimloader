@@ -3,7 +3,6 @@
 // @ts-ignore
 import Recorder from './recorder';
 
-
 let recorder: Recorder;
 let ignoreServer = false;
 

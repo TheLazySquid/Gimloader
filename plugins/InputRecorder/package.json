@@ -1,7 +1,7 @@
 {
   "name": "inputrecorder",
-  "version": "0.1.2",
-  "description": "A TAS tool for Gimkit platformer modes",
+  "version": "0.1.3",
+  "description": "A plugin that allows you to record and play back movements in Gimkit Don't Look Down",
   "main": "build/InputRecorder.js",
   "type": "module",
   "scripts": {
