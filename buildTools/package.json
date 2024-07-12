@@ -1,0 +1,36 @@
+{
+  "name": "@gimloader/build",
+  "version": "0.1.0",
+  "description": "A package to help build complex plugins for Gimloader",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "bin": {
+    "gimloader": "dist/cli.js",
+    "gl": "dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/TheLazySquid/Gimloader"
+  },
+  "keywords": [
+    "Gimloader"
+  ],
+  "author": "TheLazySquid",
+  "license": "MIT",
+  "types": "./dist/cli.d.ts",
+  "dependencies": {
+    "@inquirer/prompts": "^5.1.2",
+    "chokidar": "^3.6.0",
+    "express": "^4.19.2",
+    "rollup": "^4.18.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.10",
+    "@types/yargs": "^17.0.32",
+    "typescript": "^5.5.3"
+  }
+}

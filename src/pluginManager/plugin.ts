@@ -8,23 +8,13 @@ export default class Plugin {
     enabled: boolean;
     headers: Record<string, any>;
     return: any;
-    runPlugin: boolean;
 
-    constructor(gimloader: Gimloader, script: string, enabled = true, initial = false, runPlugin = true) {
+    constructor(gimloader: Gimloader, script: string, enabled = true) {
         this.gimloader = gimloader;
         this.script = script;
         this.enabled = enabled;
-        this.runPlugin = runPlugin;
     
         this.headers = parsePluginHeader(script);
-
-        // we are going to manually call enable on the first load
-        if(enabled && !initial) {
-            this.enable(initial)
-                .catch((e: Error) => {
-                    showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
-                })
-        }
     }
 
     async enable(initial: boolean = false) {
@@ -77,7 +67,7 @@ export default class Plugin {
                 return;
             }
     
-            if(!this.runPlugin) return;
+            if(!this.gimloader.pluginManager.runPlugins) return;
     
             // create a blob from the script and import it
             let blob = new Blob([this.script], { type: 'application/javascript' });
@@ -127,7 +117,7 @@ export default class Plugin {
     disable() {
         this.enabled = false;
         this.gimloader.pluginManager.updatePlugins();
-        if(!this.runPlugin) return;
+        if(!this.gimloader.pluginManager.runPlugins) return;
 
         if(this.return) {
             try {

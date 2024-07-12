@@ -1,6 +1,6 @@
 import wrench from '$assets/wrench.svg';
-import update from '$assets/update.svg';
 import solidBook from '$assets/solid-book.svg';
+import cogOutline from '$assets/cog-outline.svg';
 import LibManagerUI from "./LibManager";
 import PluginManagerUI from "./PluginManager";
 import UpdateScreen from './UpdateScreen';
@@ -11,7 +11,7 @@ export default function MenuUI() {
     const tabs = [
         ["Plugins", wrench],
         ["Libraries", solidBook],
-        ["Info / Updates", update]
+        ["Settings / Updates", cogOutline]
     ];
     const [tab, setTab] = React.useState(0);
 

@@ -9,7 +9,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.7.4
+// @version     0.8.0
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -22,9 +22,9 @@
 (function () {
   'use strict';
 
-  var version = "0.7.5";
+  var version = "0.8.0";
 
-  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-updateList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-updateList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-updateList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-updateList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n:is(.gl-libraryInfo, .gl-updateList) .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo td, .gl-libraryInfo table {\n  border: 1px solid black;\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
+  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-infoList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-infoList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-infoList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-infoList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n.gl-infoList input[type=checkbox] {\n  width: 20px;\n  height: 20px;\n}\n\n:is(.gl-libraryInfo, .gl-infoList) .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n:is(.gl-libraryInfo, .gl-infoList) .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo td, .gl-libraryInfo table {\n  border: 1px solid black;\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
 
   // gotta have pretty console.logs
   function log(...args) {
@@ -190,9 +190,11 @@
       return closeModal;
   }
 
-  var update = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z\" /></svg>";
-
   var solidBook = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0.88em\" height=\"1em\" viewBox=\"0 0 448 512\"><path fill=\"currentColor\" d=\"M96 0C43 0 0 43 0 96v320c0 53 43 96 96 96h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-64c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32h-32zm0 384h256v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32m32-240c0-8.8 7.2-16 16-16h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16m16 48h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16\"/></svg>";
+
+  var cogOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z\" /></svg>";
+
+  var update = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z\" /></svg>";
 
   var importSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z\" /></svg>";
 
@@ -27646,8 +27648,6 @@
 
   var closeThick = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z\" /></svg>";
 
-  var cogOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z\" /></svg>";
-
   let reactListenerSet = false;
   let queuedMessages = [];
   function showErrorMessage(msg, title = "Error") {
@@ -27856,6 +27856,17 @@
                   : null)));
   }
 
+  function SettingsSection() {
+      const React = GL.React;
+      const [pollerEnabled, setPollerEnabled] = React.useState(GL.poller.enabled);
+      return (React.createElement("div", null,
+          React.createElement("input", { type: "checkbox", checked: pollerEnabled, onChange: (e) => {
+                  GL.poller.setEnabled(e.target.checked);
+                  setPollerEnabled(e.target.checked);
+              } }),
+          "Poll for plugins/libraries being served locally"));
+  }
+
   function UpdateScreen() {
       const React = GL.React;
       let [plugins, setPlugins] = React.useState(GL.pluginManager.plugins);
@@ -27926,7 +27937,7 @@
           }
           setShowingCompleted(false);
       }
-      return (React.createElement("div", { className: "gl-updateList" },
+      return (React.createElement("div", { className: "gl-infoList" },
           React.createElement("div", { className: "checkAll" },
               React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => checkAll() }),
               "Check updates for all"),
@@ -27945,8 +27956,7 @@
                               .then(() => setPlugins([...plugins]));
                       } }),
                   plugin.headers.name,
-                  " v",
-                  plugin.headers.version));
+                  plugin.headers.version ? ` v${plugin.headers.version}` : ''));
           }),
           React.createElement("h1", null, "Libraries"),
           Object.keys(libs).length === 0 && React.createElement("div", null, "No plugins loaded"),
@@ -27957,11 +27967,13 @@
                               .then(() => setLibs(Object.values(GL.lib.libs)));
                       } }),
                   lib.headers.name,
-                  " v",
-                  lib.headers.version));
+                  lib.headers.version ? ` v${lib.headers.version}` : ''));
           }),
           React.createElement("hr", null),
-          React.createElement("div", null, navigator.userAgent)));
+          React.createElement("div", null, navigator.userAgent),
+          React.createElement("h1", null, "Dev Settings"),
+          React.createElement("hr", null),
+          React.createElement(SettingsSection, null)));
   }
 
   function MenuUI() {
@@ -27969,7 +27981,7 @@
       const tabs = [
           ["Plugins", wrench],
           ["Libraries", solidBook],
-          ["Info / Updates", update]
+          ["Settings / Updates", cogOutline]
       ];
       const [tab, setTab] = React.useState(0);
       return (React.createElement("div", { className: "gl-menu" },
@@ -28830,20 +28842,11 @@
       enabled;
       headers;
       return;
-      runPlugin;
-      constructor(gimloader, script, enabled = true, initial = false, runPlugin = true) {
+      constructor(gimloader, script, enabled = true) {
           this.gimloader = gimloader;
           this.script = script;
           this.enabled = enabled;
-          this.runPlugin = runPlugin;
           this.headers = parsePluginHeader(script);
-          // we are going to manually call enable on the first load
-          if (enabled && !initial) {
-              this.enable(initial)
-                  .catch((e) => {
-                  showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
-              });
-          }
       }
       async enable(initial = false) {
           return new Promise(async (res, rej) => {
@@ -28887,7 +28890,7 @@
                   this.gimloader.pluginManager.updatePlugins();
                   return;
               }
-              if (!this.runPlugin)
+              if (!this.gimloader.pluginManager.runPlugins)
                   return;
               // create a blob from the script and import it
               let blob = new Blob([this.script], { type: 'application/javascript' });
@@ -28929,7 +28932,7 @@
       disable() {
           this.enabled = false;
           this.gimloader.pluginManager.updatePlugins();
-          if (!this.runPlugin)
+          if (!this.gimloader.pluginManager.runPlugins)
               return;
           if (this.return) {
               try {
@@ -28974,6 +28977,12 @@
       constructor(gimloader, runPlugins = true) {
           this.gimloader = gimloader;
           this.runPlugins = runPlugins;
+          // load plugins from storage
+          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
+          for (let plugin of pluginScripts) {
+              let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled);
+              this.plugins.push(pluginObj);
+          }
       }
       updatePlugins() {
           if (this.updatePluginTimeout)
@@ -28984,11 +28993,6 @@
           });
       }
       async init() {
-          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
-          for (let plugin of pluginScripts) {
-              let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled, true, this.runPlugins);
-              this.plugins.push(pluginObj);
-          }
           let results = await Promise.allSettled(this.plugins.map(p => p.enabled && p.enable(true)));
           let fails = results.filter(r => r.status === 'rejected');
           if (fails.length > 0) {
@@ -29002,7 +29006,7 @@
               if (!remote)
                   return;
               let newPluginInfos = JSON.parse(newVal);
-              let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled, true, this.runPlugins));
+              let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled));
               // check for scripts that were added
               for (let newPlugin of newPlugins) {
                   if (!this.getPlugin(newPlugin.headers.name)) {
@@ -29070,7 +29074,11 @@
                   return;
               this.deletePlugin(existing);
           }
-          let plugin = new Plugin(this.gimloader, script, false, false, this.runPlugins);
+          let plugin = new Plugin(this.gimloader, script, false);
+          plugin.enable()
+              .catch((e) => {
+              showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
+          });
           this.plugins.push(plugin);
           this.save();
           this.updatePlugins();
@@ -29250,6 +29258,9 @@
               if (!conf)
                   return;
           }
+          if (existing) {
+              existing.disable();
+          }
           let lib = new Lib(script, headers);
           this.libs[lib.headers.name] = lib;
           this.save();
@@ -29329,6 +29340,71 @@
       return lib;
   }
 
+  class Poller {
+      enabled = GM_getValue("pollerEnabled", true);
+      uid = Math.random().toString(36).substring(2);
+      constructor() {
+          if (this.enabled)
+              this.sendRequest();
+      }
+      setEnabled(enabled) {
+          this.enabled = enabled;
+          GM_setValue("pollerEnabled", enabled);
+          if (enabled)
+              this.sendRequest();
+      }
+      sendRequest() {
+          if (!this.enabled)
+              return;
+          GM.xmlHttpRequest({ url: "http://localhost:5822/getUpdate", headers: { "uid": this.uid } })
+              .catch(() => {
+              // retry in 5 seconds
+              setTimeout(() => {
+                  this.sendRequest();
+              }, 5000);
+          })
+              .then((res) => {
+              if (!this.enabled)
+                  return;
+              if (!res || res.status !== 200)
+                  return;
+              // determine whether the code is for a library
+              let isLibrary = false;
+              let headers = res.responseHeaders.replaceAll('\r\n', '\n').split('\n');
+              for (let header of headers) {
+                  let [key, value] = header.split(': ');
+                  if (key === 'is-library') {
+                      isLibrary = value === 'true';
+                      break;
+                  }
+              }
+              this.sendRequest();
+              // create/edit the library/plugin
+              if (isLibrary) {
+                  let headers = parseLibHeader(res.responseText);
+                  let existing = GL.lib.getLib(headers.name);
+                  if (existing?.script === res.responseText)
+                      return;
+                  GL.lib.createLib(res.responseText, headers, true);
+                  GL.notification?.open({ message: `Hot reloaded library ${headers.name}` });
+              }
+              else {
+                  let headers = parsePluginHeader(res.responseText);
+                  let plugin = GL.pluginManager.getPlugin(headers.name);
+                  if (plugin?.script === res.responseText)
+                      return;
+                  if (plugin) {
+                      plugin.edit(res.responseText, headers);
+                  }
+                  else {
+                      GL.pluginManager.createPlugin(res.responseText);
+                  }
+                  GL.notification?.open({ message: `Hot reloaded plugin ${headers.name}` });
+              }
+          });
+      }
+  }
+
   class Gimloader extends EventTarget {
       version = version;
       React;
@@ -29341,6 +29417,7 @@
       pluginManager = new PluginManager(this, onGimkit);
       patcher = new Patcher();
       parcel = new Parcel(this);
+      poller = new Poller();
       net = new Net(this);
       hotkeys = new HotkeyManager();
       contextMenu = new ContextMenu(this);

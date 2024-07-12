@@ -15,6 +15,13 @@ export default class PluginManager {
     constructor(gimloader: Gimloader, runPlugins: boolean = true) {
         this.gimloader = gimloader;
         this.runPlugins = runPlugins;
+
+        // load plugins from storage
+        let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
+        for(let plugin of pluginScripts) {
+            let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled);
+            this.plugins.push(pluginObj);
+        }
     }
 
     updatePlugins() {
@@ -26,14 +33,7 @@ export default class PluginManager {
         });
     }
 
-    async init() {
-        let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
-
-        for(let plugin of pluginScripts) {
-            let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled, true, this.runPlugins);
-            this.plugins.push(pluginObj);
-        }
-    
+    async init() {    
         let results = await Promise.allSettled(this.plugins.map(p => p.enabled && p.enable(true)));
         let fails = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
 
@@ -50,7 +50,7 @@ export default class PluginManager {
         GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
             if(!remote) return;
             let newPluginInfos: IPluginInfo[] = JSON.parse(newVal);
-            let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled, true, this.runPlugins));
+            let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled));
 
             // check for scripts that were added
             for(let newPlugin of newPlugins) {
@@ -128,7 +128,11 @@ export default class PluginManager {
             this.deletePlugin(existing);
         }
 
-        let plugin = new Plugin(this.gimloader, script, false, false, this.runPlugins);
+        let plugin = new Plugin(this.gimloader, script, false);
+        plugin.enable()
+            .catch((e: Error) => {
+                showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
+            });
         this.plugins.push(plugin);
         this.save();
         this.updatePlugins();

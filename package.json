@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.7.5",
+  "version": "0.8.0",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -10,10 +10,10 @@
     "watch": "rollup -c -w",
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
-  "bin": {
-    "gimloader": "./buildTools/cli.js",
-    "gl": "./buildTools/cli.js"
-  },
+  "files": [
+    "types",
+    "gimloader.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TheLazySquid/GimLoader.git"
@@ -51,9 +51,6 @@
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.28.2",
     "@uiw/codemirror-extensions-hyper-link": "^4.22.2",
-    "codemirror": "^6.0.1",
-    "inquirer": "^9.2.22",
-    "rollup": "^4.14.1",
-    "yargs": "^17.7.2"
+    "codemirror": "^6.0.1"
   }
 }

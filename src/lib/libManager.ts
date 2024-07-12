@@ -38,6 +38,10 @@ const libManagerMethods = {
             if(!conf) return;
         }
 
+        if(existing) {
+            existing.disable();
+        }
+
         let lib = new Lib(script, headers);
         this.libs[lib.headers.name] = lib;
 

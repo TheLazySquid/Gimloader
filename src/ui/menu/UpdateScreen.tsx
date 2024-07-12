@@ -2,6 +2,7 @@ import update from "$assets/update.svg";
 import { checkLibUpdate, checkPluginUpdate, checkScriptUpdate, compareVersions, scriptUrl } from "$src/net/checkUpdates";
 import { parseLibHeader, parsePluginHeader } from "$src/util";
 import showErrorMessage from "../showErrorMessage";
+import SettingsSection from "./SettingsSection";
 
 export default function UpdateScreen() {
     const React = GL.React;
@@ -87,7 +88,7 @@ export default function UpdateScreen() {
         setShowingCompleted(false);
     }
     
-    return (<div className="gl-updateList">
+    return (<div className="gl-infoList">
         <div className="checkAll">
             <div dangerouslySetInnerHTML={{ __html: update }}
             className="updateBtn" onClick={() => checkAll()}></div>
@@ -110,7 +111,7 @@ export default function UpdateScreen() {
                     checkPluginUpdate(plugin)
                         .then(() => setPlugins([...plugins]))
                 }}></div>}
-                {plugin.headers.name} v{plugin.headers.version}
+                {plugin.headers.name}{plugin.headers.version ? ` v${plugin.headers.version}` : ''}
             </div>)
         })}
         <h1>Libraries</h1>
@@ -122,10 +123,13 @@ export default function UpdateScreen() {
                     checkLibUpdate(lib)
                         .then(() => setLibs(Object.values(GL.lib.libs)))
                 }}></div>}
-                {lib.headers.name} v{lib.headers.version}
+                {lib.headers.name}{lib.headers.version ? ` v${lib.headers.version}` : ''}
             </div>)
         })}
         <hr />
         <div>{navigator.userAgent}</div>
+        <h1>Dev Settings</h1>
+        <hr />
+        <SettingsSection />
     </div>)
 }
