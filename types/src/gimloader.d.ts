@@ -9,6 +9,7 @@ import Patcher from './patcher/patcher';
 import ContextMenu from './contextMenu/contextMenu';
 import PluginManager from './pluginManager/pluginManager';
 import Storage from './storage/storage';
+import Poller from './net/poller';
 export declare class Gimloader extends EventTarget {
     version: string;
     React: typeof React;
@@ -21,6 +22,7 @@ export declare class Gimloader extends EventTarget {
     pluginManager: PluginManager;
     patcher: Patcher;
     parcel: Parcel;
+    poller: Poller;
     net: Net;
     hotkeys: HotkeyManager;
     contextMenu: ContextMenu;

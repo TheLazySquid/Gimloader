@@ -51,7 +51,7 @@
     }
 }
 
-.gl-updateList {
+.gl-infoList {
     h1 {
         margin: 0;
         padding: 0;
@@ -73,9 +73,13 @@
         font-size: large;
     }
 
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
 }
 
-:is(.gl-libraryInfo, .gl-updateList) .updateBtn {
+:is(.gl-libraryInfo, .gl-infoList) .updateBtn {
     cursor: pointer;
     transition: transform 0.1s ease;
     width: 28px;

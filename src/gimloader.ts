@@ -17,6 +17,7 @@ import ContextMenu from './contextMenu/contextMenu';
 import PluginManager from './pluginManager/pluginManager';
 import Storage from './storage/storage';
 import makeLibManager from './lib/libManager';
+import Poller from './net/poller';
 
 export class Gimloader extends EventTarget {
     version: string = version;
@@ -33,6 +34,7 @@ export class Gimloader extends EventTarget {
     pluginManager: PluginManager = new PluginManager(this, onGimkit);
     patcher: Patcher = new Patcher();
     parcel: Parcel = new Parcel(this);
+    poller: Poller = new Poller();
     net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
     contextMenu: ContextMenu = new ContextMenu(this);
