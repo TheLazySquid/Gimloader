@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.1
+ * @version 0.2.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -162,15 +162,35 @@ const enable = () => {
     physics.bodies.activeBodies.disableBody = () => {};
 }
 
-GL.addEventListener("loadEnd", enable);
+// obviously not perfect, but I can't think of a good way to check;
+function isDLD() {
+    let tileManager = GL.stores.phaser.scene.tileManager;
+    let layer = tileManager.layerManager.layers.get("terrain-3");
+
+    // confirm that this is DLD
+    return layer.tiles.size === 1955;
+}
+
+GL.addEventListener("loadEnd", () => {
+    if(!isDLD()) return;
+
+    enable();
+});
 
 GL.parcel.interceptRequire("DLDUtils", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {  
     // prevent colyseus from complaining that nothing is registered
     GL.patcher.instead("DLDUtils", exports, "default", (_, args) => {
         args[0].onMessage("PHYSICS_STATE", (packet) => {
-            // teleports are allowed
-            if(!packet.teleport) return;
-            moveCharToPos(packet.x / 100, packet.y / 100);
+            if(isDLD()) return;
+            
+            let mc = GL.stores.phaser.mainCharacter;
+            mc?.physics.setServerPosition({
+                packet: packet.packetId,
+                x: packet.x,
+                y: packet.y,
+                jsonState: JSON.parse(packet.physicsState || "{}"),
+                teleport: packet.teleport
+            })
         })
     })
 })
