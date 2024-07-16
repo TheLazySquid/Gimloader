@@ -1,8 +1,8 @@
 # Official Plugins
 
-## DisplayCoords [code](./DisplayCoords.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DisplayCoords.js)
+## InfoLines [code](./InfoLines.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js)
 
-This will display the player's coordinates at the top right corner of the screen in 2D gamemodes.
+Displays a configurable list of information in 2d gamemodes, such as coordinates, velocity and fps.
 
 ## InstantUse [code](./InstantUse.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js)
 

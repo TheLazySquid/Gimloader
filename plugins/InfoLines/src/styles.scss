@@ -1,0 +1,24 @@
+#infoLines {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 4px;
+    z-index: 99999999;
+    border-radius: 5px;
+
+    &.top { top: 4px; }
+    &.bottom { bottom: 4px; }
+    &.left { left: 4px; }
+    &.right { right: 4px; }
+}
+
+#il-settings {    
+    .setting, .position {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .setting input {
+        flex-grow: 1;
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "infolines",
+  "version": "0.1.0",
+  "description": "Displays a configurable list of info on the screen",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/preset-react": "^7.24.7",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "gimloader": "github:TheLazySquid/Gimloader",
+    "rollup-plugin-sass": "^1.13.1",
+    "rollup-plugin-string": "^3.0.0"
+  }
+}
