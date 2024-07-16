@@ -13,6 +13,7 @@ export default {
     description: 'Displays a configurable list of info on the screen',
     author: 'TheLazySquid',
     version: pkg.version,
+    downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js",
     plugins: [
         sass(),
         string({ include: ['**/*.css', '**/*.svg'] }),
