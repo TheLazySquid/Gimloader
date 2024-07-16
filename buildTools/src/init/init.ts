@@ -20,7 +20,6 @@ export default async function init() {
         message: "Plugin name",
         required: true
     });
-    name = name.toLowerCase().replace(/ /g, "-");
 
     let description = await input({
         message: "Plugin description",
@@ -61,7 +60,6 @@ export default async function init() {
             devDependencies: {}
         }, null, 2))
     }
-
     
     if(plugins.length > 0) {
         // install dependencies
