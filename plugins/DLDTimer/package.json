@@ -1,0 +1,22 @@
+{
+  "name": "dld-timer",
+  "version": "0.1.0",
+  "description": "Times DLD runs, and shows you your time for each summit",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "gimloader": "github:TheLazySquid/Gimloader",
+    "rollup-plugin-sass": "^1.13.1",
+    "rollup-plugin-string": "^3.0.0",
+    "svelte": "^4.2.18"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.24.7",
+    "@rollup/plugin-babel": "^6.0.4"
+  }
+}

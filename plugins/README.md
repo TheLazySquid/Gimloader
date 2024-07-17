@@ -39,3 +39,7 @@ This plugin lets you customize a few things about the Gimkit UI. Most importantl
 ## InputRecorder [code](./InputRecorder) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js)
 
 A modified version of the TAS tool that allows you to record and play back inputs in Don't Look Down. Hit alt+r to start/stop recording, and alt+b to play back a recording.
+
+## DLDTimer [code](./DLDTimer) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTimer/build/DLDTimer.js)
+
+Adds an autosplitter and timer to Don't Look Down, which will automatically record the time of yours summits and runs with frame-perfect accuracy.
