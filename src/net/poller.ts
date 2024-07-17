@@ -1,7 +1,7 @@
 import { parseLibHeader, parsePluginHeader } from "$src/util";
 
 export default class Poller {
-    enabled: boolean = GM_getValue("pollerEnabled", true);
+    enabled: boolean = GM_getValue("pollerEnabled", false);
     uid = Math.random().toString(36).substring(2);
 
     constructor() {
