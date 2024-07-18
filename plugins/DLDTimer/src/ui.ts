@@ -1,39 +1,26 @@
+import type Autosplitter from "./autosplitter";
 import { categories, splitNames } from "./constants";
+import type Timer from "./timer";
 import { fmtMs } from "./util";
+// @ts-ignore
+import restore from '../assets/restore.svg';
 
 export default class UI {
+    timer: Timer;
+    autosplitter: Autosplitter;
+
     element: HTMLElement;
     total: HTMLElement;
     splitRows: HTMLElement[] = [];
     splitDatas: HTMLElement[][] = [];
     attemptsEl: HTMLElement;
-    select: HTMLSelectElement;
 
-    attempts = 0;
-    category: string = "Current Patch";
-    startTime: number;
-    splitStart: number;
-    started = false;
-    currentSplit = 0;
-    now = 0;
+    constructor(timer: Timer) {
+        this.timer = timer;
+        this.autosplitter = timer.autosplitter;
+    }
     
-    splitTimes: number[] = [];
-    bestSplits: number[] = [];
-    personalBest: number[] = [];
-
     create() {
-        this.category = "Current Patch";
-        if(GL.pluginManager.isEnabled("BringBackBoosts")) {
-            if(GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false)) {
-                this.category = "Original Physics";
-            } else {
-                this.category = "Creative Platforming Patch";
-            }
-        }
-
-        this.personalBest = GL.storage.getValue("DLD Timer", `pb-${this.category}`, []);
-        this.bestSplits = GL.storage.getValue("DLD Timer", `bestSplits-${this.category}`, []);
-
         this.element = document.createElement("div");
         this.element.id = "timer";
 
@@ -41,44 +28,54 @@ export default class UI {
         this.total.classList.add("total");
         this.total.innerText = "0.00";
 
-
         let topBar = document.createElement("div");
-        topBar.classList.add("topBar");
+        topBar.classList.add("bar");
 
         // make the category selector
-        this.select = document.createElement("select");
-        topBar.appendChild(this.select);
+        let categorySelect = document.createElement("select");
+        topBar.appendChild(categorySelect);
         for(let category of categories) {
             let option = document.createElement("option");
             option.value = category;
             option.innerText = category;
-            if(category === this.category) option.selected = true;
-            this.select.appendChild(option);
+            if(category === this.timer.category) option.selected = true;
+            categorySelect.appendChild(option);
         }
-
-        this.select.addEventListener("keydown", (e) => e.preventDefault());
-
-        // update the category when the select changes
-        this.select.addEventListener("change", () => {
-            this.category = this.select.value;
-            this.attempts = GL.storage.getValue("DLD Timer", `attempts-${this.category}`, 0);
-            this.attemptsEl.innerText = String(this.attempts);
-            this.personalBest = GL.storage.getValue("DLD Timer", `pb-${this.category}`, []);
-            this.bestSplits = GL.storage.getValue("DLD Timer", `bestSplits-${this.category}`, []);
-        });
 
         // make the attempts counter
         this.attemptsEl = document.createElement("div");
         this.attemptsEl.classList.add("attempts");
-        this.attempts = GL.storage.getValue("DLD Timer", `attempts-${this.category}`, 0);
-        this.attemptsEl.innerText = String(this.attempts);
+        this.attemptsEl.innerText = String(this.timer.attempts);
         topBar.appendChild(this.attemptsEl);
 
+        // make the run type selector
+        let runTypeBar = document.createElement("div");
+        runTypeBar.classList.add("bar");
+
+        let runTypeSelect = document.createElement("select");
+        runTypeSelect.innerHTML = `<option value="Full Game">Full Game</option>`
+        for(let i = 0; i < splitNames.length; i++) {
+            let option = document.createElement("option");
+            option.value = String(i);
+            option.innerText = splitNames[i];
+            if(this.autosplitter.mode === "Summit" && this.autosplitter.ilsummit === i) option.selected = true;
+            runTypeSelect.appendChild(option);
+        }
+        runTypeBar.appendChild(runTypeSelect);
+
+        let preboostSelect = document.createElement("select");
+        preboostSelect.innerHTML = `
+        <option value="false">No Preboosts</option>
+        <option value="true">Preboosts</option>`
+        preboostSelect.value = String(this.autosplitter.ilPreboosts);
+
+        if(this.timer.category === "Current Patch") preboostSelect.disabled = true;
+
         this.element.appendChild(topBar);
+        this.element.appendChild(runTypeBar);
 
         let table = document.createElement("table");
         this.element.appendChild(table);
-        this.element.appendChild(this.total);
 
         for(let name of splitNames) {
             let row = document.createElement("tr");
@@ -92,109 +89,114 @@ export default class UI {
             table.appendChild(row);
         }
 
+        this.element.appendChild(this.total);
         document.body.appendChild(this.element);
-    }
 
-    start() {
-        this.startTime = performance.now();
-        this.splitStart = this.startTime;
-        this.started = true;
-        this.currentSplit = 0;
+        // update the category when the select changes
+        categorySelect.addEventListener("change", () => {
+            this.timer.updateCategory(categorySelect.value);
 
-        this.splitRows[0].classList.add("active");
-
-        // replace the selector with a div
-        let div = document.createElement("div");
-        div.innerText = this.category;
-        this.select.replaceWith(div);
-
-        // increment the attempts
-        this.attempts++;
-        this.attemptsEl.innerText = String(this.attempts);
-        GL.storage.setValue("DLD Timer", `attempts-${this.category}`, this.attempts);
-    }
-
-    split() {
-        // remove the active class from the previous split
-        this.splitRows[this.currentSplit].classList.remove("active");
-
-        // add the comparison and total time
-        let els = this.splitDatas[this.currentSplit];
-        let totalMs = this.now - this.startTime;
-        els[3].innerText = fmtMs(totalMs);
-
-        let splitMs = totalMs - (this.splitTimes[this.splitTimes.length - 1] ?? 0);
-        let best = this.bestSplits[this.currentSplit];
-        let isBest = !best || splitMs < best;
-
-        if(isBest) {
-            this.bestSplits[this.currentSplit] = splitMs;
-            GL.storage.setValue("DLD Timer", `bestSplits-${this.category}`, this.bestSplits);
-        }
-
-        // add the comparison
-        let pb = this.personalBest[this.currentSplit];
-        if(pb) {
-            let diff = totalMs - pb;
-            let ahead = totalMs < pb;
-            let str: string;
-
-            if(ahead) str = `-${fmtMs(-diff)}`;
-            else str = `+${fmtMs(diff)}`;
-
-            els[2].innerText = str;
-            if(isBest) els[2].classList.add("best");
-            else if(ahead) els[2].classList.add("ahead");
-            else els[2].classList.add("behind");
-
-            if(ahead) this.total.classList.add("ahead");
-            else this.total.classList.add("behind");
-        }
-
-        this.splitTimes.push(totalMs);
-
-        this.splitStart = performance.now();
-        this.currentSplit++;
-
-        // when the run is over
-        if(this.currentSplit === splitNames.length) {
-            this.started = false;
-            this.currentSplit = splitNames.length - 1;
-            
-            let isAhead = !pb || totalMs < pb;
-            this.total.classList.add(isAhead ? "ahead" : "behind");
-
-            // update the personal best
-            if(isAhead) {
-                this.personalBest = this.splitTimes;
-                GL.storage.setValue("DLD Timer", `pb-${this.category}`, this.personalBest);
+            // there isn't a preboosts option for current patch
+            if(categorySelect.value === "Current Patch") {
+                preboostSelect.value = "false";
+                preboostSelect.disabled = true;
+            } else {
+                preboostSelect.disabled = false;
             }
+        });
 
-            return;
+        if(runTypeSelect.value !== "Full Game") {
+            table.style.display = "none";
+            runTypeBar.appendChild(preboostSelect);
         }
 
-        // add the active class to the next split
-        this.splitRows[this.currentSplit].classList.add("active");
+        runTypeSelect.addEventListener("change", () => {
+            if(runTypeSelect.value === "Full Game") {
+                table.style.display = "";
+                preboostSelect.remove();
+                this.autosplitter.setMode("Full Game");
+            } else {
+                table.style.display = "none";
+                runTypeBar.appendChild(preboostSelect);
+                this.autosplitter.setMode("Summit", parseInt(runTypeSelect.value), preboostSelect.value === "true");
+            }
+        });
+
+        preboostSelect.addEventListener("change", () => {
+            this.autosplitter.setMode("Summit", parseInt(runTypeSelect.value), preboostSelect.value === "true");
+        });
+
+        // prevent left/right from changing the category
+        categorySelect.addEventListener("keydown", (e) => e.preventDefault());
+        runTypeSelect.addEventListener("keydown", (e) => e.preventDefault());
+        preboostSelect.addEventListener("keydown", (e) => e.preventDefault());
     }
 
-    onUpdate() {
-        if(!this.started) return;
-        let now = performance.now();
-        this.now = now;
-        let totalMs = now - this.startTime;
-        let splitMs = now - this.splitStart;
-
+    update(totalMs: number, splitMs: number) {
         this.total.innerText = fmtMs(totalMs);
-        this.splitDatas[this.currentSplit][1].innerText = fmtMs(splitMs);
+        this.splitDatas[this.timer.currentSplit][1].innerText = fmtMs(splitMs);
 
-        let pb = this.personalBest[this.currentSplit];
+        let pb = this.timer.personalBest[this.timer.currentSplit];
         if(pb) {
             let amountBehind = totalMs - pb;
             if(amountBehind > 0) {
-                this.splitDatas[this.currentSplit][2].innerText = `+${fmtMs(amountBehind)}`;
-                this.splitDatas[this.currentSplit][2].classList.add("behind");
+                this.splitDatas[this.timer.currentSplit][2].innerText = `+${fmtMs(amountBehind)}`;
+                this.splitDatas[this.timer.currentSplit][2].classList.add("behind");
             }
         }
+    }
+
+    setFinalSplit(split: number, totalMs: number, diff?: number, ahead?: boolean, best?: boolean) {
+        let els = this.splitDatas[split];
+        els[3].innerText = fmtMs(totalMs);
+
+        if(diff === undefined || ahead === undefined || best === undefined) return;
+        let str: string;
+
+        if(ahead) str = `-${fmtMs(-diff)}`;
+        else str = `+${fmtMs(diff)}`;
+
+        els[2].innerText = str;
+        if(best) els[2].classList.add("best");
+        else if(ahead) els[2].classList.add("ahead");
+        else els[2].classList.add("behind");
+    }
+
+    lockInCategory() {
+        let selects = this.element.querySelectorAll("select");
+        for(let select of selects) {
+            select.disabled = true; 
+            select.title = "Cannot be altered mid-run";
+        }
+
+        let resetButton = document.createElement("button");
+        resetButton.classList.add("restart");
+        resetButton.innerHTML = restore;
+
+        resetButton.addEventListener("click", () => {
+            this.autosplitter.reset();
+        });
+
+        this.element.firstChild?.firstChild?.before(resetButton);
+    }
+    
+    setTotalAhead(ahead: boolean) {
+        this.total.classList.toggle("ahead", ahead);
+        this.total.classList.toggle("behind", !ahead);
+    }
+
+    lastActiveRow: HTMLElement | null = null;
+
+    setActiveSplit(split: number | null) {
+        if(this.lastActiveRow) this.lastActiveRow.classList.remove("active");
+        if(split === null) return;
+
+        this.splitRows[split].classList.add("active");
+        this.lastActiveRow = this.splitRows[split];
+    }
+
+    setAttempts(attempts: number) {
+        this.attemptsEl.innerText = String(attempts);
     }
 
     remove() {

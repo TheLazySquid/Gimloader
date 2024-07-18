@@ -2,7 +2,7 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.2.3
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -34,6 +34,8 @@ const summitCoords = [{
 
 const defaultState =  '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}'
 
+let stateLoadCallbacks = [];
+
 let hotkeyEquivs = [')', '!', '@', '#', '$', '%', '^'];
 let summitHotkeys = [];
 for(let i = 0; i <= 6; i++) {
@@ -52,6 +54,8 @@ const tp = (summit) => {
     
     rb.setTranslation(summitCoords[summit], true);
     physics.state = JSON.parse(defaultState);
+
+    stateLoadCallbacks.forEach(cb => cb(summit));
 }
 
 let lastPos, lastState;
@@ -77,6 +81,8 @@ const loadState = () => {
     physics.state = JSON.parse(lastState);
 
     GL.notification.open({ message: "State Loaded", duration: 0.75 })
+
+    stateLoadCallbacks.forEach(cb => cb("custom"));
 }
 
 GL.addEventListener("loadEnd", () => {    
@@ -107,11 +113,20 @@ GL.addEventListener("loadEnd", () => {
     }
 })
 
+export function onStateLoaded(callback) {
+    stateLoadCallbacks.push(callback);
+}
+
+export function offStateLoaded(callback) {
+    stateLoadCallbacks = stateLoadCallbacks.filter(cb => cb !== callback);
+}
+
 export function onStop() {
     for(let hotkey of summitHotkeys) {
         GL.hotkeys.remove(hotkey);
     }
 
+    let commandLine = GL.lib("CommandLine");
     if(commandLine) {
         commandLine.removeCommand("summit");
         commandLine.removeCommand("save");

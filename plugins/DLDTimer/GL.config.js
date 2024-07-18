@@ -12,6 +12,7 @@ export default {
     description: 'Times DLD runs, and shows you your time for each summit',
     author: 'TheLazySquid',
     version: pkg.version,
+    downloadUrl: 'https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTimer/build/DLDTimer.js',
     plugins: [
         babel({ include: ['src/**/*.jsx', 'src/**/*.tsx'], babelHelpers: 'bundled' }),
         sass(),

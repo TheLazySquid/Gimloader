@@ -5,11 +5,26 @@
     background-color: rgba(0, 0, 0, 0.85);
     color: white;
     z-index: 999999999;
+
+    .restart {
+        background-color: transparent;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        padding: 0;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
     
-    .topBar {
+    .bar {
         display: flex;
         align-items: center;
         padding: 5px 10px;
+        gap: 10px;
     }
     
     select {
@@ -18,6 +33,10 @@
     
     option {
         background-color: black;
+    }
+
+    .runType {
+        padding-left: 10px;
     }
     
     tr:nth-child(even) {
@@ -41,6 +60,7 @@
         font-size: xx-large;
         width: 100%;
         text-align: right;
+        padding-right: 10px;
     }
 
     .ahead { color: green; }

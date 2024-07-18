@@ -1,8 +1,8 @@
 import { splitNames } from "./constants";
-import type UI from "./ui";
+import type Timer from "./timer";
 import { fmtMs } from "./util";
 
-export default function Settings({ ui }: { ui: UI }) {
+export default function Settings({ ui }: { ui: Timer }) {
     const React = GL.React;
 
     const [category, setCategory] = React.useState(ui.category);
