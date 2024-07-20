@@ -2,8 +2,9 @@
 
 import { onceOrIfLoaded } from "./util";
 // @ts-ignore
+import Settings from './settings/Settings.svelte';
+// @ts-ignore
 import styles from './styles.scss';
-import Settings from './Settings';
 import Autosplitter from './autosplitter';
 
 GL.UI.addStyles("DLD Timer", styles);
@@ -26,10 +27,19 @@ export function onStop() {
 }
 
 export function openSettingsMenu() {
-    GL.UI.showModal(GL.React.createElement(Settings, { ui: autosplitter.timer }), {
+    let div = document.createElement("div");
+    new Settings({
+        target: div
+    });
+
+    GL.UI.showModal(div, {
         title: "Manage DLD Timer data",
         buttons: [{ text: "Close", style: "close" }],
         id: "DLD Timer Settings",
-        style: "min-width: min(600px, 90%)"
+        style: "min-width: min(600px, 90%)",
+        closeOnBackgroundClick: false,
+        onClosed: () => {
+            autosplitter.reset();
+        }
     });
 }

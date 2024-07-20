@@ -2,6 +2,9 @@ import typescript from '@rollup/plugin-typescript'
 import { string } from 'rollup-plugin-string';
 import babel from '@rollup/plugin-babel';
 import sass from 'rollup-plugin-sass';
+import svelte from 'rollup-plugin-svelte';
+import resolve from '@rollup/plugin-node-resolve';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
@@ -20,6 +23,18 @@ export default {
         typescript({
             jsx: 'react',
             target: 'esnext'
+        }),
+        svelte({
+            emitCss: false,
+            compilerOptions: {
+                css: 'injected'
+            },
+            preprocess: vitePreprocess()
+        }),
+        resolve({
+            browser: true,
+            exportConditions: ['svelte'],
+            extensions: ['.svelte', '.js', '.ts', '.json']
         })
    ]
 };

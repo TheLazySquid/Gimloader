@@ -17,6 +17,14 @@ export function fmtMs(ms: number) {
     return `${seconds}.${String(ms).padStart(3, '0')}`;
 }
 
+export function parseTime(time: string) {
+    let parts = time.split(":").map(parseFloat);
+    if(parts.some(isNaN)) return 6e5;
+    if(parts.length === 1) return parts[0] * 1e3;
+    if(parts.length === 2) return parts[0] * 6e4 + parts[1] * 1e3;
+    return parts[0] * 36e5 + parts[1] * 6e4 + parts[2] * 1e3;
+}
+
 export interface Area {
     x: number,
     y: number,

@@ -7,7 +7,6 @@ export default class Timer {
     ui: UI;
 
     attempts = 0;
-    category: string = "Current Patch";
     startTime: number;
     splitStart: number;
     started = false;
@@ -17,27 +16,34 @@ export default class Timer {
     splitTimes: number[] = [];
     bestSplits: number[] = [];
     personalBest: number[] = [];
+    ilPb: number | null = null;
     
     constructor(autosplitter: Autosplitter) {
         this.autosplitter = autosplitter;
         this.ui = new UI(this);
     }
 
-    init() {
-        this.category = "Current Patch";
-        if(GL.pluginManager.isEnabled("BringBackBoosts")) {
-            if(GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false)) {
-                this.category = "Original Physics";
-            } else {
-                this.category = "Creative Platforming Patch";
-            }
-        }
+    getModeId() {
+        if(this.autosplitter.mode === "Full Game") return this.autosplitter.category;
+        if(this.autosplitter.ilPreboosts) return `${this.autosplitter.category}-${this.autosplitter.ilsummit}-preboosts`;
+        return `${this.autosplitter.category}-${this.autosplitter.ilsummit}`;
+    }
 
-        this.attempts = GL.storage.getValue("DLD Timer", `attempts-${this.category}`, 0);
-        this.personalBest = GL.storage.getValue("DLD Timer", `pb-${this.category}`, []);
-        this.bestSplits = GL.storage.getValue("DLD Timer", `bestSplits-${this.category}`, []);
+    init() {
+        this.loadModeData();
 
         this.ui.create();
+    }
+
+    loadModeData() {
+        this.attempts = GL.storage.getValue("DLD Timer", `attempts-${this.getModeId()}`, 0);
+
+        if(this.autosplitter.mode == "Full Game") {
+            this.personalBest = GL.storage.getValue("DLD Timer", `pb-${this.getModeId()}`, []);
+            this.bestSplits = GL.storage.getValue("DLD Timer", `bestSplits-${this.getModeId()}`, []);
+        } else {
+            this.ilPb = GL.storage.getValue("DLD Timer", `ilpb-${this.getModeId()}`, null);
+        }
     }
 
     start(currentSplit = 0) {
@@ -53,18 +59,30 @@ export default class Timer {
         // increment the attempts
         this.attempts++;
         this.ui.setAttempts(this.attempts);
-        GL.storage.setValue("DLD Timer", `attempts-${this.category}`, this.attempts);
+        GL.storage.setValue("DLD Timer", `attempts-${this.getModeId()}`, this.attempts);
     }
 
     updateCategory(name: string) {
-        this.category = name;
-        this.attempts = GL.storage.getValue("DLD Timer", `attempts-${this.category}`, 0);
+        this.autosplitter.category = name;
+        this.loadModeData();
         this.ui.setAttempts(this.attempts);
-        this.personalBest = GL.storage.getValue("DLD Timer", `pb-${this.category}`, []);
-        this.bestSplits = GL.storage.getValue("DLD Timer", `bestSplits-${this.category}`, []);
     }
 
-    split(finishIl = false) {
+    finishIl() {
+        let ms = this.now - this.startTime;
+        
+        if(!this.ilPb || ms < this.ilPb) {
+            console.log(ms, this.ilPb);
+            this.ilPb = ms;
+            GL.storage.setValue("DLD Timer", `ilpb-${this.getModeId()}`, this.ilPb);
+
+            this.ui.setTotalAhead(true);
+        } else {
+            this.ui.setTotalAhead(false);
+        }
+    }
+
+    split() {
         // add the comparison and total time
         let totalMs = this.now - this.startTime;
 
@@ -74,12 +92,7 @@ export default class Timer {
 
         if(isBest) {
             this.bestSplits[this.currentSplit] = splitMs;
-            GL.storage.setValue("DLD Timer", `bestSplits-${this.category}`, this.bestSplits);
-        }
-
-        if(finishIl) {
-            this.ui.setTotalAhead(isBest);
-            return;
+            GL.storage.setValue("DLD Timer", `bestSplits-${this.getModeId()}`, this.bestSplits);
         }
 
         // add the comparison
@@ -109,9 +122,9 @@ export default class Timer {
             this.ui.setTotalAhead(isAhead);
 
             // update the personal best
-            if(isAhead && !finishIl) {
+            if(isAhead) {
                 this.personalBest = this.splitTimes;
-                GL.storage.setValue("DLD Timer", `pb-${this.category}`, this.personalBest);
+                GL.storage.setValue("DLD Timer", `pb-${this.getModeId()}`, this.personalBest);
             }
 
             return;

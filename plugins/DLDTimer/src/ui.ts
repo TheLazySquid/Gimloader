@@ -38,7 +38,7 @@ export default class UI {
             let option = document.createElement("option");
             option.value = category;
             option.innerText = category;
-            if(category === this.timer.category) option.selected = true;
+            if(category === this.autosplitter.category) option.selected = true;
             categorySelect.appendChild(option);
         }
 
@@ -69,7 +69,7 @@ export default class UI {
         <option value="true">Preboosts</option>`
         preboostSelect.value = String(this.autosplitter.ilPreboosts);
 
-        if(this.timer.category === "Current Patch") preboostSelect.disabled = true;
+        if(this.autosplitter.category === "Current Patch") preboostSelect.disabled = true;
 
         this.element.appendChild(topBar);
         this.element.appendChild(runTypeBar);

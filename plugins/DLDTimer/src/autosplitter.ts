@@ -8,6 +8,7 @@ export default class Autosplitter {
     mode = GL.storage.getValue("DLD Timer", "mode", "Full Game");
     ilsummit = GL.storage.getValue("DLD Timer", "ilsummit", 0);
     ilPreboosts = GL.storage.getValue("DLD Timer", "ilPreboosts", false);
+    category: string = "Current Patch";
 
     couldStartLastFrame = true;
     hasMoved = false;
@@ -27,9 +28,21 @@ export default class Autosplitter {
         }
 
         this.couldStartLastFrame = true;
+
+        this.timer.loadModeData();
+        this.timer.ui.setAttempts(this.timer.attempts);
     }
 
     init() {
+        this.category = "Current Patch";
+        if(GL.pluginManager.isEnabled("BringBackBoosts")) {
+            if(GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false)) {
+                this.category = "Original Physics";
+            } else {
+                this.category = "Creative Platforming Patch";
+            }
+        }
+
         if(document.readyState === "complete") this.timer.init();
         else document.addEventListener("DOMContentLoaded", () => this.timer.init());
 
@@ -99,7 +112,7 @@ export default class Autosplitter {
         } else if(this.ilState === "started") {
             // check if we've reached the end
             if(inArea(body, summitStartCoords[this.ilsummit + 1])) {
-                this.timer.split(true);
+                this.timer.finishIl();
                 this.ilState = "completed";
                 this.couldStartLastFrame = true;
             }
@@ -120,7 +133,7 @@ export default class Autosplitter {
             }
         } else if(this.ilState === "started") {
             if(inArea(body, summitStartCoords[this.ilsummit + 1])) {
-                this.timer.split(true);
+                this.timer.finishIl();
                 this.ilState = "completed";
             }
 
