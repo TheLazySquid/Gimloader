@@ -2,7 +2,7 @@
  * @name DLDTimer
  * @description Times DLD runs, and shows you your time for each summit
  * @author TheLazySquid
- * @version 0.2.4
+ * @version 0.2.5
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTimer/build/DLDTimer.js
  */
 function onceOrIfLoaded(callback) {
@@ -1277,7 +1277,7 @@ function instance$2($$self, $$props, $$invalidate) {
 		}
 
 		if ($$self.$$.dirty & /*preboostPb*/ 16) {
-			if (preboostPb) GL.storage.setValue("DLD Timer", `ilpb-${id}`, preboostPb);
+			if (preboostPb) GL.storage.setValue("DLD Timer", `ilpb-${id}-preboosts`, preboostPb);
 		}
 	};
 

@@ -15,7 +15,7 @@
     $: GL.storage.setValue("DLD Timer", `attempts-${id}`, noPreboostsAttempts);
     $: if(noPreboostsPb) GL.storage.setValue("DLD Timer", `ilpb-${id}`, noPreboostsPb);
     $: GL.storage.setValue("DLD Timer", `attempts-${id}-preboosts`, preboostAttempts);
-    $: if(preboostPb) GL.storage.setValue("DLD Timer", `ilpb-${id}`, preboostPb);
+    $: if(preboostPb) GL.storage.setValue("DLD Timer", `ilpb-${id}-preboosts`, preboostPb);
 </script>
 
 <h2>No Preboosts</h2>
