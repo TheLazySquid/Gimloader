@@ -13,8 +13,12 @@ export default class Autosplitter {
     couldStartLastFrame = true;
     hasMoved = false;
     loadedCorrectSummit = false;
+    
+    autostartILs = GL.storage.getValue("DLD Timer", "autostartILs", false);
 
     setMode(mode: string, ilsummit?: number, ilPreboosts?: boolean) {
+        if(this.category === "Current Patch") ilPreboosts = false;
+
         // set and save values
         this.mode = mode;
         GL.storage.setValue("DLD Timer", "mode", mode);
@@ -70,6 +74,16 @@ export default class Autosplitter {
     }
 
     onStateLoaded(summit: number | string) {
+        console.log(this.autostartILs);
+        if(this.autostartILs) {
+            if(summit === 1 && this.mode === "Full Game") return;
+            this.setMode("Summit", (summit as number) - 1);
+            this.reset();
+
+            if(!this.ilPreboosts) this.loadedCorrectSummit = true;
+            return;
+        }
+
         if(this.mode === "Full Game") return;
         if(this.ilPreboosts) return;
 

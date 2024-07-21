@@ -2,6 +2,7 @@
     import { categories, splitNames } from '../constants';
     import FullGame from './FullGame.svelte';
     import IlSettings from './ILSettings.svelte';
+    import Toggles from './Toggles.svelte';
     
     let category = categories[0];
     let mode = 'Full Game';
@@ -30,3 +31,7 @@
         {/if}
     {/key}
 {/key}
+
+<hr>
+
+<Toggles />

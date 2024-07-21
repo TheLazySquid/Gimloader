@@ -15,6 +15,8 @@ export default class UI {
     splitDatas: HTMLElement[][] = [];
     attemptsEl: HTMLElement;
 
+    showSplitComparisons = GL.storage.getValue("DLD Timer", "showSplitComparisons", true);
+
     constructor(timer: Timer) {
         this.timer = timer;
         this.autosplitter = timer.autosplitter;
@@ -138,21 +140,23 @@ export default class UI {
 
         if(this.autosplitter.mode === "Full Game") {
             let pb = this.timer.personalBest[this.timer.currentSplit];
-            if(pb) {
-                let amountBehind = totalMs - pb;
-                if(amountBehind > 0) {
+            if(!pb) return;
+
+            let amountBehind = totalMs - pb;
+            if(amountBehind > 0) {
+                if(this.showSplitComparisons) {
                     this.splitDatas[this.timer.currentSplit][2].innerText = `+${fmtMs(amountBehind)}`;
                     this.splitDatas[this.timer.currentSplit][2].classList.add("behind");
-                    this.setTotalAhead(false);
                 }
+                this.setTotalAhead(false);
             }
         } else {
             let pb = this.timer.ilPb;
-            if(pb) {
-                let amountBehind = totalMs - pb;
-                if(amountBehind > 0) {
-                    this.setTotalAhead(false);
-                }
+            if(!pb) return;
+
+            let amountBehind = totalMs - pb;
+            if(amountBehind > 0) {
+                this.setTotalAhead(false);
             }
         }
     }
@@ -161,6 +165,7 @@ export default class UI {
         let els = this.splitDatas[split];
         els[3].innerText = fmtMs(totalMs);
 
+        if(!this.showSplitComparisons) return;
         if(diff === undefined || ahead === undefined || best === undefined) return;
         let str: string;
 

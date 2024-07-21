@@ -38,6 +38,11 @@
             <td>{split}</td>
             <td>
                 <input value={bestSplits[i] ? fmtMs(bestSplits[i]) : ''} on:change={(e) => {
+                    if(e.currentTarget.value === '') {
+                        bestSplits[i] = undefined;
+                        return;
+                    }
+                    
                     let ms = parseTime(e.currentTarget.value);
                     bestSplits[i] = ms;
                 }} />
