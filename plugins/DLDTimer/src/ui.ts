@@ -15,7 +15,10 @@ export default class UI {
     splitDatas: HTMLElement[][] = [];
     attemptsEl: HTMLElement;
 
+    showSplits = GL.storage.getValue("DLD Timer", "showSplits", true);
+    showSplitTimes = GL.storage.getValue("DLD Timer", "showSplitTimes", true);
     showSplitComparisons = GL.storage.getValue("DLD Timer", "showSplitComparisons", true);
+    showSplitTimeAtEnd = GL.storage.getValue("DLD Timer", "showSplitTimeAtEnd", true);
 
     constructor(timer: Timer) {
         this.timer = timer;
@@ -77,15 +80,15 @@ export default class UI {
         this.element.appendChild(runTypeBar);
 
         let table = document.createElement("table");
-        this.element.appendChild(table);
+        if(this.showSplits) this.element.appendChild(table);
 
         for(let name of splitNames) {
             let row = document.createElement("tr");
             row.innerHTML = `
             <td style="min-width: 120px;">${name}</td>
-            <td style="min-width: 60px;"></td>
-            <td class="comparison" style="min-width: 80px;"></td>
-            <td style="min-width: 60px;"></td>`;
+            <td style="min-width: 60px; ${this.showSplitTimes ? "" : "display: none"}"></td>
+            <td style="min-width: 80px; ${this.showSplitComparisons ? "" : "display: none"}"></td>
+            <td style="min-width: 60px; ${this.showSplitTimeAtEnd ? "" : "display: none"}"></td>`;
             this.splitRows.push(row);
             this.splitDatas.push(Array.from(row.children) as HTMLElement[]);
             table.appendChild(row);

@@ -1,6 +1,6 @@
 {
   "name": "dld-timer",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Times DLD runs, and shows you your time for each summit",
   "author": "TheLazySquid",
   "main": "src/index.ts",

@@ -3,6 +3,9 @@
     import FullGame from './FullGame.svelte';
     import IlSettings from './ILSettings.svelte';
     import Toggles from './Toggles.svelte';
+    import type Autosplitter from '../autosplitter';
+
+    export let autosplitter: Autosplitter;
     
     let category = categories[0];
     let mode = 'Full Game';
@@ -34,4 +37,4 @@
 
 <hr>
 
-<Toggles />
+<Toggles {autosplitter} />

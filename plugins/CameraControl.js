@@ -130,8 +130,8 @@ const onDown = () => {
     zoomToggled = !zoomToggled;
 }
 
-GL.hotkeys.add(sHotkey, onDown, true);
-GL.hotkeys.add(downHotkey, onDown, true);
+GL.hotkeys.add(sHotkey, onDown);
+GL.hotkeys.add(downHotkey, onDown);
 
 export function onStop() {
     window.removeEventListener("wheel", onWheel);

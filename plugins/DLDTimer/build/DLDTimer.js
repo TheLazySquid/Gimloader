@@ -2,7 +2,7 @@
  * @name DLDTimer
  * @description Times DLD runs, and shows you your time for each summit
  * @author TheLazySquid
- * @version 0.2.3
+ * @version 0.2.4
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTimer/build/DLDTimer.js
  */
 function onceOrIfLoaded(callback) {
@@ -1318,6 +1318,18 @@ function create_fragment$1(ctx) {
 	let t2;
 	let t3;
 	let div2;
+	let input2;
+	let t4;
+	let t5;
+	let div3;
+	let input3;
+	let t6;
+	let t7;
+	let div4;
+	let input4;
+	let t8;
+	let t9;
+	let div5;
 	let mounted;
 	let dispose;
 
@@ -1325,51 +1337,102 @@ function create_fragment$1(ctx) {
 		c() {
 			div0 = element("div");
 			input0 = element("input");
-			t0 = text("\r\n    Show split comparisons");
+			t0 = text("\r\n    Show splits");
 			t1 = space();
 			div1 = element("div");
 			input1 = element("input");
-			t2 = text("\r\n    Start ILs upon using savestates to warp there");
+			t2 = text("\r\n    Show split times");
 			t3 = space();
 			div2 = element("div");
-			div2.textContent = "For summit one this will only happen if you don't have full game selected";
+			input2 = element("input");
+			t4 = text("\r\n    Show split comparisons");
+			t5 = space();
+			div3 = element("div");
+			input3 = element("input");
+			t6 = text("\r\n    Show split time at end");
+			t7 = space();
+			div4 = element("div");
+			input4 = element("input");
+			t8 = text("\r\n    Start ILs upon using savestates to warp there");
+			t9 = space();
+			div5 = element("div");
+			div5.textContent = "For summit one this will only happen if you don't have full game selected";
 			attr(input0, "type", "checkbox");
 			attr(input0, "class", "svelte-1vtkrny");
 			attr(div0, "class", "row svelte-1vtkrny");
 			attr(input1, "type", "checkbox");
 			attr(input1, "class", "svelte-1vtkrny");
 			attr(div1, "class", "row svelte-1vtkrny");
-			attr(div2, "class", "note svelte-1vtkrny");
+			attr(input2, "type", "checkbox");
+			attr(input2, "class", "svelte-1vtkrny");
+			attr(div2, "class", "row svelte-1vtkrny");
+			attr(input3, "type", "checkbox");
+			attr(input3, "class", "svelte-1vtkrny");
+			attr(div3, "class", "row svelte-1vtkrny");
+			attr(input4, "type", "checkbox");
+			attr(input4, "class", "svelte-1vtkrny");
+			attr(div4, "class", "row svelte-1vtkrny");
+			attr(div5, "class", "note svelte-1vtkrny");
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
 			append(div0, input0);
-			input0.checked = /*showSplitComparisons*/ ctx[0];
+			input0.checked = /*showSplits*/ ctx[0];
 			append(div0, t0);
 			insert(target, t1, anchor);
 			insert(target, div1, anchor);
 			append(div1, input1);
-			input1.checked = /*autostartILs*/ ctx[1];
+			input1.checked = /*showSplitTimes*/ ctx[1];
 			append(div1, t2);
 			insert(target, t3, anchor);
 			insert(target, div2, anchor);
+			append(div2, input2);
+			input2.checked = /*showSplitComparisons*/ ctx[2];
+			append(div2, t4);
+			insert(target, t5, anchor);
+			insert(target, div3, anchor);
+			append(div3, input3);
+			input3.checked = /*showSplitTimeAtEnd*/ ctx[3];
+			append(div3, t6);
+			insert(target, t7, anchor);
+			insert(target, div4, anchor);
+			append(div4, input4);
+			input4.checked = /*autostartILs*/ ctx[4];
+			append(div4, t8);
+			insert(target, t9, anchor);
+			insert(target, div5, anchor);
 
 			if (!mounted) {
 				dispose = [
-					listen(input0, "change", /*input0_change_handler*/ ctx[2]),
-					listen(input1, "change", /*input1_change_handler*/ ctx[3])
+					listen(input0, "change", /*input0_change_handler*/ ctx[6]),
+					listen(input1, "change", /*input1_change_handler*/ ctx[7]),
+					listen(input2, "change", /*input2_change_handler*/ ctx[8]),
+					listen(input3, "change", /*input3_change_handler*/ ctx[9]),
+					listen(input4, "change", /*input4_change_handler*/ ctx[10])
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*showSplitComparisons*/ 1) {
-				input0.checked = /*showSplitComparisons*/ ctx[0];
+			if (dirty & /*showSplits*/ 1) {
+				input0.checked = /*showSplits*/ ctx[0];
 			}
 
-			if (dirty & /*autostartILs*/ 2) {
-				input1.checked = /*autostartILs*/ ctx[1];
+			if (dirty & /*showSplitTimes*/ 2) {
+				input1.checked = /*showSplitTimes*/ ctx[1];
+			}
+
+			if (dirty & /*showSplitComparisons*/ 4) {
+				input2.checked = /*showSplitComparisons*/ ctx[2];
+			}
+
+			if (dirty & /*showSplitTimeAtEnd*/ 8) {
+				input3.checked = /*showSplitTimeAtEnd*/ ctx[3];
+			}
+
+			if (dirty & /*autostartILs*/ 16) {
+				input4.checked = /*autostartILs*/ ctx[4];
 			}
 		},
 		i: noop,
@@ -1381,6 +1444,12 @@ function create_fragment$1(ctx) {
 				detach(div1);
 				detach(t3);
 				detach(div2);
+				detach(t5);
+				detach(div3);
+				detach(t7);
+				detach(div4);
+				detach(t9);
+				detach(div5);
 			}
 
 			mounted = false;
@@ -1390,41 +1459,87 @@ function create_fragment$1(ctx) {
 }
 
 function instance$1($$self, $$props, $$invalidate) {
+	let { autosplitter } = $$props;
+	let showSplits = GL.storage.getValue("DLD Timer", "showSplits", true);
+	let showSplitTimes = GL.storage.getValue("DLD Timer", "showSplitTimes", true);
 	let showSplitComparisons = GL.storage.getValue("DLD Timer", "showSplitComparisons", true);
+	let showSplitTimeAtEnd = GL.storage.getValue("DLD Timer", "showSplitTimeAtEnd", true);
 	let autostartILs = GL.storage.getValue("DLD Timer", "autostartILs", false);
 
 	function input0_change_handler() {
-		showSplitComparisons = this.checked;
-		$$invalidate(0, showSplitComparisons);
+		showSplits = this.checked;
+		$$invalidate(0, showSplits);
 	}
 
 	function input1_change_handler() {
-		autostartILs = this.checked;
-		$$invalidate(1, autostartILs);
+		showSplitTimes = this.checked;
+		$$invalidate(1, showSplitTimes);
 	}
 
+	function input2_change_handler() {
+		showSplitComparisons = this.checked;
+		$$invalidate(2, showSplitComparisons);
+	}
+
+	function input3_change_handler() {
+		showSplitTimeAtEnd = this.checked;
+		$$invalidate(3, showSplitTimeAtEnd);
+	}
+
+	function input4_change_handler() {
+		autostartILs = this.checked;
+		$$invalidate(4, autostartILs);
+	}
+
+	$$self.$$set = $$props => {
+		if ('autosplitter' in $$props) $$invalidate(5, autosplitter = $$props.autosplitter);
+	};
+
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*showSplitComparisons*/ 1) {
+		if ($$self.$$.dirty & /*showSplits*/ 1) {
+			GL.storage.setValue("DLD Timer", "showSplits", showSplits);
+		}
+
+		if ($$self.$$.dirty & /*showSplitTimes*/ 2) {
+			GL.storage.setValue("DLD Timer", "showSplitTimes", showSplitTimes);
+		}
+
+		if ($$self.$$.dirty & /*showSplitComparisons*/ 4) {
 			GL.storage.setValue("DLD Timer", "showSplitComparisons", showSplitComparisons);
 		}
 
-		if ($$self.$$.dirty & /*autostartILs*/ 2) {
+		if ($$self.$$.dirty & /*showSplitTimeAtEnd*/ 8) {
+			GL.storage.setValue("DLD Timer", "showSplitTimeAtEnd", showSplitTimeAtEnd);
+		}
+
+		if ($$self.$$.dirty & /*autostartILs*/ 16) {
 			GL.storage.setValue("DLD Timer", "autostartILs", autostartILs);
+		}
+
+		if ($$self.$$.dirty & /*autostartILs*/ 16) {
+			$$invalidate(5, autosplitter.autostartILs = autostartILs, autosplitter);
 		}
 	};
 
 	return [
+		showSplits,
+		showSplitTimes,
 		showSplitComparisons,
+		showSplitTimeAtEnd,
 		autostartILs,
+		autosplitter,
 		input0_change_handler,
-		input1_change_handler
+		input1_change_handler,
+		input2_change_handler,
+		input3_change_handler,
+		input4_change_handler
 	];
 }
 
 class Toggles extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance$1, create_fragment$1, safe_not_equal, {}, add_css);
+		init(this, options, instance$1, create_fragment$1, safe_not_equal, { autosplitter: 5 }, add_css);
 	}
 }
 
@@ -1432,26 +1547,26 @@ class Toggles extends SvelteComponent {
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[4] = list[i];
-	child_ctx[6] = i;
+	child_ctx[5] = list[i];
+	child_ctx[7] = i;
 	return child_ctx;
 }
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[1] = list[i];
+	child_ctx[2] = list[i];
 	return child_ctx;
 }
 
-// (10:4) {#each categories as category}
+// (11:4) {#each categories as category}
 function create_each_block_1(ctx) {
 	let option;
 
 	return {
 		c() {
 			option = element("option");
-			option.textContent = `${/*category*/ ctx[1]}`;
-			option.__value = /*category*/ ctx[1];
+			option.textContent = `${/*category*/ ctx[2]}`;
+			option.__value = /*category*/ ctx[2];
 			set_input_value(option, option.__value);
 		},
 		m(target, anchor) {
@@ -1466,15 +1581,15 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (17:4) {#each splitNames as split, i}
+// (18:4) {#each splitNames as split, i}
 function create_each_block(ctx) {
 	let option;
 
 	return {
 		c() {
 			option = element("option");
-			option.textContent = `${/*split*/ ctx[4]}`;
-			option.__value = /*i*/ ctx[6];
+			option.textContent = `${/*split*/ ctx[5]}`;
+			option.__value = /*i*/ ctx[7];
 			set_input_value(option, option.__value);
 		},
 		m(target, anchor) {
@@ -1489,11 +1604,11 @@ function create_each_block(ctx) {
 	};
 }
 
-// (27:8) {:else}
+// (28:8) {:else}
 function create_else_block(ctx) {
 	let fullgame;
 	let current;
-	fullgame = new FullGame({ props: { category: /*category*/ ctx[1] } });
+	fullgame = new FullGame({ props: { category: /*category*/ ctx[2] } });
 
 	return {
 		c() {
@@ -1505,7 +1620,7 @@ function create_else_block(ctx) {
 		},
 		p(ctx, dirty) {
 			const fullgame_changes = {};
-			if (dirty & /*category*/ 2) fullgame_changes.category = /*category*/ ctx[1];
+			if (dirty & /*category*/ 4) fullgame_changes.category = /*category*/ ctx[2];
 			fullgame.$set(fullgame_changes);
 		},
 		i(local) {
@@ -1523,15 +1638,15 @@ function create_else_block(ctx) {
 	};
 }
 
-// (25:8) {#if mode !== "Full Game"}
+// (26:8) {#if mode !== "Full Game"}
 function create_if_block(ctx) {
 	let ilsettings;
 	let current;
 
 	ilsettings = new ILSettings({
 			props: {
-				category: /*category*/ ctx[1],
-				summit: parseInt(/*mode*/ ctx[0])
+				category: /*category*/ ctx[2],
+				summit: parseInt(/*mode*/ ctx[1])
 			}
 		});
 
@@ -1545,8 +1660,8 @@ function create_if_block(ctx) {
 		},
 		p(ctx, dirty) {
 			const ilsettings_changes = {};
-			if (dirty & /*category*/ 2) ilsettings_changes.category = /*category*/ ctx[1];
-			if (dirty & /*mode*/ 1) ilsettings_changes.summit = parseInt(/*mode*/ ctx[0]);
+			if (dirty & /*category*/ 4) ilsettings_changes.category = /*category*/ ctx[2];
+			if (dirty & /*mode*/ 2) ilsettings_changes.summit = parseInt(/*mode*/ ctx[1]);
 			ilsettings.$set(ilsettings_changes);
 		},
 		i(local) {
@@ -1564,7 +1679,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (24:4) {#key category}
+// (25:4) {#key category}
 function create_key_block_1(ctx) {
 	let current_block_type_index;
 	let if_block;
@@ -1574,7 +1689,7 @@ function create_key_block_1(ctx) {
 	const if_blocks = [];
 
 	function select_block_type(ctx, dirty) {
-		if (/*mode*/ ctx[0] !== "Full Game") return 0;
+		if (/*mode*/ ctx[1] !== "Full Game") return 0;
 		return 1;
 	}
 
@@ -1637,9 +1752,9 @@ function create_key_block_1(ctx) {
 	};
 }
 
-// (23:0) {#key mode}
+// (24:0) {#key mode}
 function create_key_block(ctx) {
-	let previous_key = /*category*/ ctx[1];
+	let previous_key = /*category*/ ctx[2];
 	let key_block_anchor;
 	let current;
 	let key_block = create_key_block_1(ctx);
@@ -1655,7 +1770,7 @@ function create_key_block(ctx) {
 			current = true;
 		},
 		p(ctx, dirty) {
-			if (dirty & /*category*/ 2 && safe_not_equal(previous_key, previous_key = /*category*/ ctx[1])) {
+			if (dirty & /*category*/ 4 && safe_not_equal(previous_key, previous_key = /*category*/ ctx[2])) {
 				group_outros();
 				transition_out(key_block, 1, 1, noop);
 				check_outros();
@@ -1692,7 +1807,7 @@ function create_fragment(ctx) {
 	let select1;
 	let option;
 	let t2;
-	let previous_key = /*mode*/ ctx[0];
+	let previous_key = /*mode*/ ctx[1];
 	let t3;
 	let hr;
 	let t4;
@@ -1715,7 +1830,10 @@ function create_fragment(ctx) {
 	}
 
 	let key_block = create_key_block(ctx);
-	toggles = new Toggles({});
+
+	toggles = new Toggles({
+			props: { autosplitter: /*autosplitter*/ ctx[0] }
+		});
 
 	return {
 		c() {
@@ -1740,10 +1858,10 @@ function create_fragment(ctx) {
 			hr = element("hr");
 			t4 = space();
 			create_component(toggles.$$.fragment);
-			if (/*category*/ ctx[1] === void 0) add_render_callback(() => /*select0_change_handler*/ ctx[2].call(select0));
+			if (/*category*/ ctx[2] === void 0) add_render_callback(() => /*select0_change_handler*/ ctx[3].call(select0));
 			option.__value = "Full Game";
 			set_input_value(option, option.__value);
-			if (/*mode*/ ctx[0] === void 0) add_render_callback(() => /*select1_change_handler*/ ctx[3].call(select1));
+			if (/*mode*/ ctx[1] === void 0) add_render_callback(() => /*select1_change_handler*/ ctx[4].call(select1));
 		},
 		m(target, anchor) {
 			insert(target, select0, anchor);
@@ -1754,7 +1872,7 @@ function create_fragment(ctx) {
 				}
 			}
 
-			select_option(select0, /*category*/ ctx[1], true);
+			select_option(select0, /*category*/ ctx[2], true);
 			insert(target, t0, anchor);
 			insert(target, select1, anchor);
 			append(select1, option);
@@ -1765,7 +1883,7 @@ function create_fragment(ctx) {
 				}
 			}
 
-			select_option(select1, /*mode*/ ctx[0], true);
+			select_option(select1, /*mode*/ ctx[1], true);
 			insert(target, t2, anchor);
 			key_block.m(target, anchor);
 			insert(target, t3, anchor);
@@ -1776,23 +1894,23 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(select0, "change", /*select0_change_handler*/ ctx[2]),
-					listen(select1, "change", /*select1_change_handler*/ ctx[3])
+					listen(select0, "change", /*select0_change_handler*/ ctx[3]),
+					listen(select1, "change", /*select1_change_handler*/ ctx[4])
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*category*/ 2) {
-				select_option(select0, /*category*/ ctx[1]);
+			if (dirty & /*category*/ 4) {
+				select_option(select0, /*category*/ ctx[2]);
 			}
 
-			if (dirty & /*mode*/ 1) {
-				select_option(select1, /*mode*/ ctx[0]);
+			if (dirty & /*mode*/ 2) {
+				select_option(select1, /*mode*/ ctx[1]);
 			}
 
-			if (dirty & /*mode*/ 1 && safe_not_equal(previous_key, previous_key = /*mode*/ ctx[0])) {
+			if (dirty & /*mode*/ 2 && safe_not_equal(previous_key, previous_key = /*mode*/ ctx[1])) {
 				group_outros();
 				transition_out(key_block, 1, 1, noop);
 				check_outros();
@@ -1803,6 +1921,10 @@ function create_fragment(ctx) {
 			} else {
 				key_block.p(ctx, dirty);
 			}
+
+			const toggles_changes = {};
+			if (dirty & /*autosplitter*/ 1) toggles_changes.autosplitter = /*autosplitter*/ ctx[0];
+			toggles.$set(toggles_changes);
 		},
 		i(local) {
 			if (current) return;
@@ -1837,30 +1959,35 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
+	let { autosplitter } = $$props;
 	let category = categories[0];
 	let mode = "Full Game";
 
 	function select0_change_handler() {
 		category = select_value(this);
-		$$invalidate(1, category);
+		$$invalidate(2, category);
 	}
 
 	function select1_change_handler() {
 		mode = select_value(this);
-		$$invalidate(0, mode);
+		$$invalidate(1, mode);
 	}
 
-	return [mode, category, select0_change_handler, select1_change_handler];
+	$$self.$$set = $$props => {
+		if ('autosplitter' in $$props) $$invalidate(0, autosplitter = $$props.autosplitter);
+	};
+
+	return [autosplitter, mode, category, select0_change_handler, select1_change_handler];
 }
 
 class Settings extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, {});
+		init(this, options, instance, create_fragment, safe_not_equal, { autosplitter: 0 });
 	}
 }
 
-var styles = "#timer {\n  position: absolute;\n  top: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.85);\n  color: white;\n  z-index: 999999999;\n}\n#timer .restart {\n  background-color: transparent;\n  border: none;\n  width: 20px;\n  height: 20px;\n  margin: 0;\n  padding: 0;\n}\n#timer .restart svg {\n  width: 20px;\n  height: 20px;\n}\n#timer .bar {\n  display: flex;\n  align-items: center;\n  padding: 5px 10px;\n  gap: 10px;\n}\n#timer select {\n  background: transparent;\n}\n#timer option {\n  background-color: black;\n}\n#timer .runType {\n  padding-left: 10px;\n}\n#timer tr:nth-child(even) {\n  background-color: rgba(255, 255, 255, 0.12);\n}\n#timer tr.active {\n  background-color: rgba(28, 145, 235, 0.864);\n}\n#timer td:first-child {\n  padding-left: 10px;\n}\n#timer .attempts {\n  flex-grow: 1;\n  text-align: right;\n}\n#timer .total {\n  font-size: xx-large;\n  width: 100%;\n  text-align: right;\n  padding-right: 10px;\n}\n#timer .ahead {\n  color: green;\n}\n#timer .behind {\n  color: red;\n}\n#timer .best {\n  color: gold;\n}\n\n#DLDTimer-settings .category {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}";
+var styles = "#timer {\n  position: absolute;\n  top: 0;\n  right: 0;\n  background-color: rgba(0, 0, 0, 0.85);\n  color: white;\n  z-index: 999999999;\n}\n#timer .restart {\n  background-color: transparent;\n  border: none;\n  width: 20px;\n  height: 20px;\n  margin: 0;\n  padding: 0;\n}\n#timer .restart svg {\n  width: 20px;\n  height: 20px;\n}\n#timer .bar {\n  display: flex;\n  align-items: center;\n  padding: 5px 10px;\n  gap: 10px;\n}\n#timer select {\n  background: transparent;\n}\n#timer option {\n  background-color: black;\n}\n#timer .runType {\n  padding-left: 10px;\n}\n#timer table {\n  width: 100%;\n}\n#timer tr:nth-child(even) {\n  background-color: rgba(255, 255, 255, 0.12);\n}\n#timer tr.active {\n  background-color: rgba(28, 145, 235, 0.864);\n}\n#timer td:first-child {\n  padding-left: 10px;\n}\n#timer .attempts {\n  flex-grow: 1;\n  text-align: right;\n}\n#timer .total {\n  font-size: xx-large;\n  width: 100%;\n  text-align: right;\n  padding-right: 10px;\n}\n#timer .ahead {\n  color: green;\n}\n#timer .behind {\n  color: red;\n}\n#timer .best {\n  color: gold;\n}\n\n#DLDTimer-settings .category {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}";
 
 var restore = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z\" fill=\"white\" /></svg>";
 
@@ -1872,7 +1999,10 @@ class UI {
     splitRows = [];
     splitDatas = [];
     attemptsEl;
+    showSplits = GL.storage.getValue("DLD Timer", "showSplits", true);
+    showSplitTimes = GL.storage.getValue("DLD Timer", "showSplitTimes", true);
     showSplitComparisons = GL.storage.getValue("DLD Timer", "showSplitComparisons", true);
+    showSplitTimeAtEnd = GL.storage.getValue("DLD Timer", "showSplitTimeAtEnd", true);
     constructor(timer) {
         this.timer = timer;
         this.autosplitter = timer.autosplitter;
@@ -1925,14 +2055,15 @@ class UI {
         this.element.appendChild(topBar);
         this.element.appendChild(runTypeBar);
         let table = document.createElement("table");
-        this.element.appendChild(table);
+        if (this.showSplits)
+            this.element.appendChild(table);
         for (let name of splitNames) {
             let row = document.createElement("tr");
             row.innerHTML = `
             <td style="min-width: 120px;">${name}</td>
-            <td style="min-width: 60px;"></td>
-            <td class="comparison" style="min-width: 80px;"></td>
-            <td style="min-width: 60px;"></td>`;
+            <td style="min-width: 60px; ${this.showSplitTimes ? "" : "display: none"}"></td>
+            <td style="min-width: 80px; ${this.showSplitComparisons ? "" : "display: none"}"></td>
+            <td style="min-width: 60px; ${this.showSplitTimeAtEnd ? "" : "display: none"}"></td>`;
             this.splitRows.push(row);
             this.splitDatas.push(Array.from(row.children));
             table.appendChild(row);
@@ -2238,7 +2369,6 @@ class Autosplitter {
         }
     }
     onStateLoaded(summit) {
-        console.log(this.autostartILs);
         if (this.autostartILs) {
             if (summit === 1 && this.mode === "Full Game")
                 return;
@@ -2367,7 +2497,10 @@ function onStop() {
 function openSettingsMenu() {
     let div = document.createElement("div");
     new Settings({
-        target: div
+        target: div,
+        props: {
+            autosplitter
+        }
     });
     GL.UI.showModal(div, {
         title: "Manage DLD Timer data",

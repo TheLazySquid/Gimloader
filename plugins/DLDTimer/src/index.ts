@@ -29,7 +29,10 @@ export function onStop() {
 export function openSettingsMenu() {
     let div = document.createElement("div");
     new Settings({
-        target: div
+        target: div,
+        props: {
+            autosplitter
+        }
     });
 
     GL.UI.showModal(div, {

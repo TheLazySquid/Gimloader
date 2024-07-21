@@ -74,7 +74,6 @@ export default class Autosplitter {
     }
 
     onStateLoaded(summit: number | string) {
-        console.log(this.autostartILs);
         if(this.autostartILs) {
             if(summit === 1 && this.mode === "Full Game") return;
             this.setMode("Summit", (summit as number) - 1);
