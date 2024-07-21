@@ -60,6 +60,8 @@ export default class Timer {
         this.attempts++;
         this.ui.setAttempts(this.attempts);
         GL.storage.setValue("DLD Timer", `attempts-${this.getModeId()}`, this.attempts);
+
+        this.ui.setTotalAhead(true);
     }
 
     updateCategory(name: string) {
@@ -72,13 +74,8 @@ export default class Timer {
         let ms = this.now - this.startTime;
         
         if(!this.ilPb || ms < this.ilPb) {
-            console.log(ms, this.ilPb);
             this.ilPb = ms;
             GL.storage.setValue("DLD Timer", `ilpb-${this.getModeId()}`, this.ilPb);
-
-            this.ui.setTotalAhead(true);
-        } else {
-            this.ui.setTotalAhead(false);
         }
     }
 
@@ -102,7 +99,11 @@ export default class Timer {
             let ahead = totalMs < pb;
 
             this.ui.setFinalSplit(this.currentSplit, totalMs, diff, ahead, isBest);
-            this.ui.setTotalAhead(ahead);
+            let next = this.personalBest[this.currentSplit + 1];
+            if(next) {
+                let reallyBehind = totalMs > next;
+                this.ui.setTotalAhead(!reallyBehind);
+            }
         } else {
             this.ui.setFinalSplit(this.currentSplit, totalMs);
         }
