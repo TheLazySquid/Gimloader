@@ -1,5 +1,8 @@
 import { IHotkey } from "../types";
 
+const shiftKeyHeldKeys = `~!@#$%^&*()_+{}|:"<>?`;
+const normalKeys = "`1234567890-=[]\\;',./";
+
 export default class HotkeyManager {
     hotkeys: Map<Set<string>, IHotkey> = new Map();
     pressedKeys: Set<string> = new Set();
@@ -12,6 +15,14 @@ export default class HotkeyManager {
 
         window.addEventListener('keyup', (event) => {
             this.pressedKeys.delete(event.key.toLowerCase());
+
+            // keys can sometimes get stuck if the keyup event is not fired
+            let index = normalKeys.indexOf(event.key);
+            if (index > -1) this.pressedKeys.delete(shiftKeyHeldKeys[index]);
+        });
+
+        window.addEventListener('blur', () => {
+            this.releaseAll();
         });
     }
 
