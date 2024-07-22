@@ -2,7 +2,7 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author TheLazySquid
- * @version 0.1.3
+ * @version 0.1.4
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -59,11 +59,6 @@ class Recorder {
     playing = false;
     constructor(physicsManager) {
         this.physicsManager = physicsManager;
-        let realNativeStep = physicsManager.physicsStep;
-        physicsManager.physicsStep = (dt) => {
-            GL.stores.me.movementSpeed = 310;
-            realNativeStep(dt);
-        };
         this.nativeStep = physicsManager.physicsStep;
         // load all bodies in at once for deterministic physics
         for (let id of physicsManager.bodies.staticBodies) {

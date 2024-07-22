@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.2.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -64,6 +64,11 @@ const enable = () => {
     // override the physics update to manually check for laser collisions
     let physics = GL.stores.phaser.scene.worldManager.physics;
     let showHitLaser = true;
+    GL.patcher.before("DLDUtils", physics, "physicsStep", () => {
+        // Ignore running out of energy
+        if(GL.stores.me.movementSpeed === 0) GL.stores.me.movementSpeed = 310;
+    });
+
     GL.patcher.after("DLDUtils", physics, "physicsStep", () => {
         if(GL.net.colyseus.room.state.session.gameSession.phase === "results") return;
         if(!showHitLaser || !showLaserWarning) return;

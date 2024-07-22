@@ -20,11 +20,6 @@ export default class Recorder {
     constructor(physicsManager: any) {
         this.physicsManager = physicsManager;
 
-        let realNativeStep = physicsManager.physicsStep;
-        physicsManager.physicsStep = (dt: number) => {
-            GL.stores.me.movementSpeed = 310;
-            realNativeStep(dt);
-        }
         this.nativeStep = physicsManager.physicsStep;
 
         // load all bodies in at once for deterministic physics
