@@ -2,7 +2,7 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.2.3
+ * @version 0.2.4
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -58,7 +58,8 @@ const tp = (summit) => {
     stateLoadCallbacks.forEach(cb => cb(summit));
 }
 
-let lastPos, lastState;
+let lastPos = GL.storage.getValue("Savestates", "lastPos", null);
+let lastState = GL.storage.getValue("Savestates", "lastState", null);
 
 const saveState = () => {
     let physics = GL.stores.phaser.mainCharacter.physics;
@@ -66,6 +67,10 @@ const saveState = () => {
 
     lastPos = rb.translation();
     lastState = JSON.stringify(physics.state);
+
+    // save to storage
+    GL.storage.setValue("Savestates", "lastPos", lastPos);
+    GL.storage.setValue("Savestates", "lastState", lastState);
 
     GL.notification.open({ message: "State Saved", duration: 0.75 })
 }
