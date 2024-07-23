@@ -76,7 +76,11 @@ export default class Timer {
         if(!this.ilPb || ms < this.ilPb) {
             this.ilPb = ms;
             GL.storage.setValue("DLD Timer", `ilpb-${this.getModeId()}`, this.ilPb);
+            this.ui.setTotalAhead(true);
+            return true;
         }
+
+        this.ui.setTotalAhead(false);
     }
 
     split() {
@@ -126,6 +130,7 @@ export default class Timer {
             if(isAhead) {
                 this.personalBest = this.splitTimes;
                 GL.storage.setValue("DLD Timer", `pb-${this.getModeId()}`, this.personalBest);
+                return true;
             }
 
             return;

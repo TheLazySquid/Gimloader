@@ -4,7 +4,6 @@
 import Recorder from './recorder';
 
 let recorder: Recorder;
-let ignoreServer = false;
 
 let toggleRecordHotkey = new Set(["alt", "r"]);
 GL.hotkeys.add(toggleRecordHotkey, () => {
@@ -15,8 +14,6 @@ GL.hotkeys.add(toggleRecordHotkey, () => {
         return;
     }
     
-    ignoreServer = true;
-
     if(recorder.recording) {
         GL.hotkeys.releaseAll();
     }
@@ -32,8 +29,6 @@ GL.hotkeys.add(playbackHotkey, () => {
         GL.notification.open({ message: "Cannot playback while recording", type: "error" })
         return;
     }
-
-    ignoreServer = true;
     
     if(recorder.playing) {
         recorder.stopPlayback();
@@ -62,26 +57,8 @@ GL.addEventListener("loadEnd", () => {
     recorder = new Recorder(GL.stores.phaser.scene.worldManager.physics);
 })
 
-// disable the physics state from the server
-GL.parcel.interceptRequire("InputRecorder", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
-    // prevent colyseus from complaining that nothing is registered
-    GL.patcher.instead("InputRecorder", exports, "default", (_, args: IArguments) => {
-        let ignoreTimeout: any;
-        args[0].onMessage("PHYSICS_STATE", (packet: any) => {
-            if(ignoreServer) return;
-            moveCharToPos(packet.x / 100, packet.y / 100);
-
-            if(ignoreTimeout) clearTimeout(ignoreTimeout);
-            ignoreTimeout = setTimeout(() => ignoreServer = true, 500);
-        })
-    })
-})
-
-function moveCharToPos(x: number, y: number) {
-    let rb = GL.stores?.phaser?.mainCharacter?.physics?.getBody().rigidBody
-    if(!rb) return;
-
-    rb.setTranslation({ x, y }, true);
+export function getRecorder() {
+    return recorder;
 }
 
 export function onStop() {

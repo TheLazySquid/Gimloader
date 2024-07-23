@@ -2,7 +2,7 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author TheLazySquid
- * @version 0.1.4
+ * @version 0.1.5
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -72,8 +72,10 @@ class Recorder {
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
     }
     toggleRecording() {
-        if (this.recording)
-            this.stopRecording();
+        if (this.recording) {
+            let conf = window.confirm("Do you want to save the recording?");
+            this.stopRecording(conf);
+        }
         else
             this.startRecording();
     }
@@ -91,12 +93,11 @@ class Recorder {
             updateLasers(this.frames.length);
         };
     }
-    stopRecording() {
+    stopRecording(save, fileName) {
         this.recording = false;
         this.physicsManager.physicsStep = this.nativeStep;
         stopUpdatingLasers();
-        let confirm = window.confirm("Do you want to save the recording?");
-        if (!confirm)
+        if (!save)
             return;
         // download the file
         let json = {
@@ -110,10 +111,11 @@ class Recorder {
         let name = GL.stores.phaser.mainCharacter.nametag.name;
         let a = document.createElement("a");
         a.href = url;
-        a.download = `recording-${name}.json`;
+        a.download = fileName ?? `recording-${name}.json`;
         a.click();
     }
     async playback(data) {
+        GL.lib("DLDUtils").cancelRespawn();
         this.playing = true;
         this.platformerPhysics = JSON.stringify(GL.platformerPhysics);
         this.rb.setTranslation(data.startPos, true);
@@ -149,7 +151,6 @@ class Recorder {
 /// <reference types="gimloader" />
 // @ts-ignore
 let recorder;
-let ignoreServer = false;
 let toggleRecordHotkey = new Set(["alt", "r"]);
 GL.hotkeys.add(toggleRecordHotkey, () => {
     if (!recorder)
@@ -158,7 +159,6 @@ GL.hotkeys.add(toggleRecordHotkey, () => {
         GL.notification.open({ message: "Cannot record while playing", type: "error" });
         return;
     }
-    ignoreServer = true;
     if (recorder.recording) {
         GL.hotkeys.releaseAll();
     }
@@ -172,7 +172,6 @@ GL.hotkeys.add(playbackHotkey, () => {
         GL.notification.open({ message: "Cannot playback while recording", type: "error" });
         return;
     }
-    ignoreServer = true;
     if (recorder.playing) {
         recorder.stopPlayback();
         GL.notification.open({ message: "Playback canceled" });
@@ -197,26 +196,8 @@ GL.hotkeys.add(playbackHotkey, () => {
 GL.addEventListener("loadEnd", () => {
     recorder = new Recorder(GL.stores.phaser.scene.worldManager.physics);
 });
-// disable the physics state from the server
-GL.parcel.interceptRequire("InputRecorder", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {
-    // prevent colyseus from complaining that nothing is registered
-    GL.patcher.instead("InputRecorder", exports, "default", (_, args) => {
-        let ignoreTimeout;
-        args[0].onMessage("PHYSICS_STATE", (packet) => {
-            if (ignoreServer)
-                return;
-            moveCharToPos(packet.x / 100, packet.y / 100);
-            if (ignoreTimeout)
-                clearTimeout(ignoreTimeout);
-            ignoreTimeout = setTimeout(() => ignoreServer = true, 500);
-        });
-    });
-});
-function moveCharToPos(x, y) {
-    let rb = GL.stores?.phaser?.mainCharacter?.physics?.getBody().rigidBody;
-    if (!rb)
-        return;
-    rb.setTranslation({ x, y }, true);
+function getRecorder() {
+    return recorder;
 }
 function onStop() {
     GL.parcel.stopIntercepts("InputRecorder");
@@ -225,4 +206,4 @@ function onStop() {
     GL.hotkeys.remove(playbackHotkey);
 }
 
-export { onStop };
+export { getRecorder, onStop };

@@ -24,6 +24,10 @@
     <input type="number" bind:value={noPreboostsAttempts} />
     <div>Personal best:</div>
     <input value={noPreboostsPb ? fmtMs(noPreboostsPb) : ''} on:change={(e) => {
+        if(!e.currentTarget.value) {
+            noPreboostsPb = null;
+            return;
+        }
         let ms = parseTime(e.currentTarget.value);
         noPreboostsPb = ms;
     }} />
@@ -35,6 +39,10 @@
         <input type="number" bind:value={preboostAttempts} />
         <div>Personal best:</div>
         <input value={preboostPb ? fmtMs(preboostPb) : ''} on:change={(e) => {
+            if(!e.currentTarget.value) {
+                preboostPb = null;
+                return;
+            }
             let ms = parseTime(e.currentTarget.value);
             preboostPb = ms;
         }} />

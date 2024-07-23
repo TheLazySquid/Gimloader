@@ -38,7 +38,10 @@ export default class Recorder {
     }
 
     toggleRecording() {
-        if(this.recording) this.stopRecording();
+        if(this.recording) {
+            let conf = window.confirm("Do you want to save the recording?");
+            this.stopRecording(conf);
+        }
         else this.startRecording();
     }
 
@@ -61,13 +64,12 @@ export default class Recorder {
         }
     }
 
-    stopRecording() {
+    stopRecording(save: boolean, fileName?: string) {
         this.recording = false;
         this.physicsManager.physicsStep = this.nativeStep;
         stopUpdatingLasers();
         
-        let confirm = window.confirm("Do you want to save the recording?");
-        if(!confirm) return;
+        if(!save) return;
         
         // download the file
         let json: IRecording = {
@@ -84,11 +86,13 @@ export default class Recorder {
 
         let a = document.createElement("a");
         a.href = url;
-        a.download = `recording-${name}.json`;
+        a.download = fileName ?? `recording-${name}.json`;
         a.click();
     }
 
     async playback(data: IRecording) {
+        GL.lib("DLDUtils").cancelRespawn();
+
         this.playing = true;
         this.platformerPhysics = JSON.stringify(GL.platformerPhysics);
 

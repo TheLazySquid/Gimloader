@@ -1,13 +1,13 @@
 import { resetCoordinates, summitCoords, summitStartCoords } from "./constants";
 import Timer from "./timer";
-import { inArea } from "./util";
+import { fmtMs, inArea } from "./util";
 
 export default class Autosplitter {
     timer = new Timer(this);
 
-    mode = GL.storage.getValue("DLD Timer", "mode", "Full Game");
-    ilsummit = GL.storage.getValue("DLD Timer", "ilsummit", 0);
-    ilPreboosts = GL.storage.getValue("DLD Timer", "ilPreboosts", false);
+    mode: string = GL.storage.getValue("DLD Timer", "mode", "Full Game");
+    ilsummit: number = GL.storage.getValue("DLD Timer", "ilsummit", 0);
+    ilPreboosts: boolean = GL.storage.getValue("DLD Timer", "ilPreboosts", false);
     category: string = "Current Patch";
 
     couldStartLastFrame = true;
@@ -15,6 +15,8 @@ export default class Autosplitter {
     loadedCorrectSummit = false;
     
     autostartILs = GL.storage.getValue("DLD Timer", "autostartILs", false);
+    autoRecord = GL.storage.getValue("DLD Timer", "autoRecord", true);
+    autoRecording = false;
 
     setMode(mode: string, ilsummit?: number, ilPreboosts?: boolean) {
         if(this.category === "Current Patch") ilPreboosts = false;
@@ -73,6 +75,13 @@ export default class Autosplitter {
         }
     }
 
+    getRecorder() {
+        let inputRecorder = GL.pluginManager.getPlugin("InputRecorder")?.return;
+        if(!inputRecorder) return;
+
+        return inputRecorder.getRecorder();
+    }
+
     onStateLoaded(summit: number | string) {
         if(this.autostartILs) {
             if(summit === 1 && this.mode === "Full Game") return;
@@ -104,6 +113,11 @@ export default class Autosplitter {
         this.ilState = "waiting";
         this.couldStartLastFrame = true;
         this.loadedCorrectSummit = false;
+
+        let recorder = this.getRecorder();
+        if(recorder && recorder.recording && this.autoRecording) {
+            recorder.stopRecording(false);
+        }
     }
 
     ilState = "waiting";
@@ -117,6 +131,7 @@ export default class Autosplitter {
                 if(this.couldStartLastFrame) return;
                 this.ilState = "started";
                 this.timer.start(this.ilsummit);
+                this.onRunStart();
 
                 this.timer.onUpdate();
             } else {
@@ -125,12 +140,13 @@ export default class Autosplitter {
         } else if(this.ilState === "started") {
             // check if we've reached the end
             if(inArea(body, summitStartCoords[this.ilsummit + 1])) {
-                this.timer.finishIl();
+                let isPb = this.timer.finishIl();
                 this.ilState = "completed";
                 this.couldStartLastFrame = true;
+                this.onRunEnd(isPb);
+            } else {
+                this.timer.onUpdate();
             }
-
-            this.timer.onUpdate();
         }
     }
 
@@ -142,15 +158,17 @@ export default class Autosplitter {
             if(this.hasMoved) {
                 this.ilState = "started";
                 this.timer.start(this.ilsummit);
+                this.onRunStart();
                 this.timer.onUpdate();
             }
         } else if(this.ilState === "started") {
             if(inArea(body, summitStartCoords[this.ilsummit + 1])) {
-                this.timer.finishIl();
+                let isPb = this.timer.finishIl();
                 this.ilState = "completed";
+                this.onRunEnd(isPb);
+            } else {
+                this.timer.onUpdate();
             }
-
-            this.timer.onUpdate();
         }
     }
 
@@ -171,15 +189,57 @@ export default class Autosplitter {
                 if(this.couldStartLastFrame) return;
                 this.summit = 1;
                 this.timer.start();
+                this.onRunStart();
             } else {
                 this.couldStartLastFrame = false;
             }
         } else if(inArea(body, summitStartCoords[this.summit])) {
             this.summit++;
-            this.timer.split();
+            let isPb = this.timer.split();
+
+            // Check if the run is finished
+            if(this.summit > summitStartCoords.length - 1) {
+                this.onRunEnd(isPb);
+            }
         }
 
         this.timer.onUpdate();
+    }
+
+    onRunStart() {
+        if(!this.autoRecord) return;
+        let recorder = this.getRecorder();
+        if(!recorder) return;
+
+        // Don't auto-record during a manual recording or playback
+        if(recorder.recording || recorder.playing) return;
+
+        recorder.startRecording();
+        this.autoRecording = true;
+    }
+
+    onRunEnd(isPb: boolean = false) {
+        if(!this.autoRecord) return;
+        let recorder = this.getRecorder();
+        if(!recorder) return;
+
+        // Don't stop unless we're recording
+        if(!recorder.recording || recorder.playing || !this.autoRecording) return;
+        this.autoRecording = false;
+
+        if(!isPb) return;
+        let username = GL.stores.phaser.mainCharacter.nametag.name;
+        let mode = "Full Game";
+        if(this.mode !== "Full Game") {
+            mode = `Summit ${this.ilsummit + 1}`;
+            if(this.ilPreboosts) mode += " (Preboosts)";
+        }
+
+        let time = fmtMs(this.timer.now - this.timer.startTime);
+
+        recorder.stopRecording(isPb, `recording-${username}-${this.category}-${mode}-${time}.json`);
+
+        GL.notification.open({ message: `Auto-saved PB of ${time}`, placement: "topLeft" });
     }
 
     destroy() {
