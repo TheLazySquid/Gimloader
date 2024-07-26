@@ -82,10 +82,10 @@ const enable = () => {
         // all the lasers always have the same state
         let lasersOn = states.get(lasers[0].id).properties.get("GLOBAL_active");
 
-        // 0.5s leniency between lasers turning on and doing damage
+        // some leniency between lasers turning on and doing damage
         if(!wasOnLastFrame && lasersOn) {
             startImmunityActive = true;
-            setTimeout(() => startImmunityActive = false, 500);
+            setTimeout(() => startImmunityActive = false, 360);
         }
         wasOnLastFrame = lasersOn;
         if(!lasersOn || startImmunityActive) return;
