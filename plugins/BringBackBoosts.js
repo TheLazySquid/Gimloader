@@ -2,13 +2,29 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.3.1
+ * @version 0.3.2
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  */
 
 let useOriginalPhysics = GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false);
+const defaultAirMovement = {
+    accelerationSpeed: 0.08125,
+    decelerationSpeed: 0.08125,
+    maxAccelerationSpeed: 0.14130434782608697
+}
+const originalAirMovement = {
+    accelerationSpeed: 0.121875,
+    decelerationSpeed: 0.08125,
+    maxAccelerationSpeed: 0.155
+}
+
+GL.addEventListener("loadEnd", () => {
+    if(useOriginalPhysics) {
+        GL.platformerPhysics.movement.air = originalAirMovement;
+    }
+})
 
 export function openSettingsMenu() {
     let div = document.createElement("div");
@@ -18,6 +34,12 @@ export function openSettingsMenu() {
     div.querySelector("#useOriginalPhysics").addEventListener("change", (e) => {
         useOriginalPhysics = e.target.checked;
         GL.storage.setValue("BringBackBoosts", "useOriginalPhysics", useOriginalPhysics);
+
+        if(useOriginalPhysics) {
+            GL.platformerPhysics.movement.air = originalAirMovement;
+        } else {
+            GL.platformerPhysics.movement.air = defaultAirMovement;
+        }
     })
 
     GL.UI.showModal(div, {
@@ -75,7 +97,7 @@ GL.parcel.interceptRequire("Boosts", (exports) => exports?.CalculateMovementVelo
         "left" === g ? l = -h : "right" === g && (l = h);
         const B = 0 !== l;
         if (g !== A.physics.state.movement.direction && (B && 0 !== A.physics.state.movement.xVelocity && (A.physics.state.movement.xVelocity = 0), A.physics.state.movement.accelerationTicks = 0, A.physics.state.movement.direction = g), A.physics.state.movement.xVelocity !== l) {
-            A.physics.state.movement.accelerationTicks += useOriginalPhysics ? 3.1 : 1;
+            A.physics.state.movement.accelerationTicks += 1;
             let t = 0,
                 i = 0;
             A.physics.state.grounded ? B ? (t = o.CharacterPhysicsConsts.movement.ground.accelerationSpeed, i = o.CharacterPhysicsConsts.movement.ground.maxAccelerationSpeed) : t = o.CharacterPhysicsConsts.movement.ground.decelerationSpeed : B ? (t = o.CharacterPhysicsConsts.movement.air.accelerationSpeed, i = o.CharacterPhysicsConsts.movement.air.maxAccelerationSpeed) : t = o.CharacterPhysicsConsts.movement.air.decelerationSpeed;
