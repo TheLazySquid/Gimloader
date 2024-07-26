@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.3
+ * @version 0.2.4
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -60,6 +60,9 @@ const enable = () => {
     
     // disable the physics state from the server
     let lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter(d => d.laser);
+    let states = GL.stores.world.devices.states;
+    let body = GL.stores.phaser.mainCharacter.physics.getBody();
+    let shape = body.collider.shape;
     
     // override the physics update to manually check for laser collisions
     let physics = GL.stores.phaser.scene.worldManager.physics;
@@ -69,13 +72,27 @@ const enable = () => {
         if(GL.stores.me.movementSpeed === 0) GL.stores.me.movementSpeed = 310;
     });
 
+    let wasOnLastFrame = false;
+    let startImmunityActive = false;
+
     GL.patcher.after("DLDUtils", physics, "physicsStep", () => {
         if(GL.net.colyseus.room.state.session.gameSession.phase === "results") return;
-        if(!showHitLaser || !showLaserWarning) return;
-        let body = GL.stores.phaser.mainCharacter.physics.getBody();
+        if(!showHitLaser || !showLaserWarning || startImmunityActive) return;
+
+        // all the lasers always have the same state
+        let lasersOn = states.get(lasers[0].id).properties.get("GLOBAL_active");
+
+        // 0.5s leniency between lasers turning on and doing damage
+        if(!wasOnLastFrame && lasersOn) {
+            startImmunityActive = true;
+            setTimeout(() => startImmunityActive = false, 500);
+        }
+        wasOnLastFrame = lasersOn;
+        if(!lasersOn || startImmunityActive) return;
+
         let translation = body.rigidBody.translation();
-        let shape = body.collider.shape;
     
+        // calculate the bounding box of the player
         let topLeft = {
             x: (translation.x - shape.radius) * 100,
             y: (translation.y - shape.halfHeight - shape.radius) * 100
@@ -85,13 +102,11 @@ const enable = () => {
             y: (translation.y + shape.halfHeight + shape.radius) * 100
         }
     
-        let states = GL.stores.world.devices.states;
         let hitLaser = false;
     
         // check collision with lasers
         for(let laser of lasers) {
             // make sure the laser is active
-            if(!states.get(laser.id).properties.get("GLOBAL_active")) continue;
             if(laser.dots.length <= 1) continue;
 
             let start = {
