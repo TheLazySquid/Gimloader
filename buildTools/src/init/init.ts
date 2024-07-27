@@ -36,7 +36,8 @@ export default async function init() {
             { name: "@rollup/plugin-typescript", value: "typescript" },
             { name: "@rollup/plugin-babel", value: "babel" },
             { name: "rollup-plugin-string", value: "string" },
-            { name: "rollup-plugin-sass", value: "sass" }
+            { name: "rollup-plugin-sass", value: "sass" },
+            { name: "rollup-plugin-svelte", value: "svelte" }
         ]
     });
 
@@ -66,10 +67,11 @@ export default async function init() {
         console.log('Installing dependencies...');
 
         let devDeps = {
-            'typescript': '@rollup/plugin-typescript gimloader@github:TheLazySquid/Gimloader',
+            'typescript': '@rollup/plugin-typescript tslib gimloader@github:TheLazySquid/Gimloader',
             'babel': '@rollup/plugin-babel @babel/preset-react',
             'string': 'rollup-plugin-string',
-            'sass': 'rollup-plugin-sass'
+            'sass': 'rollup-plugin-sass',
+            'svelte': 'svelte rollup-plugin-svelte @rollup/plugin-node-resolve @sveltejs/vite-plugin-svelte'
         }
     
         let installStr = 'npm install --save-dev';
@@ -91,12 +93,11 @@ export default async function init() {
 
     // create GL.config.js
     console.log('Creating GL.config.js...');
-
     let config = createGLConfig(name, description, author, plugins);
     fs.writeFileSync(configPath, config);
-    console.log('Creating main file...');
     
     // create main file
+    console.log('Creating main file...');
     let mainPath = join(process.cwd(), 'src', `index.${useTs ? 'ts' : 'js'}`);
     if(!fs.existsSync(mainPath)) {
         // create src folder

@@ -15,6 +15,11 @@ export default function createGLConfig(name: string, description: string, author
     if(plugins.includes('sass')) {
         config += `import sass from 'rollup-plugin-sass';\n`;
     }
+    if(plugins.includes('svelte')) {
+        config += `import svelte from 'rollup-plugin-svelte';\n`;
+        config += `import resolve from '@rollup/plugin-node-resolve';\n`;
+        config += `import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';\n`;
+    }
 
     config += `
 import fs from 'fs';
@@ -50,9 +55,23 @@ export default {
             target: 'esnext'
         })`);
     }
+    if(plugins.includes('svelte')) {
+        pluginStrs.push(`        svelte({
+            emitCss: false,
+            compilerOptions: {
+                css: 'injected'
+            },
+            preprocess: vitePreprocess()
+        })`);
+        pluginStrs.push(`        resolve({
+            browser: true,
+            exportConditions: ['svelte'],
+            extensions: ['.svelte', '.js', '.ts', '.json']
+        })`);
+    }
 
     if(pluginStrs.length > 0) {
-        config += "\n" + pluginStrs.join(',\n') + "\n   ]\n};";
+        config += "\n" + pluginStrs.join(',\n') + "\n    ]\n};";
     } else {
         config += ']\n};';
     }
