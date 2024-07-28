@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.5
+ * @version 0.2.6
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -14,7 +14,7 @@ let canRespawn = false;
 
 GL.addEventListener("loadEnd", () => {
     let savestates = GL.pluginManager.getPlugin("Savestates");
-    if(savestates) {
+    if(savestates?.return) {
         savestates.return.onStateLoaded((summit) => {
             if(typeof summit === "number") {
                 lastCheckpointReached = summit;
