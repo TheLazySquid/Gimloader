@@ -2,7 +2,7 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.4
+ * @version 0.2.5
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
  */
@@ -13,6 +13,16 @@ let lastCheckpointReached = 0;
 let canRespawn = false;
 
 GL.addEventListener("loadEnd", () => {
+    let savestates = GL.pluginManager.getPlugin("Savestates");
+    if(savestates) {
+        savestates.return.onStateLoaded((summit) => {
+            if(typeof summit === "number") {
+                lastCheckpointReached = summit;
+                if(summit <= 1) canRespawn = false;
+            }
+        })
+    }
+
     GL.net.colyseus.room.state.session.gameSession.listen("phase", (phase) => {
         if(phase === "results") {
             canRespawn = false;
@@ -48,10 +58,15 @@ const checkpointCoords = [{
     y: 285.739990234375
 }]
 
-let showLaserWarning = true;
+let doLaserRespawn = true;
 
+export function setLaserRespawnEnabled(enabled) {
+    doLaserRespawn = enabled;
+}
+
+// for backwards compatibility
 export function setLaserWarningEnabled(enabled) {
-    showLaserWarning = enabled;
+    doLaserRespawn = enabled;
 }
 
 const enable = () => {
@@ -77,7 +92,7 @@ const enable = () => {
 
     GL.patcher.after("DLDUtils", physics, "physicsStep", () => {
         if(GL.net.colyseus.room.state.session.gameSession.phase === "results") return;
-        if(!showHitLaser || !showLaserWarning || startImmunityActive) return;
+        if(!showHitLaser || !doLaserRespawn || startImmunityActive) return;
 
         // all the lasers always have the same state
         let lasersOn = states.get(lasers[0].id).properties.get("GLOBAL_active");
@@ -129,9 +144,9 @@ const enable = () => {
             hurtFrames++;
             if(hurtFrames >= maxHurtFrames) {
                 hurtFrames = 0;
-                showHitLaser = false;
-                GL.notification.error({ message: "You hit a laser!", duration: 3.5 })
-                setTimeout(() => showHitLaser = true, 500);
+                moveCharToPos(checkpointCoords[lastCheckpointReached].x, checkpointCoords[lastCheckpointReached].y);
+                GL.stores.me.isRespawning = true;
+                setTimeout(() => GL.stores.me.isRespawning = false, 1000);
             }
         } else hurtFrames = 0;
 
