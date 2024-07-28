@@ -99,6 +99,15 @@ export class ColyseusIntercept extends EventTarget {
 
             exports.OnJoinedRoom = function(colyseus: any) {
                 me.room = colyseus.room;
+                
+                let nativeSend = colyseus.room.send;
+                delete colyseus.room.send;
+                colyseus.room.send = function(channel: string, message: any) {
+                    me.dispatchEvent(new CustomEvent(`send:${channel}`, { detail: message }));
+                    me.dispatchEvent(new CustomEvent('send:*', { detail: { channel, message } }));
+
+                    return nativeSend.apply(this, arguments);
+                }
 
                 let nativeDispatchMsg = colyseus.room.dispatchMessage;
                 delete colyseus.room.dispatchMessage;
