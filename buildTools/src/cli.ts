@@ -4,6 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import init from './init/init';
 import build from './build/build';
 import serve from './serve/serve'
+import serveFile from './serve/servefile'
 
 yargs(hideBin(process.argv))
     .scriptName('gl')
@@ -22,6 +23,17 @@ yargs(hideBin(process.argv))
             description: 'Only re-build the plugin when sending an input in the terminal'
         }
     }, serve)
+    .command('servefile <file>', 'Serves a plugin from a file to be tested in the browser', (yargs) => {
+        yargs.positional('file', {
+            describe: 'The file to serve',
+            type: 'string'
+        })
+
+        yargs.option('manual', {
+            alias: 'm',
+            description: 'Only re-build the plugin when sending an input in the terminal'
+        })
+    }, serveFile)
     .demandCommand(1)
     .help()
     .argv;

@@ -48,3 +48,7 @@ Running `gl build` will compile the plugin / library and output it to `build/[pl
 ### Hot Reload
 
 Running `gl serve` will start a local server to host the plugin / library. If the "Poll for plugins/libraries being served locally" setting is enabled on Gimloader, it will automatically detect changes to the plugin / library and reload it. By default, the plugin will be built whenever you save its files, but passing --manual will change it to only build when pressing enter in the terminal.
+
+### Serving a single file
+
+You can run `gl servefile <file>` to serve a single javscript file, which will automatically reload when the file is changed. Similarly to `gl serve`, passing --manual will change it to only update when pressing enter in the terminal.
