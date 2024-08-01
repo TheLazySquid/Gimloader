@@ -39,3 +39,9 @@ export interface IPluginInfo {
     script: string;
     enabled: boolean;
 }
+
+export type RequireHookFn = (moduleName: string) => void;
+
+export interface RequireHook extends RequireHookFn {
+    register: (moduleName: string, moduleCallback: any) => void;
+}

@@ -3,7 +3,7 @@
 */
 
 import type { Gimloader } from "../gimloader";
-import type { Intercept } from "../types";
+import type { Intercept, RequireHook } from "../types";
 import { log, onGimkit } from "../util";
 
 // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
@@ -170,10 +170,7 @@ export default class Parcel extends EventTarget {
         if(!onGimkit) return;
         this.gimloader.pluginManager.init();
 
-        let requireHook: (moduleName: string) => void;
-        let nativeParcelRequire = unsafeWindow["parcelRequire388b"];
-    
-        ((requireHook = (moduleName) => {
+        let requireHook = ((moduleName) => {
             if (moduleName in this._parcelModuleCache) {
                 return this._parcelModuleCache[moduleName].exports;
             }
@@ -213,17 +210,12 @@ export default class Parcel extends EventTarget {
                 return moduleObject.exports;
             }
     
-            if(nativeParcelRequire) {
-                return nativeParcelRequire(moduleName);
-            }
-
             throw new Error(`Cannot find module '${moduleName}'`);
-        }
-        // @ts-ignore
-        ).register = (moduleName, moduleCallback) => {
-            this._parcelModules[moduleName] = moduleCallback;
-            nativeParcelRequire?.register(moduleName, moduleCallback);
         });
+        
+        (requireHook as RequireHook).register = (moduleName: string, moduleCallback: any) => {
+            this._parcelModules[moduleName] = moduleCallback;
+        };
 
         Object.defineProperty(unsafeWindow, "parcelRequire388b", {
             value: requireHook,
