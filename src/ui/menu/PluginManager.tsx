@@ -107,7 +107,7 @@ export default function PluginManagerUI() {
                                     onClick={() => checkPluginUpdate(plugin)}>
                                     </button>
                                 ) : null}
-                                {plugin.headers.needsLib.length > 0 ? (
+                                {plugin.headers.needsLib.length > 0 || plugin.headers.optionalLib.length > 0 ? (
                                     <button dangerouslySetInnerHTML={{ __html: solidBook }}
                                     onClick={() => showLibraries(plugin)}>
                                     </button>
