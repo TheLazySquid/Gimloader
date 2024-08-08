@@ -43,9 +43,12 @@ export default function LibraryInfo({ plugin }: { plugin: Plugin }) {
                                     downloadLibrary(lib[1])
                                         .then(() => {
                                             setLibs([...libs]);
-                                            GL.notification.open({ message: `Downloaded library ${lib[0]}` })
+                                            GL.notification?.open({ message: `Downloaded library ${lib[0]}` })
                                         })
-                                        .catch((err) => showErrorMessage(err, `Failed to download library ${lib[0]}`))
+                                        .catch((err) => {
+                                            console.log(err);
+                                            showErrorMessage(err, `Failed to download library ${lib[0]}`)
+                                        })
                                 }}></div>
                             )}
                             {lib[1] && GL.lib.getLib(lib[0]) && (

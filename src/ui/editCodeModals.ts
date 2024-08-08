@@ -90,6 +90,7 @@ export function createPlugin(pluginManager: PluginManager) {
         id: "core-CodeEditor",
         title: "Create New Plugin",
         style: "width: 90%",
+        closeOnBackgroundClick: false,
         buttons: [
             {
                 text: "cancel",
@@ -112,6 +113,7 @@ export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
         id: "core-CodeEditor",
         title: "Edit Library Code",
         style: "width: 90%",
+        closeOnBackgroundClick: false,
         buttons: [
             {
                 text: "cancel",

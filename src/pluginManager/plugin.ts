@@ -102,10 +102,12 @@ export default class Plugin {
 
                     res();
                 })
-                .catch((e) => {
+                .catch((e: Error) => {
+                    console.error(e);
                     this.enabled = false;
                     this.gimloader.pluginManager.updatePlugins();
-                    let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${e}`);
+                    let stack = e.stack.replaceAll(url, `blob:${this.headers.name}.js`);
+                    let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${stack}`);
                     rej(err);
                 })
                 .finally(() => {

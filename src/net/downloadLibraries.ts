@@ -41,7 +41,13 @@ export default async function downloadLibraries(needsLibs: string[], confirmName
     let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
         return new Promise<string>((res, rej) => {
             GL.net.corsRequest({ url: libUrl })
-                .then((resp) => res(resp.responseText))
+                .then((resp) => {
+                    if(resp.status !== 200) {
+                        rej(`Failed to download library ${libName} from ${libUrl}\nRecieved response status of ${resp.status}`);
+                        return;
+                    }
+                    res(resp.responseText)
+                })
                 .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
         })
     }))
@@ -67,6 +73,10 @@ export async function downloadLibrary(url: string) {
     return new Promise<void>((res, rej) => {
         GL.net.corsRequest({ url })
             .then((resp) => {
+                if(resp.status !== 200) {
+                    rej(`Failed to download library from ${url}\nRecieved response status of ${resp.status}`);
+                    return;
+                }
                 GL.lib.createLib(resp.responseText);
                 res();
             })
