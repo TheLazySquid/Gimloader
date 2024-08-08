@@ -1,6 +1,6 @@
 # Character Customization
 
-This plugin lets you pick your Gim's skin and trail for any 2d gamemode. You can even use custom skins!
+This plugin lets you pick your Gim's skin and trail for any 2d gamemode. You can even use custom skins! **Important**: Gimkit recently released an update that switched their version of Spine to 4.2 and changed which plugin they used for rendering. Old skins will no longer work.
 
 ![example](./images/image.png)
 

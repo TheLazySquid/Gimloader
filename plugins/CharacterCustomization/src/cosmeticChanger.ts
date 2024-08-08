@@ -20,6 +20,8 @@ export default class CosmeticChanger {
     customSkinFile: File | null = null;
     skinUrl: string | null = null;
 
+    originalImgFileClass: any;
+
     constructor() {
         this.initCustomSkinFile();
 
@@ -101,17 +103,39 @@ export default class CosmeticChanger {
         this.skinUrl = textureUrl;
 
         let atlasLines = atlas.split("\n");
-        atlasLines[1] = textureUrl.split("/").pop()!;
+        atlasLines[0] = textureUrl.split("/").pop()!;
         let atlasBlob = new Blob([atlasLines.join("\n")], {type: "text/plain"});
         let atlasUrl = URL.createObjectURL(atlasBlob);
 
         let jsonBlob = new Blob([json], {type: "application/json"});
         let jsonUrl = URL.createObjectURL(jsonBlob);
 
+        let fileTypes = (window as any).Phaser.Loader.FileTypes;
+        let imgFile = fileTypes.ImageFile;
+
+        class newImgFile extends imgFile {
+            constructor(loader: any, key: string, url: string, config: any) {
+                if(url === "blob:https://www.gimkit.com/") {
+                    url = textureUrl;
+                    key = `customSkin-atlas!${textureUrl.split("/").pop()!}`;
+                }
+                super(loader, key, url, config);
+            }
+        }
+
+        fileTypes.ImageFile = newImgFile;
+        this.originalImgFileClass = imgFile;
+
         let load = GL.stores.phaser.scene.load;
-        let res = load.spine("customSkin", jsonUrl, atlasUrl);
-        res.start();
-        res.on("complete", () => {
+        let jsonRes = load.spineJson("customSkin-data", jsonUrl);
+        let atlasRes = load.spineAtlas("customSkin-atlas", atlasUrl);
+
+        let running = 2;
+
+        const onComplete = () => {
+            running--;
+            if(running > 0) return;
+
             URL.revokeObjectURL(textureUrl);
             URL.revokeObjectURL(atlasUrl);
             URL.revokeObjectURL(jsonUrl);
@@ -121,7 +145,13 @@ export default class CosmeticChanger {
                 this.allowNextSkin = true;
                 skin.updateSkin("customSkin");
             }
-        })
+        }
+
+        jsonRes.on("complete", onComplete);
+        atlasRes.on("complete", onComplete);
+
+        jsonRes.start();
+        atlasRes.start();
     }
 
     async initCustomSkinFile() {
@@ -198,9 +228,10 @@ export default class CosmeticChanger {
         // update the skin
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
         if(skin) {
+            let cache = GL.stores.phaser.scene.cache.custom["esotericsoftware.spine.atlas.cache"];
             // update the custom skin texture
-            let entries = skin.character.spine.plugin.spineTextures.entries.entries;
-            let texture = entries["customSkin"]?.pages?.[0]?.texture;
+            let entries = cache.entries.entries;
+            let texture = entries["customSkin-atlas"]?.pages?.[0]?.texture;
 
             if(texture && this.customSkinFile) {
                 let textureUrl = URL.createObjectURL(this.customSkinFile);
@@ -220,7 +251,7 @@ export default class CosmeticChanger {
             } else if(skinType === "default") {
                 skin.updateSkin(this.normalSkin);
             } else {
-                skin.updateSkin("customSkin");
+                // skin.updateSkin("customSkin");
             }
         }
     }
@@ -263,6 +294,10 @@ export default class CosmeticChanger {
 
         if(this.skinUrl) {
             URL.revokeObjectURL(this.skinUrl);
+        }
+
+        if(this.originalImgFileClass) {
+            (window as any).Phaser.Loader.FileTypes.ImageFile = this.originalImgFileClass;
         }
     }
 }

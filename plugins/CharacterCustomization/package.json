@@ -1,11 +1,11 @@
 {
   "name": "charactercustomization",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Allows you to use any gim or a custom gim client-side",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generateJson": "node jsonGen/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
+    "compress-json": "^3.1.0",
     "rollup-plugin-sass": "^1.12.22",
     "rollup-plugin-string": "^3.0.0"
   }

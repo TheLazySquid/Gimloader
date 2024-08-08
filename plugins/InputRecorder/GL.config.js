@@ -1,4 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import fs from 'fs';
 
 let pkg = JSON.parse(fs.readFileSync('./package.json'));
@@ -15,6 +17,8 @@ export default {
     plugins: [
         typescript({
             target: "es2022"
-        })
+        }),
+        commonjs(),
+        resolve({ browser: true })
     ]
 }

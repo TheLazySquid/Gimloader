@@ -48,4 +48,5 @@ export function onStop() {
     GL.hotkeys.remove(hotkey);
     GL.UI.removeStyles("CharacterCustomization");
     GL.parcel.stopIntercepts("CharacterCustomization");
+    GL.patcher.unpatchAll("CharacterCustomization");
 }

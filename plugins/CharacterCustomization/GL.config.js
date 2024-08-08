@@ -13,6 +13,7 @@ export default {
     author: "TheLazySquid",
     version: pkg.version,
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js",
+    reloadRequired: 'ingame',
     plugins: [
         sass(),
         string({ include: ['**/*.css', '**/*.svg', './assets/*'] }),

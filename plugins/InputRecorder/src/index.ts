@@ -1,7 +1,14 @@
 /// <reference types="gimloader" />
 
-// @ts-ignore
 import Recorder from './recorder';
+import { Ghost } from './ghosts';
+
+(window as any).createGhost = () => {
+    let ghost = new Ghost();
+    let state = GL.net.colyseus.room.state;
+    state.characters.set("197823782908137123", ghost);
+    state.characters.$callbacks[128].forEach(c => c(ghost, "197823782908137123"));
+}
 
 let recorder: Recorder;
 
