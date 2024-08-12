@@ -67,7 +67,7 @@ export default async function init() {
         console.log('Installing dependencies...');
 
         let devDeps = {
-            'typescript': '@rollup/plugin-typescript tslib gimloader@github:TheLazySquid/Gimloader',
+            'typescript': '@rollup/plugin-typescript tslib @types/gimloader@github:TheLazySquid/Gimloader',
             'babel': '@rollup/plugin-babel @babel/preset-react',
             'string': 'rollup-plugin-string',
             'sass': 'rollup-plugin-sass',
@@ -83,8 +83,14 @@ export default async function init() {
         execSync(installStr, { stdio: 'inherit' });
     }
 
+    // create .gitignore
+    if(!fs.existsSync(join(process.cwd(), '.gitignore'))) {
+        console.log('Creating .gitignore...');
+        fs.writeFileSync(join(process.cwd(), '.gitignore'), 'node_modules');
+    }
+
     // create .babelrc
-    if(plugins.includes('Babel')) {
+    if(plugins.includes('babel')) {
         console.log('Creating .babelrc...');
         fs.writeFileSync(join(process.cwd(), '.babelrc'), JSON.stringify({
             presets: ['@babel/preset-react']
@@ -104,13 +110,8 @@ export default async function init() {
         if(!fs.existsSync(join(process.cwd(), 'src'))) {
             fs.mkdirSync(join(process.cwd(), 'src'));
         }
-
-        let starterFile = '';
-
-        if(useTs) starterFile += "/// <reference types='gimloader' />\n\n";
-        starterFile += "console.log('Hello, World!')";
-
-        fs.writeFileSync(mainPath, starterFile);
+        
+        fs.writeFileSync(mainPath, "console.log('Hello, World!')");
     }
 
     console.log('Done!');
