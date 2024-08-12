@@ -39,7 +39,7 @@ Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have 
 
 ### Plugin Structure
 
-Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Headers)).
+Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-and-Library-Headers)).
 
 ```javascript
 /**
