@@ -21,8 +21,7 @@ export default function createGLConfig(name: string, description: string, author
         config += `import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';\n`;
     }
 
-    config += `
-import fs from 'fs';
+    config += `import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 

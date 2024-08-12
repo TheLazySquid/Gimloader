@@ -67,8 +67,4 @@ Gimloader provides an easy way to build more complex plugins. Find more informat
 
 ### Types
 
-When using gimloader for a project, toss this somewhere in your project to get types for the api:
-
-```typescript
-/// <reference types="gimloader" />
-```
+When using gimloader for a project, run `npm i -D @types/gimloader@github:TheLazySquid/Gimloader` to get types for the api.

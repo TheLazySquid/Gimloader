@@ -12,7 +12,7 @@
   },
   "files": [
     "types",
-    "gimloader.d.ts"
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
