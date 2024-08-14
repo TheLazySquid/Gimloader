@@ -4,7 +4,7 @@
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
-  "types": "gimloader.d.ts",
+  "types": "index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",

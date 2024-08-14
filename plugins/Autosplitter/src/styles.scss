@@ -1,0 +1,76 @@
+#timer {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    z-index: 99;
+    
+    &.top { top: 0 }
+    &.bottom { bottom: 0 }
+    &.left { left: 0 }
+    &.right { right: 0 }
+
+    .restart {
+        background-color: transparent;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        padding: 0;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    
+    .bar {
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        gap: 10px;
+    }
+    
+    select {
+        background: transparent;
+    }
+    
+    option {
+        background-color: black;
+    }
+
+    .runType {
+        padding-left: 10px;
+    }
+
+    table {
+        width: 100%;
+    }
+    
+    tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    tr.active {
+        background-color: rgba(28, 145, 235, 0.864);
+    }
+
+    td:first-child {
+        padding-left: 10px;
+    }
+
+    .attempts {
+        flex-grow: 1;
+        text-align: right;
+    }
+
+    .total {
+        font-size: xx-large;
+        width: 100%;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .ahead { color: green; }
+    .behind { color: red; }
+    .best { color: gold; }
+}

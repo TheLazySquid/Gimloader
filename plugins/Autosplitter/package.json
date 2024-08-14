@@ -1,0 +1,21 @@
+{
+  "name": "autosplitter",
+  "version": "0.3.0",
+  "description": "Automatically times speedruns for various gamemodes",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@types/gimloader": "github:TheLazySquid/Gimloader",
+    "rollup-plugin-sass": "^1.13.1",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-svelte": "^7.2.2",
+    "svelte": "^4.2.18"
+  }
+}
