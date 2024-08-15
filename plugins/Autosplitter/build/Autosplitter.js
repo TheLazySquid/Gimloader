@@ -2,7 +2,7 @@
  * @name Autosplitter
  * @description Automatically times speedruns for various gamemodes
  * @author TheLazySquid
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js
  * @needsLib GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js
  */
@@ -23,6 +23,7 @@ const DLDDefaults = {
     pb: {},
     bestSplits: {},
     ilpbs: {},
+    showPbSplits: false,
     showSplits: true,
     showSplitTimes: true,
     showSplitComparisons: true,
@@ -37,6 +38,7 @@ const fishtopiaDefaults = {
     attempts: {},
     pb: {},
     bestSplits: {},
+    showPbSplits: false,
     showSplits: true,
     showSplitTimes: true,
     showSplitComparisons: true,
@@ -1431,12 +1433,16 @@ function create_fragment$4(ctx) {
 	let t14;
 	let t15;
 	let div6;
+	let input5;
+	let t16;
 	let t17;
 	let div7;
-	let input5;
-	let t18;
 	let t19;
 	let div8;
+	let input6;
+	let t20;
+	let t21;
+	let div9;
 	let mounted;
 	let dispose;
 
@@ -1472,17 +1478,21 @@ function create_fragment$4(ctx) {
 			t13 = space();
 			div5 = element("div");
 			input4 = element("input");
-			t14 = text("\r\n    Start ILs upon using savestates to warp there");
+			t14 = text("\r\n    Show time of split in PB");
 			t15 = space();
 			div6 = element("div");
-			div6.textContent = "For summit one this will only happen if you don't have full game selected";
+			input5 = element("input");
+			t16 = text("\r\n    Start ILs upon using savestates to warp there");
 			t17 = space();
 			div7 = element("div");
-			input5 = element("input");
-			t18 = text("\r\n    Automatically record all runs and save PBs");
+			div7.textContent = "For summit one this will only happen if you don't have full game selected";
 			t19 = space();
 			div8 = element("div");
-			div8.textContent = `This requires that you have the InputRecorder plugin installed and enabled${/*hasInputRecorder*/ ctx[1] ? "" : " (which you don't)"}`;
+			input6 = element("input");
+			t20 = text("\r\n    Automatically record all runs and save PBs");
+			t21 = space();
+			div9 = element("div");
+			div9.textContent = `This requires that you have the InputRecorder plugin installed and enabled${/*hasInputRecorder*/ ctx[1] ? "" : " (which you don't)"}`;
 			option0.__value = "top left";
 			set_input_value(option0, option0.__value);
 			option1.__value = "top right";
@@ -1508,12 +1518,15 @@ function create_fragment$4(ctx) {
 			attr(input4, "type", "checkbox");
 			attr(input4, "class", "svelte-1jufc9h");
 			attr(div5, "class", "row svelte-1jufc9h");
-			attr(div6, "class", "note svelte-1jufc9h");
 			attr(input5, "type", "checkbox");
 			attr(input5, "class", "svelte-1jufc9h");
-			attr(div7, "class", "row svelte-1jufc9h");
-			attr(div8, "class", "note svelte-1jufc9h");
-			toggle_class(div8, "error", !/*hasInputRecorder*/ ctx[1]);
+			attr(div6, "class", "row svelte-1jufc9h");
+			attr(div7, "class", "note svelte-1jufc9h");
+			attr(input6, "type", "checkbox");
+			attr(input6, "class", "svelte-1jufc9h");
+			attr(div8, "class", "row svelte-1jufc9h");
+			attr(div9, "class", "note svelte-1jufc9h");
+			toggle_class(div9, "error", !/*hasInputRecorder*/ ctx[1]);
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
@@ -1547,17 +1560,22 @@ function create_fragment$4(ctx) {
 			insert(target, t13, anchor);
 			insert(target, div5, anchor);
 			append(div5, input4);
-			input4.checked = /*data*/ ctx[0].autostartILs;
+			input4.checked = /*data*/ ctx[0].showPbSplits;
 			append(div5, t14);
 			insert(target, t15, anchor);
 			insert(target, div6, anchor);
+			append(div6, input5);
+			input5.checked = /*data*/ ctx[0].autostartILs;
+			append(div6, t16);
 			insert(target, t17, anchor);
 			insert(target, div7, anchor);
-			append(div7, input5);
-			input5.checked = /*data*/ ctx[0].autoRecord;
-			append(div7, t18);
 			insert(target, t19, anchor);
 			insert(target, div8, anchor);
+			append(div8, input6);
+			input6.checked = /*data*/ ctx[0].autoRecord;
+			append(div8, t20);
+			insert(target, t21, anchor);
+			insert(target, div9, anchor);
 
 			if (!mounted) {
 				dispose = [
@@ -1567,7 +1585,8 @@ function create_fragment$4(ctx) {
 					listen(input2, "change", /*input2_change_handler*/ ctx[5]),
 					listen(input3, "change", /*input3_change_handler*/ ctx[6]),
 					listen(input4, "change", /*input4_change_handler*/ ctx[7]),
-					listen(input5, "change", /*input5_change_handler*/ ctx[8])
+					listen(input5, "change", /*input5_change_handler*/ ctx[8]),
+					listen(input6, "change", /*input6_change_handler*/ ctx[9])
 				];
 
 				mounted = true;
@@ -1595,11 +1614,15 @@ function create_fragment$4(ctx) {
 			}
 
 			if (dirty & /*data*/ 1) {
-				input4.checked = /*data*/ ctx[0].autostartILs;
+				input4.checked = /*data*/ ctx[0].showPbSplits;
 			}
 
 			if (dirty & /*data*/ 1) {
-				input5.checked = /*data*/ ctx[0].autoRecord;
+				input5.checked = /*data*/ ctx[0].autostartILs;
+			}
+
+			if (dirty & /*data*/ 1) {
+				input6.checked = /*data*/ ctx[0].autoRecord;
 			}
 		},
 		i: noop,
@@ -1623,6 +1646,8 @@ function create_fragment$4(ctx) {
 				detach(div7);
 				detach(t19);
 				detach(div8);
+				detach(t21);
+				detach(div9);
 			}
 
 			mounted = false;
@@ -1661,11 +1686,16 @@ function instance$4($$self, $$props, $$invalidate) {
 	}
 
 	function input4_change_handler() {
-		data.autostartILs = this.checked;
+		data.showPbSplits = this.checked;
 		$$invalidate(0, data);
 	}
 
 	function input5_change_handler() {
+		data.autostartILs = this.checked;
+		$$invalidate(0, data);
+	}
+
+	function input6_change_handler() {
 		data.autoRecord = this.checked;
 		$$invalidate(0, data);
 	}
@@ -1683,7 +1713,8 @@ function instance$4($$self, $$props, $$invalidate) {
 		input2_change_handler,
 		input3_change_handler,
 		input4_change_handler,
-		input5_change_handler
+		input5_change_handler,
+		input6_change_handler
 	];
 }
 
@@ -2175,6 +2206,10 @@ function create_fragment$2(ctx) {
 	let div4;
 	let input3;
 	let t12;
+	let t13;
+	let div5;
+	let input4;
+	let t14;
 	let mounted;
 	let dispose;
 
@@ -2207,6 +2242,10 @@ function create_fragment$2(ctx) {
 			div4 = element("div");
 			input3 = element("input");
 			t12 = text("\r\n    Show split time at end");
+			t13 = space();
+			div5 = element("div");
+			input4 = element("input");
+			t14 = text("\r\n    Show time of split in PB");
 			option0.__value = "top left";
 			set_input_value(option0, option0.__value);
 			option1.__value = "top right";
@@ -2229,6 +2268,9 @@ function create_fragment$2(ctx) {
 			attr(input3, "type", "checkbox");
 			attr(input3, "class", "svelte-1kifeye");
 			attr(div4, "class", "row svelte-1kifeye");
+			attr(input4, "type", "checkbox");
+			attr(input4, "class", "svelte-1kifeye");
+			attr(div5, "class", "row svelte-1kifeye");
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
@@ -2259,6 +2301,11 @@ function create_fragment$2(ctx) {
 			append(div4, input3);
 			input3.checked = /*data*/ ctx[0].showSplitTimeAtEnd;
 			append(div4, t12);
+			insert(target, t13, anchor);
+			insert(target, div5, anchor);
+			append(div5, input4);
+			input4.checked = /*data*/ ctx[0].showPbSplits;
+			append(div5, t14);
 
 			if (!mounted) {
 				dispose = [
@@ -2266,7 +2313,8 @@ function create_fragment$2(ctx) {
 					listen(input0, "change", /*input0_change_handler*/ ctx[2]),
 					listen(input1, "change", /*input1_change_handler*/ ctx[3]),
 					listen(input2, "change", /*input2_change_handler*/ ctx[4]),
-					listen(input3, "change", /*input3_change_handler*/ ctx[5])
+					listen(input3, "change", /*input3_change_handler*/ ctx[5]),
+					listen(input4, "change", /*input4_change_handler*/ ctx[6])
 				];
 
 				mounted = true;
@@ -2292,6 +2340,10 @@ function create_fragment$2(ctx) {
 			if (dirty & /*data*/ 1) {
 				input3.checked = /*data*/ ctx[0].showSplitTimeAtEnd;
 			}
+
+			if (dirty & /*data*/ 1) {
+				input4.checked = /*data*/ ctx[0].showPbSplits;
+			}
 		},
 		i: noop,
 		o: noop,
@@ -2306,6 +2358,8 @@ function create_fragment$2(ctx) {
 				detach(div3);
 				detach(t11);
 				detach(div4);
+				detach(t13);
+				detach(div5);
 			}
 
 			mounted = false;
@@ -2342,6 +2396,11 @@ function instance$2($$self, $$props, $$invalidate) {
 		$$invalidate(0, data);
 	}
 
+	function input4_change_handler() {
+		data.showPbSplits = this.checked;
+		$$invalidate(0, data);
+	}
+
 	$$self.$$set = $$props => {
 		if ('data' in $$props) $$invalidate(0, data = $$props.data);
 	};
@@ -2352,7 +2411,8 @@ function instance$2($$self, $$props, $$invalidate) {
 		input0_change_handler,
 		input1_change_handler,
 		input2_change_handler,
-		input3_change_handler
+		input3_change_handler,
+		input4_change_handler
 	];
 }
 
@@ -2923,6 +2983,15 @@ class SplitsUI extends BasicUI {
             this.splitDatas.push(Array.from(row.children));
             table.appendChild(row);
         }
+        // add in the split time in the PB
+        if (this.autosplitter.data.showPbSplits) {
+            for (let i = 0; i < this.autosplitter.pbSplits.length; i++) {
+                let split = this.autosplitter.pbSplits[i];
+                if (!split)
+                    continue;
+                this.splitDatas[i][3].innerText = fmtMs(split);
+            }
+        }
         this.element.appendChild(this.total);
     }
     setActiveSplit(index) {
@@ -2944,8 +3013,10 @@ class SplitsUI extends BasicUI {
         if (!pb)
             return;
         let amountBehind = totalMs - pb;
-        if (amountBehind <= 0)
+        if (amountBehind <= 0) {
+            this.setTotalAhead(true);
             return;
+        }
         if (this.autosplitter.data.showSplitComparisons) {
             this.splitDatas[splitIndex][2].innerText = `+${fmtMs(amountBehind)}`;
             this.splitDatas[splitIndex][2].classList.add("behind");

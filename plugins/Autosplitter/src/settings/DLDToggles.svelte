@@ -32,6 +32,10 @@
     Show split time at end
 </div>
 <div class="row">
+    <input type="checkbox" bind:checked={data.showPbSplits} />
+    Show time of split in PB
+</div>
+<div class="row">
     <input type="checkbox" bind:checked={data.autostartILs} />
     Start ILs upon using savestates to warp there
 </div>

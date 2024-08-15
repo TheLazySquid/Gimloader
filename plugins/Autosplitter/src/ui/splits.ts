@@ -29,6 +29,16 @@ export default class SplitsUI extends BasicUI {
             this.splitDatas.push(Array.from(row.children) as HTMLElement[]);
             table.appendChild(row);
         }
+
+        // add in the split time in the PB
+        if(this.autosplitter.data.showPbSplits) {
+            for(let i = 0; i < this.autosplitter.pbSplits.length; i++) {
+                let split = this.autosplitter.pbSplits[i];
+                if(!split) continue;
+
+                this.splitDatas[i][3].innerText = fmtMs(split);
+            }
+        }
     
         this.element.appendChild(this.total);
     }
@@ -53,7 +63,10 @@ export default class SplitsUI extends BasicUI {
         let pb = this.autosplitter.pbSplits?.[splitIndex];
         if(!pb) return;
         let amountBehind = totalMs - pb;
-        if(amountBehind <= 0) return;
+        if(amountBehind <= 0) {
+            this.setTotalAhead(true);
+            return;
+        }
 
         if(this.autosplitter.data.showSplitComparisons) {
             this.splitDatas[splitIndex][2].innerText = `+${fmtMs(amountBehind)}`;

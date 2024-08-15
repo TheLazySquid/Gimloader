@@ -29,6 +29,10 @@
     <input type="checkbox" bind:checked={data.showSplitTimeAtEnd} />
     Show split time at end
 </div>
+<div class="row">
+    <input type="checkbox" bind:checked={data.showPbSplits} />
+    Show time of split in PB
+</div>
 
 <style>
     .row {

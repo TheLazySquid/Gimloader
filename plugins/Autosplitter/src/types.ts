@@ -10,6 +10,7 @@ export interface BasicData extends BaseData {
 export interface SplitsData extends BaseData {
     pb: Record<string, number[]>,
     bestSplits: Record<string, number[]>,
+    showPbSplits: boolean,
     showSplits: boolean,
     showSplitTimes: boolean,
     showSplitComparisons: boolean,
