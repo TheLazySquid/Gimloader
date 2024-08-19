@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.2.1
+ * @version 0.2.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  */
@@ -73,7 +73,7 @@ GL.hotkeys.add(freecamHotkey, () => {
     }
 
     freecamming = !freecamming;
-}, true)
+}, false)
 
 scrollInterval = setInterval(() => {
     let camera = GL.stores?.phaser?.scene?.cameras?.cameras?.[0];
@@ -130,8 +130,8 @@ const onDown = () => {
     zoomToggled = !zoomToggled;
 }
 
-GL.hotkeys.add(sHotkey, onDown);
-GL.hotkeys.add(downHotkey, onDown);
+GL.hotkeys.add(sHotkey, onDown, false);
+GL.hotkeys.add(downHotkey, onDown, false);
 
 export function onStop() {
     window.removeEventListener("wheel", onWheel);

@@ -2,7 +2,7 @@
  * @name InstantUse
  * @description Instantly use nearby devices without any wait
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js
  */
 
@@ -31,7 +31,7 @@ GL.hotkeys.add(hotkey, () => {
     if(closest) {
         closest.interactiveZones?.onInteraction?.()
     }
-})
+}, false)
 
 export function onStop() {
     GL.hotkeys.remove(hotkey)
