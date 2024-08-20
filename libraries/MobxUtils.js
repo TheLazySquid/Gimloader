@@ -2,7 +2,7 @@
  * @name MobxUtils
  * @description Some simple utilities for react injection with MobX
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/MobxUtils.js
  * @isLibrary true
  */
@@ -15,7 +15,8 @@ GL.parcel.interceptRequire("MobxUtils", exports => exports && Object.keys(export
         let str = args[0].toString();
         for(let intercept of observerIntercepts) {
             if(intercept.match(str)) {
-                intercept.callback(args[0]);
+                let newVal = intercept.callback(args[0]);
+                if(newVal) args[0] = newVal;
             }
         }
     })
