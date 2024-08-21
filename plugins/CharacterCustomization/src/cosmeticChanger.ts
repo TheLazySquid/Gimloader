@@ -143,7 +143,7 @@ export default class CosmeticChanger {
             let skin = GL.stores.phaser.mainCharacter?.skin;
             if(skin && this.skinType === "custom") {
                 this.allowNextSkin = true;
-                skin.updateSkin("customSkin");
+                skin.updateSkin({ id: "customSkin" });
             }
         }
 
@@ -172,7 +172,7 @@ export default class CosmeticChanger {
 
     patchSkin(skin: any) {
         if(this.skinType === "id") {
-            skin.updateSkin(this.skinId);
+            skin.updateSkin({ id: this.skinId });
         }
 
         GL.patcher.before("CharacterCustomization", skin, "updateSkin", (_, args) => {
@@ -247,7 +247,7 @@ export default class CosmeticChanger {
             this.allowNextSkin = true;
 
             if(skinType === "id") {
-                skin.updateSkin(skinId);
+                skin.updateSkin({ id: skinId });
             } else if(skinType === "default") {
                 skin.updateSkin(this.normalSkin);
             } else {
