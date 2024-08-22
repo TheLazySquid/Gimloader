@@ -2,57 +2,1840 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author TheLazySquid
- * @version 0.3.1
+ * @version 0.4.0
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js
  */
-function UI({ cosmeticChanger, onSubmit }) {
-    const React = GL.React;
-    let [skinType, setSkinType] = React.useState(cosmeticChanger.skinType);
-    let [skinId, setSkinId] = React.useState(cosmeticChanger.skinId);
-    let [trailType, setTrailType] = React.useState(cosmeticChanger.trailType);
-    let [trailId, setTrailId] = React.useState(cosmeticChanger.trailId);
-    let [customSkinFile, setCustomSkinFile] = React.useState(cosmeticChanger.customSkinFile);
-    onSubmit(() => {
-        cosmeticChanger.setSkin(skinType, skinId, customSkinFile);
-        cosmeticChanger.setTrail(trailType, trailId);
-    });
-    const uploadSkinClick = () => {
-        let input = document.createElement("input");
-        input.type = "file";
-        input.accept = ".png";
-        input.onchange = () => {
-            let file = input.files?.[0];
-            if (!file) {
-                setCustomSkinFile(null);
-            }
-            else {
-                setCustomSkinFile(file);
-            }
-        };
-        input.click();
-    };
-    return (React.createElement("div", { className: "characterCustomization" },
-        React.createElement("h1", null, "Skin"),
-        React.createElement("div", { className: "row" },
-            React.createElement("select", { value: skinType, onChange: (e) => setSkinType(e.target.value) },
-                React.createElement("option", { value: "default" }, "Unchanged"),
-                React.createElement("option", { value: "id" }, "Any Skin By ID"),
-                React.createElement("option", { value: "custom" }, "Custom Skin")),
-            skinType === "id" && React.createElement("input", { onKeyDown: (e) => e.stopPropagation(), value: skinId, onChange: (e) => setSkinId(e.target.value), type: "text", placeholder: "Skin ID" }),
-            skinType === "custom" && React.createElement("button", { onClick: uploadSkinClick },
-                "Current: ",
-                customSkinFile ? customSkinFile.name : "None",
-                ". Upload skin")),
-        React.createElement("h1", null, "Trail"),
-        React.createElement("div", { className: "row" },
-            React.createElement("select", { value: trailType, onChange: (e) => setTrailType(e.target.value) },
-                React.createElement("option", { value: "default" }, "Unchanged"),
-                React.createElement("option", { value: "id" }, "Any Trail By ID")),
-            trailType === "id" && React.createElement("input", { onKeyDown: (e) => e.stopPropagation(), value: trailId, onChange: (e) => setTrailId(e.target.value), type: "text", placeholder: "Trail ID" }))));
+/** @returns {void} */
+function noop() {}
+
+function run(fn) {
+	return fn();
 }
 
-var styles = ".characterCustomization .row {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  width: 500px;\n}\n.characterCustomization select {\n  padding: 3px;\n}";
+function blank_object() {
+	return Object.create(null);
+}
+
+/**
+ * @param {Function[]} fns
+ * @returns {void}
+ */
+function run_all(fns) {
+	fns.forEach(run);
+}
+
+/**
+ * @param {any} thing
+ * @returns {thing is Function}
+ */
+function is_function(thing) {
+	return typeof thing === 'function';
+}
+
+/** @returns {boolean} */
+function safe_not_equal(a, b) {
+	return a != a ? b == b : a !== b || (a && typeof a === 'object') || typeof a === 'function';
+}
+
+/** @returns {boolean} */
+function is_empty(obj) {
+	return Object.keys(obj).length === 0;
+}
+
+/**
+ * @param {Node} target
+ * @param {Node} node
+ * @returns {void}
+ */
+function append(target, node) {
+	target.appendChild(node);
+}
+
+/**
+ * @param {Node} target
+ * @param {string} style_sheet_id
+ * @param {string} styles
+ * @returns {void}
+ */
+function append_styles(target, style_sheet_id, styles) {
+	const append_styles_to = get_root_for_style(target);
+	if (!append_styles_to.getElementById(style_sheet_id)) {
+		const style = element('style');
+		style.id = style_sheet_id;
+		style.textContent = styles;
+		append_stylesheet(append_styles_to, style);
+	}
+}
+
+/**
+ * @param {Node} node
+ * @returns {ShadowRoot | Document}
+ */
+function get_root_for_style(node) {
+	if (!node) return document;
+	const root = node.getRootNode ? node.getRootNode() : node.ownerDocument;
+	if (root && /** @type {ShadowRoot} */ (root).host) {
+		return /** @type {ShadowRoot} */ (root);
+	}
+	return node.ownerDocument;
+}
+
+/**
+ * @param {ShadowRoot | Document} node
+ * @param {HTMLStyleElement} style
+ * @returns {CSSStyleSheet}
+ */
+function append_stylesheet(node, style) {
+	append(/** @type {Document} */ (node).head || node, style);
+	return style.sheet;
+}
+
+/**
+ * @param {Node} target
+ * @param {Node} node
+ * @param {Node} [anchor]
+ * @returns {void}
+ */
+function insert(target, node, anchor) {
+	target.insertBefore(node, anchor || null);
+}
+
+/**
+ * @param {Node} node
+ * @returns {void}
+ */
+function detach(node) {
+	if (node.parentNode) {
+		node.parentNode.removeChild(node);
+	}
+}
+
+/**
+ * @returns {void} */
+function destroy_each(iterations, detaching) {
+	for (let i = 0; i < iterations.length; i += 1) {
+		if (iterations[i]) iterations[i].d(detaching);
+	}
+}
+
+/**
+ * @template {keyof HTMLElementTagNameMap} K
+ * @param {K} name
+ * @returns {HTMLElementTagNameMap[K]}
+ */
+function element(name) {
+	return document.createElement(name);
+}
+
+/**
+ * @param {string} data
+ * @returns {Text}
+ */
+function text(data) {
+	return document.createTextNode(data);
+}
+
+/**
+ * @returns {Text} */
+function space() {
+	return text(' ');
+}
+
+/**
+ * @returns {Text} */
+function empty() {
+	return text('');
+}
+
+/**
+ * @param {EventTarget} node
+ * @param {string} event
+ * @param {EventListenerOrEventListenerObject} handler
+ * @param {boolean | AddEventListenerOptions | EventListenerOptions} [options]
+ * @returns {() => void}
+ */
+function listen(node, event, handler, options) {
+	node.addEventListener(event, handler, options);
+	return () => node.removeEventListener(event, handler, options);
+}
+
+/**
+ * @param {Element} node
+ * @param {string} attribute
+ * @param {string} [value]
+ * @returns {void}
+ */
+function attr(node, attribute, value) {
+	if (value == null) node.removeAttribute(attribute);
+	else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
+}
+
+/**
+ * @param {Element} element
+ * @returns {ChildNode[]}
+ */
+function children(element) {
+	return Array.from(element.childNodes);
+}
+
+/**
+ * @param {Text} text
+ * @param {unknown} data
+ * @returns {void}
+ */
+function set_data(text, data) {
+	data = '' + data;
+	if (text.data === data) return;
+	text.data = /** @type {string} */ (data);
+}
+
+/**
+ * @returns {void} */
+function set_input_value(input, value) {
+	input.value = value == null ? '' : value;
+}
+
+/**
+ * @returns {void} */
+function set_style(node, key, value, important) {
+	if (value == null) {
+		node.style.removeProperty(key);
+	} else {
+		node.style.setProperty(key, value, '');
+	}
+}
+
+/**
+ * @returns {void} */
+function select_option(select, value, mounting) {
+	for (let i = 0; i < select.options.length; i += 1) {
+		const option = select.options[i];
+		if (option.__value === value) {
+			option.selected = true;
+			return;
+		}
+	}
+	if (!mounting || value !== undefined) {
+		select.selectedIndex = -1; // no option should be selected
+	}
+}
+
+function select_value(select) {
+	const selected_option = select.querySelector(':checked');
+	return selected_option && selected_option.__value;
+}
+
+/**
+ * @returns {void} */
+function toggle_class(element, name, toggle) {
+	// The `!!` is required because an `undefined` flag means flipping the current state.
+	element.classList.toggle(name, !!toggle);
+}
+
+/**
+ * @typedef {Node & {
+ * 	claim_order?: number;
+ * 	hydrate_init?: true;
+ * 	actual_end_child?: NodeEx;
+ * 	childNodes: NodeListOf<NodeEx>;
+ * }} NodeEx
+ */
+
+/** @typedef {ChildNode & NodeEx} ChildNodeEx */
+
+/** @typedef {NodeEx & { claim_order: number }} NodeEx2 */
+
+/**
+ * @typedef {ChildNodeEx[] & {
+ * 	claim_info?: {
+ * 		last_index: number;
+ * 		total_claimed: number;
+ * 	};
+ * }} ChildNodeArray
+ */
+
+let current_component;
+
+/** @returns {void} */
+function set_current_component(component) {
+	current_component = component;
+}
+
+function get_current_component() {
+	if (!current_component) throw new Error('Function called outside component initialization');
+	return current_component;
+}
+
+/**
+ * The `onMount` function schedules a callback to run as soon as the component has been mounted to the DOM.
+ * It must be called during the component's initialisation (but doesn't need to live *inside* the component;
+ * it can be called from an external module).
+ *
+ * If a function is returned _synchronously_ from `onMount`, it will be called when the component is unmounted.
+ *
+ * `onMount` does not run inside a [server-side component](https://svelte.dev/docs#run-time-server-side-component-api).
+ *
+ * https://svelte.dev/docs/svelte#onmount
+ * @template T
+ * @param {() => import('./private.js').NotFunction<T> | Promise<import('./private.js').NotFunction<T>> | (() => any)} fn
+ * @returns {void}
+ */
+function onMount(fn) {
+	get_current_component().$$.on_mount.push(fn);
+}
+
+const dirty_components = [];
+const binding_callbacks = [];
+
+let render_callbacks = [];
+
+const flush_callbacks = [];
+
+const resolved_promise = /* @__PURE__ */ Promise.resolve();
+
+let update_scheduled = false;
+
+/** @returns {void} */
+function schedule_update() {
+	if (!update_scheduled) {
+		update_scheduled = true;
+		resolved_promise.then(flush);
+	}
+}
+
+/** @returns {void} */
+function add_render_callback(fn) {
+	render_callbacks.push(fn);
+}
+
+// flush() calls callbacks in this order:
+// 1. All beforeUpdate callbacks, in order: parents before children
+// 2. All bind:this callbacks, in reverse order: children before parents.
+// 3. All afterUpdate callbacks, in order: parents before children. EXCEPT
+//    for afterUpdates called during the initial onMount, which are called in
+//    reverse order: children before parents.
+// Since callbacks might update component values, which could trigger another
+// call to flush(), the following steps guard against this:
+// 1. During beforeUpdate, any updated components will be added to the
+//    dirty_components array and will cause a reentrant call to flush(). Because
+//    the flush index is kept outside the function, the reentrant call will pick
+//    up where the earlier call left off and go through all dirty components. The
+//    current_component value is saved and restored so that the reentrant call will
+//    not interfere with the "parent" flush() call.
+// 2. bind:this callbacks cannot trigger new flush() calls.
+// 3. During afterUpdate, any updated components will NOT have their afterUpdate
+//    callback called a second time; the seen_callbacks set, outside the flush()
+//    function, guarantees this behavior.
+const seen_callbacks = new Set();
+
+let flushidx = 0; // Do *not* move this inside the flush() function
+
+/** @returns {void} */
+function flush() {
+	// Do not reenter flush while dirty components are updated, as this can
+	// result in an infinite loop. Instead, let the inner flush handle it.
+	// Reentrancy is ok afterwards for bindings etc.
+	if (flushidx !== 0) {
+		return;
+	}
+	const saved_component = current_component;
+	do {
+		// first, call beforeUpdate functions
+		// and update components
+		try {
+			while (flushidx < dirty_components.length) {
+				const component = dirty_components[flushidx];
+				flushidx++;
+				set_current_component(component);
+				update(component.$$);
+			}
+		} catch (e) {
+			// reset dirty state to not end up in a deadlocked state and then rethrow
+			dirty_components.length = 0;
+			flushidx = 0;
+			throw e;
+		}
+		set_current_component(null);
+		dirty_components.length = 0;
+		flushidx = 0;
+		while (binding_callbacks.length) binding_callbacks.pop()();
+		// then, once components are updated, call
+		// afterUpdate functions. This may cause
+		// subsequent updates...
+		for (let i = 0; i < render_callbacks.length; i += 1) {
+			const callback = render_callbacks[i];
+			if (!seen_callbacks.has(callback)) {
+				// ...so guard against infinite loops
+				seen_callbacks.add(callback);
+				callback();
+			}
+		}
+		render_callbacks.length = 0;
+	} while (dirty_components.length);
+	while (flush_callbacks.length) {
+		flush_callbacks.pop()();
+	}
+	update_scheduled = false;
+	seen_callbacks.clear();
+	set_current_component(saved_component);
+}
+
+/** @returns {void} */
+function update($$) {
+	if ($$.fragment !== null) {
+		$$.update();
+		run_all($$.before_update);
+		const dirty = $$.dirty;
+		$$.dirty = [-1];
+		$$.fragment && $$.fragment.p($$.ctx, dirty);
+		$$.after_update.forEach(add_render_callback);
+	}
+}
+
+/**
+ * Useful for example to execute remaining `afterUpdate` callbacks before executing `destroy`.
+ * @param {Function[]} fns
+ * @returns {void}
+ */
+function flush_render_callbacks(fns) {
+	const filtered = [];
+	const targets = [];
+	render_callbacks.forEach((c) => (fns.indexOf(c) === -1 ? filtered.push(c) : targets.push(c)));
+	targets.forEach((c) => c());
+	render_callbacks = filtered;
+}
+
+const outroing = new Set();
+
+/**
+ * @param {import('./private.js').Fragment} block
+ * @param {0 | 1} [local]
+ * @returns {void}
+ */
+function transition_in(block, local) {
+	if (block && block.i) {
+		outroing.delete(block);
+		block.i(local);
+	}
+}
+
+/** @typedef {1} INTRO */
+/** @typedef {0} OUTRO */
+/** @typedef {{ direction: 'in' | 'out' | 'both' }} TransitionOptions */
+/** @typedef {(node: Element, params: any, options: TransitionOptions) => import('../transition/public.js').TransitionConfig} TransitionFn */
+
+/**
+ * @typedef {Object} Outro
+ * @property {number} r
+ * @property {Function[]} c
+ * @property {Object} p
+ */
+
+/**
+ * @typedef {Object} PendingProgram
+ * @property {number} start
+ * @property {INTRO|OUTRO} b
+ * @property {Outro} [group]
+ */
+
+/**
+ * @typedef {Object} Program
+ * @property {number} a
+ * @property {INTRO|OUTRO} b
+ * @property {1|-1} d
+ * @property {number} duration
+ * @property {number} start
+ * @property {number} end
+ * @property {Outro} [group]
+ */
+
+// general each functions:
+
+function ensure_array_like(array_like_or_iterator) {
+	return array_like_or_iterator?.length !== undefined
+		? array_like_or_iterator
+		: Array.from(array_like_or_iterator);
+}
+
+/** @returns {void} */
+function mount_component(component, target, anchor) {
+	const { fragment, after_update } = component.$$;
+	fragment && fragment.m(target, anchor);
+	// onMount happens before the initial afterUpdate
+	add_render_callback(() => {
+		const new_on_destroy = component.$$.on_mount.map(run).filter(is_function);
+		// if the component was destroyed immediately
+		// it will update the `$$.on_destroy` reference to `null`.
+		// the destructured on_destroy may still reference to the old array
+		if (component.$$.on_destroy) {
+			component.$$.on_destroy.push(...new_on_destroy);
+		} else {
+			// Edge case - component was destroyed immediately,
+			// most likely as a result of a binding initialising
+			run_all(new_on_destroy);
+		}
+		component.$$.on_mount = [];
+	});
+	after_update.forEach(add_render_callback);
+}
+
+/** @returns {void} */
+function destroy_component(component, detaching) {
+	const $$ = component.$$;
+	if ($$.fragment !== null) {
+		flush_render_callbacks($$.after_update);
+		run_all($$.on_destroy);
+		$$.fragment && $$.fragment.d(detaching);
+		// TODO null out other refs, including component.$$ (but need to
+		// preserve final state?)
+		$$.on_destroy = $$.fragment = null;
+		$$.ctx = [];
+	}
+}
+
+/** @returns {void} */
+function make_dirty(component, i) {
+	if (component.$$.dirty[0] === -1) {
+		dirty_components.push(component);
+		schedule_update();
+		component.$$.dirty.fill(0);
+	}
+	component.$$.dirty[(i / 31) | 0] |= 1 << i % 31;
+}
+
+// TODO: Document the other params
+/**
+ * @param {SvelteComponent} component
+ * @param {import('./public.js').ComponentConstructorOptions} options
+ *
+ * @param {import('./utils.js')['not_equal']} not_equal Used to compare props and state values.
+ * @param {(target: Element | ShadowRoot) => void} [append_styles] Function that appends styles to the DOM when the component is first initialised.
+ * This will be the `add_css` function from the compiled component.
+ *
+ * @returns {void}
+ */
+function init(
+	component,
+	options,
+	instance,
+	create_fragment,
+	not_equal,
+	props,
+	append_styles = null,
+	dirty = [-1]
+) {
+	const parent_component = current_component;
+	set_current_component(component);
+	/** @type {import('./private.js').T$$} */
+	const $$ = (component.$$ = {
+		fragment: null,
+		ctx: [],
+		// state
+		props,
+		update: noop,
+		not_equal,
+		bound: blank_object(),
+		// lifecycle
+		on_mount: [],
+		on_destroy: [],
+		on_disconnect: [],
+		before_update: [],
+		after_update: [],
+		context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
+		// everything else
+		callbacks: blank_object(),
+		dirty,
+		skip_bound: false,
+		root: options.target || parent_component.$$.root
+	});
+	append_styles && append_styles($$.root);
+	let ready = false;
+	$$.ctx = instance
+		? instance(component, options.props || {}, (i, ret, ...rest) => {
+				const value = rest.length ? rest[0] : ret;
+				if ($$.ctx && not_equal($$.ctx[i], ($$.ctx[i] = value))) {
+					if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
+					if (ready) make_dirty(component, i);
+				}
+				return ret;
+		  })
+		: [];
+	$$.update();
+	ready = true;
+	run_all($$.before_update);
+	// `false` as a special case of no DOM component
+	$$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+	if (options.target) {
+		if (options.hydrate) {
+			// TODO: what is the correct type here?
+			// @ts-expect-error
+			const nodes = children(options.target);
+			$$.fragment && $$.fragment.l(nodes);
+			nodes.forEach(detach);
+		} else {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			$$.fragment && $$.fragment.c();
+		}
+		if (options.intro) transition_in(component.$$.fragment);
+		mount_component(component, options.target, options.anchor);
+		flush();
+	}
+	set_current_component(parent_component);
+}
+
+/**
+ * Base class for Svelte components. Used when dev=false.
+ *
+ * @template {Record<string, any>} [Props=any]
+ * @template {Record<string, any>} [Events=any]
+ */
+class SvelteComponent {
+	/**
+	 * ### PRIVATE API
+	 *
+	 * Do not use, may change at any time
+	 *
+	 * @type {any}
+	 */
+	$$ = undefined;
+	/**
+	 * ### PRIVATE API
+	 *
+	 * Do not use, may change at any time
+	 *
+	 * @type {any}
+	 */
+	$$set = undefined;
+
+	/** @returns {void} */
+	$destroy() {
+		destroy_component(this, 1);
+		this.$destroy = noop;
+	}
+
+	/**
+	 * @template {Extract<keyof Events, string>} K
+	 * @param {K} type
+	 * @param {((e: Events[K]) => void) | null | undefined} callback
+	 * @returns {() => void}
+	 */
+	$on(type, callback) {
+		if (!is_function(callback)) {
+			return noop;
+		}
+		const callbacks = this.$$.callbacks[type] || (this.$$.callbacks[type] = []);
+		callbacks.push(callback);
+		return () => {
+			const index = callbacks.indexOf(callback);
+			if (index !== -1) callbacks.splice(index, 1);
+		};
+	}
+
+	/**
+	 * @param {Partial<Props>} props
+	 * @returns {void}
+	 */
+	$set(props) {
+		if (this.$$set && !is_empty(props)) {
+			this.$$.skip_bound = true;
+			this.$$set(props);
+			this.$$.skip_bound = false;
+		}
+	}
+}
+
+/**
+ * @typedef {Object} CustomElementPropDefinition
+ * @property {string} [attribute]
+ * @property {boolean} [reflect]
+ * @property {'String'|'Boolean'|'Number'|'Array'|'Object'} [type]
+ */
+
+// generated during release, do not modify
+
+const PUBLIC_VERSION = '4';
+
+if (typeof window !== 'undefined')
+	// @ts-ignore
+	(window.__svelte || (window.__svelte = { v: new Set() })).v.add(PUBLIC_VERSION);
+
+var dist = {};
+
+var core = {};
+
+var debug = {};
+
+Object.defineProperty(debug, "__esModule", { value: true });
+debug.throwUnsupportedData = debug.throwUnknownDataType = debug.getType = void 0;
+function getType(o) {
+    return Object.prototype.toString.call(o);
+}
+debug.getType = getType;
+function throwUnknownDataType(o) {
+    throw new TypeError('unsupported data type: ' + getType(o));
+}
+debug.throwUnknownDataType = throwUnknownDataType;
+function throwUnsupportedData(name) {
+    throw new TypeError('unsupported data type: ' + name);
+}
+debug.throwUnsupportedData = throwUnsupportedData;
+
+var encode = {};
+
+var number = {};
+
+Object.defineProperty(number, "__esModule", { value: true });
+number.s_to_num = number.int_str_to_s = number.num_to_s = number.big_int_to_s = number.int_to_s = number.s_to_big_int = number.s_to_int = void 0;
+let i_to_s = '';
+for (let i = 0; i < 10; i++) {
+    const c = String.fromCharCode(48 + i);
+    i_to_s += c;
+}
+for (let i = 0; i < 26; i++) {
+    const c = String.fromCharCode(65 + i);
+    i_to_s += c;
+}
+for (let i = 0; i < 26; i++) {
+    const c = String.fromCharCode(65 + 32 + i);
+    i_to_s += c;
+}
+const N = i_to_s.length;
+const s_to_i = {};
+for (let i = 0; i < N; i++) {
+    const s = i_to_s[i];
+    s_to_i[s] = i;
+}
+function s_to_int(s) {
+    let acc = 0;
+    let pow = 1;
+    for (let i = s.length - 1; i >= 0; i--) {
+        const c = s[i];
+        let x = s_to_i[c];
+        x *= pow;
+        acc += x;
+        pow *= N;
+    }
+    return acc;
+}
+number.s_to_int = s_to_int;
+function s_to_big_int(s) {
+    let acc = BigInt(0);
+    let pow = BigInt(1);
+    const n = BigInt(N);
+    for (let i = s.length - 1; i >= 0; i--) {
+        const c = s[i];
+        let x = BigInt(s_to_i[c]);
+        x *= pow;
+        acc += x;
+        pow *= n;
+    }
+    return acc;
+}
+number.s_to_big_int = s_to_big_int;
+function int_to_s(int) {
+    if (int === 0) {
+        return i_to_s[0];
+    }
+    const acc = [];
+    while (int !== 0) {
+        const i = int % N;
+        const c = i_to_s[i];
+        acc.push(c);
+        int -= i;
+        int /= N;
+    }
+    return acc.reverse().join('');
+}
+number.int_to_s = int_to_s;
+function big_int_to_s(int) {
+    const zero = BigInt(0);
+    const n = BigInt(N);
+    if (int === zero) {
+        return i_to_s[0];
+    }
+    const acc = [];
+    while (int !== zero) {
+        const i = int % n;
+        const c = i_to_s[Number(i)];
+        acc.push(c);
+        int /= n;
+    }
+    return acc.reverse().join('');
+}
+number.big_int_to_s = big_int_to_s;
+function reverse(s) {
+    return s.split('').reverse().join('');
+}
+function num_to_s(num) {
+    if (num < 0) {
+        return '-' + num_to_s(-num);
+    }
+    let [a, b] = num.toString().split('.');
+    if (!b) {
+        return int_to_s(num);
+    }
+    let c;
+    if (b) {
+        [b, c] = b.split('e');
+    }
+    a = int_str_to_s(a);
+    b = reverse(b);
+    b = int_str_to_s(b);
+    let str = a + '.' + b;
+    if (c) {
+        str += '.';
+        switch (c[0]) {
+            case '+':
+                c = c.slice(1);
+                break;
+            case '-':
+                str += '-';
+                c = c.slice(1);
+                break;
+        }
+        c = int_str_to_s(c);
+        str += c;
+    }
+    return str;
+}
+number.num_to_s = num_to_s;
+function int_str_to_s(int_str) {
+    const num = +int_str;
+    if (num.toString() === int_str && num + 1 !== num && num - 1 !== num) {
+        return int_to_s(num);
+    }
+    return ':' + big_int_to_s(BigInt(int_str));
+}
+number.int_str_to_s = int_str_to_s;
+function s_to_int_str(s) {
+    if (s[0] === ':') {
+        return s_to_big_int(s.substring(1)).toString();
+    }
+    return s_to_int(s).toString();
+}
+function s_to_num(s) {
+    if (s[0] === '-') {
+        return -s_to_num(s.substr(1));
+    }
+    let [a, b, c] = s.split('.');
+    if (!b) {
+        return s_to_int(a);
+    }
+    a = s_to_int_str(a);
+    b = s_to_int_str(b);
+    b = reverse(b);
+    let str = a + '.' + b;
+    if (c) {
+        str += 'e';
+        let neg = false;
+        if (c[0] === '-') {
+            neg = true;
+            c = c.slice(1);
+        }
+        c = s_to_int_str(c);
+        str += neg ? -c : +c;
+    }
+    return +str;
+}
+number.s_to_num = s_to_num;
+
+Object.defineProperty(encode, "__esModule", { value: true });
+encode.decodeStr = encode.encodeStr = encode.decodeBool = encode.encodeBool = encode.decodeKey = encode.decodeNum = encode.encodeNum = void 0;
+const number_1$1 = number;
+function encodeNum(num) {
+    const a = 'n|' + (0, number_1$1.num_to_s)(num);
+    return a;
+    // let b = num.toString()
+    // return a.length < b.length ? a : num
+}
+encode.encodeNum = encodeNum;
+function decodeNum(s) {
+    s = s.replace('n|', '');
+    return (0, number_1$1.s_to_num)(s);
+}
+encode.decodeNum = decodeNum;
+function decodeKey(key) {
+    return typeof key === 'number' ? key : (0, number_1$1.s_to_int)(key);
+}
+encode.decodeKey = decodeKey;
+function encodeBool(b) {
+    // return 'b|' + bool_to_s(b)
+    return b ? 'b|T' : 'b|F';
+}
+encode.encodeBool = encodeBool;
+function decodeBool(s) {
+    switch (s) {
+        case 'b|T':
+            return true;
+        case 'b|F':
+            return false;
+    }
+    return !!s;
+}
+encode.decodeBool = decodeBool;
+function encodeStr(str) {
+    const prefix = str[0] + str[1];
+    switch (prefix) {
+        case 'b|':
+        case 'o|':
+        case 'n|':
+        case 'a|':
+        case 's|':
+            str = 's|' + str;
+    }
+    return str;
+}
+encode.encodeStr = encodeStr;
+function decodeStr(s) {
+    const prefix = s[0] + s[1];
+    return prefix === 's|' ? s.substr(2) : s;
+}
+encode.decodeStr = decodeStr;
+
+var memory = {};
+
+var config = {};
+
+Object.defineProperty(config, "__esModule", { value: true });
+config.config = void 0;
+config.config = {
+    // default will not sort the object key
+    sort_key: false,
+    // default will convert into null silently like JSON.stringify
+    error_on_nan: false,
+    error_on_infinite: false,
+};
+
+Object.defineProperty(memory, "__esModule", { value: true });
+memory.addValue = memory.makeInMemoryMemory = memory.makeInMemoryCache = memory.makeInMemoryStore = memory.memToValues = void 0;
+const config_1 = config;
+const debug_1$1 = debug;
+const encode_1$1 = encode;
+const number_1 = number;
+function memToValues(mem) {
+    return mem.store.toArray();
+}
+memory.memToValues = memToValues;
+function makeInMemoryStore() {
+    const mem = [];
+    return {
+        forEach(cb) {
+            for (let i = 0; i < mem.length; i++) {
+                if (cb(mem[i]) === 'break') {
+                    return;
+                }
+            }
+        },
+        add(value) {
+            mem.push(value);
+        },
+        toArray() {
+            return mem;
+        },
+    };
+}
+memory.makeInMemoryStore = makeInMemoryStore;
+function makeInMemoryCache() {
+    const valueMem = Object.create(null);
+    const schemaMem = Object.create(null);
+    return {
+        getValue(key) {
+            return valueMem[key];
+        },
+        getSchema(key) {
+            return schemaMem[key];
+        },
+        forEachValue(cb) {
+            for (const [key, value] of Object.entries(valueMem)) {
+                if (cb(key, value) === 'break') {
+                    return;
+                }
+            }
+        },
+        forEachSchema(cb) {
+            for (const [key, value] of Object.entries(schemaMem)) {
+                if (cb(key, value) === 'break') {
+                    return;
+                }
+            }
+        },
+        setValue(key, value) {
+            valueMem[key] = value;
+        },
+        setSchema(key, value) {
+            schemaMem[key] = value;
+        },
+        hasValue(key) {
+            return key in valueMem;
+        },
+        hasSchema(key) {
+            return key in schemaMem;
+        },
+    };
+}
+memory.makeInMemoryCache = makeInMemoryCache;
+function makeInMemoryMemory() {
+    return {
+        store: makeInMemoryStore(),
+        cache: makeInMemoryCache(),
+        keyCount: 0,
+    };
+}
+memory.makeInMemoryMemory = makeInMemoryMemory;
+function getValueKey(mem, value) {
+    if (mem.cache.hasValue(value)) {
+        return mem.cache.getValue(value);
+    }
+    const id = mem.keyCount++;
+    const key = (0, number_1.num_to_s)(id);
+    mem.store.add(value);
+    mem.cache.setValue(value, key);
+    return key;
+}
+/** @remark in-place sort the keys */
+function getSchema(mem, keys) {
+    if (config_1.config.sort_key) {
+        keys.sort();
+    }
+    const schema = keys.join(',');
+    if (mem.cache.hasSchema(schema)) {
+        return mem.cache.getSchema(schema);
+    }
+    const key_id = addValue(mem, keys, undefined);
+    mem.cache.setSchema(schema, key_id);
+    return key_id;
+}
+function addValue(mem, o, parent) {
+    if (o === null) {
+        return '';
+    }
+    switch (typeof o) {
+        case 'undefined':
+            if (Array.isArray(parent)) {
+                return addValue(mem, null, parent);
+            }
+            break;
+        case 'object':
+            if (o === null) {
+                return getValueKey(mem, null);
+            }
+            if (Array.isArray(o)) {
+                let acc = 'a';
+                for (let i = 0; i < o.length; i++) {
+                    const v = o[i];
+                    const key = v === null ? '_' : addValue(mem, v, o);
+                    acc += '|' + key;
+                }
+                if (acc === 'a') {
+                    acc = 'a|';
+                }
+                return getValueKey(mem, acc);
+            }
+            else {
+                const keys = Object.keys(o);
+                if (keys.length === 0) {
+                    return getValueKey(mem, 'o|');
+                }
+                let acc = 'o';
+                const key_id = getSchema(mem, keys);
+                acc += '|' + key_id;
+                for (const key of keys) {
+                    const value = o[key];
+                    const v = addValue(mem, value, o);
+                    acc += '|' + v;
+                }
+                return getValueKey(mem, acc);
+            }
+        case 'boolean':
+            return getValueKey(mem, (0, encode_1$1.encodeBool)(o));
+        case 'number':
+            if (Number.isNaN(o)) {
+                if (config_1.config.error_on_nan) {
+                    (0, debug_1$1.throwUnsupportedData)('[number NaN]');
+                }
+                return ''; // treat it as null like JSON.stringify
+            }
+            if (Number.POSITIVE_INFINITY === o || Number.NEGATIVE_INFINITY === o) {
+                if (config_1.config.error_on_infinite) {
+                    (0, debug_1$1.throwUnsupportedData)('[number Infinity]');
+                }
+                return ''; // treat it as null like JSON.stringify
+            }
+            return getValueKey(mem, (0, encode_1$1.encodeNum)(o));
+        case 'string':
+            return getValueKey(mem, (0, encode_1$1.encodeStr)(o));
+    }
+    return (0, debug_1$1.throwUnknownDataType)(o);
+}
+memory.addValue = addValue;
+
+Object.defineProperty(core, "__esModule", { value: true });
+core.decompress = core.decode = core.compress = void 0;
+const debug_1 = debug;
+const encode_1 = encode;
+const memory_1 = memory;
+function compress(o) {
+    const mem = (0, memory_1.makeInMemoryMemory)();
+    const root = (0, memory_1.addValue)(mem, o, undefined);
+    const values = (0, memory_1.memToValues)(mem);
+    return [values, root];
+}
+core.compress = compress;
+function decodeObject(values, s) {
+    if (s === 'o|') {
+        return {};
+    }
+    const o = {};
+    const vs = s.split('|');
+    const key_id = vs[1];
+    let keys = decode(values, key_id);
+    const n = vs.length;
+    if (n - 2 === 1 && !Array.isArray(keys)) {
+        // single-key object using existing value as key
+        keys = [keys];
+    }
+    for (let i = 2; i < n; i++) {
+        const k = keys[i - 2];
+        let v = vs[i];
+        v = decode(values, v);
+        o[k] = v;
+    }
+    return o;
+}
+function decodeArray(values, s) {
+    if (s === 'a|') {
+        return [];
+    }
+    const vs = s.split('|');
+    const n = vs.length - 1;
+    const xs = new Array(n);
+    for (let i = 0; i < n; i++) {
+        let v = vs[i + 1];
+        v = decode(values, v);
+        xs[i] = v;
+    }
+    return xs;
+}
+function decode(values, key) {
+    if (key === '' || key === '_') {
+        return null;
+    }
+    const id = (0, encode_1.decodeKey)(key);
+    const v = values[id];
+    if (v === null) {
+        return v;
+    }
+    switch (typeof v) {
+        case 'undefined':
+            return v;
+        case 'number':
+            return v;
+        case 'string':
+            const prefix = v[0] + v[1];
+            switch (prefix) {
+                case 'b|':
+                    return (0, encode_1.decodeBool)(v);
+                case 'o|':
+                    return decodeObject(values, v);
+                case 'n|':
+                    return (0, encode_1.decodeNum)(v);
+                case 'a|':
+                    return decodeArray(values, v);
+                default:
+                    return (0, encode_1.decodeStr)(v);
+            }
+    }
+    return (0, debug_1.throwUnknownDataType)(v);
+}
+core.decode = decode;
+function decompress(c) {
+    const [values, root] = c;
+    return decode(values, root);
+}
+core.decompress = decompress;
+
+var helpers = {};
+
+Object.defineProperty(helpers, "__esModule", { value: true });
+helpers.trimUndefinedRecursively = helpers.trimUndefined = void 0;
+function trimUndefined(object) {
+    for (const key in object) {
+        if (object[key] === undefined) {
+            delete object[key];
+        }
+    }
+}
+helpers.trimUndefined = trimUndefined;
+function trimUndefinedRecursively(object) {
+    trimUndefinedRecursivelyLoop(object, new Set());
+}
+helpers.trimUndefinedRecursively = trimUndefinedRecursively;
+function trimUndefinedRecursivelyLoop(object, tracks) {
+    tracks.add(object);
+    for (const key in object) {
+        if (object[key] === undefined) {
+            delete object[key];
+        }
+        else {
+            const value = object[key];
+            if (value && typeof value === 'object' && !tracks.has(value)) {
+                trimUndefinedRecursivelyLoop(value, tracks);
+            }
+        }
+    }
+}
+
+(function (exports) {
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.config = exports.trimUndefinedRecursively = exports.trimUndefined = exports.addValue = exports.decode = exports.decompress = exports.compress = void 0;
+	/* for direct usage */
+	var core_1 = core;
+	Object.defineProperty(exports, "compress", { enumerable: true, get: function () { return core_1.compress; } });
+	Object.defineProperty(exports, "decompress", { enumerable: true, get: function () { return core_1.decompress; } });
+	/* for custom wrapper */
+	var core_2 = core;
+	Object.defineProperty(exports, "decode", { enumerable: true, get: function () { return core_2.decode; } });
+	var memory_1 = memory;
+	Object.defineProperty(exports, "addValue", { enumerable: true, get: function () { return memory_1.addValue; } });
+	/* to remove undefined object fields */
+	var helpers_1 = helpers;
+	Object.defineProperty(exports, "trimUndefined", { enumerable: true, get: function () { return helpers_1.trimUndefined; } });
+	Object.defineProperty(exports, "trimUndefinedRecursively", { enumerable: true, get: function () { return helpers_1.trimUndefinedRecursively; } });
+	/* to config */
+	var config_1 = config;
+	Object.defineProperty(exports, "config", { enumerable: true, get: function () { return config_1.config; } }); 
+} (dist));
+
+/* src\UI.svelte generated by Svelte v4.2.18 */
+
+function add_css(target) {
+	append_styles(target, "svelte-79x94m", ".colors.svelte-79x94m{display:flex;flex-wrap:wrap;gap:10px;width:100%;padding:10px}.color.svelte-79x94m{width:50px;height:50px;border:none}.color.selected.svelte-79x94m{outline:4px solid black}");
+}
+
+function get_each_context(ctx, list, i) {
+	const child_ctx = ctx.slice();
+	child_ctx[16] = list[i];
+	return child_ctx;
+}
+
+function get_each_context_1(ctx, list, i) {
+	const child_ctx = ctx.slice();
+	child_ctx[19] = list[i];
+	child_ctx[21] = i;
+	return child_ctx;
+}
+
+// (66:36) 
+function create_if_block_3(ctx) {
+	let button;
+	let t0;
+
+	let t1_value = (/*customSkinFile*/ ctx[4]
+	? /*customSkinFile*/ ctx[4].name
+	: "None") + "";
+
+	let t1;
+	let t2;
+	let mounted;
+	let dispose;
+
+	return {
+		c() {
+			button = element("button");
+			t0 = text("Current: ");
+			t1 = text(t1_value);
+			t2 = text(".\r\n            Upload skin");
+		},
+		m(target, anchor) {
+			insert(target, button, anchor);
+			append(button, t0);
+			append(button, t1);
+			append(button, t2);
+
+			if (!mounted) {
+				dispose = listen(button, "click", /*uploadSkin*/ ctx[7]);
+				mounted = true;
+			}
+		},
+		p(ctx, dirty) {
+			if (dirty & /*customSkinFile*/ 16 && t1_value !== (t1_value = (/*customSkinFile*/ ctx[4]
+			? /*customSkinFile*/ ctx[4].name
+			: "None") + "")) set_data(t1, t1_value);
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(button);
+			}
+
+			mounted = false;
+			dispose();
+		}
+	};
+}
+
+// (51:4) {#if skinType === "id"}
+function create_if_block_1(ctx) {
+	let input;
+	let t;
+	let if_block_anchor;
+	let mounted;
+	let dispose;
+	let if_block = /*styles*/ ctx[6] && create_if_block_2(ctx);
+
+	return {
+		c() {
+			input = element("input");
+			t = space();
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
+			attr(input, "type", "text");
+			attr(input, "placeholder", "Skin ID");
+		},
+		m(target, anchor) {
+			insert(target, input, anchor);
+			set_input_value(input, /*skinId*/ ctx[1]);
+			insert(target, t, anchor);
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
+
+			if (!mounted) {
+				dispose = [
+					listen(input, "input", /*input_input_handler*/ ctx[12]),
+					listen(input, "change", /*onSkinIdEntered*/ ctx[8])
+				];
+
+				mounted = true;
+			}
+		},
+		p(ctx, dirty) {
+			if (dirty & /*skinId*/ 2 && input.value !== /*skinId*/ ctx[1]) {
+				set_input_value(input, /*skinId*/ ctx[1]);
+			}
+
+			if (/*styles*/ ctx[6]) {
+				if (if_block) {
+					if_block.p(ctx, dirty);
+				} else {
+					if_block = create_if_block_2(ctx);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
+			}
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(input);
+				detach(t);
+				detach(if_block_anchor);
+			}
+
+			if (if_block) if_block.d(detaching);
+			mounted = false;
+			run_all(dispose);
+		}
+	};
+}
+
+// (54:8) {#if styles}
+function create_if_block_2(ctx) {
+	let each_1_anchor;
+	let each_value = ensure_array_like(/*styles*/ ctx[6].categories);
+	let each_blocks = [];
+
+	for (let i = 0; i < each_value.length; i += 1) {
+		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+	}
+
+	return {
+		c() {
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			each_1_anchor = empty();
+		},
+		m(target, anchor) {
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				if (each_blocks[i]) {
+					each_blocks[i].m(target, anchor);
+				}
+			}
+
+			insert(target, each_1_anchor, anchor);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*styles, selectedStyles*/ 96) {
+				each_value = ensure_array_like(/*styles*/ ctx[6].categories);
+				let i;
+
+				for (i = 0; i < each_value.length; i += 1) {
+					const child_ctx = get_each_context(ctx, each_value, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(child_ctx, dirty);
+					} else {
+						each_blocks[i] = create_each_block(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].d(1);
+				}
+
+				each_blocks.length = each_value.length;
+			}
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(each_1_anchor);
+			}
+
+			destroy_each(each_blocks, detaching);
+		}
+	};
+}
+
+// (58:20) {#each category.options as option, i}
+function create_each_block_1(ctx) {
+	let button;
+	let mounted;
+	let dispose;
+
+	function click_handler() {
+		return /*click_handler*/ ctx[13](/*category*/ ctx[16], /*option*/ ctx[19]);
+	}
+
+	return {
+		c() {
+			button = element("button");
+			attr(button, "class", "color svelte-79x94m");
+			set_style(button, "background-color", /*option*/ ctx[19].preview.color);
+
+			toggle_class(button, "selected", /*selectedStyles*/ ctx[5][/*category*/ ctx[16].name]
+			? /*selectedStyles*/ ctx[5][/*category*/ ctx[16].name] === /*option*/ ctx[19].name
+			: /*i*/ ctx[21] === 0);
+		},
+		m(target, anchor) {
+			insert(target, button, anchor);
+
+			if (!mounted) {
+				dispose = listen(button, "click", click_handler);
+				mounted = true;
+			}
+		},
+		p(new_ctx, dirty) {
+			ctx = new_ctx;
+
+			if (dirty & /*styles*/ 64) {
+				set_style(button, "background-color", /*option*/ ctx[19].preview.color);
+			}
+
+			if (dirty & /*selectedStyles, styles*/ 96) {
+				toggle_class(button, "selected", /*selectedStyles*/ ctx[5][/*category*/ ctx[16].name]
+				? /*selectedStyles*/ ctx[5][/*category*/ ctx[16].name] === /*option*/ ctx[19].name
+				: /*i*/ ctx[21] === 0);
+			}
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(button);
+			}
+
+			mounted = false;
+			dispose();
+		}
+	};
+}
+
+// (55:12) {#each styles.categories as category}
+function create_each_block(ctx) {
+	let h2;
+	let t0_value = /*category*/ ctx[16].name + "";
+	let t0;
+	let t1;
+	let div;
+	let t2;
+	let each_value_1 = ensure_array_like(/*category*/ ctx[16].options);
+	let each_blocks = [];
+
+	for (let i = 0; i < each_value_1.length; i += 1) {
+		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+	}
+
+	return {
+		c() {
+			h2 = element("h2");
+			t0 = text(t0_value);
+			t1 = space();
+			div = element("div");
+
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			t2 = space();
+			attr(div, "class", "colors svelte-79x94m");
+		},
+		m(target, anchor) {
+			insert(target, h2, anchor);
+			append(h2, t0);
+			insert(target, t1, anchor);
+			insert(target, div, anchor);
+
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				if (each_blocks[i]) {
+					each_blocks[i].m(div, null);
+				}
+			}
+
+			append(div, t2);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*styles*/ 64 && t0_value !== (t0_value = /*category*/ ctx[16].name + "")) set_data(t0, t0_value);
+
+			if (dirty & /*styles, selectedStyles*/ 96) {
+				each_value_1 = ensure_array_like(/*category*/ ctx[16].options);
+				let i;
+
+				for (i = 0; i < each_value_1.length; i += 1) {
+					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(child_ctx, dirty);
+					} else {
+						each_blocks[i] = create_each_block_1(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].m(div, t2);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].d(1);
+				}
+
+				each_blocks.length = each_value_1.length;
+			}
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(h2);
+				detach(t1);
+				detach(div);
+			}
+
+			destroy_each(each_blocks, detaching);
+		}
+	};
+}
+
+// (80:4) {#if trailType === "id"}
+function create_if_block(ctx) {
+	let input;
+	let mounted;
+	let dispose;
+
+	return {
+		c() {
+			input = element("input");
+			attr(input, "type", "text");
+			attr(input, "placeholder", "Trail ID");
+		},
+		m(target, anchor) {
+			insert(target, input, anchor);
+			set_input_value(input, /*trailId*/ ctx[3]);
+
+			if (!mounted) {
+				dispose = listen(input, "input", /*input_input_handler_1*/ ctx[15]);
+				mounted = true;
+			}
+		},
+		p(ctx, dirty) {
+			if (dirty & /*trailId*/ 8 && input.value !== /*trailId*/ ctx[3]) {
+				set_input_value(input, /*trailId*/ ctx[3]);
+			}
+		},
+		d(detaching) {
+			if (detaching) {
+				detach(input);
+			}
+
+			mounted = false;
+			dispose();
+		}
+	};
+}
+
+function create_fragment(ctx) {
+	let h10;
+	let t1;
+	let div0;
+	let select0;
+	let option0;
+	let option1;
+	let option2;
+	let t5;
+	let t6;
+	let h11;
+	let t8;
+	let div1;
+	let select1;
+	let option3;
+	let option4;
+	let t11;
+	let mounted;
+	let dispose;
+
+	function select_block_type(ctx, dirty) {
+		if (/*skinType*/ ctx[0] === "id") return create_if_block_1;
+		if (/*skinType*/ ctx[0] === "custom") return create_if_block_3;
+	}
+
+	let current_block_type = select_block_type(ctx);
+	let if_block0 = current_block_type && current_block_type(ctx);
+	let if_block1 = /*trailType*/ ctx[2] === "id" && create_if_block(ctx);
+
+	return {
+		c() {
+			h10 = element("h1");
+			h10.textContent = "Skin";
+			t1 = space();
+			div0 = element("div");
+			select0 = element("select");
+			option0 = element("option");
+			option0.textContent = "Unchanged";
+			option1 = element("option");
+			option1.textContent = "Any skin by ID";
+			option2 = element("option");
+			option2.textContent = "Custom";
+			t5 = space();
+			if (if_block0) if_block0.c();
+			t6 = space();
+			h11 = element("h1");
+			h11.textContent = "Trail";
+			t8 = space();
+			div1 = element("div");
+			select1 = element("select");
+			option3 = element("option");
+			option3.textContent = "Unchanged";
+			option4 = element("option");
+			option4.textContent = "Any trail by ID";
+			t11 = space();
+			if (if_block1) if_block1.c();
+			option0.__value = "default";
+			set_input_value(option0, option0.__value);
+			option1.__value = "id";
+			set_input_value(option1, option1.__value);
+			option2.__value = "custom";
+			set_input_value(option2, option2.__value);
+			if (/*skinType*/ ctx[0] === void 0) add_render_callback(() => /*select0_change_handler*/ ctx[11].call(select0));
+			option3.__value = "default";
+			set_input_value(option3, option3.__value);
+			option4.__value = "id";
+			set_input_value(option4, option4.__value);
+			if (/*trailType*/ ctx[2] === void 0) add_render_callback(() => /*select1_change_handler*/ ctx[14].call(select1));
+		},
+		m(target, anchor) {
+			insert(target, h10, anchor);
+			insert(target, t1, anchor);
+			insert(target, div0, anchor);
+			append(div0, select0);
+			append(select0, option0);
+			append(select0, option1);
+			append(select0, option2);
+			select_option(select0, /*skinType*/ ctx[0], true);
+			append(div0, t5);
+			if (if_block0) if_block0.m(div0, null);
+			insert(target, t6, anchor);
+			insert(target, h11, anchor);
+			insert(target, t8, anchor);
+			insert(target, div1, anchor);
+			append(div1, select1);
+			append(select1, option3);
+			append(select1, option4);
+			select_option(select1, /*trailType*/ ctx[2], true);
+			append(div1, t11);
+			if (if_block1) if_block1.m(div1, null);
+
+			if (!mounted) {
+				dispose = [
+					listen(select0, "change", /*select0_change_handler*/ ctx[11]),
+					listen(select1, "change", /*select1_change_handler*/ ctx[14])
+				];
+
+				mounted = true;
+			}
+		},
+		p(ctx, [dirty]) {
+			if (dirty & /*skinType*/ 1) {
+				select_option(select0, /*skinType*/ ctx[0]);
+			}
+
+			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block0) {
+				if_block0.p(ctx, dirty);
+			} else {
+				if (if_block0) if_block0.d(1);
+				if_block0 = current_block_type && current_block_type(ctx);
+
+				if (if_block0) {
+					if_block0.c();
+					if_block0.m(div0, null);
+				}
+			}
+
+			if (dirty & /*trailType*/ 4) {
+				select_option(select1, /*trailType*/ ctx[2]);
+			}
+
+			if (/*trailType*/ ctx[2] === "id") {
+				if (if_block1) {
+					if_block1.p(ctx, dirty);
+				} else {
+					if_block1 = create_if_block(ctx);
+					if_block1.c();
+					if_block1.m(div1, null);
+				}
+			} else if (if_block1) {
+				if_block1.d(1);
+				if_block1 = null;
+			}
+		},
+		i: noop,
+		o: noop,
+		d(detaching) {
+			if (detaching) {
+				detach(h10);
+				detach(t1);
+				detach(div0);
+				detach(t6);
+				detach(h11);
+				detach(t8);
+				detach(div1);
+			}
+
+			if (if_block0) {
+				if_block0.d();
+			}
+
+			if (if_block1) if_block1.d();
+			mounted = false;
+			run_all(dispose);
+		}
+	};
+}
+
+function instance($$self, $$props, $$invalidate) {
+	let { cosmeticChanger } = $$props;
+	let skinType = cosmeticChanger.skinType;
+	let skinId = cosmeticChanger.skinId;
+	let trailType = cosmeticChanger.trailType;
+	let trailId = cosmeticChanger.trailId;
+	let customSkinFile = cosmeticChanger.customSkinFile;
+	let selectedStyles = cosmeticChanger.selectedStyles;
+
+	function uploadSkin() {
+		let input = document.createElement("input");
+		input.type = "file";
+		input.accept = ".png";
+
+		input.onchange = () => {
+			let file = input.files?.[0];
+
+			if (!file) {
+				$$invalidate(4, customSkinFile = null);
+			} else {
+				$$invalidate(4, customSkinFile = file);
+			}
+		};
+
+		input.click();
+	}
+
+	let styles;
+
+	async function onSkinIdEntered() {
+		$$invalidate(6, styles = null);
+		if (!skinId) return;
+		let url = `https://www.gimkit.com/assets/map/characters/spine/${skinId}.json`;
+		let res = await fetch(url);
+
+		if (res.headers.get("content-type")?.startsWith("text/html")) {
+			return;
+		}
+
+		let json = await res.json();
+		let skinData = dist.decompress(json);
+		if (skinData.style) $$invalidate(6, styles = skinData.style);
+	}
+
+	function save() {
+		cosmeticChanger.setSkin(skinType, skinId, customSkinFile, selectedStyles);
+		cosmeticChanger.setTrail(trailType, trailId);
+	}
+
+	onMount(onSkinIdEntered);
+
+	function select0_change_handler() {
+		skinType = select_value(this);
+		$$invalidate(0, skinType);
+	}
+
+	function input_input_handler() {
+		skinId = this.value;
+		$$invalidate(1, skinId);
+	}
+
+	const click_handler = (category, option) => $$invalidate(5, selectedStyles[category.name] = option.name, selectedStyles);
+
+	function select1_change_handler() {
+		trailType = select_value(this);
+		$$invalidate(2, trailType);
+	}
+
+	function input_input_handler_1() {
+		trailId = this.value;
+		$$invalidate(3, trailId);
+	}
+
+	$$self.$$set = $$props => {
+		if ('cosmeticChanger' in $$props) $$invalidate(9, cosmeticChanger = $$props.cosmeticChanger);
+	};
+
+	return [
+		skinType,
+		skinId,
+		trailType,
+		trailId,
+		customSkinFile,
+		selectedStyles,
+		styles,
+		uploadSkin,
+		onSkinIdEntered,
+		cosmeticChanger,
+		save,
+		select0_change_handler,
+		input_input_handler,
+		click_handler,
+		select1_change_handler,
+		input_input_handler_1
+	];
+}
+
+class UI extends SvelteComponent {
+	constructor(options) {
+		super();
+		init(this, options, instance, create_fragment, safe_not_equal, { cosmeticChanger: 9, save: 10 }, add_css);
+	}
+
+	get save() {
+		return this.$$.ctx[10];
+	}
+}
 
 var atlas = "\r\nsize: 1024,832\r\nformat: RGBA8888\r\nfilter: Linear,Linear\r\nrepeat: none\r\neyes/eye1_KO\r\nbounds:265,32,30,35\r\nrotate:90\r\neyes/eye_KO\r\nbounds:265,32,30,35\r\nrotate:90\r\neyes/eye1_blink1\r\nbounds:374,26,17,29\r\nrotate:90\r\neyes/eye2_blink1\r\nbounds:374,26,17,29\r\nrotate:90\r\neyes/eye_blink1\r\nbounds:374,26,17,29\r\nrotate:90\r\neyes/eye1_blink2\r\nbounds:140,5,18,23\r\neyes/eye_blink2\r\nbounds:140,5,18,23\r\neyes/eye1_blink3\r\nbounds:160,5,23,17\r\nrotate:90\r\neyes/eye_blink3\r\nbounds:160,5,23,17\r\nrotate:90\r\neyes/eye1_closed\r\nbounds:336,45,41,17\r\neyes/eye_closed\r\nbounds:336,45,41,17\r\neyes/eye1_closed2\r\nbounds:302,32,30,32\r\nrotate:90\r\neyes/eye_closed2\r\nbounds:302,32,30,32\r\nrotate:90\r\neyes/eye1_cute\r\nbounds:464,45,17,36\r\nrotate:90\r\neyes/eye_cute\r\nbounds:464,45,17,36\r\nrotate:90\r\neyes/eye1_frown\r\nbounds:81,31,31,46\r\noffsets:0,0,31,47\r\nrotate:90\r\neyes/eye_frown\r\nbounds:81,31,31,46\r\noffsets:0,0,31,47\r\nrotate:90\r\neyes/eye1_happy\r\nbounds:129,30,42,32\r\neyes/eye_happy\r\nbounds:129,30,42,32\r\neyes/eye1_happy2\r\nbounds:81,2,37,27\r\neyes/eye_happy2\r\nbounds:81,2,37,27\r\neyes/eye1_kawaii\r\nbounds:173,37,25,44\r\nrotate:90\r\neyes/eye_kawaii\r\nbounds:173,37,25,44\r\nrotate:90\r\neyes/eye1_open\r\nbounds:336,26,17,36\r\nrotate:90\r\neyes/eye2_open\r\nbounds:336,26,17,36\r\nrotate:90\r\neyes/eye_open\r\nbounds:336,26,17,36\r\nrotate:90\r\neyes/eye1_shiny\r\nbounds:219,37,25,44\r\nrotate:90\r\neyes/eye_shiny\r\nbounds:219,37,25,44\r\nrotate:90\r\neyes/eye2_blink2\r\nbounds:179,12,18,23\r\neyes/eye2_blink3\r\nbounds:120,2,22,18\r\nrotate:90\r\neyes/eye2_closed\r\nbounds:379,45,41,17\r\neyes/eyeL_sad\r\nbounds:2,17,40,45\r\neyes/eyeR_sad\r\nbounds:44,18,35,44\r\neyes/eye_closedDown\r\nbounds:422,46,40,16\r\nfx/eyeGlow\r\nbounds:450,271,47,47\r\noffsets:10,7,63,59\r\nfx/fx_angry\r\nbounds:451,228,40,41\r\nfx/fx_blush\r\nbounds:210,183,41,38\r\noffsets:1,1,43,40\r\nfx/fx_gradientDownUp\r\nbounds:2,191,206,127\r\noffsets:0,0,206,130\r\nfx/fx_gradientUpDown\r\nbounds:2,92,196,97\r\noffsets:0,3,196,100\r\nfx/fx_line\r\nbounds:200,161,28,8\r\nrotate:90\r\nfx/fx_sparkle1\r\nbounds:31,66,20,24\r\nfx/fx_sparkle2\r\nbounds:2,66,24,27\r\nrotate:90\r\nfx/fx_sparkle3\r\nbounds:333,207,21,23\r\nfx/fx_star1\r\nbounds:253,183,38,37\r\nrotate:90\r\nfx/fx_star2\r\nbounds:356,211,19,16\r\nrotate:90\r\nfx/fx_starExpl1\r\nbounds:53,72,19,18\r\nfx/fx_starExpl2\r\nbounds:210,163,19,18\r\nfx/fx_sweatDrop\r\nbounds:292,202,39,28\r\nfx/fx_whiteDot\r\nbounds:292,188,12,12\r\nfx/leg_LongL_black\r\nbounds:210,223,80,95\r\nfx/leg_LongL_shadow1\r\nbounds:374,268,74,50\r\noffsets:6,45,80,95\r\nfx/leg_LongR_black\r\nbounds:292,232,80,86\r\noffsets:1,0,81,86\r\nfx/leg_LongR_shadow1\r\nbounds:374,219,75,47\r\noffsets:1,39,81,86\r\nskins/default_gray/body\r\nbounds:216,417,212,157\r\nskins/default_gray/legL\r\nbounds:216,322,80,93\r\nskins/default_gray/legR\r\nbounds:656,493,80,81\r\nskins/default_gray/legSittingL\r\nbounds:430,483,111,91\r\nskins/default_gray/legSittingR\r\nbounds:543,483,111,91\r\nskins/default_gray/template\r\nbounds:2,380,212,194\r\nskins/test/body\r\nbounds:2,673,212,157\r\nskins/test/legL\r\nbounds:2,578,80,93\r\nskins/test/legR\r\nbounds:329,749,80,81\r\nskins/test/legSittingL\r\nbounds:216,739,111,91\r\nskins/test/legSittingR\r\nbounds:84,580,111,91\r\n";
 
@@ -64,6 +1847,7 @@ class CosmeticChanger {
     trailType = GL.storage.getValue("CharacterCustomization", "trailType", "default");
     skinId = GL.storage.getValue("CharacterCustomization", "skinId", "");
     trailId = GL.storage.getValue("CharacterCustomization", "trailId", "");
+    selectedStyles = GL.storage.getValue("CharacterCustomization", "selectedStyles", {});
     normalSkin = "";
     allowNextSkin = false;
     normalTrail = "";
@@ -192,7 +1976,8 @@ class CosmeticChanger {
     }
     patchSkin(skin) {
         if (this.skinType === "id") {
-            skin.updateSkin({ id: this.skinId });
+            console.log({ id: this.skinId, editStyles: this.selectedStyles });
+            skin.updateSkin({ id: this.skinId, editStyles: this.selectedStyles });
         }
         GL.patcher.before("CharacterCustomization", skin, "updateSkin", (_, args) => {
             if (this.allowNextSkin) {
@@ -222,13 +2007,15 @@ class CosmeticChanger {
             }
         });
     }
-    async setSkin(skinType, skinId, customSkinFile) {
+    async setSkin(skinType, skinId, customSkinFile, selectedStyles) {
         this.skinType = skinType;
         this.skinId = skinId;
         this.customSkinFile = customSkinFile;
+        this.selectedStyles = selectedStyles;
         // save items to local storage
         GL.storage.setValue("CharacterCustomization", "skinType", skinType);
         GL.storage.setValue("CharacterCustomization", "skinId", skinId);
+        GL.storage.setValue("CharacterCustomization", "selectedStyles", selectedStyles);
         if (!customSkinFile) {
             GL.storage.removeValue("CharacterCustomization", "customSkinFile");
             GL.storage.removeValue("CharacterCustomization", "customSkinFileName");
@@ -259,12 +2046,19 @@ class CosmeticChanger {
             }
             this.allowNextSkin = true;
             if (skinType === "id") {
-                skin.updateSkin({ id: skinId });
+                skin.updateSkin({ id: "default_gray" });
+                // I have no idea why I have to do this, but otherwise styles don't update
+                setTimeout(() => {
+                    this.allowNextSkin = true;
+                    skin.updateSkin({ id: skinId, editStyles: this.selectedStyles });
+                }, 0);
             }
             else if (skinType === "default") {
                 skin.updateSkin(this.normalSkin);
             }
-            else ;
+            else {
+                skin.updateSkin({ id: "customSkin" });
+            }
         }
     }
     formatTrail(trail) {
@@ -308,19 +2102,27 @@ class CosmeticChanger {
 }
 
 /// <reference types="gimloader" />
+// @ts-ignore
 let hotkey = new Set(['alt', 'c']);
 let cosmeticChanger = new CosmeticChanger();
 function showUI() {
-    let submitCallback;
-    GL.UI.showModal(GL.React.createElement(UI, {
-        cosmeticChanger,
-        onSubmit: (callback) => {
-            submitCallback = callback;
+    let div = document.createElement("div");
+    // @ts-ignore
+    let ui = new UI({
+        target: div,
+        props: {
+            cosmeticChanger
         }
-    }), {
+    });
+    GL.UI.showModal(div, {
         id: "CharacterCustomization",
         title: "Character Customization",
-        closeOnBackgroundClick: true,
+        closeOnBackgroundClick: false,
+        style: "min-width: min(90vw, 500px)",
+        onClosed() {
+            // @ts-ignore
+            ui.$destroy();
+        },
         buttons: [
             {
                 text: "Cancel",
@@ -329,14 +2131,13 @@ function showUI() {
             {
                 text: "Apply",
                 style: "primary",
-                onClick: () => {
-                    submitCallback();
+                onClick() {
+                    ui.save();
                 }
             }
         ]
     });
 }
-GL.UI.addStyles("CharacterCustomization", styles);
 GL.hotkeys.add(hotkey, showUI);
 function openSettingsMenu() {
     showUI();
@@ -344,7 +2145,6 @@ function openSettingsMenu() {
 function onStop() {
     cosmeticChanger.reset();
     GL.hotkeys.remove(hotkey);
-    GL.UI.removeStyles("CharacterCustomization");
     GL.parcel.stopIntercepts("CharacterCustomization");
     GL.patcher.unpatchAll("CharacterCustomization");
 }

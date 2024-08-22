@@ -1,8 +1,10 @@
-import typescript from "@rollup/plugin-typescript"
-import babel from "@rollup/plugin-babel"
-import { string } from "rollup-plugin-string"
-import sass from "rollup-plugin-sass"
-import fs from "fs"
+import typescript from "@rollup/plugin-typescript";
+import svelte from "rollup-plugin-svelte";
+import resolve from "@rollup/plugin-node-resolve";
+import { string } from "rollup-plugin-string";
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import commonjs from "@rollup/plugin-commonjs";
+import fs from "fs";
 
 let pkg = JSON.parse(fs.readFileSync("package.json", "utf-8"))
 
@@ -15,12 +17,22 @@ export default {
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js",
     reloadRequired: 'ingame',
     plugins: [
-        sass(),
+        commonjs(),
         string({ include: ['**/*.css', '**/*.svg', './assets/*'] }),
-        babel({ include: 'src/**/*.tsx', babelHelpers: 'bundled' }),
         typescript({
-            jsx: "react",
-            target: "ES2022"
+            target: 'esnext'
+        }),
+        svelte({
+            emitCss: false,
+            compilerOptions: {
+                css: 'injected'
+            },
+            preprocess: vitePreprocess()
+        }),
+        resolve({
+            browser: true,
+            exportConditions: ['svelte'],
+            extensions: ['.svelte', '.js', '.ts', '.json']
         })
     ]
 }

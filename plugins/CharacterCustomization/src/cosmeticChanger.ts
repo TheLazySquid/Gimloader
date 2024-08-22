@@ -8,6 +8,7 @@ export default class CosmeticChanger {
     trailType: string = GL.storage.getValue("CharacterCustomization", "trailType",  "default");
     skinId: string = GL.storage.getValue("CharacterCustomization", "skinId",  "");
     trailId: string = GL.storage.getValue("CharacterCustomization", "trailId",  "");
+    selectedStyles: Record<string, string> = GL.storage.getValue("CharacterCustomization", "selectedStyles",  {});
 
     normalSkin: string = "";
     allowNextSkin: boolean = false;
@@ -172,7 +173,8 @@ export default class CosmeticChanger {
 
     patchSkin(skin: any) {
         if(this.skinType === "id") {
-            skin.updateSkin({ id: this.skinId });
+            console.log({ id: this.skinId, editStyles: this.selectedStyles });
+            skin.updateSkin({ id: this.skinId, editStyles: this.selectedStyles });
         }
 
         GL.patcher.before("CharacterCustomization", skin, "updateSkin", (_, args) => {
@@ -204,14 +206,16 @@ export default class CosmeticChanger {
         })
     }
 
-    async setSkin(skinType: string, skinId: string, customSkinFile: File | null) {
+    async setSkin(skinType: string, skinId: string, customSkinFile: File | null, selectedStyles: Record<string, string>) {
         this.skinType = skinType;
         this.skinId = skinId;
         this.customSkinFile = customSkinFile;
+        this.selectedStyles = selectedStyles;
 
         // save items to local storage
         GL.storage.setValue("CharacterCustomization", "skinType", skinType);
         GL.storage.setValue("CharacterCustomization", "skinId", skinId);
+        GL.storage.setValue("CharacterCustomization", "selectedStyles", selectedStyles);
         if(!customSkinFile) {
             GL.storage.removeValue("CharacterCustomization", "customSkinFile");
             GL.storage.removeValue("CharacterCustomization", "customSkinFileName");
@@ -223,7 +227,6 @@ export default class CosmeticChanger {
             }
             reader.readAsDataURL(customSkinFile);
         }
-
         
         // update the skin
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
@@ -243,15 +246,20 @@ export default class CosmeticChanger {
                     URL.revokeObjectURL(textureUrl);
                 }, {once: true})
             }
-
+            
             this.allowNextSkin = true;
-
             if(skinType === "id") {
-                skin.updateSkin({ id: skinId });
+                skin.updateSkin({ id: "default_gray" });
+
+                // I have no idea why I have to do this, but otherwise styles don't update
+                setTimeout(() => {
+                    this.allowNextSkin = true;
+                    skin.updateSkin({ id: skinId, editStyles: this.selectedStyles });
+                }, 0);
             } else if(skinType === "default") {
                 skin.updateSkin(this.normalSkin);
             } else {
-                // skin.updateSkin("customSkin");
+                skin.updateSkin({ id: "customSkin" });
             }
         }
     }

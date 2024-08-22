@@ -1,24 +1,30 @@
 /// <reference types="gimloader" />
-import UI from './ui';
 // @ts-ignore
-import styles from './styles.scss';
+import UI from './UI.svelte';
 import CosmeticChanger from './cosmeticChanger';
 
 let hotkey = new Set(['alt', 'c']);
 let cosmeticChanger = new CosmeticChanger();
 
 function showUI() {
-    let submitCallback: () => void;
-
-    GL.UI.showModal(GL.React.createElement(UI, {
-        cosmeticChanger,
-        onSubmit: (callback) => {
-            submitCallback = callback;
+    let div = document.createElement("div");
+    // @ts-ignore
+    let ui = new UI({
+        target: div,
+        props: {
+            cosmeticChanger
         }
-    }), {
+    });
+
+    GL.UI.showModal(div, {
         id: "CharacterCustomization",
         title: "Character Customization",
-        closeOnBackgroundClick: true,
+        closeOnBackgroundClick: false,
+        style: "min-width: min(90vw, 500px)",
+        onClosed() {
+            // @ts-ignore
+            ui.$destroy();
+        },
         buttons: [
             {
                 text: "Cancel",
@@ -27,15 +33,14 @@ function showUI() {
             {
                 text: "Apply",
                 style: "primary",
-                onClick: () => {
-                    submitCallback();
+                onClick() {
+                    ui.save();
                 }
             }
         ]
     });
 }
 
-GL.UI.addStyles("CharacterCustomization", styles);
 GL.hotkeys.add(hotkey, showUI);
 
 export function openSettingsMenu() {
@@ -46,7 +51,6 @@ export function onStop() {
     cosmeticChanger.reset();
 
     GL.hotkeys.remove(hotkey);
-    GL.UI.removeStyles("CharacterCustomization");
     GL.parcel.stopIntercepts("CharacterCustomization");
     GL.patcher.unpatchAll("CharacterCustomization");
 }

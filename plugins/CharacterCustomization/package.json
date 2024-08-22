@@ -1,6 +1,6 @@
 {
   "name": "charactercustomization",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Allows you to use any gim or a custom gim client-side",
   "main": "src/index.ts",
   "type": "module",
@@ -23,14 +23,17 @@
   },
   "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
   "dependencies": {
-    "@babel/preset-react": "^7.24.1",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "gimloader": "file:../.."
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@types/gimloader": "github:TheLazySquid/Gimloader",
     "compress-json": "^3.1.0",
-    "rollup-plugin-sass": "^1.12.22",
-    "rollup-plugin-string": "^3.0.0"
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-svelte": "^7.2.2",
+    "svelte": "^4.2.18"
   }
 }
