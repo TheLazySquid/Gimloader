@@ -1,4 +1,4 @@
-import { Config } from '../types';
+import { Config, IPluginTypes } from '../types';
 
 export default function addHeadersPlugin(config: Config) {
     let meta = `/**
@@ -10,25 +10,28 @@ export default function addHeadersPlugin(config: Config) {
         meta += `\n * @version ${config.version}`;
     }
 
-    if(config.reloadRequired === true) {
-        meta += '\n * @reloadRequired true';
-    } else if(config.reloadRequired === "ingame") {
-        meta += '\n * @reloadRequired ingame';
-    }
-
     if(config.downloadUrl) {
         meta += `\n * @downloadUrl ${config.downloadUrl}`;
     }
 
-    if(config.libs) {
-        for(let lib of config.libs) {
-            meta += `\n * @needsLib ${lib}`;
+    if(!config.isLibrary) {
+        config = config as IPluginTypes;
+        if(config.reloadRequired === true) {
+            meta += '\n * @reloadRequired true';
+        } else if(config.reloadRequired === "ingame") {
+            meta += '\n * @reloadRequired ingame';
         }
-    }
-
-    if(config.optionalLibs) {
-        for(let lib of config.optionalLibs) {
-            meta += `\n * @optionalLib ${lib}`;
+    
+        if(config.libs) {
+            for(let lib of config.libs) {
+                meta += `\n * @needsLib ${lib}`;
+            }
+        }
+    
+        if(config.optionalLibs) {
+            for(let lib of config.optionalLibs) {
+                meta += `\n * @optionalLib ${lib}`;
+            }
         }
     }
 

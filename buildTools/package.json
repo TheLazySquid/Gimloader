@@ -1,8 +1,8 @@
 {
   "name": "@gimloader/build",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A package to help build complex plugins for Gimloader",
-  "main": "dist/cli.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
   },
@@ -19,7 +19,7 @@
   ],
   "author": "TheLazySquid",
   "license": "MIT",
-  "types": "./dist/cli.d.ts",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@inquirer/prompts": "^5.1.2",
     "chokidar": "^3.6.0",

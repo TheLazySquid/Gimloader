@@ -62,26 +62,24 @@ export default async function init() {
         }, null, 2))
     }
     
-    if(plugins.length > 0) {
-        // install dependencies
-        console.log('Installing dependencies...');
+    // install dependencies
+    console.log('Installing dependencies...');
 
-        let devDeps = {
-            'typescript': '@rollup/plugin-typescript tslib @types/gimloader@github:TheLazySquid/Gimloader',
-            'babel': '@rollup/plugin-babel @babel/preset-react',
-            'string': 'rollup-plugin-string',
-            'sass': 'rollup-plugin-sass',
-            'svelte': 'svelte rollup-plugin-svelte @rollup/plugin-node-resolve @sveltejs/vite-plugin-svelte'
-        }
-    
-        let installStr = 'npm install --save-dev';
-        
-        for(let plugin of plugins) {
-            installStr += ` ${devDeps[plugin]}`;
-        }
-    
-        execSync(installStr, { stdio: 'inherit' });
+    let devDeps = {
+        'typescript': '@rollup/plugin-typescript tslib @types/gimloader@github:TheLazySquid/Gimloader',
+        'babel': '@rollup/plugin-babel @babel/preset-react',
+        'string': 'rollup-plugin-string',
+        'sass': 'rollup-plugin-sass',
+        'svelte': 'svelte rollup-plugin-svelte @rollup/plugin-node-resolve @sveltejs/vite-plugin-svelte'
     }
+
+    let installStr = 'npm install --save-dev @gimloader/build';
+    
+    for(let plugin of plugins) {
+        installStr += ` ${devDeps[plugin]}`;
+    }
+
+    execSync(installStr, { stdio: 'inherit' });
 
     // create .gitignore
     if(!fs.existsSync(join(process.cwd(), '.gitignore'))) {
