@@ -25,6 +25,7 @@ export default function createGLConfig(name: string, description: string, author
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
+/** @type {import('@gimloader/build').Config} */
 export default {
     input: 'src/index.${useTs ? 'ts' : 'js'}',
     name: '${name}',
