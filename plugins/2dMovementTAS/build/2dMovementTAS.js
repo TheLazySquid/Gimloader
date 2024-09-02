@@ -2,7 +2,7 @@
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js
  * @reloadRequired ingame
  */
@@ -1168,7 +1168,6 @@ class TASTools {
         GL.stores.gui.none.screen = "home";
     }
     updateDevices(frame) {
-        console.log(this.purchaseTimeouts);
         for (let [countdown, purchase] of this.purchaseTimeouts) {
             if (countdown === 0) {
                 let undo = purchase();
@@ -1284,6 +1283,23 @@ class TASTools {
             if (this.energyFrames[i] <= 0) {
                 this.energyFrames[i] = 7 * 12;
                 this.setEnergy(this.getEnergy() + 120);
+            }
+        }
+        // Use teleporters
+        let devices = GL.stores.phaser.scene.worldManager.devices;
+        let teleporters = devices.devicesInView.filter((d) => d.deviceOption?.id === "teleporter");
+        let body = GL.stores.phaser.mainCharacter.body;
+        for (let teleporter of teleporters) {
+            // 85 units on the top, 90 on the left/right, 100 on the bottom
+            if (teleporter.x > body.x - 90 && teleporter.x < body.x + 90 && teleporter.y > body.y - 85 && teleporter.y < body.y + 100) {
+                let target = teleporter.options.targetGroup;
+                if (!target)
+                    continue;
+                let targetTeleporter = devices.allDevices.find((d) => d.options?.group === target && d.deviceOption?.id === "teleporter");
+                if (!targetTeleporter)
+                    continue;
+                this.rb.setTranslation({ x: targetTeleporter.x / 100, y: targetTeleporter.y / 100 }, true);
+                break;
             }
         }
     }

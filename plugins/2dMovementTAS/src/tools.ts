@@ -281,6 +281,25 @@ export default class TASTools {
                 this.setEnergy(this.getEnergy() + 120);
             }
         }
+
+        // Use teleporters
+        let devices = GL.stores.phaser.scene.worldManager.devices
+        let teleporters = devices.devicesInView.filter((d: any) => d.deviceOption?.id === "teleporter");
+        let body = GL.stores.phaser.mainCharacter.body;
+
+        for(let teleporter of teleporters) {
+            // 85 units on the top, 90 on the left/right, 100 on the bottom
+            if(teleporter.x > body.x - 90 && teleporter.x < body.x + 90 && teleporter.y > body.y - 85 && teleporter.y < body.y + 100) {
+                let target = teleporter.options.targetGroup;
+                if(!target) continue;
+                
+                let targetTeleporter = devices.allDevices.find((d: any) => d.options?.group === target && d.deviceOption?.id === "teleporter");
+                if(!targetTeleporter) continue;
+
+                this.rb.setTranslation({ x: targetTeleporter.x / 100, y: targetTeleporter.y / 100 }, true);
+                break;
+            }
+        }
     }
 
     updateUI() {

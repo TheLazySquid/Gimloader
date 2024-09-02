@@ -1,6 +1,6 @@
 {
   "name": "2dmovementtas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Allows for making TASes of CTF and tag",
   "author": "TheLazySquid",
   "main": "src/index.ts",

@@ -42,7 +42,7 @@ This is a plugin that allows you to record and play back TASes in Don't Look Dow
 
 ## 2dMovementTAS [code](./2dMovementTAS) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js)
 
-This is a plugin for making TASes for CTF and Tag. Teleporters currently do not work.
+This is a plugin for making TASes for CTF and Tag, which consist of buying all the upgrades as fast as possible.
 
 ## AutoKicker [code](./AutoKicker) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js)
 
