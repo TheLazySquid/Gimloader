@@ -1,0 +1,21 @@
+{
+  "name": "2dmovementtas",
+  "version": "0.1.0",
+  "description": "Allows for making TASes of CTF and tag",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@types/gimloader": "github:TheLazySquid/Gimloader",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-svelte": "^7.2.2",
+    "svelte": "^4.2.18",
+    "tslib": "^2.6.3"
+  }
+}

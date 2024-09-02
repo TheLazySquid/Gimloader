@@ -36,9 +36,13 @@ A modified version of the TAS tool that allows you to record and play back input
 
 This plugin allows you to use devices instantly, without waiting for their meter to fill.
 
-## DLDTAS [code]('./DLDTAS') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js)
+## DLDTAS [code](./DLDTAS) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js)
 
 This is a plugin that allows you to record and play back TASes in Don't Look Down. This is more complex and uses the [build tools]('../buildTools') to compile.
+
+## 2dMovementTAS [code](./2dMovementTAS) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js)
+
+This is a plugin for making TASes for CTF and Tag. Teleporters currently do not work.
 
 ## AutoKicker [code](./AutoKicker) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js)
 
