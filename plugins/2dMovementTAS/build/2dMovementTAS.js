@@ -2,7 +2,7 @@
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js
  * @reloadRequired ingame
  */
@@ -1065,7 +1065,7 @@ class TASTools {
     rb;
     movement;
     tagEnergyDisplay;
-    energyPerQuestion = 1000;
+    energyPerQuestion = 5000;
     energyUsage = 60;
     energyTimeout = 0;
     purchaseTimeouts = [];

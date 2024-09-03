@@ -33,7 +33,7 @@ export default class TASTools {
     movement: any;
     tagEnergyDisplay: any;
 
-    energyPerQuestion = 1000;
+    energyPerQuestion = 5000;
     energyUsage = 60;
     energyTimeout = 0;
     purchaseTimeouts: [number, () => Function, boolean?][] = [];
