@@ -2,7 +2,7 @@
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.1.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js
  * @reloadRequired ingame
  */
@@ -1155,9 +1155,9 @@ class TASTools {
     advanceFrame() {
         let frame = this.frames[currentFrame.value];
         let save = this.getState();
+        this.prevFrameStates[currentFrame.value] = save;
         // save the state
         this.updateDevices(frame);
-        this.prevFrameStates[currentFrame.value] = save;
         this.updateCharacter(frame);
         this.inputManager.getPhysicsInput = () => this.getPhysicsInput();
         this.nativeStep(0);
@@ -1195,11 +1195,13 @@ class TASTools {
                         let channel = device.options.purchaseChannel.split(",")[0];
                         updateDeviceState(device, "GLOBAL_active", false);
                         let barrier = devices.devicesInView.find((d) => d.options?.showWhenReceivingFrom === channel);
-                        updateDeviceState(barrier, "GLOBAL_visible", true);
+                        if (barrier)
+                            updateDeviceState(barrier, "GLOBAL_visible", true);
                         this.setEnergy(this.getEnergy() - device.options.amountOfRequiredItem);
                         return () => {
-                            updateDeviceState(barrier, "GLOBAL_visible", false);
                             updateDeviceState(device, "GLOBAL_active", true);
+                            if (barrier)
+                                updateDeviceState(barrier, "GLOBAL_visible", false);
                         };
                     }
                 ]);
@@ -1208,8 +1210,8 @@ class TASTools {
                 this.purchaseTimeouts.push([
                     Math.floor(device.options.interactionDuration * 12) - 1,
                     () => {
-                        let channel = device.options.purchaseChannel.split(",")[1].trim();
-                        let disable = devices.devicesInView.filter((d) => d.options?.deactivateChannel === channel);
+                        let channels = device.options.purchaseChannel.split(",").map((str) => str.trim());
+                        let disable = devices.devicesInView.filter((d) => channels.includes(d.options?.deactivateChannel));
                         disable.forEach((d) => updateDeviceState(d, "GLOBAL_active", false));
                         this.setEnergy(this.getEnergy() - device.options.amountOfRequiredItem);
                         return () => {
@@ -2033,7 +2035,7 @@ function add_css(target) {
 	append_styles(target, "svelte-pcq7nj", "div.svelte-pcq7nj{position:absolute;top:0;left:0;z-index:999999;display:flex;flex-direction:column;gap:10px;padding:10px}button.svelte-pcq7nj{padding:5px 20px;border-radius:100px;background-color:rgba(0, 0, 0, 0.5);color:white;border:1px solid black;transition:transform 0.2s ease}button.svelte-pcq7nj:hover{transform:scale(1.05)}button.svelte-pcq7nj:active{transform:scale(0.95)}");
 }
 
-// (23:0) {:else}
+// (38:0) {:else}
 function create_else_block(ctx) {
 	let div;
 	let t0;
@@ -2067,7 +2069,11 @@ function create_else_block(ctx) {
 			append(div, button1);
 
 			if (!mounted) {
-				dispose = listen(button0, "click", /*newTAS*/ ctx[5]);
+				dispose = [
+					listen(button0, "click", /*newTAS*/ ctx[5]),
+					listen(button1, "click", /*loadTAS*/ ctx[6])
+				];
+
 				mounted = true;
 			}
 		},
@@ -2083,12 +2089,12 @@ function create_else_block(ctx) {
 
 			if (if_block) if_block.d();
 			mounted = false;
-			dispose();
+			run_all(dispose);
 		}
 	};
 }
 
-// (21:0) {#if begun}
+// (36:0) {#if begun}
 function create_if_block(ctx) {
 	let ui;
 	let current;
@@ -2129,7 +2135,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (25:8) {#if save}
+// (40:8) {#if save}
 function create_if_block_1(ctx) {
 	let button;
 	let mounted;
@@ -2255,7 +2261,24 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(0, begun = true);
 	}
 
-	return [begun, frames, startPos, save, continueTAS, newTAS];
+	async function loadTAS() {
+		if (save) {
+			let conf = confirm("Are you sure you want to load a new TAS? Your current TAS will be lost.");
+			if (!conf) return;
+		}
+
+		try {
+			let data = await uploadFile();
+			let json = JSON.parse(data);
+			$$invalidate(1, frames = json.frames);
+			$$invalidate(2, startPos = json.startPos);
+			$$invalidate(0, begun = true);
+		} catch {
+			
+		}
+	}
+
+	return [begun, frames, startPos, save, continueTAS, newTAS, loadTAS];
 }
 
 class Start extends SvelteComponent {

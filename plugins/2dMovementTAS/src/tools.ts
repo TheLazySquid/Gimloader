@@ -142,10 +142,10 @@ export default class TASTools {
     advanceFrame() {
         let frame = this.frames[currentFrame.value];
         let save = this.getState();
+        this.prevFrameStates[currentFrame.value] = save;
 
         // save the state
         this.updateDevices(frame);
-        this.prevFrameStates[currentFrame.value] = save;
         this.updateCharacter(frame);
 
         this.inputManager.getPhysicsInput = () => this.getPhysicsInput();
@@ -189,12 +189,12 @@ export default class TASTools {
                         let channel = device.options.purchaseChannel.split(",")[0];
                         updateDeviceState(device, "GLOBAL_active", false);
                         let barrier = devices.devicesInView.find((d: any) => d.options?.showWhenReceivingFrom === channel);
-                        updateDeviceState(barrier, "GLOBAL_visible", true);
+                        if(barrier) updateDeviceState(barrier, "GLOBAL_visible", true);
         
                         this.setEnergy(this.getEnergy() - device.options.amountOfRequiredItem);
                         return () => {
-                            updateDeviceState(barrier, "GLOBAL_visible", false);
                             updateDeviceState(device, "GLOBAL_active", true);
+                            if(barrier) updateDeviceState(barrier, "GLOBAL_visible", false);
                         }
                     }
                 ])
@@ -202,8 +202,8 @@ export default class TASTools {
                 this.purchaseTimeouts.push([
                     Math.floor(device.options.interactionDuration * 12) - 1,
                     () => {
-                        let channel = device.options.purchaseChannel.split(",")[1].trim();
-                        let disable = devices.devicesInView.filter((d: any) => d.options?.deactivateChannel === channel);
+                        let channels = device.options.purchaseChannel.split(",").map((str: string) => str.trim());
+                        let disable = devices.devicesInView.filter((d: any) => channels.includes(d.options?.deactivateChannel));
                         disable.forEach((d: any) => updateDeviceState(d, "GLOBAL_active", false));
 
                         this.setEnergy(this.getEnergy() - device.options.amountOfRequiredItem);

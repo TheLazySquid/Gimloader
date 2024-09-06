@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { IFrame } from "../types";
+    import { uploadFile } from "../util";
     import Ui from "./UI.svelte";
 
     let begun = false;
@@ -23,6 +24,21 @@
         frames = [];
         begun = true;
     }
+
+    async function loadTAS() {
+        if(save) {
+            let conf = confirm("Are you sure you want to load a new TAS? Your current TAS will be lost.");
+            if(!conf) return;
+        }
+
+        try {
+            let data = await uploadFile();
+            let json = JSON.parse(data);
+            frames = json.frames;
+            startPos = json.startPos;
+            begun = true;
+        } catch {}
+    }
 </script>
 
 {#if begun}
@@ -37,7 +53,7 @@
         <button on:click={newTAS}>
             New TAS at current position
         </button>
-        <button>
+        <button on:click={loadTAS}>
             Load TAS from file
         </button>
     </div>
