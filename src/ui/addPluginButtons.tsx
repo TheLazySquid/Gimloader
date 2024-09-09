@@ -79,7 +79,7 @@ export function addPluginButtons(loader: Gimloader) {
     // add the button to the home screen
     loader.parcel.interceptRequire(null, exports => exports?.SpaceContext, exports => {
         loader.patcher.before(null, exports, 'default', (_, args) => {
-            let light = location.href.includes("/creative")
+            let light = location.href.includes("/creative") || location.href.includes("/rewards");
             
             if(args[0].children?.some?.((c: any) => c?.key === 'creative')) {
                 let icon = loader.React.createElement('div', {
