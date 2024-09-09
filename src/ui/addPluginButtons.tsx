@@ -1,6 +1,5 @@
 import type { Gimloader } from "../gimloader";
 import wrench from '../../assets/wrench.svg';
-import showModal from "./modal";
 import MenuUI from "$src/ui/menu/MenuUI.svelte";
 
 function openPluginManager() {
@@ -13,7 +12,22 @@ function openPluginManager() {
     })
 }
 
+export function setShowPluginButtons(loader: Gimloader, value: boolean) {
+    loader.UI.showPluginButtons = value;
+    GM_setValue('showPluginButtons', value);
+
+    if(!value) {
+        document.documentElement.classList.add("noPluginButtons");
+    } else {
+        document.documentElement.classList.remove("noPluginButtons");
+    }
+}
+
 export function addPluginButtons(loader: Gimloader) {
+    if(!loader.UI.showPluginButtons) {
+        document.documentElement.classList.add("noPluginButtons");
+    }
+
     // add a hotkey shift+p to open the plugin manager
     loader.hotkeys.add(new Set(['alt', 'p']), () => openPluginManager());
 

@@ -1,5 +1,6 @@
 import type * as React from 'react';
 import type * as ReactDOM from 'react-dom/client';
+import { setShowPluginButtons } from './ui/addPluginButtons';
 import Parcel from './parcel/parcel';
 import Net from './net/net';
 import HotkeyManager from './hotkeyManager/hotkeyManager';
@@ -30,6 +31,8 @@ export declare class Gimloader extends EventTarget {
         showModal: typeof showModal;
         addStyles: typeof addStyles;
         removeStyles: typeof removeStyles;
+        showPluginButtons: boolean;
+        setShowPluginButtons: typeof setShowPluginButtons;
     };
     constructor();
     addStyleSheets(): void;

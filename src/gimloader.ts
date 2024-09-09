@@ -5,7 +5,7 @@ import type * as ReactDOM from 'react-dom/client';
 
 import styles from './css/styles.scss';
 import { log, onGimkit } from './util';
-import { addPluginButtons } from './ui/addPluginButtons';
+import { addPluginButtons, setShowPluginButtons } from './ui/addPluginButtons';
 import Parcel from './parcel/parcel';
 import Net from './net/net';
 import HotkeyManager from './hotkeyManager/hotkeyManager';
@@ -41,7 +41,9 @@ export class Gimloader extends EventTarget {
     UI = {
         showModal,
         addStyles,
-        removeStyles
+        removeStyles,
+        showPluginButtons: GM_getValue('showPluginButtons', true),
+        setShowPluginButtons
     }
 
     constructor() {
