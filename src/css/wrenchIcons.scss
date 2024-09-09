@@ -136,3 +136,13 @@ div:has(> * > * > .gl-hostWrench) {
         fill: white;
     }
 }
+
+.noPluginButtons {
+    .gl-1dGameWrench, .gl-1dGameWrenchJoin, .gl-1dHostGameWrench, .gl-1dHostPluginBtn, .gl-hostWrench,
+    .gl-homeWrench, .gl-wrench, .openPlugins,
+    .ant-space-item:has(.gl-homeWrench) + .ant-space-item-split,
+    div:has(> * > * > .gl-hostWrench), div:has(> * > * > .gl-wrench),
+    button:has(> .gl-1dHostGameWrench) {
+        display: none;
+    }
+}
