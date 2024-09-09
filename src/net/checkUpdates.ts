@@ -60,7 +60,7 @@ export async function checkPluginUpdate(plugin: Plugin) {
 
     if(conf) {
         plugin.edit(res.responseText, incomingHeaders);
-        GL.pluginManager.updatePlugins();
+        GL.pluginManager.plugins.update();
     }
 }
 

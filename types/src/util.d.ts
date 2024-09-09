@@ -1,4 +1,9 @@
+import type { ComponentType, SvelteComponent } from "svelte";
+import type { EasyAccessWritable } from "./types";
 export declare function log(...args: any[]): void;
+export declare function easyAccessWritable<T>(initial: T): EasyAccessWritable<T>;
+export declare function renderSvelteComponent(Component: ComponentType, props?: Record<string, any>): [HTMLDivElement, SvelteComponent];
+export declare function readUserFile(accept: string): Promise<string>;
 export declare const onGimkit: boolean;
 export declare function parsePluginHeader(code: string): Record<string, any>;
 export declare function parseLibHeader(code: string): Record<string, any>;

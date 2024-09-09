@@ -37,3 +37,24 @@ export type RequireHookFn = (moduleName: string) => void;
 export interface RequireHook extends RequireHookFn {
     register: (moduleName: string, moduleCallback: any) => void;
 }
+export interface EasyAccessWritable<T> {
+    value: T;
+    set(value: T): void;
+    update(): void;
+    subscribe(callback: (value: T) => void): () => void;
+}
+export interface IConfigurableHotkey {
+    id: string;
+    category: string;
+    title: string;
+    preventDefault: boolean;
+    callback: (event: KeyboardEvent) => void;
+    keys: Set<string>;
+}
+export interface IConfigurableHotkeyOptions {
+    id: string;
+    category: string;
+    title: string;
+    preventDefault?: boolean;
+    defaultKeys?: Set<string>;
+}

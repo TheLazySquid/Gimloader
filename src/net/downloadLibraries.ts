@@ -57,7 +57,7 @@ export default async function downloadLibraries(needsLibs: string[], confirmName
     await Promise.all(libs.map(l => l.enable()));
 
     GL.lib.save();
-    GL.lib.updateReact();
+    GL.lib.libs.update();
 
     let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
     if(failed.length > 0) {

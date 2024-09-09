@@ -1,14 +1,14 @@
 import type { Gimloader } from "$src/gimloader";
+import debounce from "debounce";
 import Plugin from "./plugin";
 export default class PluginManager {
     gimloader: Gimloader;
-    plugins: Plugin[];
+    plugins: import("../types").EasyAccessWritable<Plugin[]>;
     runPlugins: boolean;
-    reactSetPlugins?: (plugins: Plugin[]) => void;
-    updatePluginTimeout: any;
     constructor(gimloader: Gimloader, runPlugins?: boolean);
-    updatePlugins(): void;
     init(): Promise<void>;
+    saveFn(): void;
+    saveDebounced: debounce.DebouncedFunction<() => void>;
     save(newPlugins?: Plugin[]): void;
     getPlugin(name: string): Plugin;
     isEnabled(name: string): boolean;

@@ -1,4 +1,4 @@
-import { IHotkey } from "../types";
+import type { IHotkey } from "../types";
 export default class HotkeyManager {
     hotkeys: Map<Set<string>, IHotkey>;
     pressedKeys: Set<string>;

@@ -24,9 +24,8 @@ export class Gimloader extends EventTarget {
 
     React: typeof React;
     ReactDOM: typeof ReactDOM;
+    
     notification: any;
-    modules: Record<string, any> = {};
-
     stores: any;
     platformerPhysics: any;
 

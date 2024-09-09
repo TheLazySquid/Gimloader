@@ -6,7 +6,7 @@ import type { Gimloader } from "../gimloader";
 import type { Intercept, RequireHook } from "../types";
 import { log, onGimkit } from "../util";
 
-// the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
+// the code below is copied from https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/modloader/src/parcel.ts,
 // who in turn copied it from the parcel source code.
 
 const scriptSelector = 'script[src*="index"]:not([nomodule])'
