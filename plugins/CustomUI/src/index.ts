@@ -22,6 +22,7 @@ export function openSettingsMenu() {
     GL.UI.showModal(GL.React.createElement(UI, { uiChanger, onConfirm }), {
         id: "CustomUI",
         title: "UI Customization Options",
+        style: "min-width: 400px",
         closeOnBackgroundClick: false,
         buttons: [{
             text: "Cancel",

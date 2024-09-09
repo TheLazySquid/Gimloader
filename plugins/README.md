@@ -24,7 +24,7 @@ Adds an autosplitter and timer to Don't Look Down and Fishtopia, which allows yo
 
 Displays a configurable list of information in 2d gamemodes, such as coordinates, velocity and fps.
 
-## CharacterCustomization [code]('./CharacterCustomization/build/CharacterCustomization.js') [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js)
+## CharacterCustomization [code](./CharacterCustomization/build/CharacterCustomization.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js)
 
 This plugin allows you to equip any skin/trail, or even use a custom skin. This works for any 2d platformer. Hit alt + c to open the customization menu. To use a skin, you'll need its ID which can be found on the Gimkit wiki.
 
@@ -38,7 +38,7 @@ This plugin allows you to use devices instantly, without waiting for their meter
 
 ## DLDTAS [code](./DLDTAS) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js)
 
-This is a plugin that allows you to record and play back TASes in Don't Look Down. This is more complex and uses the [build tools]('../buildTools') to compile.
+This is a plugin that allows you to record and play back TASes in Don't Look Down. This is more complex and uses the [build tools](../buildTools) to compile.
 
 ## 2dMovementTAS [code](./2dMovementTAS) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js)
 
@@ -50,4 +50,4 @@ This is a plugin that allows you to set rules that allow you to automatically ki
 
 ## CustomUI [code](./CustomUI) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CustomUI/build/CustomUI.js)
 
-This plugin lets you customize a few things about the Gimkit UI. Most importantly, it lets you make and use custom themes in both 1d and 2d modes and adds dark mode.
+This plugin lets you customize a few things about the Gimkit UI. Most importantly, it lets you make and use custom themes in both 1d and 2d modes.

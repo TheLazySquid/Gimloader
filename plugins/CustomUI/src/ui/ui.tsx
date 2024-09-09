@@ -11,7 +11,6 @@ export default function UI({ uiChanger, onConfirm }: { uiChanger: UIChanger, onC
     let [customThemes, setCustomThemes] = React.useState(uiChanger.customThemes);
     let [themeType, setThemeType] = React.useState(uiChanger.themeType);
     let [themeIndex, setThemeIndex] = React.useState(uiChanger.themeIndex);
-    let [darkMode, setDarkMode] = React.useState(uiChanger.darkTheme);
     let [questionOpacity, setQuestionOpacity] = React.useState(uiChanger.questionOpacity);
 
     // reactively get the active theme based on the theme type and index
@@ -27,7 +26,7 @@ export default function UI({ uiChanger, onConfirm }: { uiChanger: UIChanger, onC
 
     onConfirm(() => {
         uiChanger.updateSettings(hideTopBar, useCustomTheme, customThemes,
-            themeType, themeIndex, questionOpacity, darkMode);
+            themeType, themeIndex, questionOpacity);
     })
 
     const openThemePicker = () => {
@@ -73,13 +72,6 @@ export default function UI({ uiChanger, onConfirm }: { uiChanger: UIChanger, onC
 
             <ThemePreview theme={activeTheme} onClick={openThemePicker} 
             text={`Current theme: ${activeTheme.name} ✎`} />
-
-            <div className="row">
-                <div>Enable Home Screen Dark Mode</div>
-                <input type="checkbox" checked={darkMode} onChange={e => {
-                    setDarkMode(e.target.checked);
-                }} />
-            </div>
         </div>
     )
 }

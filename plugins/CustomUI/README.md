@@ -13,4 +13,3 @@ The settings menu can be accessed from the plugins menu when the plugin is enabl
 1. Auto Hide Top Bar - This will make the bar at the top of the screen in 2d gamemodes slide away when you're not hovering over it.
 2. Question Panel Opacity - This will change how opaque the question panel is in 2d gamemodes.
 3. Custom Theme - This will let you choose a custom theme to use. This comes with all the default themes that Gimkit has, and it also has the option to make your own custom themes.
-4. Home Screen Dark Mode - This will apply dark mode styles to the home screen (not in-game).
