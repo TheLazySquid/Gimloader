@@ -88,7 +88,7 @@ export class ColyseusIntercept extends EventTarget {
         super();
         let me = this;
 
-        // somewhat taken from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/game.ts
+        // somewhat taken from https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/modloader/src/game.ts
         loader.parcel.interceptRequire(null, exports => exports?.OnJoinedRoom, exports => {
             let nativeOnJoined = exports.OnJoinedRoom;
             delete exports.OnJoinedRoom;

@@ -13,6 +13,11 @@ declare module '*.svg' {
     export default content;
 }
 
+declare module '*.svelte' {
+    const component: import('svelte').ComponentType;
+    export default component;
+}
+
 declare const GL: import('./src/gimloader').Gimloader;
 /** @deprecated Use GL.stores */
 declare const stores: any;

@@ -1,5 +1,6 @@
 import type { Gimloader } from "$src/gimloader";
 export default class Plugin {
+    id: string;
     gimloader: Gimloader;
     script: string;
     enabled: boolean;

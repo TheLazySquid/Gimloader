@@ -1,4 +1,4 @@
-import { IHotkey } from "../types";
+import type { IHotkey } from "../types";
 
 const shiftKeyHeldKeys = `~!@#$%^&*()_+{}|:"<>?`;
 const normalKeys = "`1234567890-=[]\\;',./";

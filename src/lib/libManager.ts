@@ -1,28 +1,28 @@
-import { parseLibHeader } from '$src/util';
+import { easyAccessWritable, parseLibHeader } from '$src/util';
 import Lib from './lib';
+import type { EasyAccessWritable } from '$src/types';
+import debounce from 'debounce';
 
 // The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
 // If there is a better way to do this please let me know
 const libManagerMethods = {
     getLib(libName: string): Lib {
-        return this.libs[libName];
+        return this.libs.value.find((lib: Lib) => lib.headers.name === libName);
     },
-    updateReact() {
-        if(this.updateLibTimeout) clearTimeout(this.updateLibTimeout);
-
-        this.updateLibTimeout = setTimeout(() => {
-            this.reactSetLibs?.({...this.libs});
-        });
-    },
-    save(libs?: Record<string, string>) {
-        if(libs) this.libs = libs;
-
-        let libObjs = {};
-        for(let name in this.libs) {
-            libObjs[name] = this.libs[name].script;
+    saveFn() {
+        let libStrs: string[] = [];
+        for(let lib of this.libs.value) {
+            libStrs.push(lib.script);
         }
 
-        GM_setValue('libs', libObjs);
+        GM_setValue('libs', libStrs);
+
+    },
+    save(libs?: Record<string, string>) {
+        if(libs) this.libs.value = libs;
+        if(!this.saveDebounced) this.saveDebounced = debounce(this.saveFn, 100);
+
+        this.saveDebounced();
     },
     createLib(script: string, headers?: Record<string, any>, ignoreDuplicates?: boolean) {
         headers = headers ?? parseLibHeader(script);
@@ -43,19 +43,19 @@ const libManagerMethods = {
         }
 
         let lib = new Lib(script, headers);
-        this.libs[lib.headers.name] = lib;
+        this.libs.value.unshift(lib);
 
         this.save();
-        this.updateReact();
+        this.libs.update();
 
         return lib;
     },
     deleteLib(lib: Lib) {
         lib.disable();
-        delete this.libs[lib.headers.name];
+        this.libs.value.splice(this.libs.value.indexOf(lib), 1);
 
         this.save();
-        this.updateReact();
+        this.libs.update();
     },
     editLib(lib: Lib, code: string, headers?: Record<string, any>) {
         headers = headers ?? parseLibHeader(code);
@@ -78,26 +78,31 @@ const libManagerMethods = {
 export type GetLibType = (lib: string) => any;
 export interface LibManagerBase extends GetLibType {
     get: GetLibType;
-    libs: Record<string, Lib>;
-    reactSetLibs?: (libs: Record<string, Lib>) => void;
-    updateLibTimeout: any;
+    libs: EasyAccessWritable<Lib[]>;
 };
 type additionalValuesType = typeof libManagerMethods;
 export interface LibManagerType extends LibManagerBase, additionalValuesType {};
 
 function makeLibManager() {
-    let libScripts = GM_getValue('libs', {}) as Record<string, string>;
-    let libs: Record<string, Lib> = {};
+    let libScripts = GM_getValue('libs', []) as string[];
 
-    for(let name in libScripts) {
-        let script = libScripts[name];
-        let lib = new Lib(script);
-
-        libs[name] = lib;
+    // convert from the old, unordered version
+    if(!Array.isArray(libScripts)) {
+        libScripts = Object.values(libScripts);
     }
 
+    let libs = easyAccessWritable<Lib[]>([]);
+
+    for(let script of libScripts) {
+        let lib = new Lib(script);
+
+        libs.value.push(lib);
+    }
+
+    libs.update();
+
     const get = function(libName: string) {
-        let lib = libs[libName];
+        let lib = libs.value.find(lib => lib.headers.name === libName);
         return lib?.library ?? null;
     }
     
@@ -107,39 +112,47 @@ function makeLibManager() {
         libs
     }, libManagerMethods);
 
-    GM_addValueChangeListener('libs', (_, __, value: Record<string, string>, remote) => {
+    GM_addValueChangeListener('libs', (_, __, value: string[], remote) => {
         if(!remote) return;
-        let newLibs: Record<string, Lib> = {};
+        let newLibs: Lib[] = [];
 
-        for(let name in value) {
-            let script = value[name];
+        for(let script of value) {
             let lib = new Lib(script);
-
-            newLibs[name] = lib;
+            newLibs.push(lib);
         }
 
-        // check if any plugins were removed
-        for(let name in libs) {
-            if(!newLibs[name]) {
-                lib.deleteLib(libs[name]);
+        console.log(newLibs);
+
+        // check if any libraries were removed
+        for(let checkLib of libs.value) {
+            if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
+                lib.deleteLib(checkLib);
             }
         }
 
-        // check if any scripts were added
-        for(let name in newLibs) {
-            if(!libs[name]) {
-                lib.createLib(newLibs[name].script, newLibs[name].headers, true);
+        // check if any libraries were added
+        for(let newLib of newLibs) {
+            if(!libs.value.some(lib => lib.headers.name === newLib.headers.name)) {
+                lib.createLib(newLib.script, newLib.headers, true);
             }
         }
 
-        // check if any scripts were updated
-        for(let name in newLibs) {
-            if(libs[name].script !== newLibs[name].script) {
-                lib.editLib(libs[name], newLibs[name].script, newLibs[name].headers);
+        // check if any libraries were updated
+        for(let newLib of newLibs) {
+            let existing = libs.value.find(lib => lib.headers.name === newLib.headers.name);
+            if(existing.script !== newLib.script) {
+                lib.editLib(existing, newLib.script, newLib.headers);
             }
         }
 
-        lib.updateReact();
+        // move the libraries into the correct order
+        let newOrder = [];
+        for (let newLib of newLibs) {
+            let setLib = lib.getLib(newLib.headers.name);
+            if (setLib) newOrder.push(setLib);
+        }
+
+        lib.libs.set(newOrder);
     })
 
     return lib;

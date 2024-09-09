@@ -1,7 +1,10 @@
-@use 'scriptList.scss';
 @use 'wrenchIcons.scss';
 @use 'ui.scss';
-@use 'menu.scss';
+@use 'preflight.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
     --text: black;

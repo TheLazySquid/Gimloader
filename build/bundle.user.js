@@ -9,7 +9,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.8.5
+// @version     0.9.0
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -22,13 +22,55 @@
 (function () {
   'use strict';
 
-  var version = "0.8.5";
+  var version = "0.9.0";
 
-  var styles$1 = ".gl-listWrap {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n}\n.gl-listWrap .scriptList {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  align-content: start;\n  gap: 1rem;\n  padding: 1rem;\n  height: 100%;\n  background-color: var(--bg-primary);\n  border-radius: 10px;\n  color: var(--text);\n  flex: 1;\n  overflow-y: auto;\n  height: 100%;\n}\n.gl-listWrap .scriptList .empty {\n  width: 100%;\n  text-align: center;\n  font-size: 2rem;\n  font-weight: 600;\n  grid-column: 1/-1;\n  padding-top: 1rem;\n}\n.gl-listWrap .header {\n  display: flex;\n  width: 100%;\n  justify-content: start;\n  align-items: center;\n}\n.gl-listWrap button {\n  cursor: pointer;\n  width: 28px;\n  height: 28px;\n  border: none;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  transition: transform 0.23s ease 0s;\n}\n.gl-listWrap button:hover {\n  transform: scale(1.1);\n}\n.gl-listWrap svg {\n  fill: var(--text);\n  width: 100%;\n  height: 100%;\n}\n.gl-listWrap .scriptItem {\n  padding: 1rem;\n  min-height: 200px;\n  background-color: var(--bg-secondary);\n  border-radius: 6px;\n  display: flex;\n  flex-direction: column;\n  box-shadow: rgba(0, 0, 0, 0.05) 0px -1px 10px 0px, rgba(0, 0, 0, 0.1) 0px 1px 4px 0px, rgb(243, 236, 232) 0px 10px 30px 0px;\n}\n.gl-listWrap .scriptItem .info {\n  flex-grow: 1;\n}\n.gl-listWrap .scriptItem .top {\n  width: 100%;\n  max-width: 100%;\n  max-height: 100px;\n  display: flex;\n}\n.gl-listWrap .scriptItem .top input {\n  flex-shrink: 0;\n  width: 25px;\n  height: 25px;\n}\n.gl-listWrap .scriptItem .name {\n  font-size: 1.2rem;\n  font-weight: 600;\n  flex-grow: 1;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .version {\n  padding-left: 5px;\n  font-size: 0.8rem;\n}\n.gl-listWrap .scriptItem .author {\n  font-size: 1rem;\n  font-weight: normal;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .description {\n  font-size: 0.8rem;\n  max-height: 200px;\n  overflow: hidden;\n  white-space: wrap;\n  text-overflow: ellipsis;\n}\n.gl-listWrap .scriptItem .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.codeCakeEditor {\n  border-radius: 0.2rem;\n}\n\n.gl-row {\n  display: flex;\n  gap: 8px;\n}\n\n* > .gl-wrench {\n  padding: 8px 12px;\n}\n\n.gl-wrench {\n  width: 20px;\n  height: 20px;\n}\n.gl-wrench svg {\n  fill: white;\n  width: 20px;\n  height: 20px;\n  transform: translate(-50%, -50%);\n}\n\n.gl-join {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.gl-join .openPlugins {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background-color: rgb(30, 7, 107);\n  height: 36px;\n  width: 40px;\n  border-radius: 4px;\n  cursor: pointer;\n}\n.gl-join .openPlugins:hover {\n  background-color: rgb(43, 10, 155);\n}\n.gl-join .openPlugins svg {\n  fill: white;\n}\n\n.gl-homeWrench {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n.gl-homeWrench .icon {\n  width: 30px;\n  height: 30px;\n}\n.gl-homeWrench.light .text {\n  color: white;\n}\n.gl-homeWrench.light .text:hover {\n  color: white;\n}\n.gl-homeWrench.light svg {\n  fill: white;\n}\n.gl-homeWrench .text {\n  font-size: 18px;\n  color: rgb(22, 119, 255);\n  font-weight: bold;\n  cursor: pointer;\n}\n.gl-homeWrench .text:hover {\n  color: #69b1ff;\n}\n\ndiv:has(> * > * > .gl-hostWrench) {\n  margin-right: 8px;\n}\n\n.gl-hostWrench {\n  display: flex;\n}\n\n.gl-1dHostPluginBtn {\n  padding: 6px 14px;\n  background-color: rgb(131, 131, 131);\n  border-radius: 4px;\n  margin-right: 8px;\n  color: white;\n  transition: transform 0.23s ease 0s;\n  border: none;\n  font-weight: 900;\n  font-size: 24px;\n  box-shadow: rgba(0, 0, 0, 0.46) 0px 4px 33px -6px;\n}\n.gl-1dHostPluginBtn:hover {\n  transform: scale(1.04);\n}\n\n.gl-1dHostGameWrench {\n  width: 25px;\n  height: 25px;\n}\n.gl-1dHostGameWrench svg {\n  fill: white;\n  transform: translate(6px, -1px);\n}\n\n.gl-1dGameWrench {\n  width: 23px;\n  height: 23px;\n}\n.gl-1dGameWrench svg {\n  fill: white;\n}\n\n.gl-1dGameWrenchJoin {\n  width: 32px;\n  height: 32px;\n  margin-left: 8px;\n}\n.gl-1dGameWrenchJoin svg {\n  fill: white;\n}\n\n.gl-modalBG {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 100;\n  background-color: rgba(0, 0, 0, 0.2);\n  backdrop-filter: blur(5px);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  animation: fadeIn 0.15s;\n}\n\n.gl-modal {\n  min-width: 25%;\n  min-height: 200px;\n  max-height: 80%;\n  max-width: 80%;\n  border-radius: 1rem;\n  padding: 1rem;\n  background-color: var(--bg-primary);\n  color: var(--text);\n  animation: zoomIn ease-out 0.15s;\n  display: flex;\n  flex-direction: column;\n}\n.gl-modal .title {\n  margin-bottom: 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.gl-modal .content {\n  overflow-y: auto;\n  flex: 1;\n}\n.gl-modal > .buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 1rem;\n  padding-top: 1rem;\n}\n.gl-modal > .buttons button {\n  padding: 0.5rem 1rem;\n  border: none;\n  border-radius: 0.5rem;\n  cursor: pointer;\n}\n.gl-modal > .buttons button.close {\n  background-color: transparent;\n  text-decoration: underline;\n}\n.gl-modal > .buttons button.primary {\n  background-color: #178635;\n  color: white;\n}\n.gl-modal > .buttons button.danger {\n  background-color: #ff4d4f;\n  color: white;\n}\n\n.gl-errorMsg {\n  white-space: pre-line;\n  background-color: lightgray;\n  border: 1px solid black;\n  border-radius: 3px;\n  padding: 5px;\n}\n\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    transform: scale(0.3);\n  }\n  to {\n    transform: scale(1);\n  }\n}\n.gl-menu {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}\n.gl-menu .tabs {\n  display: flex;\n  justify-content: center;\n  gap: 5px;\n  margin-bottom: 3px;\n}\n.gl-menu .tab {\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-grow: 1;\n  text-align: center;\n  background-color: rgb(238, 238, 238);\n  border-radius: 8px;\n  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5);\n  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;\n  margin-top: 4px;\n  user-select: none;\n  padding-top: 4px;\n}\n.gl-menu .tab:hover {\n  transform: translateY(-3px);\n  box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab:active, .gl-menu .tab.selected {\n  transform: translateY(2px);\n  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.5);\n}\n.gl-menu .tab .icon, .gl-menu .tab .icon svg {\n  width: 32px;\n  height: 32px;\n}\n.gl-menu .tab .label {\n  font-size: x-small;\n}\n.gl-menu .content {\n  flex-grow: 1;\n  overflow-y: auto;\n}\n\n.gl-infoList h1 {\n  margin: 0;\n  padding: 0;\n}\n.gl-infoList > div {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n.gl-infoList svg {\n  width: 28px;\n  height: 28px;\n}\n.gl-infoList .checkAll {\n  margin-top: 5px;\n  font-size: large;\n}\n.gl-infoList input[type=checkbox] {\n  width: 20px;\n  height: 20px;\n}\n\n:is(.gl-libraryInfo, .gl-infoList) .updateBtn {\n  cursor: pointer;\n  transition: transform 0.1s ease;\n  width: 28px;\n  height: 28px;\n}\n:is(.gl-libraryInfo, .gl-infoList) .updateBtn:hover {\n  transform: scale(1.1);\n}\n\n.gl-libraryInfo th, .gl-libraryInfo tr {\n  text-align: left;\n  padding-right: 50px;\n}\n.gl-libraryInfo tr:nth-child(even) {\n  background-color: rgb(238, 238, 238);\n}\n.gl-libraryInfo td, .gl-libraryInfo table {\n  border: 1px solid black;\n}\n.gl-libraryInfo .url {\n  max-width: 300px;\n  text-wrap: wrap;\n}\n\n:root {\n  --text: black;\n  --bg-primary: white;\n  --bg-secondary: white;\n}";
+  var css_248z = ".gl-row{display:flex;gap:8px}*>.gl-wrench{padding:8px 12px}.gl-wrench,.gl-wrench svg{height:20px;width:20px}.gl-wrench svg{fill:#fff;transform:translate(-50%,-50%)}.gl-join{gap:8px;width:100%}.gl-join,.gl-join .openPlugins{align-items:center;display:flex}.gl-join .openPlugins{background-color:#1e076b;border:none;border-radius:4px;cursor:pointer;height:36px;justify-content:center;width:40px}.gl-join .openPlugins:hover{background-color:#2b0a9b}.gl-join .openPlugins svg{fill:#fff}.gl-homeWrench{align-items:center;display:flex;gap:.5rem}.gl-homeWrench .icon{height:30px;width:30px}.gl-homeWrench.light .text,.gl-homeWrench.light .text:hover{color:#fff}.gl-homeWrench.light svg{fill:#fff}.gl-homeWrench .text{color:#1677ff;cursor:pointer;font-size:18px;font-weight:700}.gl-homeWrench .text:hover{color:#69b1ff}div:has(>*>*>.gl-hostWrench){margin-right:8px}.gl-hostWrench{display:flex}.gl-1dHostPluginBtn{background-color:#838383;border:none;border-radius:4px;box-shadow:0 4px 33px -6px rgba(0,0,0,.46);color:#fff;font-size:24px;font-weight:900;margin-right:8px;padding:6px 14px;transition:transform .23s ease 0s}.gl-1dHostPluginBtn:hover{transform:scale(1.04)}.gl-1dHostGameWrench{height:25px;width:25px}.gl-1dHostGameWrench svg{fill:#fff;transform:translate(6px,-1px)}.gl-1dGameWrench{height:23px;width:23px}.gl-1dGameWrench svg{fill:#fff}.gl-1dGameWrenchJoin{height:32px;margin-left:8px;width:32px}.gl-1dGameWrenchJoin svg{fill:#fff}.gl-modalBG{align-items:center;animation:fadeIn .15s;backdrop-filter:blur(5px);background-color:rgba(0,0,0,.2);display:flex;height:100vh;justify-content:center;left:0;position:fixed;top:0;width:100vw;z-index:100}.gl-modal{animation:zoomIn .15s ease-out;background-color:var(--bg-primary);border-radius:1rem;color:var(--text);display:flex;flex-direction:column;max-height:80%;max-width:80%;min-height:200px;min-width:25%;padding:1rem}.gl-modal .title{font-size:1rem;font-weight:600;margin-bottom:.5rem}.gl-modal .content{flex:1;overflow-y:auto}.gl-modal>.buttons{display:flex;gap:1rem;justify-content:flex-end;padding-top:1rem}.gl-modal>.buttons button{border:none;border-radius:.5rem;cursor:pointer;padding:.5rem 1rem}.gl-modal>.buttons button.close{background-color:transparent;text-decoration:underline}.gl-modal>.buttons button.primary{background-color:#178635;color:#fff}.gl-modal>.buttons button.danger{background-color:#ff4d4f;color:#fff}.gl-errorMsg{background-color:#d3d3d3;border:1px solid #000;border-radius:3px;padding:5px;white-space:pre-line}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes zoomIn{0%{transform:scale(.3)}to{transform:scale(1)}}:where(:has(>.preflight)) *,:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{border:0 solid #e5e7eb;box-sizing:border-box}:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{--tw-content:\"\"}:where(:has(>.preflight)) :host,:where(:has(>.preflight)) html{-webkit-text-size-adjust:100%;font-feature-settings:normal;-webkit-tap-highlight-color:transparent;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-variation-settings:normal;line-height:1.5;-moz-tab-size:4;tab-size:4}:where(:has(>.preflight)) body{line-height:inherit;margin:0}:where(:has(>.preflight)) hr{border-top-width:1px;color:inherit;height:0}:where(:has(>.preflight)) abbr:where([title]){text-decoration:underline dotted}:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6{font-size:inherit;font-weight:inherit}:where(:has(>.preflight)) a{color:inherit;text-decoration:inherit}:where(:has(>.preflight)) b,:where(:has(>.preflight)) strong{font-weight:bolder}:where(:has(>.preflight)) code,:where(:has(>.preflight)) kbd,:where(:has(>.preflight)) pre,:where(:has(>.preflight)) samp{font-feature-settings:normal;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em;font-variation-settings:normal}:where(:has(>.preflight)) small{font-size:80%}:where(:has(>.preflight)) sub,:where(:has(>.preflight)) sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}:where(:has(>.preflight)) sub{bottom:-.25em}:where(:has(>.preflight)) sup{top:-.5em}:where(:has(>.preflight)) table{border-collapse:collapse;border-color:inherit;text-indent:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input,:where(:has(>.preflight)) optgroup,:where(:has(>.preflight)) select,:where(:has(>.preflight)) textarea{font-feature-settings:inherit;color:inherit;font-family:inherit;font-size:100%;font-variation-settings:inherit;font-weight:inherit;letter-spacing:inherit;line-height:inherit;margin:0;padding:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) select{text-transform:none}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input:where([type=button]),:where(:has(>.preflight)) input:where([type=reset]),:where(:has(>.preflight)) input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:where(:has(>.preflight)) :-moz-focusring{outline:auto}:where(:has(>.preflight)) :-moz-ui-invalid{box-shadow:none}:where(:has(>.preflight)) progress{vertical-align:baseline}:where(:has(>.preflight)) ::-webkit-inner-spin-button,:where(:has(>.preflight)) ::-webkit-outer-spin-button{height:auto}:where(:has(>.preflight)) [type=search]{-webkit-appearance:textfield;outline-offset:-2px}:where(:has(>.preflight)) ::-webkit-search-decoration{-webkit-appearance:none}:where(:has(>.preflight)) ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}:where(:has(>.preflight)) summary{display:list-item}:where(:has(>.preflight)) blockquote,:where(:has(>.preflight)) dd,:where(:has(>.preflight)) dl,:where(:has(>.preflight)) figure,:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6,:where(:has(>.preflight)) hr,:where(:has(>.preflight)) p,:where(:has(>.preflight)) pre{margin:0}:where(:has(>.preflight)) fieldset{margin:0;padding:0}:where(:has(>.preflight)) legend{padding:0}:where(:has(>.preflight)) menu,:where(:has(>.preflight)) ol,:where(:has(>.preflight)) ul{list-style:none;margin:0;padding:0}:where(:has(>.preflight)) dialog{padding:0}:where(:has(>.preflight)) textarea{resize:vertical}:where(:has(>.preflight)) input::placeholder,:where(:has(>.preflight)) textarea::placeholder{color:#9ca3af;opacity:1}:where(:has(>.preflight)) [role=button],:where(:has(>.preflight)) button{cursor:pointer}:where(:has(>.preflight)) :disabled{cursor:default}:where(:has(>.preflight)) audio,:where(:has(>.preflight)) canvas,:where(:has(>.preflight)) embed,:where(:has(>.preflight)) iframe,:where(:has(>.preflight)) img,:where(:has(>.preflight)) object,:where(:has(>.preflight)) svg,:where(:has(>.preflight)) video{display:block;vertical-align:middle}:where(:has(>.preflight)) img,:where(:has(>.preflight)) video{height:auto;max-width:100%}:where(:has(>.preflight)) [hidden]{display:none}[data-tooltip-style^=light]+.tooltip>.tooltip-arrow:before{border-color:#e5e7eb;border-style:solid}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=top]>.tooltip-arrow:before{border-bottom-width:1px;border-right-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=right]>.tooltip-arrow:before{border-bottom-width:1px;border-left-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=bottom]>.tooltip-arrow:before{border-left-width:1px;border-top-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=left]>.tooltip-arrow:before{border-right-width:1px;border-top-width:1px}.tooltip[data-popper-placement^=top]>.tooltip-arrow{bottom:-4px}.tooltip[data-popper-placement^=bottom]>.tooltip-arrow{top:-4px}.tooltip[data-popper-placement^=left]>.tooltip-arrow{right:-4px}.tooltip[data-popper-placement^=right]>.tooltip-arrow{left:-4px}.tooltip.invisible>.tooltip-arrow:before{visibility:hidden}[data-popper-arrow],[data-popper-arrow]:before{background:inherit;height:8px;position:absolute;width:8px}[data-popper-arrow]{visibility:hidden}[data-popper-arrow]:after,[data-popper-arrow]:before{content:\"\";transform:rotate(45deg);visibility:visible}[data-popper-arrow]:after{background:inherit;height:9px;position:absolute;width:9px}[role=tooltip]>[data-popper-arrow]:before{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:before{border-color:#4b5563;border-style:solid}[role=tooltip]>[data-popper-arrow]:after{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:after{border-color:#4b5563;border-style:solid}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:before{border-bottom-width:1px;border-right-width:1px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:before{border-bottom-width:1px;border-left-width:1px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:before{border-left-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:before{border-right-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]{bottom:-5px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]{top:-5px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]{right:-5px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]{left:-5px}[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;border-color:#6b7280;border-radius:0;border-width:1px;font-size:1rem;line-height:1.5rem;padding:.5rem .75rem}[multiple]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=email]:focus,[type=month]:focus,[type=number]:focus,[type=password]:focus,[type=search]:focus,[type=tel]:focus,[type=text]:focus,[type=time]:focus,[type=url]:focus,[type=week]:focus,select:focus,textarea:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);border-color:#1c64f2;box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}input[type=time]::-webkit-calendar-picker-indicator{background:none}select:not([size]){background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E\");background-position:right .75rem center;background-repeat:no-repeat;background-size:.75em .75em;padding-right:2.5rem;print-color-adjust:exact}:is([dir=rtl]) select:not([size]){background-position:left .75rem center;padding-left:0;padding-right:.75rem}[multiple]{background-image:none;background-position:0 0;background-repeat:unset;background-size:initial;padding-right:.75rem;print-color-adjust:unset}[type=checkbox],[type=radio]{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;background-origin:border-box;border-color:#6b7280;border-width:1px;color:#1c64f2;display:inline-block;flex-shrink:0;height:1rem;padding:0;print-color-adjust:exact;user-select:none;vertical-align:middle;width:1rem}[type=checkbox]{border-radius:0}[type=radio]{border-radius:100%}[type=checkbox]:focus,[type=radio]:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}.dark [type=checkbox]:checked,.dark [type=radio]:checked,[type=checkbox]:checked,[type=radio]:checked{background-color:currentColor;background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent}[type=checkbox]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-size:.55em .55em;print-color-adjust:exact}.dark [type=radio]:checked,[type=radio]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E\");background-size:1em 1em}[type=checkbox]:indeterminate{background-color:currentColor;background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M.5 6h14'/%3E%3C/svg%3E\");background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent;print-color-adjust:exact}[type=checkbox]:indeterminate:focus,[type=checkbox]:indeterminate:hover{background-color:currentColor;border-color:transparent}[type=file]{background:unset;border-color:inherit;border-radius:0;border-width:0;font-size:unset;line-height:inherit;padding:0}[type=file]:focus{outline:1px auto inherit}input[type=file]::file-selector-button{background:#1f2937;border:0;color:#fff;cursor:pointer;font-size:.875rem;font-weight:500;margin-inline-end:1rem;margin-inline-start:-1rem;padding:.625rem 1rem .625rem 2rem}input[type=file]::file-selector-button:hover{background:#374151}:is([dir=rtl]) input[type=file]::file-selector-button{padding-left:1rem;padding-right:2rem}.dark input[type=file]::file-selector-button{background:#4b5563;color:#fff}.dark input[type=file]::file-selector-button:hover{background:#6b7280}input[type=range]::-webkit-slider-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-webkit-slider-thumb{background:#9ca3af}.dark input[type=range]:disabled::-webkit-slider-thumb{background:#6b7280}input[type=range]:focus::-webkit-slider-thumb{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);--tw-ring-opacity:1px;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity));box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);outline:2px solid transparent;outline-offset:2px}input[type=range]::-moz-range-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-moz-range-thumb{background:#9ca3af}.dark input[type=range]:disabled::-moz-range-thumb{background:#6b7280}input[type=range]::-moz-range-progress{background:#3f83f8}input[type=range]::-ms-fill-lower{background:#3f83f8}input[type=range].range-sm::-webkit-slider-thumb{height:1rem;width:1rem}input[type=range].range-lg::-webkit-slider-thumb{height:1.5rem;width:1.5rem}input[type=range].range-sm::-moz-range-thumb{height:1rem;width:1rem}input[type=range].range-lg::-moz-range-thumb{height:1.5rem;width:1.5rem}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.sr-only{clip:rect(0,0,0,0);border-width:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.pointer-events-none{pointer-events:none}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.-inset-1{inset:-.25rem}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{bottom:0;top:0}.-left-\\[17px\\]{left:-17px}.-right-\\[16px\\]{right:-16px}.-right-\\[17px\\]{right:-17px}.-start-1\\.5{inset-inline-start:-.375rem}.-start-14{inset-inline-start:-3.5rem}.-start-3{inset-inline-start:-.75rem}.bottom-0{bottom:0}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.bottom-6{bottom:1.5rem}.end-0{inset-inline-end:0}.end-2\\.5{inset-inline-end:.625rem}.end-5{inset-inline-end:1.25rem}.end-6{inset-inline-end:1.5rem}.left-1\\/2{left:50%}.right-3{right:.75rem}.start-0{inset-inline-start:0}.start-1{inset-inline-start:.25rem}.start-1\\/2{inset-inline-start:50%}.start-2\\.5{inset-inline-start:.625rem}.start-5{inset-inline-start:1.25rem}.top-0{top:0}.top-1{top:.25rem}.top-1\\/2{top:50%}.top-2{top:.5rem}.top-3{top:.75rem}.top-4{top:1rem}.top-5{top:1.25rem}.top-6{top:1.5rem}.top-\\[124px\\]{top:124px}.top-\\[142px\\]{top:142px}.top-\\[178px\\]{top:178px}.top-\\[40px\\]{top:40px}.top-\\[72px\\]{top:72px}.top-\\[88px\\]{top:88px}.top-\\[calc\\(100\\%\\+1rem\\)\\]{top:calc(100% + 1rem)}.-z-10{z-index:-10}.z-0{z-index:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.m-0\\.5{margin:.125rem}.-mx-1\\.5{margin-left:-.375rem;margin-right:-.375rem}.-my-1\\.5{margin-bottom:-.375rem;margin-top:-.375rem}.mx-2{margin-left:.5rem;margin-right:.5rem}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-bottom:.25rem;margin-top:.25rem}.my-2{margin-bottom:.5rem;margin-top:.5rem}.my-8{margin-bottom:2rem;margin-top:2rem}.-mb-px{margin-bottom:-1px}.-me-1\\.5{margin-inline-end:-.375rem}.-ms-4{margin-inline-start:-1rem}.-mt-px{margin-top:-1px}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-\\[3px\\]{margin-bottom:3px}.mb-px{margin-bottom:1px}.me-1{margin-inline-end:.25rem}.me-2{margin-inline-end:.5rem}.me-3{margin-inline-end:.75rem}.me-4{margin-inline-end:1rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mr-2{margin-right:.5rem}.ms-1{margin-inline-start:.25rem}.ms-1\\.5{margin-inline-start:.375rem}.ms-2{margin-inline-start:.5rem}.ms-3{margin-inline-start:.75rem}.ms-4{margin-inline-start:1rem}.ms-6{margin-inline-start:1.5rem}.ms-auto{margin-inline-start:auto}.mt-1{margin-top:.25rem}.mt-1\\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.line-clamp-6{-webkit-box-orient:vertical;-webkit-line-clamp:6;display:-webkit-box;overflow:hidden}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.\\!hidden{display:none!important}.hidden{display:none}.h-1{height:.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-2\\.5{height:.625rem}.h-20{height:5rem}.h-24{height:6rem}.h-3{height:.75rem}.h-3\\.5{height:.875rem}.h-36{height:9rem}.h-4{height:1rem}.h-48{height:12rem}.h-5{height:1.25rem}.h-56{height:14rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-7{height:1.75rem}.h-72{height:18rem}.h-8{height:2rem}.h-80{height:20rem}.h-9{height:2.25rem}.h-96{height:24rem}.h-\\[10px\\]{height:10px}.h-\\[140px\\]{height:140px}.h-\\[156px\\]{height:156px}.h-\\[172px\\]{height:172px}.h-\\[17px\\]{height:17px}.h-\\[18px\\]{height:18px}.h-\\[193px\\]{height:193px}.h-\\[213px\\]{height:213px}.h-\\[24px\\]{height:24px}.h-\\[32px\\]{height:32px}.h-\\[41px\\]{height:41px}.h-\\[426px\\]{height:426px}.h-\\[454px\\]{height:454px}.h-\\[46px\\]{height:46px}.h-\\[52px\\]{height:52px}.h-\\[55px\\]{height:55px}.h-\\[572px\\]{height:572px}.h-\\[5px\\]{height:5px}.h-\\[600px\\]{height:600px}.h-\\[63px\\]{height:63px}.h-\\[64px\\]{height:64px}.h-auto{height:auto}.h-fit{height:fit-content}.h-full{height:100%}.h-modal{height:calc(100% - 2rem)}.h-px{height:1px}.max-h-64{max-height:16rem}.max-h-full{max-height:100%}.min-h-\\[150px\\]{min-height:150px}.min-h-\\[2\\.4rem\\]{min-height:2.4rem}.min-h-\\[2\\.7rem\\]{min-height:2.7rem}.min-h-\\[3\\.2rem\\]{min-height:3.2rem}.min-h-\\[65vh\\]{min-height:65vh}.\\!w-full{width:100%!important}.w-1{width:.25rem}.w-1\\/2{width:50%}.w-10{width:2.5rem}.w-10\\/12{width:83.333333%}.w-11{width:2.75rem}.w-11\\/12{width:91.666667%}.w-12{width:3rem}.w-14{width:3.5rem}.w-2{width:.5rem}.w-2\\.5{width:.625rem}.w-2\\/4{width:50%}.w-20{width:5rem}.w-24{width:6rem}.w-3{width:.75rem}.w-3\\.5{width:.875rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-8{width:2rem}.w-8\\/12{width:66.666667%}.w-80{width:20rem}.w-9{width:2.25rem}.w-9\\/12{width:75%}.w-\\[10px\\]{width:10px}.w-\\[148px\\]{width:148px}.w-\\[188px\\]{width:188px}.w-\\[1px\\]{width:1px}.w-\\[208px\\]{width:208px}.w-\\[272px\\]{width:272px}.w-\\[300px\\]{width:300px}.w-\\[3px\\]{width:3px}.w-\\[52px\\]{width:52px}.w-\\[56px\\]{width:56px}.w-\\[6px\\]{width:6px}.w-\\[calc\\(100\\%-2rem\\)\\]{width:calc(100% - 2rem)}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-60{max-width:15rem}.max-w-7xl{max-width:80rem}.max-w-80{max-width:20rem}.max-w-\\[133px\\]{max-width:133px}.max-w-\\[301px\\]{max-width:301px}.max-w-\\[341px\\]{max-width:341px}.max-w-\\[351px\\]{max-width:351px}.max-w-\\[540px\\]{max-width:540px}.max-w-\\[640px\\]{max-width:640px}.max-w-\\[83px\\]{max-width:83px}.max-w-full{max-width:100%}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-screen-md{max-width:768px}.max-w-screen-xl{max-width:1280px}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.origin-left{transform-origin:left}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-x-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-x-1\\/3{--tw-translate-x:-33.333333%}.-translate-y-1\\/2{--tw-translate-y:-50%}.-translate-y-1\\/2,.-translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/3{--tw-translate-y:-33.333333%}.-translate-y-4{--tw-translate-y:-1rem}.-translate-y-4,.-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-6{--tw-translate-y:-1.5rem}.translate-x-1\\/3{--tw-translate-x:33.333333%}.translate-x-1\\/3,.translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-1\\/3{--tw-translate-y:33.333333%}.rotate-45{--tw-rotate:45deg}.rotate-45,.scale-75{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-75{--tw-scale-x:.75;--tw-scale-y:.75}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.list-inside{list-style-position:inside}.list-outside{list-style-position:outside}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.list-none{list-style-type:none}.appearance-none{appearance:none}.grid-flow-row{grid-auto-flow:row}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-row{flex-direction:row}.flex-row-reverse{flex-direction:row-reverse}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-start{justify-content:flex-start}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.gap-y-4{row-gap:1rem}.-space-x-px>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(-1px*(1 - var(--tw-space-x-reverse)));margin-right:calc(-1px*var(--tw-space-x-reverse))}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.25rem*var(--tw-space-x-reverse))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.5rem*var(--tw-space-x-reverse))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.space-x-4>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1rem*var(--tw-space-x-reverse))}.space-x-6>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1.5rem*var(--tw-space-x-reverse))}.space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.25rem*var(--tw-space-y-reverse));margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.5rem*var(--tw-space-y-reverse));margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)))}.space-y-2\\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.625rem*var(--tw-space-y-reverse));margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(1rem*var(--tw-space-y-reverse));margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(2rem*var(--tw-space-y-reverse));margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)))}.divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(1px*var(--tw-divide-y-reverse));border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)))}.divide-blue-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(164 202 254/var(--tw-divide-opacity))}.divide-gray-100>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(243 244 246/var(--tw-divide-opacity))}.divide-gray-200>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235/var(--tw-divide-opacity))}.divide-gray-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(209 213 219/var(--tw-divide-opacity))}.divide-gray-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(107 114 128/var(--tw-divide-opacity))}.divide-gray-700>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.divide-green-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(132 225 188/var(--tw-divide-opacity))}.divide-indigo-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(180 198 252/var(--tw-divide-opacity))}.divide-orange-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(253 186 140/var(--tw-divide-opacity))}.divide-pink-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 217/var(--tw-divide-opacity))}.divide-primary-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(146 93 254/var(--tw-divide-opacity))}.divide-purple-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(202 191 253/var(--tw-divide-opacity))}.divide-red-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 180/var(--tw-divide-opacity))}.divide-yellow-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(250 202 21/var(--tw-divide-opacity))}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overflow-y-scroll{overflow-y:scroll}.overscroll-contain{overscroll-behavior:contain}.overflow-ellipsis{text-overflow:ellipsis}.whitespace-normal{white-space:normal}.whitespace-nowrap{white-space:nowrap}.whitespace-pre{white-space:pre}.whitespace-pre-line{white-space:pre-line}.whitespace-pre-wrap{white-space:pre-wrap}.text-wrap{text-wrap:wrap}.\\!rounded-md{border-radius:.375rem!important}.rounded{border-radius:.25rem}.rounded-\\[2\\.5rem\\]{border-radius:2.5rem}.rounded-\\[2rem\\]{border-radius:2rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-sm{border-radius:.125rem}.rounded-xl{border-radius:.75rem}.rounded-b-\\[1rem\\]{border-bottom-left-radius:1rem;border-bottom-right-radius:1rem}.rounded-b-\\[2\\.5rem\\]{border-bottom-left-radius:2.5rem;border-bottom-right-radius:2.5rem}.rounded-b-lg{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.rounded-b-xl{border-bottom-left-radius:.75rem;border-bottom-right-radius:.75rem}.rounded-e-full{border-end-end-radius:9999px;border-start-end-radius:9999px}.rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.rounded-l{border-bottom-left-radius:.25rem;border-top-left-radius:.25rem}.rounded-l-lg{border-bottom-left-radius:.5rem;border-top-left-radius:.5rem}.rounded-r{border-bottom-right-radius:.25rem;border-top-right-radius:.25rem}.rounded-r-lg{border-bottom-right-radius:.5rem;border-top-right-radius:.5rem}.rounded-s-full{border-end-start-radius:9999px;border-start-start-radius:9999px}.rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.rounded-t-\\[2\\.5rem\\]{border-top-left-radius:2.5rem;border-top-right-radius:2.5rem}.rounded-t-lg{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.rounded-t-md{border-top-left-radius:.375rem;border-top-right-radius:.375rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.\\!border-0{border-width:0!important}.border{border-width:1px}.border-0{border-width:0}.border-2{border-width:2px}.border-\\[10px\\]{border-width:10px}.border-\\[14px\\]{border-width:14px}.border-\\[16px\\]{border-width:16px}.border-\\[8px\\]{border-width:8px}.border-x{border-left-width:1px;border-right-width:1px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-e{border-inline-end-width:1px}.border-s{border-inline-start-width:1px}.border-s-4{border-inline-start-width:4px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-300{--tw-border-opacity:1;border-color:rgb(164 202 254/var(--tw-border-opacity))}.border-blue-400{--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.border-blue-700{--tw-border-opacity:1;border-color:rgb(26 86 219/var(--tw-border-opacity))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246/var(--tw-border-opacity))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.border-gray-400{--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.border-gray-900{--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.border-green-300{--tw-border-opacity:1;border-color:rgb(132 225 188/var(--tw-border-opacity))}.border-green-400{--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.border-green-500{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.border-green-600{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.border-green-700{--tw-border-opacity:1;border-color:rgb(4 108 78/var(--tw-border-opacity))}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(180 198 252/var(--tw-border-opacity))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.border-inherit{border-color:inherit}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 140/var(--tw-border-opacity))}.border-pink-300{--tw-border-opacity:1;border-color:rgb(248 180 217/var(--tw-border-opacity))}.border-pink-400{--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.border-primary-400{--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.border-primary-500{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.border-primary-600{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.border-primary-700{--tw-border-opacity:1;border-color:rgb(105 40 235/var(--tw-border-opacity))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(202 191 253/var(--tw-border-opacity))}.border-purple-400{--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.border-purple-700{--tw-border-opacity:1;border-color:rgb(108 43 217/var(--tw-border-opacity))}.border-red-300{--tw-border-opacity:1;border-color:rgb(248 180 180/var(--tw-border-opacity))}.border-red-400{--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.border-red-500{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.border-red-600{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.border-red-700{--tw-border-opacity:1;border-color:rgb(200 30 30/var(--tw-border-opacity))}.border-transparent{border-color:transparent}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.border-yellow-300{--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(227 160 8/var(--tw-border-opacity))}.\\!bg-gray-50{--tw-bg-opacity:1!important;background-color:rgb(249 250 251/var(--tw-bg-opacity))!important}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.bg-blue-400{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(235 245 255/var(--tw-bg-opacity))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.bg-gray-400{--tw-bg-opacity:1;background-color:rgb(156 163 175/var(--tw-bg-opacity))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(222 247 236/var(--tw-bg-opacity))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(243 250 247/var(--tw-bg-opacity))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.bg-green-700{--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.bg-green-800{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(229 237 255/var(--tw-bg-opacity))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(240 245 255/var(--tw-bg-opacity))}.bg-indigo-500{--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(88 80 236/var(--tw-bg-opacity))}.bg-indigo-800{--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.bg-inherit{background-color:inherit}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 248 241/var(--tw-bg-opacity))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(208 56 1/var(--tw-bg-opacity))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 232 243/var(--tw-bg-opacity))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248/var(--tw-bg-opacity))}.bg-pink-500{--tw-bg-opacity:1;background-color:rgb(231 70 148/var(--tw-bg-opacity))}.bg-pink-800{--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.bg-primary-100{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-200{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.bg-primary-400{--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.bg-primary-50{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-500{--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.bg-primary-700{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.bg-primary-800{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(237 235 254/var(--tw-bg-opacity))}.bg-purple-400{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(246 245 255/var(--tw-bg-opacity))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.bg-purple-800{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(253 232 232/var(--tw-bg-opacity))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(253 242 242/var(--tw-bg-opacity))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.bg-red-700{--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.bg-teal-500{--tw-bg-opacity:1;background-color:rgb(6 148 162/var(--tw-bg-opacity))}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.bg-white\\/30{background-color:hsla(0,0%,100%,.3)}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(253 246 178/var(--tw-bg-opacity))}.bg-yellow-300{--tw-bg-opacity:1;background-color:rgb(250 202 21/var(--tw-bg-opacity))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(253 253 234/var(--tw-bg-opacity))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.bg-yellow-600{--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-75{--tw-bg-opacity:0.75}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3f83f8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(63,131,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgba(34,211,238,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-green-400{--tw-gradient-from:#31c48d var(--tw-gradient-from-position);--tw-gradient-to:rgba(49,196,141,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-lime-200{--tw-gradient-from:#d9f99d var(--tw-gradient-from-position);--tw-gradient-to:hsla(81,88%,80%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-400{--tw-gradient-from:#f17eb8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(241,126,184,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-500{--tw-gradient-from:#e74694 var(--tw-gradient-from-position);--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#9061f9 var(--tw-gradient-from-position);--tw-gradient-to:rgba(144,97,249,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#7e3af2 var(--tw-gradient-from-position);--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-200{--tw-gradient-from:#fbd5d5 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,83%,91%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-400{--tw-gradient-from:#f98080 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,91%,74%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-sky-400{--tw-gradient-from:#38bdf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(56,189,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-200{--tw-gradient-from:#afecef var(--tw-gradient-from-position);--tw-gradient-to:rgba(175,236,239,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-400{--tw-gradient-from:#16bdca var(--tw-gradient-from-position);--tw-gradient-to:rgba(22,189,202,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-blue-600{--tw-gradient-to:rgba(28,100,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#1c64f2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-cyan-500{--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#06b6d4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-green-500{--tw-gradient-to:rgba(14,159,110,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0e9f6e var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-lime-400{--tw-gradient-to:rgba(163,230,53,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#a3e635 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-pink-500{--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#e74694 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-purple-600{--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#7e3af2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-300{--tw-gradient-to:hsla(0,83%,84%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f8b4b4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-500{--tw-gradient-to:rgba(240,82,82,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f05252 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-teal-500{--tw-gradient-to:rgba(6,148,162,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0694a2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3f83f8 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#1c64f2 var(--tw-gradient-to-position)}.to-blue-700{--tw-gradient-to:#1a56db var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-green-600{--tw-gradient-to:#057a55 var(--tw-gradient-to-position)}.to-lime-200{--tw-gradient-to:#d9f99d var(--tw-gradient-to-position)}.to-lime-500{--tw-gradient-to:#84cc16 var(--tw-gradient-to-position)}.to-orange-400{--tw-gradient-to:#ff8a4c var(--tw-gradient-to-position)}.to-pink-500{--tw-gradient-to:#e74694 var(--tw-gradient-to-position)}.to-pink-600{--tw-gradient-to:#d61f69 var(--tw-gradient-to-position)}.to-purple-700{--tw-gradient-to:#6c2bd9 var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#e02424 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#047481 var(--tw-gradient-to-position)}.to-yellow-200{--tw-gradient-to:#fce96a var(--tw-gradient-to-position)}.bg-clip-text{background-clip:text}.fill-blue-600{fill:#1c64f2}.fill-gray-600{fill:#4b5563}.fill-green-500{fill:#0e9f6e}.fill-pink-600{fill:#d61f69}.fill-primary-600{fill:#6e2eef}.fill-purple-600{fill:#7e3af2}.fill-red-600{fill:#e02424}.fill-white{fill:#fff}.fill-yellow-400{fill:#e3a008}.object-cover{object-fit:cover}.\\!p-0{padding:0!important}.\\!p-2{padding:.5rem!important}.\\!p-3{padding:.75rem!important}.p-0{padding:0}.p-0\\.5{padding:.125rem}.p-1{padding:.25rem}.p-1\\.5{padding:.375rem}.p-2{padding:.5rem}.p-2\\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.\\!px-0{padding-left:0!important;padding-right:0!important}.px-0{padding-left:0;padding-right:0}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0\\.5{padding-bottom:.125rem;padding-top:.125rem}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-1\\.5{padding-bottom:.375rem;padding-top:.375rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.py-2\\.5{padding-bottom:.625rem;padding-top:.625rem}.py-3{padding-bottom:.75rem;padding-top:.75rem}.py-3\\.5{padding-bottom:.875rem;padding-top:.875rem}.py-4{padding-bottom:1rem;padding-top:1rem}.py-5{padding-bottom:1.25rem;padding-top:1.25rem}.pb-1{padding-bottom:.25rem}.pb-1\\.5{padding-bottom:.375rem}.pb-2\\.5{padding-bottom:.625rem}.pe-10{padding-inline-end:2.5rem}.pe-11{padding-inline-end:2.75rem}.pe-2\\.5{padding-inline-end:.625rem}.pe-4{padding-inline-end:1rem}.pe-9{padding-inline-end:2.25rem}.pr-7{padding-right:1.75rem}.ps-10{padding-inline-start:2.5rem}.ps-11{padding-inline-start:2.75rem}.ps-2\\.5{padding-inline-start:.625rem}.ps-3{padding-inline-start:.75rem}.ps-4{padding-inline-start:1rem}.ps-9{padding-inline-start:2.25rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-justify{text-align:justify}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-8xl{font-size:6rem;line-height:1}.text-9xl{font-size:8rem;line-height:1}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-extralight{font-weight:200}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.font-thin{font-weight:100}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-6{line-height:1.5rem}.leading-9{line-height:2.25rem}.leading-loose{line-height:2}.leading-none{line-height:1}.leading-normal{line-height:1.5}.leading-relaxed{line-height:1.625}.tracking-normal{letter-spacing:0}.tracking-tight{letter-spacing:-.025em}.tracking-tighter{letter-spacing:-.05em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}.\\!text-gray-900{--tw-text-opacity:1!important;color:rgb(17 24 39/var(--tw-text-opacity))!important}.text-black{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.text-blue-100{--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.text-blue-50{--tw-text-opacity:1;color:rgb(235 245 255/var(--tw-text-opacity))}.text-blue-500{--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.text-blue-600{--tw-text-opacity:1;color:rgb(28 100 242/var(--tw-text-opacity))}.text-blue-700{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 66 159/var(--tw-text-opacity))}.text-blue-900{--tw-text-opacity:1;color:rgb(35 56 118/var(--tw-text-opacity))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.text-green-100{--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.text-green-500{--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.text-green-600{--tw-text-opacity:1;color:rgb(5 122 85/var(--tw-text-opacity))}.text-green-700{--tw-text-opacity:1;color:rgb(4 108 78/var(--tw-text-opacity))}.text-green-800{--tw-text-opacity:1;color:rgb(3 84 63/var(--tw-text-opacity))}.text-green-900{--tw-text-opacity:1;color:rgb(1 71 55/var(--tw-text-opacity))}.text-indigo-100{--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.text-indigo-500{--tw-text-opacity:1;color:rgb(104 117 245/var(--tw-text-opacity))}.text-indigo-800{--tw-text-opacity:1;color:rgb(66 56 157/var(--tw-text-opacity))}.text-orange-500{--tw-text-opacity:1;color:rgb(255 90 31/var(--tw-text-opacity))}.text-orange-800{--tw-text-opacity:1;color:rgb(138 44 13/var(--tw-text-opacity))}.text-pink-100{--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.text-pink-500{--tw-text-opacity:1;color:rgb(231 70 148/var(--tw-text-opacity))}.text-pink-800{--tw-text-opacity:1;color:rgb(153 21 75/var(--tw-text-opacity))}.text-primary-100{--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.text-primary-500{--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.text-primary-800{--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.text-primary-900{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.text-purple-100{--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.text-purple-500{--tw-text-opacity:1;color:rgb(144 97 249/var(--tw-text-opacity))}.text-purple-600{--tw-text-opacity:1;color:rgb(126 58 242/var(--tw-text-opacity))}.text-purple-700{--tw-text-opacity:1;color:rgb(108 43 217/var(--tw-text-opacity))}.text-purple-800{--tw-text-opacity:1;color:rgb(85 33 181/var(--tw-text-opacity))}.text-purple-900{--tw-text-opacity:1;color:rgb(74 29 150/var(--tw-text-opacity))}.text-red-100{--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.text-red-500{--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(224 36 36/var(--tw-text-opacity))}.text-red-700{--tw-text-opacity:1;color:rgb(200 30 30/var(--tw-text-opacity))}.text-red-800{--tw-text-opacity:1;color:rgb(155 28 28/var(--tw-text-opacity))}.text-red-900{--tw-text-opacity:1;color:rgb(119 29 29/var(--tw-text-opacity))}.text-teal-600{--tw-text-opacity:1;color:rgb(4 116 129/var(--tw-text-opacity))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.text-yellow-100{--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.text-yellow-400{--tw-text-opacity:1;color:rgb(227 160 8/var(--tw-text-opacity))}.text-yellow-500{--tw-text-opacity:1;color:rgb(194 120 3/var(--tw-text-opacity))}.text-yellow-800{--tw-text-opacity:1;color:rgb(114 59 19/var(--tw-text-opacity))}.text-yellow-900{--tw-text-opacity:1;color:rgb(99 49 18/var(--tw-text-opacity))}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-blue-400{text-decoration-color:#76a9fa}.decoration-2{text-decoration-thickness:2px}.placeholder-green-700::placeholder{--tw-placeholder-opacity:1;color:rgb(4 108 78/var(--tw-placeholder-opacity))}.placeholder-red-700::placeholder{--tw-placeholder-opacity:1;color:rgb(200 30 30/var(--tw-placeholder-opacity))}.opacity-100{opacity:1}.opacity-30{opacity:.3}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-inner{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgba(0,0,0,.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-md{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.shadow-blue-500\\/50{--tw-shadow-color:rgba(63,131,248,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-700{--tw-shadow-color:#1a56db;--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-500\\/50{--tw-shadow-color:rgba(6,182,212,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-300{--tw-shadow-color:#d1d5db;--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-500\\/50{--tw-shadow-color:hsla(220,9%,46%,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-800{--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.shadow-green-500\\/50{--tw-shadow-color:rgba(14,159,110,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-green-700{--tw-shadow-color:#046c4e;--tw-shadow:var(--tw-shadow-colored)}.shadow-lime-500\\/50{--tw-shadow-color:rgba(132,204,22,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-pink-500\\/50{--tw-shadow-color:rgba(231,70,148,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-500\\/50{--tw-shadow-color:rgba(146,93,254,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-700{--tw-shadow-color:#6928eb;--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\\/50{--tw-shadow-color:rgba(144,97,249,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-700{--tw-shadow-color:#6c2bd9;--tw-shadow:var(--tw-shadow-colored)}.shadow-red-500\\/50{--tw-shadow-color:rgba(240,82,82,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-red-700{--tw-shadow-color:#c81e1e;--tw-shadow:var(--tw-shadow-colored)}.shadow-teal-500\\/50{--tw-shadow-color:rgba(6,148,162,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500{--tw-shadow-color:#c27803;--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500\\/50{--tw-shadow-color:rgba(194,120,3,.5);--tw-shadow:var(--tw-shadow-colored)}.\\!outline{outline-style:solid!important}.outline{outline-style:solid}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-2,.ring-8{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-8{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(8px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-gray-300{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.ring-primary-500{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-transform{transition-duration:.15s;transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1)}.duration-300{transition-duration:.3s}.duration-75{transition-duration:75ms}.ease-in{transition-timing-function:cubic-bezier(.4,0,1,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}:root{--text:#000;--bg-primary:#fff;--bg-secondary:#fff}.\\*\\:me-0>*{margin-inline-end:0}.first-letter\\:float-left:first-letter{float:left}.first-letter\\:me-3:first-letter{margin-inline-end:.75rem}.first-letter\\:text-7xl:first-letter{font-size:4.5rem;line-height:1}.first-letter\\:font-bold:first-letter{font-weight:700}.first-letter\\:text-gray-900:first-letter{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.first-line\\:uppercase:first-line{text-transform:uppercase}.first-line\\:tracking-widest:first-line{letter-spacing:.1em}.before\\:absolute:before{content:var(--tw-content);position:absolute}.before\\:end-0:before{content:var(--tw-content);inset-inline-end:0}.before\\:z-10:before{content:var(--tw-content);z-index:10}.before\\:block:before{content:var(--tw-content);display:block}.before\\:h-full:before{content:var(--tw-content);height:100%}.before\\:shadow-\\[-10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:before{--tw-shadow:-10px 0 50px 65px #fff;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.before\\:content-\\[\\'\\'\\]:before{--tw-content:\"\";content:var(--tw-content)}.after\\:absolute:after{content:var(--tw-content);position:absolute}.after\\:start-\\[2px\\]:after{content:var(--tw-content);inset-inline-start:2px}.after\\:start-\\[4px\\]:after{content:var(--tw-content);inset-inline-start:4px}.after\\:top-0\\.5:after{content:var(--tw-content);top:.125rem}.after\\:top-\\[2px\\]:after{content:var(--tw-content);top:2px}.after\\:z-10:after{content:var(--tw-content);z-index:10}.after\\:block:after{content:var(--tw-content);display:block}.after\\:h-4:after{content:var(--tw-content);height:1rem}.after\\:h-5:after{content:var(--tw-content);height:1.25rem}.after\\:h-6:after{content:var(--tw-content);height:1.5rem}.after\\:h-full:after{content:var(--tw-content);height:100%}.after\\:w-4:after{content:var(--tw-content);width:1rem}.after\\:w-5:after{content:var(--tw-content);width:1.25rem}.after\\:w-6:after{content:var(--tw-content);width:1.5rem}.after\\:rounded-full:after{border-radius:9999px;content:var(--tw-content)}.after\\:border:after{border-width:1px;content:var(--tw-content)}.after\\:border-gray-300:after{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity));content:var(--tw-content)}.after\\:bg-white:after{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity));content:var(--tw-content)}.after\\:shadow-\\[10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:after{--tw-shadow:10px 0 50px 65px #fff;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.after\\:transition-all:after{content:var(--tw-content);transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.after\\:content-\\[\\'\\'\\]:after{--tw-content:\"\";content:var(--tw-content)}.first\\:rounded-s-full:first-child{border-end-start-radius:9999px;border-start-start-radius:9999px}.first\\:rounded-s-lg:first-child{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.first\\:rounded-t-lg:first-child{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.last\\:me-0:last-child{margin-inline-end:0}.last\\:rounded-b-lg:last-child{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.last\\:rounded-e-full:last-child{border-end-end-radius:9999px;border-start-end-radius:9999px}.last\\:rounded-e-lg:last-child{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.last\\:border-b-0:last-child{border-bottom-width:0}.odd\\:bg-blue-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:bg-green-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:bg-purple-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:bg-red-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:bg-white:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.odd\\:bg-yellow-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:bg-blue-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:bg-gray-50:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.even\\:bg-green-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:bg-purple-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:bg-red-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:bg-yellow-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.focus-within\\:z-10:focus-within{z-index:10}.focus-within\\:border-primary-500:focus-within{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus-within\\:bg-gray-900:focus-within{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.focus-within\\:text-primary-700:focus-within{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus-within\\:text-white:focus-within{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.focus-within\\:outline-none:focus-within{outline:2px solid transparent;outline-offset:2px}.focus-within\\:ring-1:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-2:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-4:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-blue-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus-within\\:ring-gray-200:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus-within\\:ring-gray-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus-within\\:ring-green-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus-within\\:ring-primary-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus-within\\:ring-purple-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus-within\\:ring-red-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus-within\\:ring-yellow-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.hover\\:border-gray-300:hover{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.hover\\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.hover\\:bg-blue-200:hover{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.hover\\:bg-blue-400:hover{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.hover\\:bg-blue-800:hover{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.hover\\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.hover\\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.hover\\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.hover\\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.hover\\:bg-gray-900:hover{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.hover\\:bg-green-200:hover{--tw-bg-opacity:1;background-color:rgb(188 240 218/var(--tw-bg-opacity))}.hover\\:bg-green-400:hover{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.hover\\:bg-green-800:hover{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.hover\\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(205 219 254/var(--tw-bg-opacity))}.hover\\:bg-pink-200:hover{--tw-bg-opacity:1;background-color:rgb(250 209 232/var(--tw-bg-opacity))}.hover\\:bg-primary-100:hover{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.hover\\:bg-primary-200:hover{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.hover\\:bg-primary-700:hover{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.hover\\:bg-primary-800:hover{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.hover\\:bg-purple-200:hover{--tw-bg-opacity:1;background-color:rgb(220 215 254/var(--tw-bg-opacity))}.hover\\:bg-purple-400:hover{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.hover\\:bg-purple-800:hover{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.hover\\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(251 213 213/var(--tw-bg-opacity))}.hover\\:bg-red-400:hover{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.hover\\:bg-red-800:hover{--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.hover\\:bg-transparent:hover{background-color:transparent}.hover\\:bg-yellow-200:hover{--tw-bg-opacity:1;background-color:rgb(252 233 106/var(--tw-bg-opacity))}.hover\\:bg-yellow-400:hover{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.hover\\:bg-yellow-500:hover{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.hover\\:bg-gradient-to-bl:hover{background-image:linear-gradient(to bottom left,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-br:hover{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-l:hover{background-image:linear-gradient(to left,var(--tw-gradient-stops))}.hover\\:\\!text-inherit:hover{color:inherit!important}.hover\\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.hover\\:text-blue-700:hover{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.hover\\:text-gray-600:hover{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.hover\\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.hover\\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.hover\\:text-primary-600:hover{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.hover\\:text-primary-900:hover{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.hover\\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.hover\\:underline:hover{text-decoration-line:underline}.focus\\:z-40:focus{z-index:40}.focus\\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.focus\\:border-gray-200:focus{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.focus\\:border-green-500:focus{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.focus\\:border-green-600:focus{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.focus\\:border-primary-500:focus{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus\\:border-primary-600:focus{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.focus\\:border-red-500:focus{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.focus\\:border-red-600:focus{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.focus\\:text-primary-700:focus{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ring-0:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-0:focus,.focus\\:ring-1:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus,.focus\\:ring-4:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-4:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-blue-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus\\:ring-blue-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(118 169 250/var(--tw-ring-opacity))}.focus\\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.focus\\:ring-cyan-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(103 232 249/var(--tw-ring-opacity))}.focus\\:ring-gray-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus\\:ring-gray-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus\\:ring-gray-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(156 163 175/var(--tw-ring-opacity))}.focus\\:ring-green-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(188 240 218/var(--tw-ring-opacity))}.focus\\:ring-green-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus\\:ring-green-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(49 196 141/var(--tw-ring-opacity))}.focus\\:ring-green-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.focus\\:ring-indigo-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(141 162 251/var(--tw-ring-opacity))}.focus\\:ring-lime-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(217 249 157/var(--tw-ring-opacity))}.focus\\:ring-lime-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(190 242 100/var(--tw-ring-opacity))}.focus\\:ring-orange-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(255 90 31/var(--tw-ring-opacity))}.focus\\:ring-pink-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(250 209 232/var(--tw-ring-opacity))}.focus\\:ring-pink-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 217/var(--tw-ring-opacity))}.focus\\:ring-pink-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(241 126 184/var(--tw-ring-opacity))}.focus\\:ring-primary-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus\\:ring-primary-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(201 173 255/var(--tw-ring-opacity))}.focus\\:ring-primary-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.focus\\:ring-primary-700:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(105 40 235/var(--tw-ring-opacity))}.focus\\:ring-purple-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(220 215 254/var(--tw-ring-opacity))}.focus\\:ring-purple-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus\\:ring-purple-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(172 148 250/var(--tw-ring-opacity))}.focus\\:ring-purple-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(144 97 249/var(--tw-ring-opacity))}.focus\\:ring-red-100:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(253 232 232/var(--tw-ring-opacity))}.focus\\:ring-red-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus\\:ring-red-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.focus\\:ring-red-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.focus\\:ring-teal-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.focus\\:ring-teal-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(6 148 162/var(--tw-ring-opacity))}.focus\\:ring-yellow-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(227 160 8/var(--tw-ring-opacity))}.focus\\:ring-yellow-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(194 120 3/var(--tw-ring-opacity))}.focus-visible\\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.disabled\\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:text-gray-400:disabled{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.disabled\\:opacity-50:disabled{opacity:.5}.group:first-child .group-first\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.group:first-child .group-first\\:rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.group:first-child .group-first\\:border-t{border-top-width:1px}.group:last-child .group-last\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.group:hover .group-hover\\:rotate-45{--tw-rotate:45deg;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\\:bg-white\\/50{background-color:hsla(0,0%,100%,.5)}.group:hover .group-hover\\:\\!bg-opacity-0{--tw-bg-opacity:0!important}.group:hover .group-hover\\:\\!text-inherit{color:inherit!important}.group:hover .group-hover\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.group:focus .group-focus\\:outline-none{outline:2px solid transparent;outline-offset:2px}.group:focus .group-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.group:focus .group-focus\\:ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.peer:checked~.peer-checked\\:bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-orange-500{--tw-bg-opacity:1;background-color:rgb(255 90 31/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-teal-600{--tw-bg-opacity:1;background-color:rgb(4 116 129/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:after\\:translate-x-full:after{--tw-translate-x:100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:checked~.peer-checked\\:after\\:border-white:after{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity));content:var(--tw-content)}.peer:placeholder-shown~.peer-placeholder-shown\\:top-1\\/2{top:50%}.peer:placeholder-shown~.peer-placeholder-shown\\:-translate-y-1\\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:start-0{inset-inline-start:0}.peer:focus~.peer-focus\\:top-2{top:.5rem}.peer:focus~.peer-focus\\:-translate-y-4{--tw-translate-y:-1rem}.peer:focus~.peer-focus\\:-translate-y-4,.peer:focus~.peer-focus\\:-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:-translate-y-6{--tw-translate-y:-1.5rem}.peer:focus~.peer-focus\\:scale-75{--tw-scale-x:.75;--tw-scale-y:.75;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:px-2{padding-left:.5rem;padding-right:.5rem}.peer:focus~.peer-focus\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.peer:focus~.peer-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.peer:focus~.peer-focus\\:ring-blue-300{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-green-300{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-orange-300{--tw-ring-opacity:1;--tw-ring-color:rgb(253 186 140/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-primary-300{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-purple-300{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-red-300{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-teal-300{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-yellow-300{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.dark\\:block:is(.dark *){display:block}.dark\\:hidden:is(.dark *){display:none}.dark\\:divide-blue-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(30 66 159/var(--tw-divide-opacity))}.dark\\:divide-gray-600:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(75 85 99/var(--tw-divide-opacity))}.dark\\:divide-gray-700:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.dark\\:divide-gray-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(31 41 55/var(--tw-divide-opacity))}.dark\\:divide-green-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(3 84 63/var(--tw-divide-opacity))}.dark\\:divide-indigo-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(66 56 157/var(--tw-divide-opacity))}.dark\\:divide-orange-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(138 44 13/var(--tw-divide-opacity))}.dark\\:divide-pink-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(153 21 75/var(--tw-divide-opacity))}.dark\\:divide-primary-200:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(235 224 255/var(--tw-divide-opacity))}.dark\\:divide-purple-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(85 33 181/var(--tw-divide-opacity))}.dark\\:divide-red-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(155 28 28/var(--tw-divide-opacity))}.dark\\:divide-yellow-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(114 59 19/var(--tw-divide-opacity))}.dark\\:\\!border-gray-600:is(.dark *){--tw-border-opacity:1!important;border-color:rgb(75 85 99/var(--tw-border-opacity))!important}.dark\\:border-blue-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.dark\\:border-blue-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:border-blue-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 66 159/var(--tw-border-opacity))}.dark\\:border-gray-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.dark\\:border-gray-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:border-gray-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-gray-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:border-gray-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.dark\\:border-gray-900:is(.dark *){--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.dark\\:border-green-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.dark\\:border-green-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:border-green-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(3 84 63/var(--tw-border-opacity))}.dark\\:border-indigo-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.dark\\:border-indigo-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(66 56 157/var(--tw-border-opacity))}.dark\\:border-orange-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(138 44 13/var(--tw-border-opacity))}.dark\\:border-pink-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.dark\\:border-pink-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(153 21 75/var(--tw-border-opacity))}.dark\\:border-primary-200:is(.dark *){--tw-border-opacity:1;border-color:rgb(235 224 255/var(--tw-border-opacity))}.dark\\:border-primary-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.dark\\:border-primary-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:border-purple-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.dark\\:border-purple-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(85 33 181/var(--tw-border-opacity))}.dark\\:border-red-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.dark\\:border-red-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:border-red-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(155 28 28/var(--tw-border-opacity))}.dark\\:border-white:is(.dark *){--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.dark\\:border-yellow-300:is(.dark *){--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.dark\\:border-yellow-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(114 59 19/var(--tw-border-opacity))}.dark\\:border-e-gray-600:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-e-gray-700:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:\\!bg-gray-700:is(.dark *){--tw-bg-opacity:1!important;background-color:rgb(55 65 81/var(--tw-bg-opacity))!important}.dark\\:bg-blue-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.dark\\:bg-blue-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.dark\\:bg-blue-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:bg-blue-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:bg-blue-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(35 56 118/var(--tw-bg-opacity))}.dark\\:bg-gray-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.dark\\:bg-gray-300:is(.dark *){--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.dark\\:bg-gray-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.dark\\:bg-gray-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:bg-gray-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:bg-gray-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:bg-gray-800\\/30:is(.dark *){background-color:rgba(31,41,55,.3)}.dark\\:bg-gray-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.dark\\:bg-green-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.dark\\:bg-green-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.dark\\:bg-green-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:bg-green-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:bg-green-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(1 71 55/var(--tw-bg-opacity))}.dark\\:bg-indigo-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(141 162 251/var(--tw-bg-opacity))}.dark\\:bg-indigo-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.dark\\:bg-indigo-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:bg-indigo-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(54 47 120/var(--tw-bg-opacity))}.dark\\:bg-inherit:is(.dark *){background-color:inherit}.dark\\:bg-orange-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(138 44 13/var(--tw-bg-opacity))}.dark\\:bg-pink-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(241 126 184/var(--tw-bg-opacity))}.dark\\:bg-pink-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(191 18 93/var(--tw-bg-opacity))}.dark\\:bg-pink-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(117 26 61/var(--tw-bg-opacity))}.dark\\:bg-primary-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.dark\\:bg-primary-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.dark\\:bg-primary-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:bg-primary-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:bg-primary-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:bg-primary-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(73 27 165/var(--tw-bg-opacity))}.dark\\:bg-purple-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.dark\\:bg-purple-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:bg-purple-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.dark\\:bg-purple-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:bg-purple-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(74 29 150/var(--tw-bg-opacity))}.dark\\:bg-red-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.dark\\:bg-red-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:bg-red-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:bg-red-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.dark\\:bg-transparent:is(.dark *){background-color:transparent}.dark\\:bg-yellow-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:bg-yellow-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.dark\\:bg-yellow-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.dark\\:bg-yellow-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(99 49 18/var(--tw-bg-opacity))}.dark\\:bg-opacity-80:is(.dark *){--tw-bg-opacity:0.8}.dark\\:fill-gray-300:is(.dark *){fill:#d1d5db}.dark\\:\\!text-white:is(.dark *){--tw-text-opacity:1!important;color:rgb(255 255 255/var(--tw-text-opacity))!important}.dark\\:text-blue-100:is(.dark *){--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.dark\\:text-blue-200:is(.dark *){--tw-text-opacity:1;color:rgb(195 221 253/var(--tw-text-opacity))}.dark\\:text-blue-300:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:text-blue-400:is(.dark *){--tw-text-opacity:1;color:rgb(118 169 250/var(--tw-text-opacity))}.dark\\:text-blue-500:is(.dark *){--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.dark\\:text-gray-100:is(.dark *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:text-gray-200:is(.dark *){--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.dark\\:text-gray-300:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:text-gray-400:is(.dark *){--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.dark\\:text-gray-500:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.dark\\:text-gray-600:is(.dark *){--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.dark\\:text-gray-700:is(.dark *){--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.dark\\:text-gray-900:is(.dark *){--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.dark\\:text-green-100:is(.dark *){--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.dark\\:text-green-200:is(.dark *){--tw-text-opacity:1;color:rgb(188 240 218/var(--tw-text-opacity))}.dark\\:text-green-300:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:text-green-400:is(.dark *){--tw-text-opacity:1;color:rgb(49 196 141/var(--tw-text-opacity))}.dark\\:text-green-500:is(.dark *){--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.dark\\:text-indigo-100:is(.dark *){--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.dark\\:text-indigo-200:is(.dark *){--tw-text-opacity:1;color:rgb(205 219 254/var(--tw-text-opacity))}.dark\\:text-indigo-300:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:text-indigo-400:is(.dark *){--tw-text-opacity:1;color:rgb(141 162 251/var(--tw-text-opacity))}.dark\\:text-orange-400:is(.dark *){--tw-text-opacity:1;color:rgb(255 138 76/var(--tw-text-opacity))}.dark\\:text-pink-100:is(.dark *){--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.dark\\:text-pink-200:is(.dark *){--tw-text-opacity:1;color:rgb(250 209 232/var(--tw-text-opacity))}.dark\\:text-pink-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:text-pink-400:is(.dark *){--tw-text-opacity:1;color:rgb(241 126 184/var(--tw-text-opacity))}.dark\\:text-primary-100:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:text-primary-200:is(.dark *){--tw-text-opacity:1;color:rgb(235 224 255/var(--tw-text-opacity))}.dark\\:text-primary-300:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:text-primary-400:is(.dark *){--tw-text-opacity:1;color:rgb(201 173 255/var(--tw-text-opacity))}.dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.dark\\:text-primary-700:is(.dark *){--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.dark\\:text-primary-800:is(.dark *){--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.dark\\:text-primary-900:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:text-purple-100:is(.dark *){--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.dark\\:text-purple-200:is(.dark *){--tw-text-opacity:1;color:rgb(220 215 254/var(--tw-text-opacity))}.dark\\:text-purple-300:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(172 148 250/var(--tw-text-opacity))}.dark\\:text-red-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.dark\\:text-red-200:is(.dark *){--tw-text-opacity:1;color:rgb(251 213 213/var(--tw-text-opacity))}.dark\\:text-red-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:text-red-400:is(.dark *){--tw-text-opacity:1;color:rgb(249 128 128/var(--tw-text-opacity))}.dark\\:text-red-500:is(.dark *){--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:text-yellow-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.dark\\:text-yellow-200:is(.dark *){--tw-text-opacity:1;color:rgb(252 233 106/var(--tw-text-opacity))}.dark\\:text-yellow-300:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:decoration-blue-600:is(.dark *){text-decoration-color:#1c64f2}.dark\\:placeholder-gray-400:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(156 163 175/var(--tw-placeholder-opacity))}.dark\\:placeholder-green-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(14 159 110/var(--tw-placeholder-opacity))}.dark\\:placeholder-red-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(240 82 82/var(--tw-placeholder-opacity))}.dark\\:opacity-25:is(.dark *){opacity:.25}.dark\\:shadow-blue-800:is(.dark *){--tw-shadow-color:#1e429f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-blue-800\\/80:is(.dark *){--tw-shadow-color:rgba(30,66,159,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-cyan-800\\/80:is(.dark *){--tw-shadow-color:rgba(21,94,117,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-700:is(.dark *){--tw-shadow-color:#374151;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800:is(.dark *){--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800\\/80:is(.dark *){--tw-shadow-color:rgba(31,41,55,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-900:is(.dark *){--tw-shadow-color:#111827;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800:is(.dark *){--tw-shadow-color:#03543f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800\\/80:is(.dark *){--tw-shadow-color:rgba(3,84,63,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-lime-800\\/80:is(.dark *){--tw-shadow-color:rgba(63,98,18,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-pink-800\\/80:is(.dark *){--tw-shadow-color:rgba(153,21,75,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800:is(.dark *){--tw-shadow-color:#5c23cd;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800\\/80:is(.dark *){--tw-shadow-color:rgba(92,35,205,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800:is(.dark *){--tw-shadow-color:#5521b5;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800\\/80:is(.dark *){--tw-shadow-color:rgba(85,33,181,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800:is(.dark *){--tw-shadow-color:#9b1c1c;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800\\/80:is(.dark *){--tw-shadow-color:rgba(155,28,28,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-teal-800\\/80:is(.dark *){--tw-shadow-color:rgba(5,80,92,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-700:is(.dark *){--tw-shadow-color:#8e4b10;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-800\\/80:is(.dark *){--tw-shadow-color:rgba(114,59,19,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:ring-gray-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:ring-gray-900:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(17 24 39/var(--tw-ring-opacity))}.dark\\:ring-primary-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:ring-offset-gray-800:is(.dark *){--tw-ring-offset-color:#1f2937}.dark\\:first-letter\\:text-gray-100:is(.dark *):first-letter{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:before\\:shadow-\\[-10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):before{--tw-shadow:-10px 0 50px 65px #101827;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:after\\:shadow-\\[10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):after{--tw-shadow:10px 0 50px 65px #101827;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:last\\:border-e-gray-500:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:last\\:border-e-gray-600:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.odd\\:dark\\:bg-blue-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:dark\\:bg-gray-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.odd\\:dark\\:bg-green-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:dark\\:bg-purple-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:dark\\:bg-red-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:dark\\:bg-yellow-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:dark\\:bg-blue-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:dark\\:bg-gray-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.even\\:dark\\:bg-green-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:dark\\:bg-purple-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:dark\\:bg-red-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:dark\\:bg-yellow-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.dark\\:focus-within\\:border-primary-500:focus-within:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus-within\\:text-white:focus-within:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus-within\\:ring-blue-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-700:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(55 65 81/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-green-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-primary-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-purple-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(74 29 150/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-red-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(119 29 29/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-yellow-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(99 49 18/var(--tw-ring-opacity))}.dark\\:hover\\:border-gray-500:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:hover\\:border-gray-600:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:hover\\:bg-blue-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:hover\\:bg-indigo-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:hover\\:bg-pink-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-400:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.hover\\:dark\\:bg-gray-800:is(.dark *):hover{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:text-blue-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:hover\\:text-gray-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:hover\\:text-green-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:hover\\:text-indigo-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:hover\\:text-pink-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-100:hover:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-900:hover:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:hover\\:text-purple-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:hover\\:text-red-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:hover\\:text-yellow-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:focus\\:border-blue-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:focus\\:border-green-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:focus\\:border-primary-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus\\:border-red-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:focus\\:text-white:focus:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus\\:ring-blue-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(28 100 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus\\:ring-cyan-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(21 94 117/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 122 85/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus\\:ring-lime-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 98 18/var(--tw-ring-opacity))}.dark\\:focus\\:ring-orange-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(208 56 1/var(--tw-ring-opacity))}.dark\\:focus\\:ring-pink-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(153 21 75/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(110 46 239/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(126 58 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-400:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(224 36 36/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(4 116 129/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-700:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 102 114/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.dark\\:focus\\:ring-yellow-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(159 88 10/var(--tw-ring-opacity))}.dark\\:disabled\\:text-gray-500:disabled:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.group:hover .dark\\:group-hover\\:bg-gray-800\\/60:is(.dark *){background-color:rgba(31,41,55,.6)}.group:hover .dark\\:group-hover\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.group:focus .dark\\:group-focus\\:ring-gray-800\\/70:is(.dark *){--tw-ring-color:rgba(31,41,55,.7)}.peer:focus~.peer-focus\\:dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-blue-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-green-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-orange-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(138 44 13/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-primary-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-purple-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-red-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-teal-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-yellow-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(114 59 19/var(--tw-ring-opacity))}@media (min-width:640px){.sm\\:order-last{order:9999}.sm\\:mb-0{margin-bottom:0}.sm\\:flex{display:flex}.sm\\:grid{display:grid}.sm\\:h-10{height:2.5rem}.sm\\:h-6{height:1.5rem}.sm\\:h-64{height:16rem}.sm\\:h-7{height:1.75rem}.sm\\:w-10{width:2.5rem}.sm\\:w-6{width:1.5rem}.sm\\:w-96{width:24rem}.sm\\:w-auto{width:auto}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\\:divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.sm\\:rounded-lg{border-radius:.5rem}.sm\\:p-5{padding:1.25rem}.sm\\:p-6{padding:1.5rem}.sm\\:p-8{padding:2rem}.sm\\:px-4{padding-left:1rem;padding-right:1rem}.sm\\:pe-4{padding-inline-end:1rem}.sm\\:ps-4{padding-inline-start:1rem}.sm\\:text-center{text-align:center}.sm\\:text-base{font-size:1rem;line-height:1.5rem}.sm\\:text-sm{font-size:.875rem;line-height:1.25rem}.sm\\:text-xs{font-size:.75rem;line-height:1rem}.first\\:sm\\:ps-0:first-child{padding-inline-start:0}.last\\:sm\\:pe-0:last-child{padding-inline-end:0}}@media (min-width:768px){.md\\:inset-0{inset:0}.md\\:mb-0{margin-bottom:0}.md\\:me-6{margin-inline-end:1.5rem}.md\\:ms-2{margin-inline-start:.5rem}.md\\:mt-0{margin-top:0}.md\\:block{display:block}.md\\:flex{display:flex}.md\\:grid{display:grid}.md\\:hidden{display:none}.md\\:h-\\[21px\\]{height:21px}.md\\:h-\\[262px\\]{height:262px}.md\\:h-\\[278px\\]{height:278px}.md\\:h-\\[294px\\]{height:294px}.md\\:h-\\[42px\\]{height:42px}.md\\:h-\\[654px\\]{height:654px}.md\\:h-\\[682px\\]{height:682px}.md\\:h-\\[8px\\]{height:8px}.md\\:h-\\[95px\\]{height:95px}.md\\:h-auto{height:auto}.md\\:h-full{height:100%}.md\\:w-1\\/3{width:33.333333%}.md\\:w-2\\/3{width:66.666667%}.md\\:w-48{width:12rem}.md\\:w-\\[96px\\]{width:96px}.md\\:w-auto{width:auto}.md\\:max-w-\\[142px\\]{max-width:142px}.md\\:max-w-\\[512px\\]{max-width:512px}.md\\:max-w-\\[597px\\]{max-width:597px}.md\\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\\:flex-row{flex-direction:row}.md\\:flex-row-reverse{flex-direction:row-reverse}.md\\:items-center{align-items:center}.md\\:justify-between{justify-content:space-between}.md\\:gap-8{gap:2rem}.md\\:gap-x-0{column-gap:0}.md\\:space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.md\\:space-x-8>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(2rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(2rem*var(--tw-space-x-reverse))}.md\\:space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.md\\:divide-y-0>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(0px*var(--tw-divide-y-reverse));border-top-width:calc(0px*(1 - var(--tw-divide-y-reverse)))}.md\\:rounded-none{border-radius:0}.md\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.md\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.md\\:border-0{border-width:0}.md\\:bg-transparent{background-color:transparent}.md\\:p-0{padding:0}.md\\:p-5{padding:1.25rem}.md\\:p-6{padding:1.5rem}.md\\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\\:py-8{padding-bottom:2rem;padding-top:2rem}.md\\:text-lg{font-size:1.125rem;line-height:1.75rem}.md\\:text-sm{font-size:.875rem;line-height:1.25rem}.md\\:font-medium{font-weight:500}.md\\:text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:hover\\:bg-transparent:hover{background-color:transparent}.md\\:hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:dark\\:bg-transparent:is(.dark *){background-color:transparent}.md\\:dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.md\\:dark\\:hover\\:bg-transparent:hover:is(.dark *){background-color:transparent}.md\\:dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}}@media (min-width:1024px){.lg\\:max-w-7xl{max-width:80rem}}@media (min-width:1280px){.xl\\:h-80{height:20rem}}@media (min-width:1536px){.\\32xl\\:h-96{height:24rem}}.rtl\\:origin-right:where([dir=rtl],[dir=rtl] *){transform-origin:right}.rtl\\:-translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:-33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/2:where([dir=rtl],[dir=rtl] *){--tw-translate-x:50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:-scale-x-100:where([dir=rtl],[dir=rtl] *){--tw-scale-x:-1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:space-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-space-x-reverse:1}.rtl\\:divide-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:1}.rtl\\:text-right:where([dir=rtl],[dir=rtl] *){text-align:right}.peer:checked~.rtl\\:peer-checked\\:after\\:-translate-x-full:where([dir=rtl],[dir=rtl] *):after{--tw-translate-x:-100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.\\[\\&\\:not\\(\\:first-child\\)\\]\\:-ms-px:not(:first-child){margin-inline-start:-1px}";
 
   // gotta have pretty console.logs
   function log(...args) {
       console.log('%c[GL]', 'color:#5030f2', ...args);
+  }
+  function easyAccessWritable(initial) {
+      let callbacks = new Set();
+      return {
+          value: initial,
+          set(value) {
+              this.value = value;
+              for (let callback of callbacks) {
+                  callback(value);
+              }
+          },
+          update() {
+              for (let callback of callbacks) {
+                  callback(this.value);
+              }
+          },
+          subscribe(callback) {
+              callbacks.add(callback);
+              callback(this.value);
+              return () => {
+                  callbacks.delete(callback);
+              };
+          }
+      };
+  }
+  function readUserFile(accept) {
+      return new Promise((res, rej) => {
+          let input = document.createElement('input');
+          input.type = 'file';
+          input.accept = accept;
+          input.addEventListener('change', () => {
+              let file = input.files?.[0];
+              if (!file)
+                  return rej('No file selected');
+              let reader = new FileReader();
+              reader.onload = () => {
+                  res(reader.result);
+              };
+              reader.readAsText(file);
+          });
+          input.click();
+      });
   }
   const onGimkit = location.host === "www.gimkit.com";
   function parsePluginHeader(code) {
@@ -190,19 +232,17456 @@
       return closeModal;
   }
 
-  var solidBook = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0.88em\" height=\"1em\" viewBox=\"0 0 448 512\"><path fill=\"currentColor\" d=\"M96 0C43 0 0 43 0 96v320c0 53 43 96 96 96h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-64c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32h-32zm0 384h256v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32m32-240c0-8.8 7.2-16 16-16h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16m16 48h192c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16\"/></svg>";
+  /** @returns {void} */
+  function noop() {}
 
-  var cogOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z\" /></svg>";
+  const identity = (x) => x;
 
-  var update = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z\" /></svg>";
+  /**
+   * @template T
+   * @template S
+   * @param {T} tar
+   * @param {S} src
+   * @returns {T & S}
+   */
+  function assign(tar, src) {
+  	// @ts-ignore
+  	for (const k in src) tar[k] = src[k];
+  	return /** @type {T & S} */ (tar);
+  }
 
-  var importSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z\" /></svg>";
+  function run(fn) {
+  	return fn();
+  }
 
-  var plusBoxOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z\" /></svg>";
+  function blank_object() {
+  	return Object.create(null);
+  }
 
-  var pencilOutline = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z\" /></svg>";
+  /**
+   * @param {Function[]} fns
+   * @returns {void}
+   */
+  function run_all(fns) {
+  	fns.forEach(run);
+  }
 
-  var deleteSvg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z\" /></svg>";
+  /**
+   * @param {any} thing
+   * @returns {thing is Function}
+   */
+  function is_function(thing) {
+  	return typeof thing === 'function';
+  }
+
+  /** @returns {boolean} */
+  function safe_not_equal(a, b) {
+  	return a != a ? b == b : a !== b || (a && typeof a === 'object') || typeof a === 'function';
+  }
+
+  /** @returns {boolean} */
+  function is_empty(obj) {
+  	return Object.keys(obj).length === 0;
+  }
+
+  function subscribe(store, ...callbacks) {
+  	if (store == null) {
+  		for (const callback of callbacks) {
+  			callback(undefined);
+  		}
+  		return noop;
+  	}
+  	const unsub = store.subscribe(...callbacks);
+  	return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+  }
+
+  /** @returns {void} */
+  function component_subscribe(component, store, callback) {
+  	component.$$.on_destroy.push(subscribe(store, callback));
+  }
+
+  function create_slot(definition, ctx, $$scope, fn) {
+  	if (definition) {
+  		const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
+  		return definition[0](slot_ctx);
+  	}
+  }
+
+  function get_slot_context(definition, ctx, $$scope, fn) {
+  	return definition[1] && fn ? assign($$scope.ctx.slice(), definition[1](fn(ctx))) : $$scope.ctx;
+  }
+
+  function get_slot_changes(definition, $$scope, dirty, fn) {
+  	if (definition[2] && fn) {
+  		const lets = definition[2](fn(dirty));
+  		if ($$scope.dirty === undefined) {
+  			return lets;
+  		}
+  		if (typeof lets === 'object') {
+  			const merged = [];
+  			const len = Math.max($$scope.dirty.length, lets.length);
+  			for (let i = 0; i < len; i += 1) {
+  				merged[i] = $$scope.dirty[i] | lets[i];
+  			}
+  			return merged;
+  		}
+  		return $$scope.dirty | lets;
+  	}
+  	return $$scope.dirty;
+  }
+
+  /** @returns {void} */
+  function update_slot_base(
+  	slot,
+  	slot_definition,
+  	ctx,
+  	$$scope,
+  	slot_changes,
+  	get_slot_context_fn
+  ) {
+  	if (slot_changes) {
+  		const slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
+  		slot.p(slot_context, slot_changes);
+  	}
+  }
+
+  /** @returns {any[] | -1} */
+  function get_all_dirty_from_scope($$scope) {
+  	if ($$scope.ctx.length > 32) {
+  		const dirty = [];
+  		const length = $$scope.ctx.length / 32;
+  		for (let i = 0; i < length; i++) {
+  			dirty[i] = -1;
+  		}
+  		return dirty;
+  	}
+  	return -1;
+  }
+
+  /** @returns {{}} */
+  function exclude_internal_props(props) {
+  	const result = {};
+  	for (const k in props) if (k[0] !== '$') result[k] = props[k];
+  	return result;
+  }
+
+  /** @returns {{}} */
+  function compute_rest_props(props, keys) {
+  	const rest = {};
+  	keys = new Set(keys);
+  	for (const k in props) if (!keys.has(k) && k[0] !== '$') rest[k] = props[k];
+  	return rest;
+  }
+
+  /** @returns {{}} */
+  function compute_slots(slots) {
+  	const result = {};
+  	for (const key in slots) {
+  		result[key] = true;
+  	}
+  	return result;
+  }
+
+  function action_destroyer(action_result) {
+  	return action_result && is_function(action_result.destroy) ? action_result.destroy : noop;
+  }
+
+  const is_client = typeof window !== 'undefined';
+
+  /** @type {() => number} */
+  let now = is_client ? () => window.performance.now() : () => Date.now();
+
+  let raf = is_client ? (cb) => requestAnimationFrame(cb) : noop;
+
+  const tasks = new Set();
+
+  /**
+   * @param {number} now
+   * @returns {void}
+   */
+  function run_tasks(now) {
+  	tasks.forEach((task) => {
+  		if (!task.c(now)) {
+  			tasks.delete(task);
+  			task.f();
+  		}
+  	});
+  	if (tasks.size !== 0) raf(run_tasks);
+  }
+
+  /**
+   * Creates a new task that runs on each raf frame
+   * until it returns a falsy value or is aborted
+   * @param {import('./private.js').TaskCallback} callback
+   * @returns {import('./private.js').Task}
+   */
+  function loop(callback) {
+  	/** @type {import('./private.js').TaskEntry} */
+  	let task;
+  	if (tasks.size === 0) raf(run_tasks);
+  	return {
+  		promise: new Promise((fulfill) => {
+  			tasks.add((task = { c: callback, f: fulfill }));
+  		}),
+  		abort() {
+  			tasks.delete(task);
+  		}
+  	};
+  }
+
+  /**
+   * @param {Node} target
+   * @param {Node} node
+   * @returns {void}
+   */
+  function append(target, node) {
+  	target.appendChild(node);
+  }
+
+  /**
+   * @param {Node} target
+   * @param {string} style_sheet_id
+   * @param {string} styles
+   * @returns {void}
+   */
+  function append_styles(target, style_sheet_id, styles) {
+  	const append_styles_to = get_root_for_style(target);
+  	if (!append_styles_to.getElementById(style_sheet_id)) {
+  		const style = element('style');
+  		style.id = style_sheet_id;
+  		style.textContent = styles;
+  		append_stylesheet(append_styles_to, style);
+  	}
+  }
+
+  /**
+   * @param {Node} node
+   * @returns {ShadowRoot | Document}
+   */
+  function get_root_for_style(node) {
+  	if (!node) return document;
+  	const root = node.getRootNode ? node.getRootNode() : node.ownerDocument;
+  	if (root && /** @type {ShadowRoot} */ (root).host) {
+  		return /** @type {ShadowRoot} */ (root);
+  	}
+  	return node.ownerDocument;
+  }
+
+  /**
+   * @param {Node} node
+   * @returns {CSSStyleSheet}
+   */
+  function append_empty_stylesheet(node) {
+  	const style_element = element('style');
+  	// For transitions to work without 'style-src: unsafe-inline' Content Security Policy,
+  	// these empty tags need to be allowed with a hash as a workaround until we move to the Web Animations API.
+  	// Using the hash for the empty string (for an empty tag) works in all browsers except Safari.
+  	// So as a workaround for the workaround, when we append empty style tags we set their content to /* empty */.
+  	// The hash 'sha256-9OlNO0DNEeaVzHL4RZwCLsBHA8WBQ8toBp/4F5XV2nc=' will then work even in Safari.
+  	style_element.textContent = '/* empty */';
+  	append_stylesheet(get_root_for_style(node), style_element);
+  	return style_element.sheet;
+  }
+
+  /**
+   * @param {ShadowRoot | Document} node
+   * @param {HTMLStyleElement} style
+   * @returns {CSSStyleSheet}
+   */
+  function append_stylesheet(node, style) {
+  	append(/** @type {Document} */ (node).head || node, style);
+  	return style.sheet;
+  }
+
+  /**
+   * @param {Node} target
+   * @param {Node} node
+   * @param {Node} [anchor]
+   * @returns {void}
+   */
+  function insert$1(target, node, anchor) {
+  	target.insertBefore(node, anchor || null);
+  }
+
+  /**
+   * @param {Node} node
+   * @returns {void}
+   */
+  function detach(node) {
+  	if (node.parentNode) {
+  		node.parentNode.removeChild(node);
+  	}
+  }
+
+  /**
+   * @returns {void} */
+  function destroy_each(iterations, detaching) {
+  	for (let i = 0; i < iterations.length; i += 1) {
+  		if (iterations[i]) iterations[i].d(detaching);
+  	}
+  }
+
+  /**
+   * @template {keyof HTMLElementTagNameMap} K
+   * @param {K} name
+   * @returns {HTMLElementTagNameMap[K]}
+   */
+  function element(name) {
+  	return document.createElement(name);
+  }
+
+  /**
+   * @template {keyof SVGElementTagNameMap} K
+   * @param {K} name
+   * @returns {SVGElement}
+   */
+  function svg_element(name) {
+  	return document.createElementNS('http://www.w3.org/2000/svg', name);
+  }
+
+  /**
+   * @param {string} data
+   * @returns {Text}
+   */
+  function text(data) {
+  	return document.createTextNode(data);
+  }
+
+  /**
+   * @returns {Text} */
+  function space$1() {
+  	return text(' ');
+  }
+
+  /**
+   * @returns {Text} */
+  function empty$1() {
+  	return text('');
+  }
+
+  /**
+   * @param {EventTarget} node
+   * @param {string} event
+   * @param {EventListenerOrEventListenerObject} handler
+   * @param {boolean | AddEventListenerOptions | EventListenerOptions} [options]
+   * @returns {() => void}
+   */
+  function listen(node, event, handler, options) {
+  	node.addEventListener(event, handler, options);
+  	return () => node.removeEventListener(event, handler, options);
+  }
+
+  /**
+   * @returns {(event: any) => any} */
+  function prevent_default(fn) {
+  	return function (event) {
+  		event.preventDefault();
+  		// @ts-ignore
+  		return fn.call(this, event);
+  	};
+  }
+
+  /**
+   * @returns {(event: any) => any} */
+  function stop_propagation(fn) {
+  	return function (event) {
+  		event.stopPropagation();
+  		// @ts-ignore
+  		return fn.call(this, event);
+  	};
+  }
+
+  /**
+   * @param {Element} node
+   * @param {string} attribute
+   * @param {string} [value]
+   * @returns {void}
+   */
+  function attr(node, attribute, value) {
+  	if (value == null) node.removeAttribute(attribute);
+  	else if (node.getAttribute(attribute) !== value) node.setAttribute(attribute, value);
+  }
+  /**
+   * List of attributes that should always be set through the attr method,
+   * because updating them through the property setter doesn't work reliably.
+   * In the example of `width`/`height`, the problem is that the setter only
+   * accepts numeric values, but the attribute can also be set to a string like `50%`.
+   * If this list becomes too big, rethink this approach.
+   */
+  const always_set_through_set_attribute = ['width', 'height'];
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {{ [x: string]: string }} attributes
+   * @returns {void}
+   */
+  function set_attributes(node, attributes) {
+  	// @ts-ignore
+  	const descriptors = Object.getOwnPropertyDescriptors(node.__proto__);
+  	for (const key in attributes) {
+  		if (attributes[key] == null) {
+  			node.removeAttribute(key);
+  		} else if (key === 'style') {
+  			node.style.cssText = attributes[key];
+  		} else if (key === '__value') {
+  			/** @type {any} */ (node).value = node[key] = attributes[key];
+  		} else if (
+  			descriptors[key] &&
+  			descriptors[key].set &&
+  			always_set_through_set_attribute.indexOf(key) === -1
+  		) {
+  			node[key] = attributes[key];
+  		} else {
+  			attr(node, key, attributes[key]);
+  		}
+  	}
+  }
+
+  /**
+   * @param {Record<string, unknown>} data_map
+   * @returns {void}
+   */
+  function set_custom_element_data_map(node, data_map) {
+  	Object.keys(data_map).forEach((key) => {
+  		set_custom_element_data(node, key, data_map[key]);
+  	});
+  }
+
+  /**
+   * @returns {void} */
+  function set_custom_element_data(node, prop, value) {
+  	const lower = prop.toLowerCase(); // for backwards compatibility with existing behavior we do lowercase first
+  	if (lower in node) {
+  		node[lower] = typeof node[lower] === 'boolean' && value === '' ? true : value;
+  	} else if (prop in node) {
+  		node[prop] = typeof node[prop] === 'boolean' && value === '' ? true : value;
+  	} else {
+  		attr(node, prop, value);
+  	}
+  }
+
+  /**
+   * @param {string} tag
+   */
+  function set_dynamic_element_data(tag) {
+  	return /-/.test(tag) ? set_custom_element_data_map : set_attributes;
+  }
+
+  /**
+   * @returns {unknown[]} */
+  function get_binding_group_value(group, __value, checked) {
+  	const value = new Set();
+  	for (let i = 0; i < group.length; i += 1) {
+  		if (group[i].checked) value.add(group[i].__value);
+  	}
+  	if (!checked) {
+  		value.delete(__value);
+  	}
+  	return Array.from(value);
+  }
+
+  /**
+   * @param {HTMLInputElement[]} group
+   * @returns {{ p(...inputs: HTMLInputElement[]): void; r(): void; }}
+   */
+  function init_binding_group(group) {
+  	/**
+  	 * @type {HTMLInputElement[]} */
+  	let _inputs;
+  	return {
+  		/* push */ p(...inputs) {
+  			_inputs = inputs;
+  			_inputs.forEach((input) => group.push(input));
+  		},
+  		/* remove */ r() {
+  			_inputs.forEach((input) => group.splice(group.indexOf(input), 1));
+  		}
+  	};
+  }
+
+  /**
+   * @param {Element} element
+   * @returns {ChildNode[]}
+   */
+  function children(element) {
+  	return Array.from(element.childNodes);
+  }
+
+  /**
+   * @param {Text} text
+   * @param {unknown} data
+   * @returns {void}
+   */
+  function set_data(text, data) {
+  	data = '' + data;
+  	if (text.data === data) return;
+  	text.data = /** @type {string} */ (data);
+  }
+
+  /**
+   * @returns {void} */
+  function set_style(node, key, value, important) {
+  	if (value == null) {
+  		node.style.removeProperty(key);
+  	} else {
+  		node.style.setProperty(key, value, '');
+  	}
+  }
+
+  /**
+   * @template T
+   * @param {string} type
+   * @param {T} [detail]
+   * @param {{ bubbles?: boolean, cancelable?: boolean }} [options]
+   * @returns {CustomEvent<T>}
+   */
+  function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
+  	return new CustomEvent(type, { detail, bubbles, cancelable });
+  }
+
+  /**
+   * @typedef {Node & {
+   * 	claim_order?: number;
+   * 	hydrate_init?: true;
+   * 	actual_end_child?: NodeEx;
+   * 	childNodes: NodeListOf<NodeEx>;
+   * }} NodeEx
+   */
+
+  /** @typedef {ChildNode & NodeEx} ChildNodeEx */
+
+  /** @typedef {NodeEx & { claim_order: number }} NodeEx2 */
+
+  /**
+   * @typedef {ChildNodeEx[] & {
+   * 	claim_info?: {
+   * 		last_index: number;
+   * 		total_claimed: number;
+   * 	};
+   * }} ChildNodeArray
+   */
+
+  // we need to store the information for multiple documents because a Svelte application could also contain iframes
+  // https://github.com/sveltejs/svelte/issues/3624
+  /** @type {Map<Document | ShadowRoot, import('./private.d.ts').StyleInformation>} */
+  const managed_styles = new Map();
+
+  let active = 0;
+
+  // https://github.com/darkskyapp/string-hash/blob/master/index.js
+  /**
+   * @param {string} str
+   * @returns {number}
+   */
+  function hash(str) {
+  	let hash = 5381;
+  	let i = str.length;
+  	while (i--) hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+  	return hash >>> 0;
+  }
+
+  /**
+   * @param {Document | ShadowRoot} doc
+   * @param {Element & ElementCSSInlineStyle} node
+   * @returns {{ stylesheet: any; rules: {}; }}
+   */
+  function create_style_information(doc, node) {
+  	const info = { stylesheet: append_empty_stylesheet(node), rules: {} };
+  	managed_styles.set(doc, info);
+  	return info;
+  }
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {number} a
+   * @param {number} b
+   * @param {number} duration
+   * @param {number} delay
+   * @param {(t: number) => number} ease
+   * @param {(t: number, u: number) => string} fn
+   * @param {number} uid
+   * @returns {string}
+   */
+  function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+  	const step = 16.666 / duration;
+  	let keyframes = '{\n';
+  	for (let p = 0; p <= 1; p += step) {
+  		const t = a + (b - a) * ease(p);
+  		keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+  	}
+  	const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+  	const name = `__svelte_${hash(rule)}_${uid}`;
+  	const doc = get_root_for_style(node);
+  	const { stylesheet, rules } = managed_styles.get(doc) || create_style_information(doc, node);
+  	if (!rules[name]) {
+  		rules[name] = true;
+  		stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+  	}
+  	const animation = node.style.animation || '';
+  	node.style.animation = `${
+		animation ? `${animation}, ` : ''
+	}${name} ${duration}ms linear ${delay}ms 1 both`;
+  	active += 1;
+  	return name;
+  }
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {string} [name]
+   * @returns {void}
+   */
+  function delete_rule(node, name) {
+  	const previous = (node.style.animation || '').split(', ');
+  	const next = previous.filter(
+  		name
+  			? (anim) => anim.indexOf(name) < 0 // remove specific animation
+  			: (anim) => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+  	);
+  	const deleted = previous.length - next.length;
+  	if (deleted) {
+  		node.style.animation = next.join(', ');
+  		active -= deleted;
+  		if (!active) clear_rules();
+  	}
+  }
+
+  /** @returns {void} */
+  function clear_rules() {
+  	raf(() => {
+  		if (active) return;
+  		managed_styles.forEach((info) => {
+  			const { ownerNode } = info.stylesheet;
+  			// there is no ownerNode if it runs on jsdom.
+  			if (ownerNode) detach(ownerNode);
+  		});
+  		managed_styles.clear();
+  	});
+  }
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {import('./private.js').PositionRect} from
+   * @param {import('./private.js').AnimationFn} fn
+   */
+  function create_animation(node, from, fn, params) {
+  	if (!from) return noop;
+  	const to = node.getBoundingClientRect();
+  	if (
+  		from.left === to.left &&
+  		from.right === to.right &&
+  		from.top === to.top &&
+  		from.bottom === to.bottom
+  	)
+  		return noop;
+  	const {
+  		delay = 0,
+  		duration = 300,
+  		easing = identity,
+  		// @ts-ignore todo: should this be separated from destructuring? Or start/end added to public api and documentation?
+  		start: start_time = now() + delay,
+  		// @ts-ignore todo:
+  		end = start_time + duration,
+  		tick = noop,
+  		css
+  	} = fn(node, { from, to }, params);
+  	let running = true;
+  	let started = false;
+  	let name;
+  	/** @returns {void} */
+  	function start() {
+  		if (css) {
+  			name = create_rule(node, 0, 1, duration, delay, easing, css);
+  		}
+  		if (!delay) {
+  			started = true;
+  		}
+  	}
+  	/** @returns {void} */
+  	function stop() {
+  		if (css) delete_rule(node, name);
+  		running = false;
+  	}
+  	loop((now) => {
+  		if (!started && now >= start_time) {
+  			started = true;
+  		}
+  		if (started && now >= end) {
+  			tick(1, 0);
+  			stop();
+  		}
+  		if (!running) {
+  			return false;
+  		}
+  		if (started) {
+  			const p = now - start_time;
+  			const t = 0 + 1 * easing(p / duration);
+  			tick(t, 1 - t);
+  		}
+  		return true;
+  	});
+  	start();
+  	tick(0, 1);
+  	return stop;
+  }
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @returns {void}
+   */
+  function fix_position(node) {
+  	const style = getComputedStyle(node);
+  	if (style.position !== 'absolute' && style.position !== 'fixed') {
+  		const { width, height } = style;
+  		const a = node.getBoundingClientRect();
+  		node.style.position = 'absolute';
+  		node.style.width = width;
+  		node.style.height = height;
+  		add_transform(node, a);
+  	}
+  }
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {import('./private.js').PositionRect} a
+   * @returns {void}
+   */
+  function add_transform(node, a) {
+  	const b = node.getBoundingClientRect();
+  	if (a.left !== b.left || a.top !== b.top) {
+  		const style = getComputedStyle(node);
+  		const transform = style.transform === 'none' ? '' : style.transform;
+  		node.style.transform = `${transform} translate(${a.left - b.left}px, ${a.top - b.top}px)`;
+  	}
+  }
+
+  let current_component;
+
+  /** @returns {void} */
+  function set_current_component(component) {
+  	current_component = component;
+  }
+
+  function get_current_component() {
+  	if (!current_component) throw new Error('Function called outside component initialization');
+  	return current_component;
+  }
+
+  /**
+   * The `onMount` function schedules a callback to run as soon as the component has been mounted to the DOM.
+   * It must be called during the component's initialisation (but doesn't need to live *inside* the component;
+   * it can be called from an external module).
+   *
+   * If a function is returned _synchronously_ from `onMount`, it will be called when the component is unmounted.
+   *
+   * `onMount` does not run inside a [server-side component](https://svelte.dev/docs#run-time-server-side-component-api).
+   *
+   * https://svelte.dev/docs/svelte#onmount
+   * @template T
+   * @param {() => import('./private.js').NotFunction<T> | Promise<import('./private.js').NotFunction<T>> | (() => any)} fn
+   * @returns {void}
+   */
+  function onMount(fn) {
+  	get_current_component().$$.on_mount.push(fn);
+  }
+
+  /**
+   * Creates an event dispatcher that can be used to dispatch [component events](https://svelte.dev/docs#template-syntax-component-directives-on-eventname).
+   * Event dispatchers are functions that can take two arguments: `name` and `detail`.
+   *
+   * Component events created with `createEventDispatcher` create a
+   * [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent).
+   * These events do not [bubble](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).
+   * The `detail` argument corresponds to the [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
+   * property and can contain any type of data.
+   *
+   * The event dispatcher can be typed to narrow the allowed event names and the type of the `detail` argument:
+   * ```ts
+   * const dispatch = createEventDispatcher<{
+   *  loaded: never; // does not take a detail argument
+   *  change: string; // takes a detail argument of type string, which is required
+   *  optional: number | null; // takes an optional detail argument of type number
+   * }>();
+   * ```
+   *
+   * https://svelte.dev/docs/svelte#createeventdispatcher
+   * @template {Record<string, any>} [EventMap=any]
+   * @returns {import('./public.js').EventDispatcher<EventMap>}
+   */
+  function createEventDispatcher() {
+  	const component = get_current_component();
+  	return (type, detail, { cancelable = false } = {}) => {
+  		const callbacks = component.$$.callbacks[type];
+  		if (callbacks) {
+  			// TODO are there situations where events could be dispatched
+  			// in a server (non-DOM) environment?
+  			const event = custom_event(/** @type {string} */ (type), detail, { cancelable });
+  			callbacks.slice().forEach((fn) => {
+  				fn.call(component, event);
+  			});
+  			return !event.defaultPrevented;
+  		}
+  		return true;
+  	};
+  }
+
+  /**
+   * Associates an arbitrary `context` object with the current component and the specified `key`
+   * and returns that object. The context is then available to children of the component
+   * (including slotted content) with `getContext`.
+   *
+   * Like lifecycle functions, this must be called during component initialisation.
+   *
+   * https://svelte.dev/docs/svelte#setcontext
+   * @template T
+   * @param {any} key
+   * @param {T} context
+   * @returns {T}
+   */
+  function setContext(key, context) {
+  	get_current_component().$$.context.set(key, context);
+  	return context;
+  }
+
+  /**
+   * Retrieves the context that belongs to the closest parent component with the specified `key`.
+   * Must be called during component initialisation.
+   *
+   * https://svelte.dev/docs/svelte#getcontext
+   * @template T
+   * @param {any} key
+   * @returns {T}
+   */
+  function getContext(key) {
+  	return get_current_component().$$.context.get(key);
+  }
+
+  // TODO figure out if we still want to support
+  // shorthand events, or if we want to implement
+  // a real bubbling mechanism
+  /**
+   * @param component
+   * @param event
+   * @returns {void}
+   */
+  function bubble(component, event) {
+  	const callbacks = component.$$.callbacks[event.type];
+  	if (callbacks) {
+  		// @ts-ignore
+  		callbacks.slice().forEach((fn) => fn.call(this, event));
+  	}
+  }
+
+  const dirty_components = [];
+  const binding_callbacks = [];
+
+  let render_callbacks = [];
+
+  const flush_callbacks = [];
+
+  const resolved_promise = /* @__PURE__ */ Promise.resolve();
+
+  let update_scheduled = false;
+
+  /** @returns {void} */
+  function schedule_update() {
+  	if (!update_scheduled) {
+  		update_scheduled = true;
+  		resolved_promise.then(flush);
+  	}
+  }
+
+  /** @returns {void} */
+  function add_render_callback(fn) {
+  	render_callbacks.push(fn);
+  }
+
+  /** @returns {void} */
+  function add_flush_callback(fn) {
+  	flush_callbacks.push(fn);
+  }
+
+  // flush() calls callbacks in this order:
+  // 1. All beforeUpdate callbacks, in order: parents before children
+  // 2. All bind:this callbacks, in reverse order: children before parents.
+  // 3. All afterUpdate callbacks, in order: parents before children. EXCEPT
+  //    for afterUpdates called during the initial onMount, which are called in
+  //    reverse order: children before parents.
+  // Since callbacks might update component values, which could trigger another
+  // call to flush(), the following steps guard against this:
+  // 1. During beforeUpdate, any updated components will be added to the
+  //    dirty_components array and will cause a reentrant call to flush(). Because
+  //    the flush index is kept outside the function, the reentrant call will pick
+  //    up where the earlier call left off and go through all dirty components. The
+  //    current_component value is saved and restored so that the reentrant call will
+  //    not interfere with the "parent" flush() call.
+  // 2. bind:this callbacks cannot trigger new flush() calls.
+  // 3. During afterUpdate, any updated components will NOT have their afterUpdate
+  //    callback called a second time; the seen_callbacks set, outside the flush()
+  //    function, guarantees this behavior.
+  const seen_callbacks = new Set();
+
+  let flushidx = 0; // Do *not* move this inside the flush() function
+
+  /** @returns {void} */
+  function flush() {
+  	// Do not reenter flush while dirty components are updated, as this can
+  	// result in an infinite loop. Instead, let the inner flush handle it.
+  	// Reentrancy is ok afterwards for bindings etc.
+  	if (flushidx !== 0) {
+  		return;
+  	}
+  	const saved_component = current_component;
+  	do {
+  		// first, call beforeUpdate functions
+  		// and update components
+  		try {
+  			while (flushidx < dirty_components.length) {
+  				const component = dirty_components[flushidx];
+  				flushidx++;
+  				set_current_component(component);
+  				update(component.$$);
+  			}
+  		} catch (e) {
+  			// reset dirty state to not end up in a deadlocked state and then rethrow
+  			dirty_components.length = 0;
+  			flushidx = 0;
+  			throw e;
+  		}
+  		set_current_component(null);
+  		dirty_components.length = 0;
+  		flushidx = 0;
+  		while (binding_callbacks.length) binding_callbacks.pop()();
+  		// then, once components are updated, call
+  		// afterUpdate functions. This may cause
+  		// subsequent updates...
+  		for (let i = 0; i < render_callbacks.length; i += 1) {
+  			const callback = render_callbacks[i];
+  			if (!seen_callbacks.has(callback)) {
+  				// ...so guard against infinite loops
+  				seen_callbacks.add(callback);
+  				callback();
+  			}
+  		}
+  		render_callbacks.length = 0;
+  	} while (dirty_components.length);
+  	while (flush_callbacks.length) {
+  		flush_callbacks.pop()();
+  	}
+  	update_scheduled = false;
+  	seen_callbacks.clear();
+  	set_current_component(saved_component);
+  }
+
+  /** @returns {void} */
+  function update($$) {
+  	if ($$.fragment !== null) {
+  		$$.update();
+  		run_all($$.before_update);
+  		const dirty = $$.dirty;
+  		$$.dirty = [-1];
+  		$$.fragment && $$.fragment.p($$.ctx, dirty);
+  		$$.after_update.forEach(add_render_callback);
+  	}
+  }
+
+  /**
+   * Useful for example to execute remaining `afterUpdate` callbacks before executing `destroy`.
+   * @param {Function[]} fns
+   * @returns {void}
+   */
+  function flush_render_callbacks(fns) {
+  	const filtered = [];
+  	const targets = [];
+  	render_callbacks.forEach((c) => (fns.indexOf(c) === -1 ? filtered.push(c) : targets.push(c)));
+  	targets.forEach((c) => c());
+  	render_callbacks = filtered;
+  }
+
+  /**
+   * @type {Promise<void> | null}
+   */
+  let promise;
+
+  /**
+   * @returns {Promise<void>}
+   */
+  function wait() {
+  	if (!promise) {
+  		promise = Promise.resolve();
+  		promise.then(() => {
+  			promise = null;
+  		});
+  	}
+  	return promise;
+  }
+
+  /**
+   * @param {Element} node
+   * @param {INTRO | OUTRO | boolean} direction
+   * @param {'start' | 'end'} kind
+   * @returns {void}
+   */
+  function dispatch(node, direction, kind) {
+  	node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+  }
+
+  const outroing = new Set();
+
+  /**
+   * @type {Outro}
+   */
+  let outros;
+
+  /**
+   * @returns {void} */
+  function group_outros() {
+  	outros = {
+  		r: 0,
+  		c: [],
+  		p: outros // parent group
+  	};
+  }
+
+  /**
+   * @returns {void} */
+  function check_outros() {
+  	if (!outros.r) {
+  		run_all(outros.c);
+  	}
+  	outros = outros.p;
+  }
+
+  /**
+   * @param {import('./private.js').Fragment} block
+   * @param {0 | 1} [local]
+   * @returns {void}
+   */
+  function transition_in(block, local) {
+  	if (block && block.i) {
+  		outroing.delete(block);
+  		block.i(local);
+  	}
+  }
+
+  /**
+   * @param {import('./private.js').Fragment} block
+   * @param {0 | 1} local
+   * @param {0 | 1} [detach]
+   * @param {() => void} [callback]
+   * @returns {void}
+   */
+  function transition_out(block, local, detach, callback) {
+  	if (block && block.o) {
+  		if (outroing.has(block)) return;
+  		outroing.add(block);
+  		outros.c.push(() => {
+  			outroing.delete(block);
+  			if (callback) {
+  				if (detach) block.d(1);
+  				callback();
+  			}
+  		});
+  		block.o(local);
+  	} else if (callback) {
+  		callback();
+  	}
+  }
+
+  /**
+   * @type {import('../transition/public.js').TransitionConfig}
+   */
+  const null_transition = { duration: 0 };
+
+  /**
+   * @param {Element & ElementCSSInlineStyle} node
+   * @param {TransitionFn} fn
+   * @param {any} params
+   * @param {boolean} intro
+   * @returns {{ run(b: 0 | 1): void; end(): void; }}
+   */
+  function create_bidirectional_transition(node, fn, params, intro) {
+  	/**
+  	 * @type {TransitionOptions} */
+  	const options = { direction: 'both' };
+  	let config = fn(node, params, options);
+  	let t = intro ? 0 : 1;
+
+  	/**
+  	 * @type {Program | null} */
+  	let running_program = null;
+
+  	/**
+  	 * @type {PendingProgram | null} */
+  	let pending_program = null;
+  	let animation_name = null;
+
+  	/** @type {boolean} */
+  	let original_inert_value;
+
+  	/**
+  	 * @returns {void} */
+  	function clear_animation() {
+  		if (animation_name) delete_rule(node, animation_name);
+  	}
+
+  	/**
+  	 * @param {PendingProgram} program
+  	 * @param {number} duration
+  	 * @returns {Program}
+  	 */
+  	function init(program, duration) {
+  		const d = /** @type {Program['d']} */ (program.b - t);
+  		duration *= Math.abs(d);
+  		return {
+  			a: t,
+  			b: program.b,
+  			d,
+  			duration,
+  			start: program.start,
+  			end: program.start + duration,
+  			group: program.group
+  		};
+  	}
+
+  	/**
+  	 * @param {INTRO | OUTRO} b
+  	 * @returns {void}
+  	 */
+  	function go(b) {
+  		const {
+  			delay = 0,
+  			duration = 300,
+  			easing = identity,
+  			tick = noop,
+  			css
+  		} = config || null_transition;
+
+  		/**
+  		 * @type {PendingProgram} */
+  		const program = {
+  			start: now() + delay,
+  			b
+  		};
+
+  		if (!b) {
+  			// @ts-ignore todo: improve typings
+  			program.group = outros;
+  			outros.r += 1;
+  		}
+
+  		if ('inert' in node) {
+  			if (b) {
+  				if (original_inert_value !== undefined) {
+  					// aborted/reversed outro — restore previous inert value
+  					node.inert = original_inert_value;
+  				}
+  			} else {
+  				original_inert_value = /** @type {HTMLElement} */ (node).inert;
+  				node.inert = true;
+  			}
+  		}
+
+  		if (running_program || pending_program) {
+  			pending_program = program;
+  		} else {
+  			// if this is an intro, and there's a delay, we need to do
+  			// an initial tick and/or apply CSS animation immediately
+  			if (css) {
+  				clear_animation();
+  				animation_name = create_rule(node, t, b, duration, delay, easing, css);
+  			}
+  			if (b) tick(0, 1);
+  			running_program = init(program, duration);
+  			add_render_callback(() => dispatch(node, b, 'start'));
+  			loop((now) => {
+  				if (pending_program && now > pending_program.start) {
+  					running_program = init(pending_program, duration);
+  					pending_program = null;
+  					dispatch(node, running_program.b, 'start');
+  					if (css) {
+  						clear_animation();
+  						animation_name = create_rule(
+  							node,
+  							t,
+  							running_program.b,
+  							running_program.duration,
+  							0,
+  							easing,
+  							config.css
+  						);
+  					}
+  				}
+  				if (running_program) {
+  					if (now >= running_program.end) {
+  						tick((t = running_program.b), 1 - t);
+  						dispatch(node, running_program.b, 'end');
+  						if (!pending_program) {
+  							// we're done
+  							if (running_program.b) {
+  								// intro — we can tidy up immediately
+  								clear_animation();
+  							} else {
+  								// outro — needs to be coordinated
+  								if (!--running_program.group.r) run_all(running_program.group.c);
+  							}
+  						}
+  						running_program = null;
+  					} else if (now >= running_program.start) {
+  						const p = now - running_program.start;
+  						t = running_program.a + running_program.d * easing(p / running_program.duration);
+  						tick(t, 1 - t);
+  					}
+  				}
+  				return !!(running_program || pending_program);
+  			});
+  		}
+  	}
+  	return {
+  		run(b) {
+  			if (is_function(config)) {
+  				wait().then(() => {
+  					const opts = { direction: b ? 'in' : 'out' };
+  					// @ts-ignore
+  					config = config(opts);
+  					go(b);
+  				});
+  			} else {
+  				go(b);
+  			}
+  		},
+  		end() {
+  			clear_animation();
+  			running_program = pending_program = null;
+  		}
+  	};
+  }
+
+  /** @typedef {1} INTRO */
+  /** @typedef {0} OUTRO */
+  /** @typedef {{ direction: 'in' | 'out' | 'both' }} TransitionOptions */
+  /** @typedef {(node: Element, params: any, options: TransitionOptions) => import('../transition/public.js').TransitionConfig} TransitionFn */
+
+  /**
+   * @typedef {Object} Outro
+   * @property {number} r
+   * @property {Function[]} c
+   * @property {Object} p
+   */
+
+  /**
+   * @typedef {Object} PendingProgram
+   * @property {number} start
+   * @property {INTRO|OUTRO} b
+   * @property {Outro} [group]
+   */
+
+  /**
+   * @typedef {Object} Program
+   * @property {number} a
+   * @property {INTRO|OUTRO} b
+   * @property {1|-1} d
+   * @property {number} duration
+   * @property {number} start
+   * @property {number} end
+   * @property {Outro} [group]
+   */
+
+  // general each functions:
+
+  function ensure_array_like(array_like_or_iterator) {
+  	return array_like_or_iterator?.length !== undefined
+  		? array_like_or_iterator
+  		: Array.from(array_like_or_iterator);
+  }
+
+  /** @returns {void} */
+  function outro_and_destroy_block(block, lookup) {
+  	transition_out(block, 1, 1, () => {
+  		lookup.delete(block.key);
+  	});
+  }
+
+  /** @returns {void} */
+  function fix_and_outro_and_destroy_block(block, lookup) {
+  	block.f();
+  	outro_and_destroy_block(block, lookup);
+  }
+
+  /** @returns {any[]} */
+  function update_keyed_each(
+  	old_blocks,
+  	dirty,
+  	get_key,
+  	dynamic,
+  	ctx,
+  	list,
+  	lookup,
+  	node,
+  	destroy,
+  	create_each_block,
+  	next,
+  	get_context
+  ) {
+  	let o = old_blocks.length;
+  	let n = list.length;
+  	let i = o;
+  	const old_indexes = {};
+  	while (i--) old_indexes[old_blocks[i].key] = i;
+  	const new_blocks = [];
+  	const new_lookup = new Map();
+  	const deltas = new Map();
+  	const updates = [];
+  	i = n;
+  	while (i--) {
+  		const child_ctx = get_context(ctx, list, i);
+  		const key = get_key(child_ctx);
+  		let block = lookup.get(key);
+  		if (!block) {
+  			block = create_each_block(key, child_ctx);
+  			block.c();
+  		} else {
+  			// defer updates until all the DOM shuffling is done
+  			updates.push(() => block.p(child_ctx, dirty));
+  		}
+  		new_lookup.set(key, (new_blocks[i] = block));
+  		if (key in old_indexes) deltas.set(key, Math.abs(i - old_indexes[key]));
+  	}
+  	const will_move = new Set();
+  	const did_move = new Set();
+  	/** @returns {void} */
+  	function insert(block) {
+  		transition_in(block, 1);
+  		block.m(node, next);
+  		lookup.set(block.key, block);
+  		next = block.first;
+  		n--;
+  	}
+  	while (o && n) {
+  		const new_block = new_blocks[n - 1];
+  		const old_block = old_blocks[o - 1];
+  		const new_key = new_block.key;
+  		const old_key = old_block.key;
+  		if (new_block === old_block) {
+  			// do nothing
+  			next = new_block.first;
+  			o--;
+  			n--;
+  		} else if (!new_lookup.has(old_key)) {
+  			// remove old block
+  			destroy(old_block, lookup);
+  			o--;
+  		} else if (!lookup.has(new_key) || will_move.has(new_key)) {
+  			insert(new_block);
+  		} else if (did_move.has(old_key)) {
+  			o--;
+  		} else if (deltas.get(new_key) > deltas.get(old_key)) {
+  			did_move.add(new_key);
+  			insert(new_block);
+  		} else {
+  			will_move.add(old_key);
+  			o--;
+  		}
+  	}
+  	while (o--) {
+  		const old_block = old_blocks[o];
+  		if (!new_lookup.has(old_block.key)) destroy(old_block, lookup);
+  	}
+  	while (n) insert(new_blocks[n - 1]);
+  	run_all(updates);
+  	return new_blocks;
+  }
+
+  /** @returns {{}} */
+  function get_spread_update(levels, updates) {
+  	const update = {};
+  	const to_null_out = {};
+  	const accounted_for = { $$scope: 1 };
+  	let i = levels.length;
+  	while (i--) {
+  		const o = levels[i];
+  		const n = updates[i];
+  		if (n) {
+  			for (const key in o) {
+  				if (!(key in n)) to_null_out[key] = 1;
+  			}
+  			for (const key in n) {
+  				if (!accounted_for[key]) {
+  					update[key] = n[key];
+  					accounted_for[key] = 1;
+  				}
+  			}
+  			levels[i] = n;
+  		} else {
+  			for (const key in o) {
+  				accounted_for[key] = 1;
+  			}
+  		}
+  	}
+  	for (const key in to_null_out) {
+  		if (!(key in update)) update[key] = undefined;
+  	}
+  	return update;
+  }
+
+  function get_spread_object(spread_props) {
+  	return typeof spread_props === 'object' && spread_props !== null ? spread_props : {};
+  }
+
+  /** @returns {void} */
+  function bind(component, name, callback) {
+  	const index = component.$$.props[name];
+  	if (index !== undefined) {
+  		component.$$.bound[index] = callback;
+  		callback(component.$$.ctx[index]);
+  	}
+  }
+
+  /** @returns {void} */
+  function create_component(block) {
+  	block && block.c();
+  }
+
+  /** @returns {void} */
+  function mount_component(component, target, anchor) {
+  	const { fragment, after_update } = component.$$;
+  	fragment && fragment.m(target, anchor);
+  	// onMount happens before the initial afterUpdate
+  	add_render_callback(() => {
+  		const new_on_destroy = component.$$.on_mount.map(run).filter(is_function);
+  		// if the component was destroyed immediately
+  		// it will update the `$$.on_destroy` reference to `null`.
+  		// the destructured on_destroy may still reference to the old array
+  		if (component.$$.on_destroy) {
+  			component.$$.on_destroy.push(...new_on_destroy);
+  		} else {
+  			// Edge case - component was destroyed immediately,
+  			// most likely as a result of a binding initialising
+  			run_all(new_on_destroy);
+  		}
+  		component.$$.on_mount = [];
+  	});
+  	after_update.forEach(add_render_callback);
+  }
+
+  /** @returns {void} */
+  function destroy_component(component, detaching) {
+  	const $$ = component.$$;
+  	if ($$.fragment !== null) {
+  		flush_render_callbacks($$.after_update);
+  		run_all($$.on_destroy);
+  		$$.fragment && $$.fragment.d(detaching);
+  		// TODO null out other refs, including component.$$ (but need to
+  		// preserve final state?)
+  		$$.on_destroy = $$.fragment = null;
+  		$$.ctx = [];
+  	}
+  }
+
+  /** @returns {void} */
+  function make_dirty(component, i) {
+  	if (component.$$.dirty[0] === -1) {
+  		dirty_components.push(component);
+  		schedule_update();
+  		component.$$.dirty.fill(0);
+  	}
+  	component.$$.dirty[(i / 31) | 0] |= 1 << i % 31;
+  }
+
+  // TODO: Document the other params
+  /**
+   * @param {SvelteComponent} component
+   * @param {import('./public.js').ComponentConstructorOptions} options
+   *
+   * @param {import('./utils.js')['not_equal']} not_equal Used to compare props and state values.
+   * @param {(target: Element | ShadowRoot) => void} [append_styles] Function that appends styles to the DOM when the component is first initialised.
+   * This will be the `add_css` function from the compiled component.
+   *
+   * @returns {void}
+   */
+  function init(
+  	component,
+  	options,
+  	instance,
+  	create_fragment,
+  	not_equal,
+  	props,
+  	append_styles = null,
+  	dirty = [-1]
+  ) {
+  	const parent_component = current_component;
+  	set_current_component(component);
+  	/** @type {import('./private.js').T$$} */
+  	const $$ = (component.$$ = {
+  		fragment: null,
+  		ctx: [],
+  		// state
+  		props,
+  		update: noop,
+  		not_equal,
+  		bound: blank_object(),
+  		// lifecycle
+  		on_mount: [],
+  		on_destroy: [],
+  		on_disconnect: [],
+  		before_update: [],
+  		after_update: [],
+  		context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
+  		// everything else
+  		callbacks: blank_object(),
+  		dirty,
+  		skip_bound: false,
+  		root: options.target || parent_component.$$.root
+  	});
+  	append_styles && append_styles($$.root);
+  	let ready = false;
+  	$$.ctx = instance
+  		? instance(component, options.props || {}, (i, ret, ...rest) => {
+  				const value = rest.length ? rest[0] : ret;
+  				if ($$.ctx && not_equal($$.ctx[i], ($$.ctx[i] = value))) {
+  					if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
+  					if (ready) make_dirty(component, i);
+  				}
+  				return ret;
+  		  })
+  		: [];
+  	$$.update();
+  	ready = true;
+  	run_all($$.before_update);
+  	// `false` as a special case of no DOM component
+  	$$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+  	if (options.target) {
+  		if (options.hydrate) {
+  			// TODO: what is the correct type here?
+  			// @ts-expect-error
+  			const nodes = children(options.target);
+  			$$.fragment && $$.fragment.l(nodes);
+  			nodes.forEach(detach);
+  		} else {
+  			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  			$$.fragment && $$.fragment.c();
+  		}
+  		if (options.intro) transition_in(component.$$.fragment);
+  		mount_component(component, options.target, options.anchor);
+  		flush();
+  	}
+  	set_current_component(parent_component);
+  }
+
+  /**
+   * Base class for Svelte components. Used when dev=false.
+   *
+   * @template {Record<string, any>} [Props=any]
+   * @template {Record<string, any>} [Events=any]
+   */
+  class SvelteComponent {
+  	/**
+  	 * ### PRIVATE API
+  	 *
+  	 * Do not use, may change at any time
+  	 *
+  	 * @type {any}
+  	 */
+  	$$ = undefined;
+  	/**
+  	 * ### PRIVATE API
+  	 *
+  	 * Do not use, may change at any time
+  	 *
+  	 * @type {any}
+  	 */
+  	$$set = undefined;
+
+  	/** @returns {void} */
+  	$destroy() {
+  		destroy_component(this, 1);
+  		this.$destroy = noop;
+  	}
+
+  	/**
+  	 * @template {Extract<keyof Events, string>} K
+  	 * @param {K} type
+  	 * @param {((e: Events[K]) => void) | null | undefined} callback
+  	 * @returns {() => void}
+  	 */
+  	$on(type, callback) {
+  		if (!is_function(callback)) {
+  			return noop;
+  		}
+  		const callbacks = this.$$.callbacks[type] || (this.$$.callbacks[type] = []);
+  		callbacks.push(callback);
+  		return () => {
+  			const index = callbacks.indexOf(callback);
+  			if (index !== -1) callbacks.splice(index, 1);
+  		};
+  	}
+
+  	/**
+  	 * @param {Partial<Props>} props
+  	 * @returns {void}
+  	 */
+  	$set(props) {
+  		if (this.$$set && !is_empty(props)) {
+  			this.$$.skip_bound = true;
+  			this.$$set(props);
+  			this.$$.skip_bound = false;
+  		}
+  	}
+  }
+
+  /**
+   * @typedef {Object} CustomElementPropDefinition
+   * @property {string} [attribute]
+   * @property {boolean} [reflect]
+   * @property {'String'|'Boolean'|'Number'|'Array'|'Object'} [type]
+   */
+
+  // generated during release, do not modify
+
+  const PUBLIC_VERSION = '4';
+
+  if (typeof window !== 'undefined')
+  	// @ts-ignore
+  	(window.__svelte || (window.__svelte = { v: new Set() })).v.add(PUBLIC_VERSION);
+
+  /*
+  Adapted from https://github.com/mattdesl
+  Distributed under MIT License https://github.com/mattdesl/eases/blob/master/LICENSE.md
+  */
+
+  /**
+   * https://svelte.dev/docs/svelte-easing
+   * @param {number} t
+   * @returns {number}
+   */
+  function cubicOut(t) {
+  	const f = t - 1.0;
+  	return f * f * f + 1.0;
+  }
+
+  /**
+   * The flip function calculates the start and end position of an element and animates between them, translating the x and y values.
+   * `flip` stands for [First, Last, Invert, Play](https://aerotwist.com/blog/flip-your-animations/).
+   *
+   * https://svelte.dev/docs/svelte-animate#flip
+   * @param {Element} node
+   * @param {{ from: DOMRect; to: DOMRect }} fromTo
+   * @param {import('./public.js').FlipParams} params
+   * @returns {import('./public.js').AnimationConfig}
+   */
+  function flip$2(node, { from, to }, params = {}) {
+  	const style = getComputedStyle(node);
+  	const transform = style.transform === 'none' ? '' : style.transform;
+  	const [ox, oy] = style.transformOrigin.split(' ').map(parseFloat);
+  	const dx = from.left + (from.width * ox) / to.width - (to.left + ox);
+  	const dy = from.top + (from.height * oy) / to.height - (to.top + oy);
+  	const { delay = 0, duration = (d) => Math.sqrt(d) * 120, easing = cubicOut } = params;
+  	return {
+  		delay,
+  		duration: is_function(duration) ? duration(Math.sqrt(dx * dx + dy * dy)) : duration,
+  		easing,
+  		css: (t, u) => {
+  			const x = u * dx;
+  			const y = u * dy;
+  			const sx = t + (u * from.width) / to.width;
+  			const sy = t + (u * from.height) / to.height;
+  			return `transform: ${transform} translate(${x}px, ${y}px) scale(${sx}, ${sy});`;
+  		}
+  	};
+  }
+
+  // external events
+  const FINALIZE_EVENT_NAME = "finalize";
+  const CONSIDER_EVENT_NAME = "consider";
+
+  /**
+   * @typedef {Object} Info
+   * @property {string} trigger
+   * @property {string} id
+   * @property {string} source
+   * @param {Node} el
+   * @param {Array} items
+   * @param {Info} info
+   */
+  function dispatchFinalizeEvent(el, items, info) {
+      el.dispatchEvent(
+          new CustomEvent(FINALIZE_EVENT_NAME, {
+              detail: {items, info}
+          })
+      );
+  }
+
+  /**
+   * Dispatches a consider event
+   * @param {Node} el
+   * @param {Array} items
+   * @param {Info} info
+   */
+  function dispatchConsiderEvent(el, items, info) {
+      el.dispatchEvent(
+          new CustomEvent(CONSIDER_EVENT_NAME, {
+              detail: {items, info}
+          })
+      );
+  }
+
+  // internal events
+  const DRAGGED_ENTERED_EVENT_NAME = "draggedEntered";
+  const DRAGGED_LEFT_EVENT_NAME = "draggedLeft";
+  const DRAGGED_OVER_INDEX_EVENT_NAME = "draggedOverIndex";
+  const DRAGGED_LEFT_DOCUMENT_EVENT_NAME = "draggedLeftDocument";
+
+  const DRAGGED_LEFT_TYPES = {
+      LEFT_FOR_ANOTHER: "leftForAnother",
+      OUTSIDE_OF_ANY: "outsideOfAny"
+  };
+
+  function dispatchDraggedElementEnteredContainer(containerEl, indexObj, draggedEl) {
+      containerEl.dispatchEvent(
+          new CustomEvent(DRAGGED_ENTERED_EVENT_NAME, {
+              detail: {indexObj, draggedEl}
+          })
+      );
+  }
+
+  /**
+   * @param containerEl - the dropzone the element left
+   * @param draggedEl - the dragged element
+   * @param theOtherDz - the new dropzone the element entered
+   */
+  function dispatchDraggedElementLeftContainerForAnother(containerEl, draggedEl, theOtherDz) {
+      containerEl.dispatchEvent(
+          new CustomEvent(DRAGGED_LEFT_EVENT_NAME, {
+              detail: {draggedEl, type: DRAGGED_LEFT_TYPES.LEFT_FOR_ANOTHER, theOtherDz}
+          })
+      );
+  }
+
+  function dispatchDraggedElementLeftContainerForNone(containerEl, draggedEl) {
+      containerEl.dispatchEvent(
+          new CustomEvent(DRAGGED_LEFT_EVENT_NAME, {
+              detail: {draggedEl, type: DRAGGED_LEFT_TYPES.OUTSIDE_OF_ANY}
+          })
+      );
+  }
+  function dispatchDraggedElementIsOverIndex(containerEl, indexObj, draggedEl) {
+      containerEl.dispatchEvent(
+          new CustomEvent(DRAGGED_OVER_INDEX_EVENT_NAME, {
+              detail: {indexObj, draggedEl}
+          })
+      );
+  }
+  function dispatchDraggedLeftDocument(draggedEl) {
+      window.dispatchEvent(
+          new CustomEvent(DRAGGED_LEFT_DOCUMENT_EVENT_NAME, {
+              detail: {draggedEl}
+          })
+      );
+  }
+
+  const TRIGGERS = {
+      DRAG_STARTED: "dragStarted",
+      DRAGGED_ENTERED: DRAGGED_ENTERED_EVENT_NAME,
+      DRAGGED_ENTERED_ANOTHER: "dragEnteredAnother",
+      DRAGGED_OVER_INDEX: DRAGGED_OVER_INDEX_EVENT_NAME,
+      DRAGGED_LEFT: DRAGGED_LEFT_EVENT_NAME,
+      DRAGGED_LEFT_ALL: "draggedLeftAll",
+      DROPPED_INTO_ZONE: "droppedIntoZone",
+      DROPPED_INTO_ANOTHER: "droppedIntoAnother",
+      DROPPED_OUTSIDE_OF_ANY: "droppedOutsideOfAny",
+      DRAG_STOPPED: "dragStopped"
+  };
+
+  const SOURCES = {
+      POINTER: "pointer",
+      KEYBOARD: "keyboard"
+  };
+
+  const SHADOW_ITEM_MARKER_PROPERTY_NAME = "isDndShadowItem";
+  const SHADOW_ELEMENT_ATTRIBUTE_NAME = "data-is-dnd-shadow-item-internal";
+  const SHADOW_ELEMENT_HINT_ATTRIBUTE_NAME = "data-is-dnd-shadow-item-hint";
+  const SHADOW_PLACEHOLDER_ITEM_ID = "id:dnd-shadow-placeholder-0000";
+  const DRAGGED_ELEMENT_ID = "dnd-action-dragged-el";
+
+  let ITEM_ID_KEY = "id";
+  let activeDndZoneCount = 0;
+  function incrementActiveDropZoneCount() {
+      activeDndZoneCount++;
+  }
+  function decrementActiveDropZoneCount() {
+      if (activeDndZoneCount === 0) {
+          throw new Error("Bug! trying to decrement when there are no dropzones");
+      }
+      activeDndZoneCount--;
+  }
+
+  const isOnServer = typeof window === "undefined";
+
+  // This is based off https://stackoverflow.com/questions/27745438/how-to-compute-getboundingclientrect-without-considering-transforms/57876601#57876601
+  // It removes the transforms that are potentially applied by the flip animations
+  /**
+   * Gets the bounding rect but removes transforms (ex: flip animation)
+   * @param {HTMLElement} el
+   * @return {{top: number, left: number, bottom: number, right: number}}
+   */
+  function getBoundingRectNoTransforms(el) {
+      let ta;
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      const tx = style.transform;
+
+      if (tx) {
+          let sx, sy, dx, dy;
+          if (tx.startsWith("matrix3d(")) {
+              ta = tx.slice(9, -1).split(/, /);
+              sx = +ta[0];
+              sy = +ta[5];
+              dx = +ta[12];
+              dy = +ta[13];
+          } else if (tx.startsWith("matrix(")) {
+              ta = tx.slice(7, -1).split(/, /);
+              sx = +ta[0];
+              sy = +ta[3];
+              dx = +ta[4];
+              dy = +ta[5];
+          } else {
+              return rect;
+          }
+
+          const to = style.transformOrigin;
+          const x = rect.x - dx - (1 - sx) * parseFloat(to);
+          const y = rect.y - dy - (1 - sy) * parseFloat(to.slice(to.indexOf(" ") + 1));
+          const w = sx ? rect.width / sx : el.offsetWidth;
+          const h = sy ? rect.height / sy : el.offsetHeight;
+          return {
+              x: x,
+              y: y,
+              width: w,
+              height: h,
+              top: y,
+              right: x + w,
+              bottom: y + h,
+              left: x
+          };
+      } else {
+          return rect;
+      }
+  }
+
+  /**
+   * Gets the absolute bounding rect (accounts for the window's scroll position and removes transforms)
+   * @param {HTMLElement} el
+   * @return {{top: number, left: number, bottom: number, right: number}}
+   */
+  function getAbsoluteRectNoTransforms(el) {
+      const rect = getBoundingRectNoTransforms(el);
+      return {
+          top: rect.top + window.scrollY,
+          bottom: rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX,
+          right: rect.right + window.scrollX
+      };
+  }
+
+  /**
+   * Gets the absolute bounding rect (accounts for the window's scroll position)
+   * @param {HTMLElement} el
+   * @return {{top: number, left: number, bottom: number, right: number}}
+   */
+  function getAbsoluteRect(el) {
+      const rect = el.getBoundingClientRect();
+      return {
+          top: rect.top + window.scrollY,
+          bottom: rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX,
+          right: rect.right + window.scrollX
+      };
+  }
+
+  /**
+   * finds the center :)
+   * @typedef {Object} Rect
+   * @property {number} top
+   * @property {number} bottom
+   * @property {number} left
+   * @property {number} right
+   * @param {Rect} rect
+   * @return {{x: number, y: number}}
+   */
+  function findCenter(rect) {
+      return {
+          x: (rect.left + rect.right) / 2,
+          y: (rect.top + rect.bottom) / 2
+      };
+  }
+
+  /**
+   * @typedef {Object} Point
+   * @property {number} x
+   * @property {number} y
+   * @param {Point} pointA
+   * @param {Point} pointB
+   * @return {number}
+   */
+  function calcDistance(pointA, pointB) {
+      return Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
+  }
+
+  /**
+   * @param {Point} point
+   * @param {Rect} rect
+   * @return {boolean|boolean}
+   */
+  function isPointInsideRect(point, rect) {
+      return point.y <= rect.bottom && point.y >= rect.top && point.x >= rect.left && point.x <= rect.right;
+  }
+
+  /**
+   * find the absolute coordinates of the center of a dom element
+   * @param el {HTMLElement}
+   * @returns {{x: number, y: number}}
+   */
+  function findCenterOfElement(el) {
+      return findCenter(getAbsoluteRect(el));
+  }
+
+  /**
+   * @param {HTMLElement} elA
+   * @param {HTMLElement} elB
+   * @return {boolean}
+   */
+  function isCenterOfAInsideB(elA, elB) {
+      const centerOfA = findCenterOfElement(elA);
+      const rectOfB = getAbsoluteRectNoTransforms(elB);
+      return isPointInsideRect(centerOfA, rectOfB);
+  }
+
+  /**
+   * @param {HTMLElement|ChildNode} elA
+   * @param {HTMLElement|ChildNode} elB
+   * @return {number}
+   */
+  function calcDistanceBetweenCenters(elA, elB) {
+      const centerOfA = findCenterOfElement(elA);
+      const centerOfB = findCenterOfElement(elB);
+      return calcDistance(centerOfA, centerOfB);
+  }
+
+  /**
+   * @param {HTMLElement} el - the element to check
+   * @returns {boolean} - true if the element in its entirety is off-screen including the scrollable area (the normal dom events look at the mouse rather than the element)
+   */
+  function isElementOffDocument(el) {
+      const rect = getAbsoluteRect(el);
+      return rect.right < 0 || rect.left > document.documentElement.scrollWidth || rect.bottom < 0 || rect.top > document.documentElement.scrollHeight;
+  }
+
+  let dzToShadowIndexToRect;
+
+  /**
+   * Resets the cache that allows for smarter "would be index" resolution. Should be called after every drag operation
+   */
+  function resetIndexesCache() {
+      dzToShadowIndexToRect = new Map();
+  }
+  resetIndexesCache();
+
+  /**
+   * Caches the coordinates of the shadow element when it's in a certain index in a certain dropzone.
+   * Helpful in order to determine "would be index" more effectively
+   * @param {HTMLElement} dz
+   * @return {number} - the shadow element index
+   */
+  function cacheShadowRect(dz) {
+      const shadowElIndex = Array.from(dz.children).findIndex(child => child.getAttribute(SHADOW_ELEMENT_ATTRIBUTE_NAME));
+      if (shadowElIndex >= 0) {
+          if (!dzToShadowIndexToRect.has(dz)) {
+              dzToShadowIndexToRect.set(dz, new Map());
+          }
+          dzToShadowIndexToRect.get(dz).set(shadowElIndex, getAbsoluteRectNoTransforms(dz.children[shadowElIndex]));
+          return shadowElIndex;
+      }
+      return undefined;
+  }
+
+  /**
+   * @typedef {Object} Index
+   * @property {number} index - the would be index
+   * @property {boolean} isProximityBased - false if the element is actually over the index, true if it is not over it but this index is the closest
+   */
+  /**
+   * Find the index for the dragged element in the list it is dragged over
+   * @param {HTMLElement} floatingAboveEl
+   * @param {HTMLElement} collectionBelowEl
+   * @returns {Index|null} -  if the element is over the container the Index object otherwise null
+   */
+  function findWouldBeIndex(floatingAboveEl, collectionBelowEl) {
+      if (!isCenterOfAInsideB(floatingAboveEl, collectionBelowEl)) {
+          return null;
+      }
+      const children = collectionBelowEl.children;
+      // the container is empty, floating element should be the first
+      if (children.length === 0) {
+          return {index: 0, isProximityBased: true};
+      }
+      const shadowElIndex = cacheShadowRect(collectionBelowEl);
+
+      // the search could be more efficient but keeping it simple for now
+      // a possible improvement: pass in the lastIndex it was found in and check there first, then expand from there
+      for (let i = 0; i < children.length; i++) {
+          if (isCenterOfAInsideB(floatingAboveEl, children[i])) {
+              const cachedShadowRect = dzToShadowIndexToRect.has(collectionBelowEl) && dzToShadowIndexToRect.get(collectionBelowEl).get(i);
+              if (cachedShadowRect) {
+                  if (!isPointInsideRect(findCenterOfElement(floatingAboveEl), cachedShadowRect)) {
+                      return {index: shadowElIndex, isProximityBased: false};
+                  }
+              }
+              return {index: i, isProximityBased: false};
+          }
+      }
+      // this can happen if there is space around the children so the floating element has
+      //entered the container but not any of the children, in this case we will find the nearest child
+      let minDistanceSoFar = Number.MAX_VALUE;
+      let indexOfMin = undefined;
+      // we are checking all of them because we don't know whether we are dealing with a horizontal or vertical container and where the floating element entered from
+      for (let i = 0; i < children.length; i++) {
+          const distance = calcDistanceBetweenCenters(floatingAboveEl, children[i]);
+          if (distance < minDistanceSoFar) {
+              minDistanceSoFar = distance;
+              indexOfMin = i;
+          }
+      }
+      return {index: indexOfMin, isProximityBased: true};
+  }
+
+  /**
+   * @param {Object} object
+   * @return {string}
+   */
+  function toString(object) {
+      return JSON.stringify(object, null, 2);
+  }
+
+  /**
+   * Finds the depth of the given node in the DOM tree
+   * @param {HTMLElement} node
+   * @return {number} - the depth of the node
+   */
+  function getDepth(node) {
+      if (!node) {
+          throw new Error("cannot get depth of a falsy node");
+      }
+      return _getDepth(node, 0);
+  }
+  function _getDepth(node, countSoFar = 0) {
+      if (!node.parentElement) {
+          return countSoFar - 1;
+      }
+      return _getDepth(node.parentElement, countSoFar + 1);
+  }
+
+  /**
+   * A simple util to shallow compare objects quickly, it doesn't validate the arguments so pass objects in
+   * @param {Object} objA
+   * @param {Object} objB
+   * @return {boolean} - true if objA and objB are shallow equal
+   */
+  function areObjectsShallowEqual(objA, objB) {
+      if (Object.keys(objA).length !== Object.keys(objB).length) {
+          return false;
+      }
+      for (const keyA in objA) {
+          if (!{}.hasOwnProperty.call(objB, keyA) || objB[keyA] !== objA[keyA]) {
+              return false;
+          }
+      }
+      return true;
+  }
+
+  /**
+   * Shallow compares two arrays
+   * @param arrA
+   * @param arrB
+   * @return {boolean} - whether the arrays are shallow equal
+   */
+  function areArraysShallowEqualSameOrder(arrA, arrB) {
+      if (arrA.length !== arrB.length) {
+          return false;
+      }
+      for (let i = 0; i < arrA.length; i++) {
+          if (arrA[i] !== arrB[i]) {
+              return false;
+          }
+      }
+      return true;
+  }
+
+  const INTERVAL_MS = 200;
+  const TOLERANCE_PX = 10;
+  let next;
+
+  /**
+   * Tracks the dragged elements and performs the side effects when it is dragged over a drop zone (basically dispatching custom-events scrolling)
+   * @param {Set<HTMLElement>} dropZones
+   * @param {HTMLElement} draggedEl
+   * @param {number} [intervalMs = INTERVAL_MS]
+   * @param {MultiScroller} multiScroller
+   */
+  function observe(draggedEl, dropZones, intervalMs = INTERVAL_MS, multiScroller) {
+      // initialization
+      let lastDropZoneFound;
+      let lastIndexFound;
+      let lastIsDraggedInADropZone = false;
+      let lastCentrePositionOfDragged;
+      // We are sorting to make sure that in case of nested zones of the same type the one "on top" is considered first
+      const dropZonesFromDeepToShallow = Array.from(dropZones).sort((dz1, dz2) => getDepth(dz2) - getDepth(dz1));
+
+      /**
+       * The main function in this module. Tracks where everything is/ should be a take the actions
+       */
+      function andNow() {
+          const currentCenterOfDragged = findCenterOfElement(draggedEl);
+          const scrolled = multiScroller.multiScrollIfNeeded();
+          // we only want to make a new decision after the element was moved a bit to prevent flickering
+          if (
+              !scrolled &&
+              lastCentrePositionOfDragged &&
+              Math.abs(lastCentrePositionOfDragged.x - currentCenterOfDragged.x) < TOLERANCE_PX &&
+              Math.abs(lastCentrePositionOfDragged.y - currentCenterOfDragged.y) < TOLERANCE_PX
+          ) {
+              next = window.setTimeout(andNow, intervalMs);
+              return;
+          }
+          if (isElementOffDocument(draggedEl)) {
+              dispatchDraggedLeftDocument(draggedEl);
+              return;
+          }
+
+          lastCentrePositionOfDragged = currentCenterOfDragged;
+          // this is a simple algorithm, potential improvement: first look at lastDropZoneFound
+          let isDraggedInADropZone = false;
+          for (const dz of dropZonesFromDeepToShallow) {
+              if (scrolled) resetIndexesCache();
+              const indexObj = findWouldBeIndex(draggedEl, dz);
+              if (indexObj === null) {
+                  // it is not inside
+                  continue;
+              }
+              const {index} = indexObj;
+              isDraggedInADropZone = true;
+              // the element is over a container
+              if (dz !== lastDropZoneFound) {
+                  lastDropZoneFound && dispatchDraggedElementLeftContainerForAnother(lastDropZoneFound, draggedEl, dz);
+                  dispatchDraggedElementEnteredContainer(dz, indexObj, draggedEl);
+                  lastDropZoneFound = dz;
+              } else if (index !== lastIndexFound) {
+                  dispatchDraggedElementIsOverIndex(dz, indexObj, draggedEl);
+                  lastIndexFound = index;
+              }
+              // we handle looping with the 'continue' statement above
+              break;
+          }
+          // the first time the dragged element is not in any dropzone we need to notify the last dropzone it was in
+          if (!isDraggedInADropZone && lastIsDraggedInADropZone && lastDropZoneFound) {
+              dispatchDraggedElementLeftContainerForNone(lastDropZoneFound, draggedEl);
+              lastDropZoneFound = undefined;
+              lastIndexFound = undefined;
+              lastIsDraggedInADropZone = false;
+          } else {
+              lastIsDraggedInADropZone = true;
+          }
+          next = window.setTimeout(andNow, intervalMs);
+      }
+      andNow();
+  }
+
+  // assumption - we can only observe one dragged element at a time, this could be changed in the future
+  function unobserve() {
+      clearTimeout(next);
+      resetIndexesCache();
+  }
+
+  const SCROLL_ZONE_PX = 30;
+
+  /**
+   * Will make a scroller that can scroll any element given to it in any direction
+   * @returns {{scrollIfNeeded: function(Point, HTMLElement): boolean, resetScrolling: function(void):void}}
+   */
+  function makeScroller() {
+      let scrollingInfo;
+      function resetScrolling() {
+          scrollingInfo = {directionObj: undefined, stepPx: 0};
+      }
+      resetScrolling();
+      // directionObj {x: 0|1|-1, y:0|1|-1} - 1 means down in y and right in x
+      function scrollContainer(containerEl) {
+          const {directionObj, stepPx} = scrollingInfo;
+          if (directionObj) {
+              containerEl.scrollBy(directionObj.x * stepPx, directionObj.y * stepPx);
+              window.requestAnimationFrame(() => scrollContainer(containerEl));
+          }
+      }
+      function calcScrollStepPx(distancePx) {
+          return SCROLL_ZONE_PX - distancePx;
+      }
+
+      /**
+       * @param {Point} pointer - the pointer will be used to decide in which direction to scroll
+       * @param {HTMLElement} elementToScroll - the scroll container
+       * If the pointer is next to the sides of the element to scroll, will trigger scrolling
+       * Can be called repeatedly with updated pointer and elementToScroll values without issues
+       * @return {boolean} - true if scrolling was needed
+       */
+      function scrollIfNeeded(pointer, elementToScroll) {
+          if (!elementToScroll) {
+              return false;
+          }
+          const distances = calcInnerDistancesBetweenPointAndSidesOfElement(pointer, elementToScroll);
+          const isAlreadyScrolling = !!scrollingInfo.directionObj;
+          if (distances === null) {
+              if (isAlreadyScrolling) resetScrolling();
+              return false;
+          }
+          let [scrollingVertically, scrollingHorizontally] = [false, false];
+          // vertical
+          if (elementToScroll.scrollHeight > elementToScroll.clientHeight) {
+              if (distances.bottom < SCROLL_ZONE_PX) {
+                  scrollingVertically = true;
+                  scrollingInfo.directionObj = {x: 0, y: 1};
+                  scrollingInfo.stepPx = calcScrollStepPx(distances.bottom);
+              } else if (distances.top < SCROLL_ZONE_PX) {
+                  scrollingVertically = true;
+                  scrollingInfo.directionObj = {x: 0, y: -1};
+                  scrollingInfo.stepPx = calcScrollStepPx(distances.top);
+              }
+              if (!isAlreadyScrolling && scrollingVertically) {
+                  scrollContainer(elementToScroll);
+                  return true;
+              }
+          }
+          // horizontal
+          if (elementToScroll.scrollWidth > elementToScroll.clientWidth) {
+              if (distances.right < SCROLL_ZONE_PX) {
+                  scrollingHorizontally = true;
+                  scrollingInfo.directionObj = {x: 1, y: 0};
+                  scrollingInfo.stepPx = calcScrollStepPx(distances.right);
+              } else if (distances.left < SCROLL_ZONE_PX) {
+                  scrollingHorizontally = true;
+                  scrollingInfo.directionObj = {x: -1, y: 0};
+                  scrollingInfo.stepPx = calcScrollStepPx(distances.left);
+              }
+              if (!isAlreadyScrolling && scrollingHorizontally) {
+                  scrollContainer(elementToScroll);
+                  return true;
+              }
+          }
+          resetScrolling();
+          return false;
+      }
+
+      return {
+          scrollIfNeeded,
+          resetScrolling
+      };
+  }
+
+  /**
+   * If the point is inside the element returns its distances from the sides, otherwise returns null
+   * @param {Point} point
+   * @param {HTMLElement} el
+   * @return {null|{top: number, left: number, bottom: number, right: number}}
+   */
+  function calcInnerDistancesBetweenPointAndSidesOfElement(point, el) {
+      // Even if the scrolling element is small it acts as a scroller for the viewport
+      const rect =
+          el === document.scrollingElement
+              ? {
+                    top: 0,
+                    bottom: window.innerHeight,
+                    left: 0,
+                    right: window.innerWidth
+                }
+              : el.getBoundingClientRect();
+      if (!isPointInsideRect(point, rect)) {
+          return null;
+      }
+      return {
+          top: point.y - rect.top,
+          bottom: rect.bottom - point.y,
+          left: point.x - rect.left,
+          right: rect.right - point.x
+      };
+  }
+
+  /**
+   @typedef {Object} MultiScroller
+   @property {function():boolean} multiScrollIfNeeded - call this on every "tick" to scroll containers if needed, returns true if anything was scrolled
+  /**
+   * Creates a scroller than can scroll any of the provided containers or any of their scrollable parents (including the document's scrolling element)
+   * @param {HTMLElement[]} baseElementsForScrolling
+   * @param {function():Point} getPointerPosition
+   * @return {MultiScroller}
+   */
+  function createMultiScroller(baseElementsForScrolling = [], getPointerPosition) {
+      const scrollingContainersSet = findRelevantScrollContainers(baseElementsForScrolling);
+      const scrollingContainersDeepToShallow = Array.from(scrollingContainersSet).sort((dz1, dz2) => getDepth(dz2) - getDepth(dz1));
+      const {scrollIfNeeded, resetScrolling} = makeScroller();
+
+      /**
+       * @return {boolean} - was any container scrolled
+       */
+      function tick() {
+          const mousePosition = getPointerPosition();
+          if (!mousePosition || !scrollingContainersDeepToShallow) {
+              return false;
+          }
+          const scrollContainersUnderCursor = scrollingContainersDeepToShallow.filter(
+              el => isPointInsideRect(mousePosition, el.getBoundingClientRect()) || el === document.scrollingElement
+          );
+          for (let i = 0; i < scrollContainersUnderCursor.length; i++) {
+              const scrolled = scrollIfNeeded(mousePosition, scrollContainersUnderCursor[i]);
+              if (scrolled) {
+                  return true;
+              }
+          }
+          return false;
+      }
+      return {
+          multiScrollIfNeeded: scrollingContainersSet.size > 0 ? tick : () => false,
+          destroy: () => resetScrolling()
+      };
+  }
+
+  // internal utils
+  function findScrollableParents(element) {
+      if (!element) {
+          return [];
+      }
+      const scrollableContainers = [];
+      let parent = element;
+      while (parent) {
+          const {overflow} = window.getComputedStyle(parent);
+          if (overflow.split(" ").some(o => o.includes("auto") || o.includes("scroll"))) {
+              scrollableContainers.push(parent);
+          }
+          parent = parent.parentElement;
+      }
+      return scrollableContainers;
+  }
+  function findRelevantScrollContainers(dropZones) {
+      const scrollingContainers = new Set();
+      for (let dz of dropZones) {
+          findScrollableParents(dz).forEach(container => scrollingContainers.add(container));
+      }
+      // The scrolling element might have overflow visible and still be scrollable
+      if (
+          document.scrollingElement.scrollHeight > document.scrollingElement.clientHeight ||
+          document.scrollingElement.scrollWidth > document.scrollingElement.clientHeight
+      ) {
+          scrollingContainers.add(document.scrollingElement);
+      }
+      return scrollingContainers;
+  }
+
+  /**
+   * Fixes svelte issue when cloning node containing (or being) <select> which will loose it's value.
+   * Since svelte manages select value internally.
+   * @see https://github.com/sveltejs/svelte/issues/6717
+   * @see https://github.com/isaacHagoel/svelte-dnd-action/issues/306
+   *
+   * @param {HTMLElement} el
+   * @returns
+   */
+  function svelteNodeClone(el) {
+      const cloned = el.cloneNode(true);
+
+      const values = [];
+      const elIsSelect = el.tagName === "SELECT";
+      const selects = elIsSelect ? [el] : [...el.querySelectorAll("select")];
+      for (const select of selects) {
+          values.push(select.value);
+      }
+
+      if (selects.length > 0) {
+          const clonedSelects = elIsSelect ? [cloned] : [...cloned.querySelectorAll("select")];
+          for (let i = 0; i < clonedSelects.length; i++) {
+              const select = clonedSelects[i];
+              const value = values[i];
+              const optionEl = select.querySelector(`option[value="${value}"`);
+              if (optionEl) {
+                  optionEl.setAttribute("selected", true);
+              }
+          }
+      }
+
+      const elIsCanvas = el.tagName === "CANVAS";
+      const canvases = elIsCanvas ? [el] : [...el.querySelectorAll("canvas")];
+      if (canvases.length > 0) {
+          const clonedCanvases = elIsCanvas ? [cloned] : [...cloned.querySelectorAll("canvas")];
+          for (let i = 0; i < clonedCanvases.length; i++) {
+              const canvas = canvases[i];
+              const clonedCanvas = clonedCanvases[i];
+              clonedCanvas.width = canvas.width;
+              clonedCanvas.height = canvas.height;
+              if (canvas.width > 0 && canvas.height > 0) {
+                  clonedCanvas.getContext("2d").drawImage(canvas, 0, 0);
+              }
+          }
+      }
+
+      return cloned;
+  }
+
+  /**
+   * @type {{USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT: string}}
+   */
+  const FEATURE_FLAG_NAMES = Object.freeze({
+      // This flag exists as a workaround for issue 454 (basically a browser bug) - seems like these rect values take time to update when in grid layout. Setting it to true can cause strange behaviour in the REPL for non-grid zones, see issue 470
+      USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT: "USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT"
+  });
+
+  const featureFlagsMap = {
+      [FEATURE_FLAG_NAMES.USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT]: false
+  };
+
+  /**
+   *
+   * @param {FEATURE_FLAG_NAMES} flagName
+   * @return {boolean}
+   */
+  function getFeatureFlag(flagName) {
+      if (!FEATURE_FLAG_NAMES[flagName])
+          throw new Error(`Can't get non existing feature flag ${flagName}! Supported flags: ${Object.keys(FEATURE_FLAG_NAMES)}`);
+      return featureFlagsMap[flagName];
+  }
+
+  const TRANSITION_DURATION_SECONDS = 0.2;
+
+  /**
+   * private helper function - creates a transition string for a property
+   * @param {string} property
+   * @return {string} - the transition string
+   */
+  function trs(property) {
+      return `${property} ${TRANSITION_DURATION_SECONDS}s ease`;
+  }
+  /**
+   * clones the given element and applies proper styles and transitions to the dragged element
+   * @param {HTMLElement} originalElement
+   * @param {Point} [positionCenterOnXY]
+   * @return {Node} - the cloned, styled element
+   */
+  function createDraggedElementFrom(originalElement, positionCenterOnXY) {
+      const rect = originalElement.getBoundingClientRect();
+      const draggedEl = svelteNodeClone(originalElement);
+      copyStylesFromTo(originalElement, draggedEl);
+      draggedEl.id = DRAGGED_ELEMENT_ID;
+      draggedEl.style.position = "fixed";
+      let elTopPx = rect.top;
+      let elLeftPx = rect.left;
+      draggedEl.style.top = `${elTopPx}px`;
+      draggedEl.style.left = `${elLeftPx}px`;
+      if (positionCenterOnXY) {
+          const center = findCenter(rect);
+          elTopPx -= center.y - positionCenterOnXY.y;
+          elLeftPx -= center.x - positionCenterOnXY.x;
+          window.setTimeout(() => {
+              draggedEl.style.top = `${elTopPx}px`;
+              draggedEl.style.left = `${elLeftPx}px`;
+          }, 0);
+      }
+      draggedEl.style.margin = "0";
+      // we can't have relative or automatic height and width or it will break the illusion
+      draggedEl.style.boxSizing = "border-box";
+      draggedEl.style.height = `${rect.height}px`;
+      draggedEl.style.width = `${rect.width}px`;
+      draggedEl.style.transition = `${trs("top")}, ${trs("left")}, ${trs("background-color")}, ${trs("opacity")}, ${trs("color")} `;
+      // this is a workaround for a strange browser bug that causes the right border to disappear when all the transitions are added at the same time
+      window.setTimeout(() => (draggedEl.style.transition += `, ${trs("width")}, ${trs("height")}`), 0);
+      draggedEl.style.zIndex = "9999";
+      draggedEl.style.cursor = "grabbing";
+
+      return draggedEl;
+  }
+
+  /**
+   * styles the dragged element to a 'dropped' state
+   * @param {HTMLElement} draggedEl
+   */
+  function moveDraggedElementToWasDroppedState(draggedEl) {
+      draggedEl.style.cursor = "grab";
+  }
+
+  /**
+   * Morphs the dragged element style, maintains the mouse pointer within the element
+   * @param {HTMLElement} draggedEl
+   * @param {HTMLElement} copyFromEl - the element the dragged element should look like, typically the shadow element
+   * @param {number} currentMouseX
+   * @param {number} currentMouseY
+   */
+  function morphDraggedElementToBeLike(draggedEl, copyFromEl, currentMouseX, currentMouseY) {
+      copyStylesFromTo(copyFromEl, draggedEl);
+      const newRect = copyFromEl.getBoundingClientRect();
+      const draggedElRect = draggedEl.getBoundingClientRect();
+      const widthChange = newRect.width - draggedElRect.width;
+      const heightChange = newRect.height - draggedElRect.height;
+      if (widthChange || heightChange) {
+          const relativeDistanceOfMousePointerFromDraggedSides = {
+              left: (currentMouseX - draggedElRect.left) / draggedElRect.width,
+              top: (currentMouseY - draggedElRect.top) / draggedElRect.height
+          };
+          if (!getFeatureFlag(FEATURE_FLAG_NAMES.USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT)) {
+              draggedEl.style.height = `${newRect.height}px`;
+              draggedEl.style.width = `${newRect.width}px`;
+          }
+          draggedEl.style.left = `${parseFloat(draggedEl.style.left) - relativeDistanceOfMousePointerFromDraggedSides.left * widthChange}px`;
+          draggedEl.style.top = `${parseFloat(draggedEl.style.top) - relativeDistanceOfMousePointerFromDraggedSides.top * heightChange}px`;
+      }
+  }
+
+  /**
+   * @param {HTMLElement} copyFromEl
+   * @param {HTMLElement} copyToEl
+   */
+  function copyStylesFromTo(copyFromEl, copyToEl) {
+      const computedStyle = window.getComputedStyle(copyFromEl);
+      Array.from(computedStyle)
+          .filter(
+              s =>
+                  s.startsWith("background") ||
+                  s.startsWith("padding") ||
+                  s.startsWith("font") ||
+                  s.startsWith("text") ||
+                  s.startsWith("align") ||
+                  s.startsWith("justify") ||
+                  s.startsWith("display") ||
+                  s.startsWith("flex") ||
+                  s.startsWith("border") ||
+                  s === "opacity" ||
+                  s === "color" ||
+                  s === "list-style-type" ||
+                  // copying with and height to make up for rect update timing issues in some browsers
+                  (getFeatureFlag(FEATURE_FLAG_NAMES.USE_COMPUTED_STYLE_INSTEAD_OF_BOUNDING_RECT) && (s === "width" || s === "height"))
+          )
+          .forEach(s => copyToEl.style.setProperty(s, computedStyle.getPropertyValue(s), computedStyle.getPropertyPriority(s)));
+  }
+
+  /**
+   * makes the element compatible with being draggable
+   * @param {HTMLElement} draggableEl
+   * @param {boolean} dragDisabled
+   */
+  function styleDraggable(draggableEl, dragDisabled) {
+      draggableEl.draggable = false;
+      draggableEl.ondragstart = () => false;
+      if (!dragDisabled) {
+          draggableEl.style.userSelect = "none";
+          draggableEl.style.WebkitUserSelect = "none";
+          draggableEl.style.cursor = "grab";
+      } else {
+          draggableEl.style.userSelect = "";
+          draggableEl.style.WebkitUserSelect = "";
+          draggableEl.style.cursor = "";
+      }
+  }
+
+  /**
+   * Hides the provided element so that it can stay in the dom without interrupting
+   * @param {HTMLElement} dragTarget
+   */
+  function hideElement(dragTarget) {
+      dragTarget.style.display = "none";
+      dragTarget.style.position = "fixed";
+      dragTarget.style.zIndex = "-5";
+  }
+
+  /**
+   * styles the shadow element
+   * @param {HTMLElement} shadowEl
+   */
+  function decorateShadowEl(shadowEl) {
+      shadowEl.style.visibility = "hidden";
+      shadowEl.setAttribute(SHADOW_ELEMENT_ATTRIBUTE_NAME, "true");
+  }
+
+  /**
+   * undo the styles the shadow element
+   * @param {HTMLElement} shadowEl
+   */
+  function unDecorateShadowElement(shadowEl) {
+      shadowEl.style.visibility = "";
+      shadowEl.removeAttribute(SHADOW_ELEMENT_ATTRIBUTE_NAME);
+  }
+
+  /**
+   * will mark the given dropzones as visually active
+   * @param {Array<HTMLElement>} dropZones
+   * @param {Function} getStyles - maps a dropzone to a styles object (so the styles can be removed)
+   * @param {Function} getClasses - maps a dropzone to a classList
+   */
+  function styleActiveDropZones(dropZones, getStyles = () => {}, getClasses = () => []) {
+      dropZones.forEach(dz => {
+          const styles = getStyles(dz);
+          Object.keys(styles).forEach(style => {
+              dz.style[style] = styles[style];
+          });
+          getClasses(dz).forEach(c => dz.classList.add(c));
+      });
+  }
+
+  /**
+   * will remove the 'active' styling from given dropzones
+   * @param {Array<HTMLElement>} dropZones
+   * @param {Function} getStyles - maps a dropzone to a styles object
+   * @param {Function} getClasses - maps a dropzone to a classList
+   */
+  function styleInactiveDropZones(dropZones, getStyles = () => {}, getClasses = () => []) {
+      dropZones.forEach(dz => {
+          const styles = getStyles(dz);
+          Object.keys(styles).forEach(style => {
+              dz.style[style] = "";
+          });
+          getClasses(dz).forEach(c => dz.classList.contains(c) && dz.classList.remove(c));
+      });
+  }
+
+  /**
+   * will prevent the provided element from shrinking by setting its minWidth and minHeight to the current width and height values
+   * @param {HTMLElement} el
+   * @return {function(): void} - run this function to undo the operation and restore the original values
+   */
+  function preventShrinking(el) {
+      const originalMinHeight = el.style.minHeight;
+      el.style.minHeight = window.getComputedStyle(el).getPropertyValue("height");
+      const originalMinWidth = el.style.minWidth;
+      el.style.minWidth = window.getComputedStyle(el).getPropertyValue("width");
+      return function undo() {
+          el.style.minHeight = originalMinHeight;
+          el.style.minWidth = originalMinWidth;
+      };
+  }
+
+  const DEFAULT_DROP_ZONE_TYPE$1 = "--any--";
+  const MIN_OBSERVATION_INTERVAL_MS = 100;
+  const DISABLED_OBSERVATION_INTERVAL_MS = 20;
+  const MIN_MOVEMENT_BEFORE_DRAG_START_PX = 3;
+  const DEFAULT_DROP_TARGET_STYLE$1 = {
+      outline: "rgba(255, 255, 102, 0.7) solid 2px"
+  };
+  const ORIGINAL_DRAGGED_ITEM_MARKER_ATTRIBUTE = "data-is-dnd-original-dragged-item";
+
+  let originalDragTarget;
+  let draggedEl;
+  let draggedElData;
+  let draggedElType;
+  let originDropZone;
+  let originIndex;
+  let shadowElData;
+  let shadowElDropZone;
+  let dragStartMousePosition;
+  let currentMousePosition;
+  let isWorkingOnPreviousDrag = false;
+  let finalizingPreviousDrag = false;
+  let unlockOriginDzMinDimensions;
+  let isDraggedOutsideOfAnyDz = false;
+  let scheduledForRemovalAfterDrop = [];
+  let multiScroller;
+
+  // a map from type to a set of drop-zones
+  const typeToDropZones$1 = new Map();
+  // important - this is needed because otherwise the config that would be used for everyone is the config of the element that created the event listeners
+  const dzToConfig$1 = new Map();
+  // this is needed in order to be able to cleanup old listeners and avoid stale closures issues (as the listener is defined within each zone)
+  const elToMouseDownListener = new WeakMap();
+
+  /* drop-zones registration management */
+  function registerDropZone$1(dropZoneEl, type) {
+      if (!typeToDropZones$1.has(type)) {
+          typeToDropZones$1.set(type, new Set());
+      }
+      if (!typeToDropZones$1.get(type).has(dropZoneEl)) {
+          typeToDropZones$1.get(type).add(dropZoneEl);
+          incrementActiveDropZoneCount();
+      }
+  }
+  function unregisterDropZone$1(dropZoneEl, type) {
+      typeToDropZones$1.get(type).delete(dropZoneEl);
+      decrementActiveDropZoneCount();
+      if (typeToDropZones$1.get(type).size === 0) {
+          typeToDropZones$1.delete(type);
+      }
+  }
+
+  /* functions to manage observing the dragged element and trigger custom drag-events */
+  function watchDraggedElement() {
+      const dropZones = typeToDropZones$1.get(draggedElType);
+
+      for (const dz of dropZones) {
+          dz.addEventListener(DRAGGED_ENTERED_EVENT_NAME, handleDraggedEntered);
+          dz.addEventListener(DRAGGED_LEFT_EVENT_NAME, handleDraggedLeft);
+          dz.addEventListener(DRAGGED_OVER_INDEX_EVENT_NAME, handleDraggedIsOverIndex);
+      }
+      window.addEventListener(DRAGGED_LEFT_DOCUMENT_EVENT_NAME, handleDrop$1);
+
+      // it is important that we don't have an interval that is faster than the flip duration because it can cause elements to jump bach and forth
+      const setIntervalMs = Math.max(...Array.from(dropZones.keys()).map(dz => dzToConfig$1.get(dz).dropAnimationDurationMs));
+      const observationIntervalMs = setIntervalMs === 0 ? DISABLED_OBSERVATION_INTERVAL_MS : Math.max(setIntervalMs, MIN_OBSERVATION_INTERVAL_MS); // if setIntervalMs is 0 it goes to 20, otherwise it is max between it and min observation.
+      multiScroller = createMultiScroller(dropZones, () => currentMousePosition);
+      observe(draggedEl, dropZones, observationIntervalMs * 1.07, multiScroller);
+  }
+  function unWatchDraggedElement() {
+      const dropZones = typeToDropZones$1.get(draggedElType);
+      for (const dz of dropZones) {
+          dz.removeEventListener(DRAGGED_ENTERED_EVENT_NAME, handleDraggedEntered);
+          dz.removeEventListener(DRAGGED_LEFT_EVENT_NAME, handleDraggedLeft);
+          dz.removeEventListener(DRAGGED_OVER_INDEX_EVENT_NAME, handleDraggedIsOverIndex);
+      }
+      window.removeEventListener(DRAGGED_LEFT_DOCUMENT_EVENT_NAME, handleDrop$1);
+      multiScroller.destroy();
+      multiScroller = undefined;
+      unobserve();
+  }
+
+  function findShadowElementIdx(items) {
+      return items.findIndex(item => !!item[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
+  }
+  function createShadowElData(draggedElData) {
+      return {...draggedElData, [SHADOW_ITEM_MARKER_PROPERTY_NAME]: true, [ITEM_ID_KEY]: SHADOW_PLACEHOLDER_ITEM_ID};
+  }
+
+  /* custom drag-events handlers */
+  function handleDraggedEntered(e) {
+      let {items, dropFromOthersDisabled} = dzToConfig$1.get(e.currentTarget);
+      if (dropFromOthersDisabled && e.currentTarget !== originDropZone) {
+          return;
+      }
+      isDraggedOutsideOfAnyDz = false;
+      // this deals with another race condition. in rare occasions (super rapid operations) the list hasn't updated yet
+      items = items.filter(item => item[ITEM_ID_KEY] !== shadowElData[ITEM_ID_KEY]);
+
+      if (originDropZone !== e.currentTarget) {
+          const originZoneItems = dzToConfig$1.get(originDropZone).items;
+          const newOriginZoneItems = originZoneItems.filter(item => !item[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
+          dispatchConsiderEvent(originDropZone, newOriginZoneItems, {
+              trigger: TRIGGERS.DRAGGED_ENTERED_ANOTHER,
+              id: draggedElData[ITEM_ID_KEY],
+              source: SOURCES.POINTER
+          });
+      }
+      const {index, isProximityBased} = e.detail.indexObj;
+      const shadowElIdx = isProximityBased && index === e.currentTarget.children.length - 1 ? index + 1 : index;
+      shadowElDropZone = e.currentTarget;
+      items.splice(shadowElIdx, 0, shadowElData);
+      dispatchConsiderEvent(e.currentTarget, items, {trigger: TRIGGERS.DRAGGED_ENTERED, id: draggedElData[ITEM_ID_KEY], source: SOURCES.POINTER});
+  }
+
+  function handleDraggedLeft(e) {
+      // dealing with a rare race condition on extremely rapid clicking and dropping
+      if (!isWorkingOnPreviousDrag) return;
+      const {items: originalItems, dropFromOthersDisabled} = dzToConfig$1.get(e.currentTarget);
+      if (dropFromOthersDisabled && e.currentTarget !== originDropZone && e.currentTarget !== shadowElDropZone) {
+          return;
+      }
+      const items = [...originalItems];
+      const shadowElIdx = findShadowElementIdx(items);
+      if (shadowElIdx !== -1) {
+          items.splice(shadowElIdx, 1);
+      }
+      const origShadowDz = shadowElDropZone;
+      shadowElDropZone = undefined;
+      const {type, theOtherDz} = e.detail;
+      if (
+          type === DRAGGED_LEFT_TYPES.OUTSIDE_OF_ANY ||
+          (type === DRAGGED_LEFT_TYPES.LEFT_FOR_ANOTHER && theOtherDz !== originDropZone && dzToConfig$1.get(theOtherDz).dropFromOthersDisabled)
+      ) {
+          isDraggedOutsideOfAnyDz = true;
+          shadowElDropZone = originDropZone;
+          // if the last zone it left is the origin dz, we will put it back into items (which we just removed it from)
+          const originZoneItems = origShadowDz === originDropZone ? items : [...dzToConfig$1.get(originDropZone).items];
+          originZoneItems.splice(originIndex, 0, shadowElData);
+          dispatchConsiderEvent(originDropZone, originZoneItems, {
+              trigger: TRIGGERS.DRAGGED_LEFT_ALL,
+              id: draggedElData[ITEM_ID_KEY],
+              source: SOURCES.POINTER
+          });
+      }
+      // for the origin dz, when the dragged is outside of any, this will be fired in addition to the previous. this is for simplicity
+      dispatchConsiderEvent(e.currentTarget, items, {
+          trigger: TRIGGERS.DRAGGED_LEFT,
+          id: draggedElData[ITEM_ID_KEY],
+          source: SOURCES.POINTER
+      });
+  }
+  function handleDraggedIsOverIndex(e) {
+      const {items: originalItems, dropFromOthersDisabled} = dzToConfig$1.get(e.currentTarget);
+      if (dropFromOthersDisabled && e.currentTarget !== originDropZone) {
+          return;
+      }
+      const items = [...originalItems];
+      isDraggedOutsideOfAnyDz = false;
+      const {index} = e.detail.indexObj;
+      const shadowElIdx = findShadowElementIdx(items);
+      if (shadowElIdx !== -1) {
+          items.splice(shadowElIdx, 1);
+      }
+      items.splice(index, 0, shadowElData);
+      dispatchConsiderEvent(e.currentTarget, items, {trigger: TRIGGERS.DRAGGED_OVER_INDEX, id: draggedElData[ITEM_ID_KEY], source: SOURCES.POINTER});
+  }
+
+  // Global mouse/touch-events handlers
+  function handleMouseMove(e) {
+      e.preventDefault();
+      const c = e.touches ? e.touches[0] : e;
+      currentMousePosition = {x: c.clientX, y: c.clientY};
+      draggedEl.style.transform = `translate3d(${currentMousePosition.x - dragStartMousePosition.x}px, ${
+        currentMousePosition.y - dragStartMousePosition.y
+    }px, 0)`;
+  }
+
+  function handleDrop$1() {
+      finalizingPreviousDrag = true;
+      // cleanup
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleMouseMove);
+      window.removeEventListener("mouseup", handleDrop$1);
+      window.removeEventListener("touchend", handleDrop$1);
+      unWatchDraggedElement();
+      moveDraggedElementToWasDroppedState(draggedEl);
+
+      if (!shadowElDropZone) {
+          shadowElDropZone = originDropZone;
+      }
+      let {items, type} = dzToConfig$1.get(shadowElDropZone);
+      styleInactiveDropZones(
+          typeToDropZones$1.get(type),
+          dz => dzToConfig$1.get(dz).dropTargetStyle,
+          dz => dzToConfig$1.get(dz).dropTargetClasses
+      );
+      let shadowElIdx = findShadowElementIdx(items);
+      // the handler might remove the shadow element, ex: dragula like copy on drag
+      if (shadowElIdx === -1) {
+          if (shadowElDropZone === originDropZone) {
+              shadowElIdx = originIndex;
+          }
+      }
+
+      items = items.map(item => (item[SHADOW_ITEM_MARKER_PROPERTY_NAME] ? draggedElData : item));
+      function finalizeWithinZone() {
+          unlockOriginDzMinDimensions();
+          dispatchFinalizeEvent(shadowElDropZone, items, {
+              trigger: isDraggedOutsideOfAnyDz ? TRIGGERS.DROPPED_OUTSIDE_OF_ANY : TRIGGERS.DROPPED_INTO_ZONE,
+              id: draggedElData[ITEM_ID_KEY],
+              source: SOURCES.POINTER
+          });
+          if (shadowElDropZone !== originDropZone) {
+              // letting the origin drop zone know the element was permanently taken away
+              dispatchFinalizeEvent(originDropZone, dzToConfig$1.get(originDropZone).items, {
+                  trigger: TRIGGERS.DROPPED_INTO_ANOTHER,
+                  id: draggedElData[ITEM_ID_KEY],
+                  source: SOURCES.POINTER
+              });
+          }
+          if (shadowElIdx !== -1) unDecorateShadowElement(shadowElDropZone.children[shadowElIdx]);
+          cleanupPostDrop();
+      }
+      animateDraggedToFinalPosition(shadowElIdx, finalizeWithinZone);
+  }
+
+  // helper function for handleDrop
+  function animateDraggedToFinalPosition(shadowElIdx, callback) {
+      const shadowElRect =
+          shadowElIdx > -1 ? getBoundingRectNoTransforms(shadowElDropZone.children[shadowElIdx]) : getBoundingRectNoTransforms(shadowElDropZone);
+      const newTransform = {
+          x: shadowElRect.left - parseFloat(draggedEl.style.left),
+          y: shadowElRect.top - parseFloat(draggedEl.style.top)
+      };
+      const {dropAnimationDurationMs} = dzToConfig$1.get(shadowElDropZone);
+      const transition = `transform ${dropAnimationDurationMs}ms ease`;
+      draggedEl.style.transition = draggedEl.style.transition ? draggedEl.style.transition + "," + transition : transition;
+      draggedEl.style.transform = `translate3d(${newTransform.x}px, ${newTransform.y}px, 0)`;
+      window.setTimeout(callback, dropAnimationDurationMs);
+  }
+
+  function scheduleDZForRemovalAfterDrop(dz, destroy) {
+      scheduledForRemovalAfterDrop.push({dz, destroy});
+      window.requestAnimationFrame(() => {
+          hideElement(dz);
+          document.body.appendChild(dz);
+      });
+  }
+  /* cleanup */
+  function cleanupPostDrop() {
+      draggedEl.remove();
+      originalDragTarget.remove();
+      if (scheduledForRemovalAfterDrop.length) {
+          scheduledForRemovalAfterDrop.forEach(({dz, destroy}) => {
+              destroy();
+              dz.remove();
+          });
+          scheduledForRemovalAfterDrop = [];
+      }
+      draggedEl = undefined;
+      originalDragTarget = undefined;
+      draggedElData = undefined;
+      draggedElType = undefined;
+      originDropZone = undefined;
+      originIndex = undefined;
+      shadowElData = undefined;
+      shadowElDropZone = undefined;
+      dragStartMousePosition = undefined;
+      currentMousePosition = undefined;
+      isWorkingOnPreviousDrag = false;
+      finalizingPreviousDrag = false;
+      unlockOriginDzMinDimensions = undefined;
+      isDraggedOutsideOfAnyDz = false;
+  }
+
+  function dndzone$2(node, options) {
+      let initialized = false;
+      const config = {
+          items: undefined,
+          type: undefined,
+          flipDurationMs: 0,
+          dragDisabled: false,
+          morphDisabled: false,
+          dropFromOthersDisabled: false,
+          dropTargetStyle: DEFAULT_DROP_TARGET_STYLE$1,
+          dropTargetClasses: [],
+          transformDraggedElement: () => {},
+          centreDraggedOnCursor: false
+      };
+      let elToIdx = new Map();
+
+      function addMaybeListeners() {
+          window.addEventListener("mousemove", handleMouseMoveMaybeDragStart, {passive: false});
+          window.addEventListener("touchmove", handleMouseMoveMaybeDragStart, {passive: false, capture: false});
+          window.addEventListener("mouseup", handleFalseAlarm, {passive: false});
+          window.addEventListener("touchend", handleFalseAlarm, {passive: false});
+      }
+      function removeMaybeListeners() {
+          window.removeEventListener("mousemove", handleMouseMoveMaybeDragStart);
+          window.removeEventListener("touchmove", handleMouseMoveMaybeDragStart);
+          window.removeEventListener("mouseup", handleFalseAlarm);
+          window.removeEventListener("touchend", handleFalseAlarm);
+      }
+      function handleFalseAlarm(e) {
+          removeMaybeListeners();
+          originalDragTarget = undefined;
+          dragStartMousePosition = undefined;
+          currentMousePosition = undefined;
+
+          // dragging initiated by touch events prevents onclick from initially firing
+          if (e.type === "touchend") {
+              e.target.click();
+          }
+      }
+
+      function handleMouseMoveMaybeDragStart(e) {
+          e.preventDefault();
+          const c = e.touches ? e.touches[0] : e;
+          currentMousePosition = {x: c.clientX, y: c.clientY};
+          if (
+              Math.abs(currentMousePosition.x - dragStartMousePosition.x) >= MIN_MOVEMENT_BEFORE_DRAG_START_PX ||
+              Math.abs(currentMousePosition.y - dragStartMousePosition.y) >= MIN_MOVEMENT_BEFORE_DRAG_START_PX
+          ) {
+              removeMaybeListeners();
+              handleDragStart();
+          }
+      }
+      function handleMouseDown(e) {
+          // on safari clicking on a select element doesn't fire mouseup at the end of the click and in general this makes more sense
+          if (e.target !== e.currentTarget && (e.target.value !== undefined || e.target.isContentEditable)) {
+              return;
+          }
+          // prevents responding to any button but left click which equals 0 (which is falsy)
+          if (e.button) {
+              return;
+          }
+          if (isWorkingOnPreviousDrag) {
+              return;
+          }
+          e.preventDefault();
+          e.stopPropagation();
+          const c = e.touches ? e.touches[0] : e;
+          dragStartMousePosition = {x: c.clientX, y: c.clientY};
+          currentMousePosition = {...dragStartMousePosition};
+          originalDragTarget = e.currentTarget;
+          addMaybeListeners();
+      }
+
+      function handleDragStart() {
+          isWorkingOnPreviousDrag = true;
+
+          // initialising globals
+          const currentIdx = elToIdx.get(originalDragTarget);
+          originIndex = currentIdx;
+          originDropZone = originalDragTarget.parentElement;
+          /** @type {ShadowRoot | HTMLDocument | Element } */
+          const rootNode = originDropZone.closest("dialog") || originDropZone.getRootNode();
+          const originDropZoneRoot = rootNode.body || rootNode;
+          const {items: originalItems, type, centreDraggedOnCursor} = config;
+          const items = [...originalItems];
+          draggedElData = items[currentIdx];
+          draggedElType = type;
+          shadowElData = createShadowElData(draggedElData);
+
+          // creating the draggable element
+          draggedEl = createDraggedElementFrom(originalDragTarget, centreDraggedOnCursor && currentMousePosition);
+          originalDragTarget.setAttribute(ORIGINAL_DRAGGED_ITEM_MARKER_ATTRIBUTE, true);
+
+          // We will keep the original dom node in the dom because touch events keep firing on it, we want to re-add it after the framework removes it
+          function keepOriginalElementInDom() {
+              if (!draggedEl.parentElement) {
+                  originDropZoneRoot.appendChild(draggedEl);
+                  // to prevent the outline from disappearing
+                  draggedEl.focus();
+                  watchDraggedElement();
+                  hideElement(originalDragTarget);
+                  originDropZoneRoot.appendChild(originalDragTarget);
+                  // after the removal of the original element we can give the shadow element the original item id so that the host zone can find it and render it correctly if it does lookups by id
+                  shadowElData[ITEM_ID_KEY] = draggedElData[ITEM_ID_KEY];
+              } else {
+                  window.requestAnimationFrame(keepOriginalElementInDom);
+              }
+          }
+          window.requestAnimationFrame(keepOriginalElementInDom);
+
+          styleActiveDropZones(
+              Array.from(typeToDropZones$1.get(config.type)).filter(dz => dz === originDropZone || !dzToConfig$1.get(dz).dropFromOthersDisabled),
+              dz => dzToConfig$1.get(dz).dropTargetStyle,
+              dz => dzToConfig$1.get(dz).dropTargetClasses
+          );
+
+          // removing the original element by removing its data entry
+          items.splice(currentIdx, 1, shadowElData);
+          unlockOriginDzMinDimensions = preventShrinking(originDropZone);
+
+          dispatchConsiderEvent(originDropZone, items, {trigger: TRIGGERS.DRAG_STARTED, id: draggedElData[ITEM_ID_KEY], source: SOURCES.POINTER});
+
+          // handing over to global handlers - starting to watch the element
+          window.addEventListener("mousemove", handleMouseMove, {passive: false});
+          window.addEventListener("touchmove", handleMouseMove, {passive: false, capture: false});
+          window.addEventListener("mouseup", handleDrop$1, {passive: false});
+          window.addEventListener("touchend", handleDrop$1, {passive: false});
+      }
+
+      function configure({
+          items = undefined,
+          flipDurationMs: dropAnimationDurationMs = 0,
+          type: newType = DEFAULT_DROP_ZONE_TYPE$1,
+          dragDisabled = false,
+          morphDisabled = false,
+          dropFromOthersDisabled = false,
+          dropTargetStyle = DEFAULT_DROP_TARGET_STYLE$1,
+          dropTargetClasses = [],
+          transformDraggedElement = () => {},
+          centreDraggedOnCursor = false
+      }) {
+          config.dropAnimationDurationMs = dropAnimationDurationMs;
+          if (config.type && newType !== config.type) {
+              unregisterDropZone$1(node, config.type);
+          }
+          config.type = newType;
+          config.items = [...items];
+          config.dragDisabled = dragDisabled;
+          config.morphDisabled = morphDisabled;
+          config.transformDraggedElement = transformDraggedElement;
+          config.centreDraggedOnCursor = centreDraggedOnCursor;
+
+          // realtime update for dropTargetStyle
+          if (
+              initialized &&
+              isWorkingOnPreviousDrag &&
+              !finalizingPreviousDrag &&
+              (!areObjectsShallowEqual(dropTargetStyle, config.dropTargetStyle) ||
+                  !areArraysShallowEqualSameOrder(dropTargetClasses, config.dropTargetClasses))
+          ) {
+              styleInactiveDropZones(
+                  [node],
+                  () => config.dropTargetStyle,
+                  () => dropTargetClasses
+              );
+              styleActiveDropZones(
+                  [node],
+                  () => dropTargetStyle,
+                  () => dropTargetClasses
+              );
+          }
+          config.dropTargetStyle = dropTargetStyle;
+          config.dropTargetClasses = [...dropTargetClasses];
+
+          // realtime update for dropFromOthersDisabled
+          function getConfigProp(dz, propName) {
+              return dzToConfig$1.get(dz) ? dzToConfig$1.get(dz)[propName] : config[propName];
+          }
+          if (initialized && isWorkingOnPreviousDrag && config.dropFromOthersDisabled !== dropFromOthersDisabled) {
+              if (dropFromOthersDisabled) {
+                  styleInactiveDropZones(
+                      [node],
+                      dz => getConfigProp(dz, "dropTargetStyle"),
+                      dz => getConfigProp(dz, "dropTargetClasses")
+                  );
+              } else {
+                  styleActiveDropZones(
+                      [node],
+                      dz => getConfigProp(dz, "dropTargetStyle"),
+                      dz => getConfigProp(dz, "dropTargetClasses")
+                  );
+              }
+          }
+          config.dropFromOthersDisabled = dropFromOthersDisabled;
+
+          dzToConfig$1.set(node, config);
+          registerDropZone$1(node, newType);
+          const shadowElIdx = isWorkingOnPreviousDrag ? findShadowElementIdx(config.items) : -1;
+          for (let idx = 0; idx < node.children.length; idx++) {
+              const draggableEl = node.children[idx];
+              styleDraggable(draggableEl, dragDisabled);
+              if (idx === shadowElIdx) {
+                  if (!morphDisabled) {
+                      morphDraggedElementToBeLike(draggedEl, draggableEl, currentMousePosition.x, currentMousePosition.y);
+                  }
+                  config.transformDraggedElement(draggedEl, draggedElData, idx);
+                  decorateShadowEl(draggableEl);
+                  continue;
+              }
+              draggableEl.removeEventListener("mousedown", elToMouseDownListener.get(draggableEl));
+              draggableEl.removeEventListener("touchstart", elToMouseDownListener.get(draggableEl));
+              if (!dragDisabled) {
+                  draggableEl.addEventListener("mousedown", handleMouseDown);
+                  draggableEl.addEventListener("touchstart", handleMouseDown);
+                  elToMouseDownListener.set(draggableEl, handleMouseDown);
+              }
+              // updating the idx
+              elToIdx.set(draggableEl, idx);
+
+              if (!initialized) {
+                  initialized = true;
+              }
+          }
+      }
+      configure(options);
+
+      return {
+          update: newOptions => {
+              configure(newOptions);
+          },
+          destroy: () => {
+              function destroyDz() {
+                  unregisterDropZone$1(node, dzToConfig$1.get(node).type);
+                  dzToConfig$1.delete(node);
+              }
+              if (isWorkingOnPreviousDrag && !node.closest(`[${ORIGINAL_DRAGGED_ITEM_MARKER_ATTRIBUTE}]`)) {
+                  scheduleDZForRemovalAfterDrop(node, destroyDz);
+              } else {
+                  destroyDz();
+              }
+          }
+      };
+  }
+
+  const INSTRUCTION_IDs$1 = {
+      DND_ZONE_ACTIVE: "dnd-zone-active",
+      DND_ZONE_DRAG_DISABLED: "dnd-zone-drag-disabled"
+  };
+  const ID_TO_INSTRUCTION = {
+      [INSTRUCTION_IDs$1.DND_ZONE_ACTIVE]: "Tab to one the items and press space-bar or enter to start dragging it",
+      [INSTRUCTION_IDs$1.DND_ZONE_DRAG_DISABLED]: "This is a disabled drag and drop list"
+  };
+
+  const ALERT_DIV_ID = "dnd-action-aria-alert";
+  let alertsDiv;
+
+  function initAriaOnBrowser() {
+      if (alertsDiv) {
+          // it is already initialized
+          return;
+      }
+      // setting the dynamic alerts
+      alertsDiv = document.createElement("div");
+      (function initAlertsDiv() {
+          alertsDiv.id = ALERT_DIV_ID;
+          // tab index -1 makes the alert be read twice on chrome for some reason
+          //alertsDiv.tabIndex = -1;
+          alertsDiv.style.position = "fixed";
+          alertsDiv.style.bottom = "0";
+          alertsDiv.style.left = "0";
+          alertsDiv.style.zIndex = "-5";
+          alertsDiv.style.opacity = "0";
+          alertsDiv.style.height = "0";
+          alertsDiv.style.width = "0";
+          alertsDiv.setAttribute("role", "alert");
+      })();
+      document.body.prepend(alertsDiv);
+
+      // setting the instructions
+      Object.entries(ID_TO_INSTRUCTION).forEach(([id, txt]) => document.body.prepend(instructionToHiddenDiv(id, txt)));
+  }
+
+  /**
+   * Initializes the static aria instructions so they can be attached to zones
+   * @return {{DND_ZONE_ACTIVE: string, DND_ZONE_DRAG_DISABLED: string} | null} - the IDs for static aria instruction (to be used via aria-describedby) or null on the server
+   */
+  function initAria() {
+      if (isOnServer) return null;
+      if (document.readyState === "complete") {
+          initAriaOnBrowser();
+      } else {
+          window.addEventListener("DOMContentLoaded", initAriaOnBrowser);
+      }
+      return {...INSTRUCTION_IDs$1};
+  }
+
+  /**
+   * Removes all the artifacts (dom elements) added by this module
+   */
+  function destroyAria() {
+      if (isOnServer || !alertsDiv) return;
+      Object.keys(ID_TO_INSTRUCTION).forEach(id => document.getElementById(id)?.remove());
+      alertsDiv.remove();
+      alertsDiv = undefined;
+  }
+
+  function instructionToHiddenDiv(id, txt) {
+      const div = document.createElement("div");
+      div.id = id;
+      div.innerHTML = `<p>${txt}</p>`;
+      div.style.display = "none";
+      div.style.position = "fixed";
+      div.style.zIndex = "-5";
+      return div;
+  }
+
+  /**
+   * Will make the screen reader alert the provided text to the user
+   * @param {string} txt
+   */
+  function alertToScreenReader(txt) {
+      if (isOnServer) return;
+      if (!alertsDiv) {
+          initAriaOnBrowser();
+      }
+      alertsDiv.innerHTML = "";
+      const alertText = document.createTextNode(txt);
+      alertsDiv.appendChild(alertText);
+      // this is needed for Safari
+      alertsDiv.style.display = "none";
+      alertsDiv.style.display = "inline";
+  }
+
+  const DEFAULT_DROP_ZONE_TYPE = "--any--";
+  const DEFAULT_DROP_TARGET_STYLE = {
+      outline: "rgba(255, 255, 102, 0.7) solid 2px"
+  };
+
+  let isDragging = false;
+  let draggedItemType;
+  let focusedDz;
+  let focusedDzLabel = "";
+  let focusedItem;
+  let focusedItemId;
+  let focusedItemLabel = "";
+  const allDragTargets = new WeakSet();
+  const elToKeyDownListeners = new WeakMap();
+  const elToFocusListeners = new WeakMap();
+  const dzToHandles = new Map();
+  const dzToConfig = new Map();
+  const typeToDropZones = new Map();
+
+  /* TODO (potentially)
+   * what's the deal with the black border of voice-reader not following focus?
+   * maybe keep focus on the last dragged item upon drop?
+   */
+
+  let INSTRUCTION_IDs;
+
+  /* drop-zones registration management */
+  function registerDropZone(dropZoneEl, type) {
+      if (typeToDropZones.size === 0) {
+          INSTRUCTION_IDs = initAria();
+          window.addEventListener("keydown", globalKeyDownHandler);
+          window.addEventListener("click", globalClickHandler);
+      }
+      if (!typeToDropZones.has(type)) {
+          typeToDropZones.set(type, new Set());
+      }
+      if (!typeToDropZones.get(type).has(dropZoneEl)) {
+          typeToDropZones.get(type).add(dropZoneEl);
+          incrementActiveDropZoneCount();
+      }
+  }
+  function unregisterDropZone(dropZoneEl, type) {
+      if (focusedDz === dropZoneEl) {
+          handleDrop();
+      }
+      typeToDropZones.get(type).delete(dropZoneEl);
+      decrementActiveDropZoneCount();
+      if (typeToDropZones.get(type).size === 0) {
+          typeToDropZones.delete(type);
+      }
+      if (typeToDropZones.size === 0) {
+          window.removeEventListener("keydown", globalKeyDownHandler);
+          window.removeEventListener("click", globalClickHandler);
+          INSTRUCTION_IDs = undefined;
+          destroyAria();
+      }
+  }
+
+  function globalKeyDownHandler(e) {
+      if (!isDragging) return;
+      switch (e.key) {
+          case "Escape": {
+              handleDrop();
+              break;
+          }
+      }
+  }
+
+  function globalClickHandler() {
+      if (!isDragging) return;
+      if (!allDragTargets.has(document.activeElement)) {
+          handleDrop();
+      }
+  }
+
+  function handleZoneFocus(e) {
+      if (!isDragging) return;
+      const newlyFocusedDz = e.currentTarget;
+      if (newlyFocusedDz === focusedDz) return;
+
+      focusedDzLabel = newlyFocusedDz.getAttribute("aria-label") || "";
+      const {items: originItems} = dzToConfig.get(focusedDz);
+      const originItem = originItems.find(item => item[ITEM_ID_KEY] === focusedItemId);
+      const originIdx = originItems.indexOf(originItem);
+      const itemToMove = originItems.splice(originIdx, 1)[0];
+      const {items: targetItems, autoAriaDisabled} = dzToConfig.get(newlyFocusedDz);
+      if (
+          newlyFocusedDz.getBoundingClientRect().top < focusedDz.getBoundingClientRect().top ||
+          newlyFocusedDz.getBoundingClientRect().left < focusedDz.getBoundingClientRect().left
+      ) {
+          targetItems.push(itemToMove);
+          if (!autoAriaDisabled) {
+              alertToScreenReader(`Moved item ${focusedItemLabel} to the end of the list ${focusedDzLabel}`);
+          }
+      } else {
+          targetItems.unshift(itemToMove);
+          if (!autoAriaDisabled) {
+              alertToScreenReader(`Moved item ${focusedItemLabel} to the beginning of the list ${focusedDzLabel}`);
+          }
+      }
+      const dzFrom = focusedDz;
+      dispatchFinalizeEvent(dzFrom, originItems, {trigger: TRIGGERS.DROPPED_INTO_ANOTHER, id: focusedItemId, source: SOURCES.KEYBOARD});
+      dispatchFinalizeEvent(newlyFocusedDz, targetItems, {trigger: TRIGGERS.DROPPED_INTO_ZONE, id: focusedItemId, source: SOURCES.KEYBOARD});
+      focusedDz = newlyFocusedDz;
+  }
+
+  function triggerAllDzsUpdate() {
+      dzToHandles.forEach(({update}, dz) => update(dzToConfig.get(dz)));
+  }
+
+  function handleDrop(dispatchConsider = true) {
+      if (!dzToConfig.get(focusedDz).autoAriaDisabled) {
+          alertToScreenReader(`Stopped dragging item ${focusedItemLabel}`);
+      }
+      if (allDragTargets.has(document.activeElement)) {
+          document.activeElement.blur();
+      }
+      if (dispatchConsider) {
+          dispatchConsiderEvent(focusedDz, dzToConfig.get(focusedDz).items, {
+              trigger: TRIGGERS.DRAG_STOPPED,
+              id: focusedItemId,
+              source: SOURCES.KEYBOARD
+          });
+      }
+      styleInactiveDropZones(
+          typeToDropZones.get(draggedItemType),
+          dz => dzToConfig.get(dz).dropTargetStyle,
+          dz => dzToConfig.get(dz).dropTargetClasses
+      );
+      focusedItem = null;
+      focusedItemId = null;
+      focusedItemLabel = "";
+      draggedItemType = null;
+      focusedDz = null;
+      focusedDzLabel = "";
+      isDragging = false;
+      triggerAllDzsUpdate();
+  }
+  //////
+  function dndzone$1(node, options) {
+      const config = {
+          items: undefined,
+          type: undefined,
+          dragDisabled: false,
+          zoneTabIndex: 0,
+          zoneItemTabIndex: 0,
+          dropFromOthersDisabled: false,
+          dropTargetStyle: DEFAULT_DROP_TARGET_STYLE,
+          dropTargetClasses: [],
+          autoAriaDisabled: false
+      };
+
+      function swap(arr, i, j) {
+          if (arr.length <= 1) return;
+          arr.splice(j, 1, arr.splice(i, 1, arr[j])[0]);
+      }
+
+      function handleKeyDown(e) {
+          switch (e.key) {
+              case "Enter":
+              case " ": {
+                  // we don't want to affect nested input elements or clickable elements
+                  if ((e.target.disabled !== undefined || e.target.href || e.target.isContentEditable) && !allDragTargets.has(e.target)) {
+                      return;
+                  }
+                  e.preventDefault(); // preventing scrolling on spacebar
+                  e.stopPropagation();
+                  if (isDragging) {
+                      // TODO - should this trigger a drop? only here or in general (as in when hitting space or enter outside of any zone)?
+                      handleDrop();
+                  } else {
+                      // drag start
+                      handleDragStart(e);
+                  }
+                  break;
+              }
+              case "ArrowDown":
+              case "ArrowRight": {
+                  if (!isDragging) return;
+                  e.preventDefault(); // prevent scrolling
+                  e.stopPropagation();
+                  const {items} = dzToConfig.get(node);
+                  const children = Array.from(node.children);
+                  const idx = children.indexOf(e.currentTarget);
+                  if (idx < children.length - 1) {
+                      if (!config.autoAriaDisabled) {
+                          alertToScreenReader(`Moved item ${focusedItemLabel} to position ${idx + 2} in the list ${focusedDzLabel}`);
+                      }
+                      swap(items, idx, idx + 1);
+                      dispatchFinalizeEvent(node, items, {trigger: TRIGGERS.DROPPED_INTO_ZONE, id: focusedItemId, source: SOURCES.KEYBOARD});
+                  }
+                  break;
+              }
+              case "ArrowUp":
+              case "ArrowLeft": {
+                  if (!isDragging) return;
+                  e.preventDefault(); // prevent scrolling
+                  e.stopPropagation();
+                  const {items} = dzToConfig.get(node);
+                  const children = Array.from(node.children);
+                  const idx = children.indexOf(e.currentTarget);
+                  if (idx > 0) {
+                      if (!config.autoAriaDisabled) {
+                          alertToScreenReader(`Moved item ${focusedItemLabel} to position ${idx} in the list ${focusedDzLabel}`);
+                      }
+                      swap(items, idx, idx - 1);
+                      dispatchFinalizeEvent(node, items, {trigger: TRIGGERS.DROPPED_INTO_ZONE, id: focusedItemId, source: SOURCES.KEYBOARD});
+                  }
+                  break;
+              }
+          }
+      }
+      function handleDragStart(e) {
+          setCurrentFocusedItem(e.currentTarget);
+          focusedDz = node;
+          draggedItemType = config.type;
+          isDragging = true;
+          const dropTargets = Array.from(typeToDropZones.get(config.type)).filter(dz => dz === focusedDz || !dzToConfig.get(dz).dropFromOthersDisabled);
+          styleActiveDropZones(
+              dropTargets,
+              dz => dzToConfig.get(dz).dropTargetStyle,
+              dz => dzToConfig.get(dz).dropTargetClasses
+          );
+          if (!config.autoAriaDisabled) {
+              let msg = `Started dragging item ${focusedItemLabel}. Use the arrow keys to move it within its list ${focusedDzLabel}`;
+              if (dropTargets.length > 1) {
+                  msg += `, or tab to another list in order to move the item into it`;
+              }
+              alertToScreenReader(msg);
+          }
+          dispatchConsiderEvent(node, dzToConfig.get(node).items, {trigger: TRIGGERS.DRAG_STARTED, id: focusedItemId, source: SOURCES.KEYBOARD});
+          triggerAllDzsUpdate();
+      }
+
+      function handleClick(e) {
+          if (!isDragging) return;
+          if (e.currentTarget === focusedItem) return;
+          e.stopPropagation();
+          handleDrop(false);
+          handleDragStart(e);
+      }
+      function setCurrentFocusedItem(draggableEl) {
+          const {items} = dzToConfig.get(node);
+          const children = Array.from(node.children);
+          const focusedItemIdx = children.indexOf(draggableEl);
+          focusedItem = draggableEl;
+          focusedItem.tabIndex = config.zoneItemTabIndex;
+          focusedItemId = items[focusedItemIdx][ITEM_ID_KEY];
+          focusedItemLabel = children[focusedItemIdx].getAttribute("aria-label") || "";
+      }
+
+      function configure({
+          items = [],
+          type: newType = DEFAULT_DROP_ZONE_TYPE,
+          dragDisabled = false,
+          zoneTabIndex = 0,
+          zoneItemTabIndex = 0,
+          dropFromOthersDisabled = false,
+          dropTargetStyle = DEFAULT_DROP_TARGET_STYLE,
+          dropTargetClasses = [],
+          autoAriaDisabled = false
+      }) {
+          config.items = [...items];
+          config.dragDisabled = dragDisabled;
+          config.dropFromOthersDisabled = dropFromOthersDisabled;
+          config.zoneTabIndex = zoneTabIndex;
+          config.zoneItemTabIndex = zoneItemTabIndex;
+          config.dropTargetStyle = dropTargetStyle;
+          config.dropTargetClasses = dropTargetClasses;
+          config.autoAriaDisabled = autoAriaDisabled;
+          if (config.type && newType !== config.type) {
+              unregisterDropZone(node, config.type);
+          }
+          config.type = newType;
+          registerDropZone(node, newType);
+          if (!autoAriaDisabled) {
+              node.setAttribute("aria-disabled", dragDisabled);
+              node.setAttribute("role", "list");
+              node.setAttribute("aria-describedby", dragDisabled ? INSTRUCTION_IDs.DND_ZONE_DRAG_DISABLED : INSTRUCTION_IDs.DND_ZONE_ACTIVE);
+          }
+          dzToConfig.set(node, config);
+
+          if (isDragging) {
+              node.tabIndex =
+                  node === focusedDz ||
+                  focusedItem.contains(node) ||
+                  config.dropFromOthersDisabled ||
+                  (focusedDz && config.type !== dzToConfig.get(focusedDz).type)
+                      ? -1
+                      : 0;
+          } else {
+              node.tabIndex = config.zoneTabIndex;
+          }
+
+          node.addEventListener("focus", handleZoneFocus);
+
+          for (let i = 0; i < node.children.length; i++) {
+              const draggableEl = node.children[i];
+              allDragTargets.add(draggableEl);
+              draggableEl.tabIndex = isDragging ? -1 : config.zoneItemTabIndex;
+              if (!autoAriaDisabled) {
+                  draggableEl.setAttribute("role", "listitem");
+              }
+              draggableEl.removeEventListener("keydown", elToKeyDownListeners.get(draggableEl));
+              draggableEl.removeEventListener("click", elToFocusListeners.get(draggableEl));
+              if (!dragDisabled) {
+                  draggableEl.addEventListener("keydown", handleKeyDown);
+                  elToKeyDownListeners.set(draggableEl, handleKeyDown);
+                  draggableEl.addEventListener("click", handleClick);
+                  elToFocusListeners.set(draggableEl, handleClick);
+              }
+              if (isDragging && config.items[i][ITEM_ID_KEY] === focusedItemId) {
+                  // if it is a nested dropzone, it was re-rendered and we need to refresh our pointer
+                  focusedItem = draggableEl;
+                  focusedItem.tabIndex = config.zoneItemTabIndex;
+                  // without this the element loses focus if it moves backwards in the list
+                  draggableEl.focus();
+              }
+          }
+      }
+      configure(options);
+
+      const handles = {
+          update: newOptions => {
+              configure(newOptions);
+          },
+          destroy: () => {
+              unregisterDropZone(node, config.type);
+              dzToConfig.delete(node);
+              dzToHandles.delete(node);
+          }
+      };
+      dzToHandles.set(node, handles);
+      return handles;
+  }
+
+  /**
+   * A custom action to turn any container to a dnd zone and all of its direct children to draggables
+   * Supports mouse, touch and keyboard interactions.
+   * Dispatches two events that the container is expected to react to by modifying its list of items,
+   * which will then feed back in to this action via the update function
+   *
+   * @typedef {object} Options
+   * @property {array} items - the list of items that was used to generate the children of the given node (the list used in the #each block
+   * @property {string} [type] - the type of the dnd zone. children dragged from here can only be dropped in other zones of the same type, default to a base type
+   * @property {number} [flipDurationMs] - if the list animated using flip (recommended), specifies the flip duration such that everything syncs with it without conflict, defaults to zero
+   * @property {boolean} [dragDisabled]
+   * @property {boolean} [morphDisabled] - whether dragged element should morph to zone dimensions
+   * @property {boolean} [dropFromOthersDisabled]
+   * @property {number} [zoneTabIndex] - set the tabindex of the list container when not dragging
+   * @property {number} [zoneItemTabIndex] - set the tabindex of the list container items when not dragging
+   * @property {object} [dropTargetStyle]
+   * @property {string[]} [dropTargetClasses]
+   * @property {function} [transformDraggedElement]
+   * @param {HTMLElement} node - the element to enhance
+   * @param {Options} options
+   * @return {{update: function, destroy: function}}
+   */
+  function dndzone(node, options) {
+      if (shouldIgnoreZone(node)) {
+          return {
+              update: () => {},
+              destroy: () => {}
+          };
+      }
+      validateOptions(options);
+      const pointerZone = dndzone$2(node, options);
+      const keyboardZone = dndzone$1(node, options);
+      return {
+          update: newOptions => {
+              validateOptions(newOptions);
+              pointerZone.update(newOptions);
+              keyboardZone.update(newOptions);
+          },
+          destroy: () => {
+              pointerZone.destroy();
+              keyboardZone.destroy();
+          }
+      };
+  }
+
+  /**
+   * If the user marked something in the ancestry of our node as shadow element, we can ignore it
+   * We need the user to mark it for us because svelte updates the action from deep to shallow (but renders top down)
+   * @param {HTMLElement} node
+   * @return {boolean}
+   */
+  function shouldIgnoreZone(node) {
+      return !!node.closest(`[${SHADOW_ELEMENT_HINT_ATTRIBUTE_NAME}="true"]`);
+  }
+
+  function validateOptions(options) {
+      /*eslint-disable*/
+      const {
+          items,
+          flipDurationMs,
+          type,
+          dragDisabled,
+          morphDisabled,
+          dropFromOthersDisabled,
+          zoneTabIndex,
+          zoneItemTabIndex,
+          dropTargetStyle,
+          dropTargetClasses,
+          transformDraggedElement,
+          autoAriaDisabled,
+          centreDraggedOnCursor,
+          ...rest
+      } = options;
+      /*eslint-enable*/
+      if (Object.keys(rest).length > 0) {
+          console.warn(`dndzone will ignore unknown options`, rest);
+      }
+      if (!items) {
+          throw new Error("no 'items' key provided to dndzone");
+      }
+      const itemWithMissingId = items.find(item => !{}.hasOwnProperty.call(item, ITEM_ID_KEY));
+      if (itemWithMissingId) {
+          throw new Error(`missing '${ITEM_ID_KEY}' property for item ${toString(itemWithMissingId)}`);
+      }
+      if (dropTargetClasses && !Array.isArray(dropTargetClasses)) {
+          throw new Error(`dropTargetClasses should be an array but instead it is a ${typeof dropTargetClasses}, ${toString(dropTargetClasses)}`);
+      }
+      if (zoneTabIndex && !isInt(zoneTabIndex)) {
+          throw new Error(`zoneTabIndex should be a number but instead it is a ${typeof zoneTabIndex}, ${toString(zoneTabIndex)}`);
+      }
+      if (zoneItemTabIndex && !isInt(zoneItemTabIndex)) {
+          throw new Error(`zoneItemTabIndex should be a number but instead it is a ${typeof zoneItemTabIndex}, ${toString(zoneItemTabIndex)}`);
+      }
+  }
+
+  function isInt(value) {
+      return (
+          !isNaN(value) &&
+          (function (x) {
+              return (x | 0) === x;
+          })(parseFloat(value))
+      );
+  }
+
+  /* node_modules\svelte-material-icons\DotsGrid.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$n(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$w(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$H(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$n(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$w(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M12 16C13.1 16 14 16.9 14 18S13.1 20 12 20 10 19.1 10 18 10.9 16 12 16M12 10C13.1 10 14 10.9 14 12S13.1 14 12 14 10 13.1 10 12 10.9 10 12 10M12 4C13.1 4 14 4.9 14 6S13.1 8 12 8 10 7.1 10 6 10.9 4 12 4M6 16C7.1 16 8 16.9 8 18S7.1 20 6 20 4 19.1 4 18 4.9 16 6 16M6 10C7.1 10 8 10.9 8 12S7.1 14 6 14 4 13.1 4 12 4.9 10 6 10M6 4C7.1 4 8 4.9 8 6S7.1 8 6 8 4 7.1 4 6 4.9 4 6 4M18 16C19.1 16 20 16.9 20 18S19.1 20 18 20 16 19.1 16 18 16.9 16 18 16M18 10C19.1 10 20 10.9 20 12S19.1 14 18 14 16 13.1 16 12 16.9 10 18 10M18 4C19.1 4 20 4.9 20 6S19.1 8 18 8 16 7.1 16 6 16.9 4 18 4Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$n(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$w(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$H($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class DotsGrid extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$H, create_fragment$H, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\Card.svelte generated by Svelte v4.2.19 */
+  const get_buttons_slot_changes = dirty => ({});
+  const get_buttons_slot_context = ctx => ({});
+  const get_description_slot_changes = dirty => ({});
+  const get_description_slot_context = ctx => ({});
+  const get_header_slot_changes$2 = dirty => ({});
+  const get_header_slot_context$2 = ctx => ({});
+
+  function create_fragment$G(ctx) {
+  	let div4;
+  	let div0;
+  	let t0;
+  	let div1;
+  	let t1;
+  	let div2;
+  	let t2;
+  	let div3;
+  	let dotsgrid;
+  	let div3_style_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const header_slot_template = /*#slots*/ ctx[3].header;
+  	const header_slot = create_slot(header_slot_template, ctx, /*$$scope*/ ctx[2], get_header_slot_context$2);
+  	const description_slot_template = /*#slots*/ ctx[3].description;
+  	const description_slot = create_slot(description_slot_template, ctx, /*$$scope*/ ctx[2], get_description_slot_context);
+  	const buttons_slot_template = /*#slots*/ ctx[3].buttons;
+  	const buttons_slot = create_slot(buttons_slot_template, ctx, /*$$scope*/ ctx[2], get_buttons_slot_context);
+  	dotsgrid = new DotsGrid({ props: { size: 28 } });
+
+  	return {
+  		c() {
+  			div4 = element("div");
+  			div0 = element("div");
+  			if (header_slot) header_slot.c();
+  			t0 = space$1();
+  			div1 = element("div");
+  			if (description_slot) description_slot.c();
+  			t1 = space$1();
+  			div2 = element("div");
+  			if (buttons_slot) buttons_slot.c();
+  			t2 = space$1();
+  			div3 = element("div");
+  			create_component(dotsgrid.$$.fragment);
+  			attr(div0, "class", "w-full flex items-center");
+  			attr(div1, "class", "flex-grow text-sm pr-7 overflow-hidden overflow-ellipsis line-clamp-6");
+  			attr(div2, "class", "flex flex-row-reverse items-end");
+  			attr(div3, "class", "absolute right-3 top-1/2 transform -translate-y-1/2");
+
+  			attr(div3, "style", div3_style_value = /*dragDisabled*/ ctx[1]
+  			? 'cursor: grab'
+  			: 'cursor: grabbing');
+
+  			attr(div4, "class", "border border-gray-500 p-3 h-fit relative bg-white min-h-[150px] flex flex-col preflight rounded-xl");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div4, anchor);
+  			append(div4, div0);
+
+  			if (header_slot) {
+  				header_slot.m(div0, null);
+  			}
+
+  			append(div4, t0);
+  			append(div4, div1);
+
+  			if (description_slot) {
+  				description_slot.m(div1, null);
+  			}
+
+  			append(div4, t1);
+  			append(div4, div2);
+
+  			if (buttons_slot) {
+  				buttons_slot.m(div2, null);
+  			}
+
+  			append(div4, t2);
+  			append(div4, div3);
+  			mount_component(dotsgrid, div3, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(div3, "pointerdown", function () {
+  					if (is_function(/*startDrag*/ ctx[0])) /*startDrag*/ ctx[0].apply(this, arguments);
+  				});
+
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, [dirty]) {
+  			ctx = new_ctx;
+
+  			if (header_slot) {
+  				if (header_slot.p && (!current || dirty & /*$$scope*/ 4)) {
+  					update_slot_base(
+  						header_slot,
+  						header_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[2],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[2])
+  						: get_slot_changes(header_slot_template, /*$$scope*/ ctx[2], dirty, get_header_slot_changes$2),
+  						get_header_slot_context$2
+  					);
+  				}
+  			}
+
+  			if (description_slot) {
+  				if (description_slot.p && (!current || dirty & /*$$scope*/ 4)) {
+  					update_slot_base(
+  						description_slot,
+  						description_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[2],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[2])
+  						: get_slot_changes(description_slot_template, /*$$scope*/ ctx[2], dirty, get_description_slot_changes),
+  						get_description_slot_context
+  					);
+  				}
+  			}
+
+  			if (buttons_slot) {
+  				if (buttons_slot.p && (!current || dirty & /*$$scope*/ 4)) {
+  					update_slot_base(
+  						buttons_slot,
+  						buttons_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[2],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[2])
+  						: get_slot_changes(buttons_slot_template, /*$$scope*/ ctx[2], dirty, get_buttons_slot_changes),
+  						get_buttons_slot_context
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*dragDisabled*/ 2 && div3_style_value !== (div3_style_value = /*dragDisabled*/ ctx[1]
+  			? 'cursor: grab'
+  			: 'cursor: grabbing')) {
+  				attr(div3, "style", div3_style_value);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(header_slot, local);
+  			transition_in(description_slot, local);
+  			transition_in(buttons_slot, local);
+  			transition_in(dotsgrid.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(header_slot, local);
+  			transition_out(description_slot, local);
+  			transition_out(buttons_slot, local);
+  			transition_out(dotsgrid.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div4);
+  			}
+
+  			if (header_slot) header_slot.d(detaching);
+  			if (description_slot) description_slot.d(detaching);
+  			if (buttons_slot) buttons_slot.d(detaching);
+  			destroy_component(dotsgrid);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  function instance$G($$self, $$props, $$invalidate) {
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { startDrag } = $$props;
+  	let { dragDisabled } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('startDrag' in $$props) $$invalidate(0, startDrag = $$props.startDrag);
+  		if ('dragDisabled' in $$props) $$invalidate(1, dragDisabled = $$props.dragDisabled);
+  		if ('$$scope' in $$props) $$invalidate(2, $$scope = $$props.$$scope);
+  	};
+
+  	return [startDrag, dragDisabled, $$scope, slots];
+  }
+
+  class Card extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$G, create_fragment$G, safe_not_equal, { startDrag: 0, dragDisabled: 1 });
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Delete.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$m(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$v(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$F(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$m(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$v(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$m(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$v(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$F($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Delete extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$F, create_fragment$F, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Pencil.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$l(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$u(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$E(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$l(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$u(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$l(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$u(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$E($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Pencil extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$E, create_fragment$E, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Update.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$k(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$t(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$D(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$k(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$t(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M21,10.12H14.22L16.96,7.3C14.23,4.6 9.81,4.5 7.08,7.2C4.35,9.91 4.35,14.28 7.08,17C9.81,19.7 14.23,19.7 16.96,17C18.32,15.65 19,14.08 19,12.1H21C21,14.08 20.12,16.65 18.36,18.39C14.85,21.87 9.15,21.87 5.64,18.39C2.14,14.92 2.11,9.28 5.62,5.81C9.13,2.34 14.76,2.34 18.27,5.81L21,3V10.12M12.5,8V12.25L16,14.33L15.28,15.54L11,13V8H12.5Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$k(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$t(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$D($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Update extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$D, create_fragment$D, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  const subscriber_queue = [];
+
+  /**
+   * Create a `Writable` store that allows both updating and reading by subscription.
+   *
+   * https://svelte.dev/docs/svelte-store#writable
+   * @template T
+   * @param {T} [value] initial value
+   * @param {import('./public.js').StartStopNotifier<T>} [start]
+   * @returns {import('./public.js').Writable<T>}
+   */
+  function writable(value, start = noop) {
+  	/** @type {import('./public.js').Unsubscriber} */
+  	let stop;
+  	/** @type {Set<import('./private.js').SubscribeInvalidateTuple<T>>} */
+  	const subscribers = new Set();
+  	/** @param {T} new_value
+  	 * @returns {void}
+  	 */
+  	function set(new_value) {
+  		if (safe_not_equal(value, new_value)) {
+  			value = new_value;
+  			if (stop) {
+  				// store is ready
+  				const run_queue = !subscriber_queue.length;
+  				for (const subscriber of subscribers) {
+  					subscriber[1]();
+  					subscriber_queue.push(subscriber, value);
+  				}
+  				if (run_queue) {
+  					for (let i = 0; i < subscriber_queue.length; i += 2) {
+  						subscriber_queue[i][0](subscriber_queue[i + 1]);
+  					}
+  					subscriber_queue.length = 0;
+  				}
+  			}
+  		}
+  	}
+
+  	/**
+  	 * @param {import('./public.js').Updater<T>} fn
+  	 * @returns {void}
+  	 */
+  	function update(fn) {
+  		set(fn(value));
+  	}
+
+  	/**
+  	 * @param {import('./public.js').Subscriber<T>} run
+  	 * @param {import('./private.js').Invalidator<T>} [invalidate]
+  	 * @returns {import('./public.js').Unsubscriber}
+  	 */
+  	function subscribe(run, invalidate = noop) {
+  		/** @type {import('./private.js').SubscribeInvalidateTuple<T>} */
+  		const subscriber = [run, invalidate];
+  		subscribers.add(subscriber);
+  		if (subscribers.size === 1) {
+  			stop = start(set, update) || noop;
+  		}
+  		run(value);
+  		return () => {
+  			subscribers.delete(subscriber);
+  			if (subscribers.size === 0 && stop) {
+  				stop();
+  				stop = null;
+  			}
+  		};
+  	}
+  	return { set, update, subscribe };
+  }
+
+  const CLASS_PART_SEPARATOR = '-';
+  const createClassGroupUtils = config => {
+    const classMap = createClassMap(config);
+    const {
+      conflictingClassGroups,
+      conflictingClassGroupModifiers
+    } = config;
+    const getClassGroupId = className => {
+      const classParts = className.split(CLASS_PART_SEPARATOR);
+      // Classes like `-inset-1` produce an empty string as first classPart. We assume that classes for negative values are used correctly and remove it from classParts.
+      if (classParts[0] === '' && classParts.length !== 1) {
+        classParts.shift();
+      }
+      return getGroupRecursive(classParts, classMap) || getGroupIdForArbitraryProperty(className);
+    };
+    const getConflictingClassGroupIds = (classGroupId, hasPostfixModifier) => {
+      const conflicts = conflictingClassGroups[classGroupId] || [];
+      if (hasPostfixModifier && conflictingClassGroupModifiers[classGroupId]) {
+        return [...conflicts, ...conflictingClassGroupModifiers[classGroupId]];
+      }
+      return conflicts;
+    };
+    return {
+      getClassGroupId,
+      getConflictingClassGroupIds
+    };
+  };
+  const getGroupRecursive = (classParts, classPartObject) => {
+    if (classParts.length === 0) {
+      return classPartObject.classGroupId;
+    }
+    const currentClassPart = classParts[0];
+    const nextClassPartObject = classPartObject.nextPart.get(currentClassPart);
+    const classGroupFromNextClassPart = nextClassPartObject ? getGroupRecursive(classParts.slice(1), nextClassPartObject) : undefined;
+    if (classGroupFromNextClassPart) {
+      return classGroupFromNextClassPart;
+    }
+    if (classPartObject.validators.length === 0) {
+      return undefined;
+    }
+    const classRest = classParts.join(CLASS_PART_SEPARATOR);
+    return classPartObject.validators.find(({
+      validator
+    }) => validator(classRest))?.classGroupId;
+  };
+  const arbitraryPropertyRegex = /^\[(.+)\]$/;
+  const getGroupIdForArbitraryProperty = className => {
+    if (arbitraryPropertyRegex.test(className)) {
+      const arbitraryPropertyClassName = arbitraryPropertyRegex.exec(className)[1];
+      const property = arbitraryPropertyClassName?.substring(0, arbitraryPropertyClassName.indexOf(':'));
+      if (property) {
+        // I use two dots here because one dot is used as prefix for class groups in plugins
+        return 'arbitrary..' + property;
+      }
+    }
+  };
+  /**
+   * Exported for testing only
+   */
+  const createClassMap = config => {
+    const {
+      theme,
+      prefix
+    } = config;
+    const classMap = {
+      nextPart: new Map(),
+      validators: []
+    };
+    const prefixedClassGroupEntries = getPrefixedClassGroupEntries(Object.entries(config.classGroups), prefix);
+    prefixedClassGroupEntries.forEach(([classGroupId, classGroup]) => {
+      processClassesRecursively(classGroup, classMap, classGroupId, theme);
+    });
+    return classMap;
+  };
+  const processClassesRecursively = (classGroup, classPartObject, classGroupId, theme) => {
+    classGroup.forEach(classDefinition => {
+      if (typeof classDefinition === 'string') {
+        const classPartObjectToEdit = classDefinition === '' ? classPartObject : getPart(classPartObject, classDefinition);
+        classPartObjectToEdit.classGroupId = classGroupId;
+        return;
+      }
+      if (typeof classDefinition === 'function') {
+        if (isThemeGetter(classDefinition)) {
+          processClassesRecursively(classDefinition(theme), classPartObject, classGroupId, theme);
+          return;
+        }
+        classPartObject.validators.push({
+          validator: classDefinition,
+          classGroupId
+        });
+        return;
+      }
+      Object.entries(classDefinition).forEach(([key, classGroup]) => {
+        processClassesRecursively(classGroup, getPart(classPartObject, key), classGroupId, theme);
+      });
+    });
+  };
+  const getPart = (classPartObject, path) => {
+    let currentClassPartObject = classPartObject;
+    path.split(CLASS_PART_SEPARATOR).forEach(pathPart => {
+      if (!currentClassPartObject.nextPart.has(pathPart)) {
+        currentClassPartObject.nextPart.set(pathPart, {
+          nextPart: new Map(),
+          validators: []
+        });
+      }
+      currentClassPartObject = currentClassPartObject.nextPart.get(pathPart);
+    });
+    return currentClassPartObject;
+  };
+  const isThemeGetter = func => func.isThemeGetter;
+  const getPrefixedClassGroupEntries = (classGroupEntries, prefix) => {
+    if (!prefix) {
+      return classGroupEntries;
+    }
+    return classGroupEntries.map(([classGroupId, classGroup]) => {
+      const prefixedClassGroup = classGroup.map(classDefinition => {
+        if (typeof classDefinition === 'string') {
+          return prefix + classDefinition;
+        }
+        if (typeof classDefinition === 'object') {
+          return Object.fromEntries(Object.entries(classDefinition).map(([key, value]) => [prefix + key, value]));
+        }
+        return classDefinition;
+      });
+      return [classGroupId, prefixedClassGroup];
+    });
+  };
+
+  // LRU cache inspired from hashlru (https://github.com/dominictarr/hashlru/blob/v1.0.4/index.js) but object replaced with Map to improve performance
+  const createLruCache = maxCacheSize => {
+    if (maxCacheSize < 1) {
+      return {
+        get: () => undefined,
+        set: () => {}
+      };
+    }
+    let cacheSize = 0;
+    let cache = new Map();
+    let previousCache = new Map();
+    const update = (key, value) => {
+      cache.set(key, value);
+      cacheSize++;
+      if (cacheSize > maxCacheSize) {
+        cacheSize = 0;
+        previousCache = cache;
+        cache = new Map();
+      }
+    };
+    return {
+      get(key) {
+        let value = cache.get(key);
+        if (value !== undefined) {
+          return value;
+        }
+        if ((value = previousCache.get(key)) !== undefined) {
+          update(key, value);
+          return value;
+        }
+      },
+      set(key, value) {
+        if (cache.has(key)) {
+          cache.set(key, value);
+        } else {
+          update(key, value);
+        }
+      }
+    };
+  };
+  const IMPORTANT_MODIFIER = '!';
+  const createParseClassName = config => {
+    const {
+      separator,
+      experimentalParseClassName
+    } = config;
+    const isSeparatorSingleCharacter = separator.length === 1;
+    const firstSeparatorCharacter = separator[0];
+    const separatorLength = separator.length;
+    // parseClassName inspired by https://github.com/tailwindlabs/tailwindcss/blob/v3.2.2/src/util/splitAtTopLevelOnly.js
+    const parseClassName = className => {
+      const modifiers = [];
+      let bracketDepth = 0;
+      let modifierStart = 0;
+      let postfixModifierPosition;
+      for (let index = 0; index < className.length; index++) {
+        let currentCharacter = className[index];
+        if (bracketDepth === 0) {
+          if (currentCharacter === firstSeparatorCharacter && (isSeparatorSingleCharacter || className.slice(index, index + separatorLength) === separator)) {
+            modifiers.push(className.slice(modifierStart, index));
+            modifierStart = index + separatorLength;
+            continue;
+          }
+          if (currentCharacter === '/') {
+            postfixModifierPosition = index;
+            continue;
+          }
+        }
+        if (currentCharacter === '[') {
+          bracketDepth++;
+        } else if (currentCharacter === ']') {
+          bracketDepth--;
+        }
+      }
+      const baseClassNameWithImportantModifier = modifiers.length === 0 ? className : className.substring(modifierStart);
+      const hasImportantModifier = baseClassNameWithImportantModifier.startsWith(IMPORTANT_MODIFIER);
+      const baseClassName = hasImportantModifier ? baseClassNameWithImportantModifier.substring(1) : baseClassNameWithImportantModifier;
+      const maybePostfixModifierPosition = postfixModifierPosition && postfixModifierPosition > modifierStart ? postfixModifierPosition - modifierStart : undefined;
+      return {
+        modifiers,
+        hasImportantModifier,
+        baseClassName,
+        maybePostfixModifierPosition
+      };
+    };
+    if (experimentalParseClassName) {
+      return className => experimentalParseClassName({
+        className,
+        parseClassName
+      });
+    }
+    return parseClassName;
+  };
+  /**
+   * Sorts modifiers according to following schema:
+   * - Predefined modifiers are sorted alphabetically
+   * - When an arbitrary variant appears, it must be preserved which modifiers are before and after it
+   */
+  const sortModifiers = modifiers => {
+    if (modifiers.length <= 1) {
+      return modifiers;
+    }
+    const sortedModifiers = [];
+    let unsortedModifiers = [];
+    modifiers.forEach(modifier => {
+      const isArbitraryVariant = modifier[0] === '[';
+      if (isArbitraryVariant) {
+        sortedModifiers.push(...unsortedModifiers.sort(), modifier);
+        unsortedModifiers = [];
+      } else {
+        unsortedModifiers.push(modifier);
+      }
+    });
+    sortedModifiers.push(...unsortedModifiers.sort());
+    return sortedModifiers;
+  };
+  const createConfigUtils = config => ({
+    cache: createLruCache(config.cacheSize),
+    parseClassName: createParseClassName(config),
+    ...createClassGroupUtils(config)
+  });
+  const SPLIT_CLASSES_REGEX = /\s+/;
+  const mergeClassList = (classList, configUtils) => {
+    const {
+      parseClassName,
+      getClassGroupId,
+      getConflictingClassGroupIds
+    } = configUtils;
+    /**
+     * Set of classGroupIds in following format:
+     * `{importantModifier}{variantModifiers}{classGroupId}`
+     * @example 'float'
+     * @example 'hover:focus:bg-color'
+     * @example 'md:!pr'
+     */
+    const classGroupsInConflict = [];
+    const classNames = classList.trim().split(SPLIT_CLASSES_REGEX);
+    let result = '';
+    for (let index = classNames.length - 1; index >= 0; index -= 1) {
+      const originalClassName = classNames[index];
+      const {
+        modifiers,
+        hasImportantModifier,
+        baseClassName,
+        maybePostfixModifierPosition
+      } = parseClassName(originalClassName);
+      let hasPostfixModifier = Boolean(maybePostfixModifierPosition);
+      let classGroupId = getClassGroupId(hasPostfixModifier ? baseClassName.substring(0, maybePostfixModifierPosition) : baseClassName);
+      if (!classGroupId) {
+        if (!hasPostfixModifier) {
+          // Not a Tailwind class
+          result = originalClassName + (result.length > 0 ? ' ' + result : result);
+          continue;
+        }
+        classGroupId = getClassGroupId(baseClassName);
+        if (!classGroupId) {
+          // Not a Tailwind class
+          result = originalClassName + (result.length > 0 ? ' ' + result : result);
+          continue;
+        }
+        hasPostfixModifier = false;
+      }
+      const variantModifier = sortModifiers(modifiers).join(':');
+      const modifierId = hasImportantModifier ? variantModifier + IMPORTANT_MODIFIER : variantModifier;
+      const classId = modifierId + classGroupId;
+      if (classGroupsInConflict.includes(classId)) {
+        // Tailwind class omitted due to conflict
+        continue;
+      }
+      classGroupsInConflict.push(classId);
+      const conflictGroups = getConflictingClassGroupIds(classGroupId, hasPostfixModifier);
+      for (let i = 0; i < conflictGroups.length; ++i) {
+        const group = conflictGroups[i];
+        classGroupsInConflict.push(modifierId + group);
+      }
+      // Tailwind class not in conflict
+      result = originalClassName + (result.length > 0 ? ' ' + result : result);
+    }
+    return result;
+  };
+
+  /**
+   * The code in this file is copied from https://github.com/lukeed/clsx and modified to suit the needs of tailwind-merge better.
+   *
+   * Specifically:
+   * - Runtime code from https://github.com/lukeed/clsx/blob/v1.2.1/src/index.js
+   * - TypeScript types from https://github.com/lukeed/clsx/blob/v1.2.1/clsx.d.ts
+   *
+   * Original code has MIT license: Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
+   */
+  function twJoin() {
+    let index = 0;
+    let argument;
+    let resolvedValue;
+    let string = '';
+    while (index < arguments.length) {
+      if (argument = arguments[index++]) {
+        if (resolvedValue = toValue(argument)) {
+          string && (string += ' ');
+          string += resolvedValue;
+        }
+      }
+    }
+    return string;
+  }
+  const toValue = mix => {
+    if (typeof mix === 'string') {
+      return mix;
+    }
+    let resolvedValue;
+    let string = '';
+    for (let k = 0; k < mix.length; k++) {
+      if (mix[k]) {
+        if (resolvedValue = toValue(mix[k])) {
+          string && (string += ' ');
+          string += resolvedValue;
+        }
+      }
+    }
+    return string;
+  };
+  function createTailwindMerge(createConfigFirst, ...createConfigRest) {
+    let configUtils;
+    let cacheGet;
+    let cacheSet;
+    let functionToCall = initTailwindMerge;
+    function initTailwindMerge(classList) {
+      const config = createConfigRest.reduce((previousConfig, createConfigCurrent) => createConfigCurrent(previousConfig), createConfigFirst());
+      configUtils = createConfigUtils(config);
+      cacheGet = configUtils.cache.get;
+      cacheSet = configUtils.cache.set;
+      functionToCall = tailwindMerge;
+      return tailwindMerge(classList);
+    }
+    function tailwindMerge(classList) {
+      const cachedResult = cacheGet(classList);
+      if (cachedResult) {
+        return cachedResult;
+      }
+      const result = mergeClassList(classList, configUtils);
+      cacheSet(classList, result);
+      return result;
+    }
+    return function callTailwindMerge() {
+      return functionToCall(twJoin.apply(null, arguments));
+    };
+  }
+  const fromTheme = key => {
+    const themeGetter = theme => theme[key] || [];
+    themeGetter.isThemeGetter = true;
+    return themeGetter;
+  };
+  const arbitraryValueRegex = /^\[(?:([a-z-]+):)?(.+)\]$/i;
+  const fractionRegex = /^\d+\/\d+$/;
+  const stringLengths = /*#__PURE__*/new Set(['px', 'full', 'screen']);
+  const tshirtUnitRegex = /^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/;
+  const lengthUnitRegex = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$/;
+  const colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$/;
+  // Shadow always begins with x and y offset separated by underscore optionally prepended by inset
+  const shadowRegex = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
+  const imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
+  const isLength = value => isNumber(value) || stringLengths.has(value) || fractionRegex.test(value);
+  const isArbitraryLength = value => getIsArbitraryValue(value, 'length', isLengthOnly);
+  const isNumber = value => Boolean(value) && !Number.isNaN(Number(value));
+  const isArbitraryNumber = value => getIsArbitraryValue(value, 'number', isNumber);
+  const isInteger = value => Boolean(value) && Number.isInteger(Number(value));
+  const isPercent = value => value.endsWith('%') && isNumber(value.slice(0, -1));
+  const isArbitraryValue = value => arbitraryValueRegex.test(value);
+  const isTshirtSize = value => tshirtUnitRegex.test(value);
+  const sizeLabels = /*#__PURE__*/new Set(['length', 'size', 'percentage']);
+  const isArbitrarySize = value => getIsArbitraryValue(value, sizeLabels, isNever);
+  const isArbitraryPosition = value => getIsArbitraryValue(value, 'position', isNever);
+  const imageLabels = /*#__PURE__*/new Set(['image', 'url']);
+  const isArbitraryImage = value => getIsArbitraryValue(value, imageLabels, isImage);
+  const isArbitraryShadow = value => getIsArbitraryValue(value, '', isShadow);
+  const isAny = () => true;
+  const getIsArbitraryValue = (value, label, testValue) => {
+    const result = arbitraryValueRegex.exec(value);
+    if (result) {
+      if (result[1]) {
+        return typeof label === 'string' ? result[1] === label : label.has(result[1]);
+      }
+      return testValue(result[2]);
+    }
+    return false;
+  };
+  const isLengthOnly = value =>
+  // `colorFunctionRegex` check is necessary because color functions can have percentages in them which which would be incorrectly classified as lengths.
+  // For example, `hsl(0 0% 0%)` would be classified as a length without this check.
+  // I could also use lookbehind assertion in `lengthUnitRegex` but that isn't supported widely enough.
+  lengthUnitRegex.test(value) && !colorFunctionRegex.test(value);
+  const isNever = () => false;
+  const isShadow = value => shadowRegex.test(value);
+  const isImage = value => imageRegex.test(value);
+  const getDefaultConfig = () => {
+    const colors = fromTheme('colors');
+    const spacing = fromTheme('spacing');
+    const blur = fromTheme('blur');
+    const brightness = fromTheme('brightness');
+    const borderColor = fromTheme('borderColor');
+    const borderRadius = fromTheme('borderRadius');
+    const borderSpacing = fromTheme('borderSpacing');
+    const borderWidth = fromTheme('borderWidth');
+    const contrast = fromTheme('contrast');
+    const grayscale = fromTheme('grayscale');
+    const hueRotate = fromTheme('hueRotate');
+    const invert = fromTheme('invert');
+    const gap = fromTheme('gap');
+    const gradientColorStops = fromTheme('gradientColorStops');
+    const gradientColorStopPositions = fromTheme('gradientColorStopPositions');
+    const inset = fromTheme('inset');
+    const margin = fromTheme('margin');
+    const opacity = fromTheme('opacity');
+    const padding = fromTheme('padding');
+    const saturate = fromTheme('saturate');
+    const scale = fromTheme('scale');
+    const sepia = fromTheme('sepia');
+    const skew = fromTheme('skew');
+    const space = fromTheme('space');
+    const translate = fromTheme('translate');
+    const getOverscroll = () => ['auto', 'contain', 'none'];
+    const getOverflow = () => ['auto', 'hidden', 'clip', 'visible', 'scroll'];
+    const getSpacingWithAutoAndArbitrary = () => ['auto', isArbitraryValue, spacing];
+    const getSpacingWithArbitrary = () => [isArbitraryValue, spacing];
+    const getLengthWithEmptyAndArbitrary = () => ['', isLength, isArbitraryLength];
+    const getNumberWithAutoAndArbitrary = () => ['auto', isNumber, isArbitraryValue];
+    const getPositions = () => ['bottom', 'center', 'left', 'left-bottom', 'left-top', 'right', 'right-bottom', 'right-top', 'top'];
+    const getLineStyles = () => ['solid', 'dashed', 'dotted', 'double', 'none'];
+    const getBlendModes = () => ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity'];
+    const getAlign = () => ['start', 'end', 'center', 'between', 'around', 'evenly', 'stretch'];
+    const getZeroAndEmpty = () => ['', '0', isArbitraryValue];
+    const getBreaks = () => ['auto', 'avoid', 'all', 'avoid-page', 'page', 'left', 'right', 'column'];
+    const getNumberAndArbitrary = () => [isNumber, isArbitraryValue];
+    return {
+      cacheSize: 500,
+      separator: ':',
+      theme: {
+        colors: [isAny],
+        spacing: [isLength, isArbitraryLength],
+        blur: ['none', '', isTshirtSize, isArbitraryValue],
+        brightness: getNumberAndArbitrary(),
+        borderColor: [colors],
+        borderRadius: ['none', '', 'full', isTshirtSize, isArbitraryValue],
+        borderSpacing: getSpacingWithArbitrary(),
+        borderWidth: getLengthWithEmptyAndArbitrary(),
+        contrast: getNumberAndArbitrary(),
+        grayscale: getZeroAndEmpty(),
+        hueRotate: getNumberAndArbitrary(),
+        invert: getZeroAndEmpty(),
+        gap: getSpacingWithArbitrary(),
+        gradientColorStops: [colors],
+        gradientColorStopPositions: [isPercent, isArbitraryLength],
+        inset: getSpacingWithAutoAndArbitrary(),
+        margin: getSpacingWithAutoAndArbitrary(),
+        opacity: getNumberAndArbitrary(),
+        padding: getSpacingWithArbitrary(),
+        saturate: getNumberAndArbitrary(),
+        scale: getNumberAndArbitrary(),
+        sepia: getZeroAndEmpty(),
+        skew: getNumberAndArbitrary(),
+        space: getSpacingWithArbitrary(),
+        translate: getSpacingWithArbitrary()
+      },
+      classGroups: {
+        // Layout
+        /**
+         * Aspect Ratio
+         * @see https://tailwindcss.com/docs/aspect-ratio
+         */
+        aspect: [{
+          aspect: ['auto', 'square', 'video', isArbitraryValue]
+        }],
+        /**
+         * Container
+         * @see https://tailwindcss.com/docs/container
+         */
+        container: ['container'],
+        /**
+         * Columns
+         * @see https://tailwindcss.com/docs/columns
+         */
+        columns: [{
+          columns: [isTshirtSize]
+        }],
+        /**
+         * Break After
+         * @see https://tailwindcss.com/docs/break-after
+         */
+        'break-after': [{
+          'break-after': getBreaks()
+        }],
+        /**
+         * Break Before
+         * @see https://tailwindcss.com/docs/break-before
+         */
+        'break-before': [{
+          'break-before': getBreaks()
+        }],
+        /**
+         * Break Inside
+         * @see https://tailwindcss.com/docs/break-inside
+         */
+        'break-inside': [{
+          'break-inside': ['auto', 'avoid', 'avoid-page', 'avoid-column']
+        }],
+        /**
+         * Box Decoration Break
+         * @see https://tailwindcss.com/docs/box-decoration-break
+         */
+        'box-decoration': [{
+          'box-decoration': ['slice', 'clone']
+        }],
+        /**
+         * Box Sizing
+         * @see https://tailwindcss.com/docs/box-sizing
+         */
+        box: [{
+          box: ['border', 'content']
+        }],
+        /**
+         * Display
+         * @see https://tailwindcss.com/docs/display
+         */
+        display: ['block', 'inline-block', 'inline', 'flex', 'inline-flex', 'table', 'inline-table', 'table-caption', 'table-cell', 'table-column', 'table-column-group', 'table-footer-group', 'table-header-group', 'table-row-group', 'table-row', 'flow-root', 'grid', 'inline-grid', 'contents', 'list-item', 'hidden'],
+        /**
+         * Floats
+         * @see https://tailwindcss.com/docs/float
+         */
+        float: [{
+          float: ['right', 'left', 'none', 'start', 'end']
+        }],
+        /**
+         * Clear
+         * @see https://tailwindcss.com/docs/clear
+         */
+        clear: [{
+          clear: ['left', 'right', 'both', 'none', 'start', 'end']
+        }],
+        /**
+         * Isolation
+         * @see https://tailwindcss.com/docs/isolation
+         */
+        isolation: ['isolate', 'isolation-auto'],
+        /**
+         * Object Fit
+         * @see https://tailwindcss.com/docs/object-fit
+         */
+        'object-fit': [{
+          object: ['contain', 'cover', 'fill', 'none', 'scale-down']
+        }],
+        /**
+         * Object Position
+         * @see https://tailwindcss.com/docs/object-position
+         */
+        'object-position': [{
+          object: [...getPositions(), isArbitraryValue]
+        }],
+        /**
+         * Overflow
+         * @see https://tailwindcss.com/docs/overflow
+         */
+        overflow: [{
+          overflow: getOverflow()
+        }],
+        /**
+         * Overflow X
+         * @see https://tailwindcss.com/docs/overflow
+         */
+        'overflow-x': [{
+          'overflow-x': getOverflow()
+        }],
+        /**
+         * Overflow Y
+         * @see https://tailwindcss.com/docs/overflow
+         */
+        'overflow-y': [{
+          'overflow-y': getOverflow()
+        }],
+        /**
+         * Overscroll Behavior
+         * @see https://tailwindcss.com/docs/overscroll-behavior
+         */
+        overscroll: [{
+          overscroll: getOverscroll()
+        }],
+        /**
+         * Overscroll Behavior X
+         * @see https://tailwindcss.com/docs/overscroll-behavior
+         */
+        'overscroll-x': [{
+          'overscroll-x': getOverscroll()
+        }],
+        /**
+         * Overscroll Behavior Y
+         * @see https://tailwindcss.com/docs/overscroll-behavior
+         */
+        'overscroll-y': [{
+          'overscroll-y': getOverscroll()
+        }],
+        /**
+         * Position
+         * @see https://tailwindcss.com/docs/position
+         */
+        position: ['static', 'fixed', 'absolute', 'relative', 'sticky'],
+        /**
+         * Top / Right / Bottom / Left
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        inset: [{
+          inset: [inset]
+        }],
+        /**
+         * Right / Left
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        'inset-x': [{
+          'inset-x': [inset]
+        }],
+        /**
+         * Top / Bottom
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        'inset-y': [{
+          'inset-y': [inset]
+        }],
+        /**
+         * Start
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        start: [{
+          start: [inset]
+        }],
+        /**
+         * End
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        end: [{
+          end: [inset]
+        }],
+        /**
+         * Top
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        top: [{
+          top: [inset]
+        }],
+        /**
+         * Right
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        right: [{
+          right: [inset]
+        }],
+        /**
+         * Bottom
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        bottom: [{
+          bottom: [inset]
+        }],
+        /**
+         * Left
+         * @see https://tailwindcss.com/docs/top-right-bottom-left
+         */
+        left: [{
+          left: [inset]
+        }],
+        /**
+         * Visibility
+         * @see https://tailwindcss.com/docs/visibility
+         */
+        visibility: ['visible', 'invisible', 'collapse'],
+        /**
+         * Z-Index
+         * @see https://tailwindcss.com/docs/z-index
+         */
+        z: [{
+          z: ['auto', isInteger, isArbitraryValue]
+        }],
+        // Flexbox and Grid
+        /**
+         * Flex Basis
+         * @see https://tailwindcss.com/docs/flex-basis
+         */
+        basis: [{
+          basis: getSpacingWithAutoAndArbitrary()
+        }],
+        /**
+         * Flex Direction
+         * @see https://tailwindcss.com/docs/flex-direction
+         */
+        'flex-direction': [{
+          flex: ['row', 'row-reverse', 'col', 'col-reverse']
+        }],
+        /**
+         * Flex Wrap
+         * @see https://tailwindcss.com/docs/flex-wrap
+         */
+        'flex-wrap': [{
+          flex: ['wrap', 'wrap-reverse', 'nowrap']
+        }],
+        /**
+         * Flex
+         * @see https://tailwindcss.com/docs/flex
+         */
+        flex: [{
+          flex: ['1', 'auto', 'initial', 'none', isArbitraryValue]
+        }],
+        /**
+         * Flex Grow
+         * @see https://tailwindcss.com/docs/flex-grow
+         */
+        grow: [{
+          grow: getZeroAndEmpty()
+        }],
+        /**
+         * Flex Shrink
+         * @see https://tailwindcss.com/docs/flex-shrink
+         */
+        shrink: [{
+          shrink: getZeroAndEmpty()
+        }],
+        /**
+         * Order
+         * @see https://tailwindcss.com/docs/order
+         */
+        order: [{
+          order: ['first', 'last', 'none', isInteger, isArbitraryValue]
+        }],
+        /**
+         * Grid Template Columns
+         * @see https://tailwindcss.com/docs/grid-template-columns
+         */
+        'grid-cols': [{
+          'grid-cols': [isAny]
+        }],
+        /**
+         * Grid Column Start / End
+         * @see https://tailwindcss.com/docs/grid-column
+         */
+        'col-start-end': [{
+          col: ['auto', {
+            span: ['full', isInteger, isArbitraryValue]
+          }, isArbitraryValue]
+        }],
+        /**
+         * Grid Column Start
+         * @see https://tailwindcss.com/docs/grid-column
+         */
+        'col-start': [{
+          'col-start': getNumberWithAutoAndArbitrary()
+        }],
+        /**
+         * Grid Column End
+         * @see https://tailwindcss.com/docs/grid-column
+         */
+        'col-end': [{
+          'col-end': getNumberWithAutoAndArbitrary()
+        }],
+        /**
+         * Grid Template Rows
+         * @see https://tailwindcss.com/docs/grid-template-rows
+         */
+        'grid-rows': [{
+          'grid-rows': [isAny]
+        }],
+        /**
+         * Grid Row Start / End
+         * @see https://tailwindcss.com/docs/grid-row
+         */
+        'row-start-end': [{
+          row: ['auto', {
+            span: [isInteger, isArbitraryValue]
+          }, isArbitraryValue]
+        }],
+        /**
+         * Grid Row Start
+         * @see https://tailwindcss.com/docs/grid-row
+         */
+        'row-start': [{
+          'row-start': getNumberWithAutoAndArbitrary()
+        }],
+        /**
+         * Grid Row End
+         * @see https://tailwindcss.com/docs/grid-row
+         */
+        'row-end': [{
+          'row-end': getNumberWithAutoAndArbitrary()
+        }],
+        /**
+         * Grid Auto Flow
+         * @see https://tailwindcss.com/docs/grid-auto-flow
+         */
+        'grid-flow': [{
+          'grid-flow': ['row', 'col', 'dense', 'row-dense', 'col-dense']
+        }],
+        /**
+         * Grid Auto Columns
+         * @see https://tailwindcss.com/docs/grid-auto-columns
+         */
+        'auto-cols': [{
+          'auto-cols': ['auto', 'min', 'max', 'fr', isArbitraryValue]
+        }],
+        /**
+         * Grid Auto Rows
+         * @see https://tailwindcss.com/docs/grid-auto-rows
+         */
+        'auto-rows': [{
+          'auto-rows': ['auto', 'min', 'max', 'fr', isArbitraryValue]
+        }],
+        /**
+         * Gap
+         * @see https://tailwindcss.com/docs/gap
+         */
+        gap: [{
+          gap: [gap]
+        }],
+        /**
+         * Gap X
+         * @see https://tailwindcss.com/docs/gap
+         */
+        'gap-x': [{
+          'gap-x': [gap]
+        }],
+        /**
+         * Gap Y
+         * @see https://tailwindcss.com/docs/gap
+         */
+        'gap-y': [{
+          'gap-y': [gap]
+        }],
+        /**
+         * Justify Content
+         * @see https://tailwindcss.com/docs/justify-content
+         */
+        'justify-content': [{
+          justify: ['normal', ...getAlign()]
+        }],
+        /**
+         * Justify Items
+         * @see https://tailwindcss.com/docs/justify-items
+         */
+        'justify-items': [{
+          'justify-items': ['start', 'end', 'center', 'stretch']
+        }],
+        /**
+         * Justify Self
+         * @see https://tailwindcss.com/docs/justify-self
+         */
+        'justify-self': [{
+          'justify-self': ['auto', 'start', 'end', 'center', 'stretch']
+        }],
+        /**
+         * Align Content
+         * @see https://tailwindcss.com/docs/align-content
+         */
+        'align-content': [{
+          content: ['normal', ...getAlign(), 'baseline']
+        }],
+        /**
+         * Align Items
+         * @see https://tailwindcss.com/docs/align-items
+         */
+        'align-items': [{
+          items: ['start', 'end', 'center', 'baseline', 'stretch']
+        }],
+        /**
+         * Align Self
+         * @see https://tailwindcss.com/docs/align-self
+         */
+        'align-self': [{
+          self: ['auto', 'start', 'end', 'center', 'stretch', 'baseline']
+        }],
+        /**
+         * Place Content
+         * @see https://tailwindcss.com/docs/place-content
+         */
+        'place-content': [{
+          'place-content': [...getAlign(), 'baseline']
+        }],
+        /**
+         * Place Items
+         * @see https://tailwindcss.com/docs/place-items
+         */
+        'place-items': [{
+          'place-items': ['start', 'end', 'center', 'baseline', 'stretch']
+        }],
+        /**
+         * Place Self
+         * @see https://tailwindcss.com/docs/place-self
+         */
+        'place-self': [{
+          'place-self': ['auto', 'start', 'end', 'center', 'stretch']
+        }],
+        // Spacing
+        /**
+         * Padding
+         * @see https://tailwindcss.com/docs/padding
+         */
+        p: [{
+          p: [padding]
+        }],
+        /**
+         * Padding X
+         * @see https://tailwindcss.com/docs/padding
+         */
+        px: [{
+          px: [padding]
+        }],
+        /**
+         * Padding Y
+         * @see https://tailwindcss.com/docs/padding
+         */
+        py: [{
+          py: [padding]
+        }],
+        /**
+         * Padding Start
+         * @see https://tailwindcss.com/docs/padding
+         */
+        ps: [{
+          ps: [padding]
+        }],
+        /**
+         * Padding End
+         * @see https://tailwindcss.com/docs/padding
+         */
+        pe: [{
+          pe: [padding]
+        }],
+        /**
+         * Padding Top
+         * @see https://tailwindcss.com/docs/padding
+         */
+        pt: [{
+          pt: [padding]
+        }],
+        /**
+         * Padding Right
+         * @see https://tailwindcss.com/docs/padding
+         */
+        pr: [{
+          pr: [padding]
+        }],
+        /**
+         * Padding Bottom
+         * @see https://tailwindcss.com/docs/padding
+         */
+        pb: [{
+          pb: [padding]
+        }],
+        /**
+         * Padding Left
+         * @see https://tailwindcss.com/docs/padding
+         */
+        pl: [{
+          pl: [padding]
+        }],
+        /**
+         * Margin
+         * @see https://tailwindcss.com/docs/margin
+         */
+        m: [{
+          m: [margin]
+        }],
+        /**
+         * Margin X
+         * @see https://tailwindcss.com/docs/margin
+         */
+        mx: [{
+          mx: [margin]
+        }],
+        /**
+         * Margin Y
+         * @see https://tailwindcss.com/docs/margin
+         */
+        my: [{
+          my: [margin]
+        }],
+        /**
+         * Margin Start
+         * @see https://tailwindcss.com/docs/margin
+         */
+        ms: [{
+          ms: [margin]
+        }],
+        /**
+         * Margin End
+         * @see https://tailwindcss.com/docs/margin
+         */
+        me: [{
+          me: [margin]
+        }],
+        /**
+         * Margin Top
+         * @see https://tailwindcss.com/docs/margin
+         */
+        mt: [{
+          mt: [margin]
+        }],
+        /**
+         * Margin Right
+         * @see https://tailwindcss.com/docs/margin
+         */
+        mr: [{
+          mr: [margin]
+        }],
+        /**
+         * Margin Bottom
+         * @see https://tailwindcss.com/docs/margin
+         */
+        mb: [{
+          mb: [margin]
+        }],
+        /**
+         * Margin Left
+         * @see https://tailwindcss.com/docs/margin
+         */
+        ml: [{
+          ml: [margin]
+        }],
+        /**
+         * Space Between X
+         * @see https://tailwindcss.com/docs/space
+         */
+        'space-x': [{
+          'space-x': [space]
+        }],
+        /**
+         * Space Between X Reverse
+         * @see https://tailwindcss.com/docs/space
+         */
+        'space-x-reverse': ['space-x-reverse'],
+        /**
+         * Space Between Y
+         * @see https://tailwindcss.com/docs/space
+         */
+        'space-y': [{
+          'space-y': [space]
+        }],
+        /**
+         * Space Between Y Reverse
+         * @see https://tailwindcss.com/docs/space
+         */
+        'space-y-reverse': ['space-y-reverse'],
+        // Sizing
+        /**
+         * Width
+         * @see https://tailwindcss.com/docs/width
+         */
+        w: [{
+          w: ['auto', 'min', 'max', 'fit', 'svw', 'lvw', 'dvw', isArbitraryValue, spacing]
+        }],
+        /**
+         * Min-Width
+         * @see https://tailwindcss.com/docs/min-width
+         */
+        'min-w': [{
+          'min-w': [isArbitraryValue, spacing, 'min', 'max', 'fit']
+        }],
+        /**
+         * Max-Width
+         * @see https://tailwindcss.com/docs/max-width
+         */
+        'max-w': [{
+          'max-w': [isArbitraryValue, spacing, 'none', 'full', 'min', 'max', 'fit', 'prose', {
+            screen: [isTshirtSize]
+          }, isTshirtSize]
+        }],
+        /**
+         * Height
+         * @see https://tailwindcss.com/docs/height
+         */
+        h: [{
+          h: [isArbitraryValue, spacing, 'auto', 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+        }],
+        /**
+         * Min-Height
+         * @see https://tailwindcss.com/docs/min-height
+         */
+        'min-h': [{
+          'min-h': [isArbitraryValue, spacing, 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+        }],
+        /**
+         * Max-Height
+         * @see https://tailwindcss.com/docs/max-height
+         */
+        'max-h': [{
+          'max-h': [isArbitraryValue, spacing, 'min', 'max', 'fit', 'svh', 'lvh', 'dvh']
+        }],
+        /**
+         * Size
+         * @see https://tailwindcss.com/docs/size
+         */
+        size: [{
+          size: [isArbitraryValue, spacing, 'auto', 'min', 'max', 'fit']
+        }],
+        // Typography
+        /**
+         * Font Size
+         * @see https://tailwindcss.com/docs/font-size
+         */
+        'font-size': [{
+          text: ['base', isTshirtSize, isArbitraryLength]
+        }],
+        /**
+         * Font Smoothing
+         * @see https://tailwindcss.com/docs/font-smoothing
+         */
+        'font-smoothing': ['antialiased', 'subpixel-antialiased'],
+        /**
+         * Font Style
+         * @see https://tailwindcss.com/docs/font-style
+         */
+        'font-style': ['italic', 'not-italic'],
+        /**
+         * Font Weight
+         * @see https://tailwindcss.com/docs/font-weight
+         */
+        'font-weight': [{
+          font: ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black', isArbitraryNumber]
+        }],
+        /**
+         * Font Family
+         * @see https://tailwindcss.com/docs/font-family
+         */
+        'font-family': [{
+          font: [isAny]
+        }],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-normal': ['normal-nums'],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-ordinal': ['ordinal'],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-slashed-zero': ['slashed-zero'],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-figure': ['lining-nums', 'oldstyle-nums'],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-spacing': ['proportional-nums', 'tabular-nums'],
+        /**
+         * Font Variant Numeric
+         * @see https://tailwindcss.com/docs/font-variant-numeric
+         */
+        'fvn-fraction': ['diagonal-fractions', 'stacked-fractons'],
+        /**
+         * Letter Spacing
+         * @see https://tailwindcss.com/docs/letter-spacing
+         */
+        tracking: [{
+          tracking: ['tighter', 'tight', 'normal', 'wide', 'wider', 'widest', isArbitraryValue]
+        }],
+        /**
+         * Line Clamp
+         * @see https://tailwindcss.com/docs/line-clamp
+         */
+        'line-clamp': [{
+          'line-clamp': ['none', isNumber, isArbitraryNumber]
+        }],
+        /**
+         * Line Height
+         * @see https://tailwindcss.com/docs/line-height
+         */
+        leading: [{
+          leading: ['none', 'tight', 'snug', 'normal', 'relaxed', 'loose', isLength, isArbitraryValue]
+        }],
+        /**
+         * List Style Image
+         * @see https://tailwindcss.com/docs/list-style-image
+         */
+        'list-image': [{
+          'list-image': ['none', isArbitraryValue]
+        }],
+        /**
+         * List Style Type
+         * @see https://tailwindcss.com/docs/list-style-type
+         */
+        'list-style-type': [{
+          list: ['none', 'disc', 'decimal', isArbitraryValue]
+        }],
+        /**
+         * List Style Position
+         * @see https://tailwindcss.com/docs/list-style-position
+         */
+        'list-style-position': [{
+          list: ['inside', 'outside']
+        }],
+        /**
+         * Placeholder Color
+         * @deprecated since Tailwind CSS v3.0.0
+         * @see https://tailwindcss.com/docs/placeholder-color
+         */
+        'placeholder-color': [{
+          placeholder: [colors]
+        }],
+        /**
+         * Placeholder Opacity
+         * @see https://tailwindcss.com/docs/placeholder-opacity
+         */
+        'placeholder-opacity': [{
+          'placeholder-opacity': [opacity]
+        }],
+        /**
+         * Text Alignment
+         * @see https://tailwindcss.com/docs/text-align
+         */
+        'text-alignment': [{
+          text: ['left', 'center', 'right', 'justify', 'start', 'end']
+        }],
+        /**
+         * Text Color
+         * @see https://tailwindcss.com/docs/text-color
+         */
+        'text-color': [{
+          text: [colors]
+        }],
+        /**
+         * Text Opacity
+         * @see https://tailwindcss.com/docs/text-opacity
+         */
+        'text-opacity': [{
+          'text-opacity': [opacity]
+        }],
+        /**
+         * Text Decoration
+         * @see https://tailwindcss.com/docs/text-decoration
+         */
+        'text-decoration': ['underline', 'overline', 'line-through', 'no-underline'],
+        /**
+         * Text Decoration Style
+         * @see https://tailwindcss.com/docs/text-decoration-style
+         */
+        'text-decoration-style': [{
+          decoration: [...getLineStyles(), 'wavy']
+        }],
+        /**
+         * Text Decoration Thickness
+         * @see https://tailwindcss.com/docs/text-decoration-thickness
+         */
+        'text-decoration-thickness': [{
+          decoration: ['auto', 'from-font', isLength, isArbitraryLength]
+        }],
+        /**
+         * Text Underline Offset
+         * @see https://tailwindcss.com/docs/text-underline-offset
+         */
+        'underline-offset': [{
+          'underline-offset': ['auto', isLength, isArbitraryValue]
+        }],
+        /**
+         * Text Decoration Color
+         * @see https://tailwindcss.com/docs/text-decoration-color
+         */
+        'text-decoration-color': [{
+          decoration: [colors]
+        }],
+        /**
+         * Text Transform
+         * @see https://tailwindcss.com/docs/text-transform
+         */
+        'text-transform': ['uppercase', 'lowercase', 'capitalize', 'normal-case'],
+        /**
+         * Text Overflow
+         * @see https://tailwindcss.com/docs/text-overflow
+         */
+        'text-overflow': ['truncate', 'text-ellipsis', 'text-clip'],
+        /**
+         * Text Wrap
+         * @see https://tailwindcss.com/docs/text-wrap
+         */
+        'text-wrap': [{
+          text: ['wrap', 'nowrap', 'balance', 'pretty']
+        }],
+        /**
+         * Text Indent
+         * @see https://tailwindcss.com/docs/text-indent
+         */
+        indent: [{
+          indent: getSpacingWithArbitrary()
+        }],
+        /**
+         * Vertical Alignment
+         * @see https://tailwindcss.com/docs/vertical-align
+         */
+        'vertical-align': [{
+          align: ['baseline', 'top', 'middle', 'bottom', 'text-top', 'text-bottom', 'sub', 'super', isArbitraryValue]
+        }],
+        /**
+         * Whitespace
+         * @see https://tailwindcss.com/docs/whitespace
+         */
+        whitespace: [{
+          whitespace: ['normal', 'nowrap', 'pre', 'pre-line', 'pre-wrap', 'break-spaces']
+        }],
+        /**
+         * Word Break
+         * @see https://tailwindcss.com/docs/word-break
+         */
+        break: [{
+          break: ['normal', 'words', 'all', 'keep']
+        }],
+        /**
+         * Hyphens
+         * @see https://tailwindcss.com/docs/hyphens
+         */
+        hyphens: [{
+          hyphens: ['none', 'manual', 'auto']
+        }],
+        /**
+         * Content
+         * @see https://tailwindcss.com/docs/content
+         */
+        content: [{
+          content: ['none', isArbitraryValue]
+        }],
+        // Backgrounds
+        /**
+         * Background Attachment
+         * @see https://tailwindcss.com/docs/background-attachment
+         */
+        'bg-attachment': [{
+          bg: ['fixed', 'local', 'scroll']
+        }],
+        /**
+         * Background Clip
+         * @see https://tailwindcss.com/docs/background-clip
+         */
+        'bg-clip': [{
+          'bg-clip': ['border', 'padding', 'content', 'text']
+        }],
+        /**
+         * Background Opacity
+         * @deprecated since Tailwind CSS v3.0.0
+         * @see https://tailwindcss.com/docs/background-opacity
+         */
+        'bg-opacity': [{
+          'bg-opacity': [opacity]
+        }],
+        /**
+         * Background Origin
+         * @see https://tailwindcss.com/docs/background-origin
+         */
+        'bg-origin': [{
+          'bg-origin': ['border', 'padding', 'content']
+        }],
+        /**
+         * Background Position
+         * @see https://tailwindcss.com/docs/background-position
+         */
+        'bg-position': [{
+          bg: [...getPositions(), isArbitraryPosition]
+        }],
+        /**
+         * Background Repeat
+         * @see https://tailwindcss.com/docs/background-repeat
+         */
+        'bg-repeat': [{
+          bg: ['no-repeat', {
+            repeat: ['', 'x', 'y', 'round', 'space']
+          }]
+        }],
+        /**
+         * Background Size
+         * @see https://tailwindcss.com/docs/background-size
+         */
+        'bg-size': [{
+          bg: ['auto', 'cover', 'contain', isArbitrarySize]
+        }],
+        /**
+         * Background Image
+         * @see https://tailwindcss.com/docs/background-image
+         */
+        'bg-image': [{
+          bg: ['none', {
+            'gradient-to': ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
+          }, isArbitraryImage]
+        }],
+        /**
+         * Background Color
+         * @see https://tailwindcss.com/docs/background-color
+         */
+        'bg-color': [{
+          bg: [colors]
+        }],
+        /**
+         * Gradient Color Stops From Position
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-from-pos': [{
+          from: [gradientColorStopPositions]
+        }],
+        /**
+         * Gradient Color Stops Via Position
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-via-pos': [{
+          via: [gradientColorStopPositions]
+        }],
+        /**
+         * Gradient Color Stops To Position
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-to-pos': [{
+          to: [gradientColorStopPositions]
+        }],
+        /**
+         * Gradient Color Stops From
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-from': [{
+          from: [gradientColorStops]
+        }],
+        /**
+         * Gradient Color Stops Via
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-via': [{
+          via: [gradientColorStops]
+        }],
+        /**
+         * Gradient Color Stops To
+         * @see https://tailwindcss.com/docs/gradient-color-stops
+         */
+        'gradient-to': [{
+          to: [gradientColorStops]
+        }],
+        // Borders
+        /**
+         * Border Radius
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        rounded: [{
+          rounded: [borderRadius]
+        }],
+        /**
+         * Border Radius Start
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-s': [{
+          'rounded-s': [borderRadius]
+        }],
+        /**
+         * Border Radius End
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-e': [{
+          'rounded-e': [borderRadius]
+        }],
+        /**
+         * Border Radius Top
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-t': [{
+          'rounded-t': [borderRadius]
+        }],
+        /**
+         * Border Radius Right
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-r': [{
+          'rounded-r': [borderRadius]
+        }],
+        /**
+         * Border Radius Bottom
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-b': [{
+          'rounded-b': [borderRadius]
+        }],
+        /**
+         * Border Radius Left
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-l': [{
+          'rounded-l': [borderRadius]
+        }],
+        /**
+         * Border Radius Start Start
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-ss': [{
+          'rounded-ss': [borderRadius]
+        }],
+        /**
+         * Border Radius Start End
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-se': [{
+          'rounded-se': [borderRadius]
+        }],
+        /**
+         * Border Radius End End
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-ee': [{
+          'rounded-ee': [borderRadius]
+        }],
+        /**
+         * Border Radius End Start
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-es': [{
+          'rounded-es': [borderRadius]
+        }],
+        /**
+         * Border Radius Top Left
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-tl': [{
+          'rounded-tl': [borderRadius]
+        }],
+        /**
+         * Border Radius Top Right
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-tr': [{
+          'rounded-tr': [borderRadius]
+        }],
+        /**
+         * Border Radius Bottom Right
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-br': [{
+          'rounded-br': [borderRadius]
+        }],
+        /**
+         * Border Radius Bottom Left
+         * @see https://tailwindcss.com/docs/border-radius
+         */
+        'rounded-bl': [{
+          'rounded-bl': [borderRadius]
+        }],
+        /**
+         * Border Width
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w': [{
+          border: [borderWidth]
+        }],
+        /**
+         * Border Width X
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-x': [{
+          'border-x': [borderWidth]
+        }],
+        /**
+         * Border Width Y
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-y': [{
+          'border-y': [borderWidth]
+        }],
+        /**
+         * Border Width Start
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-s': [{
+          'border-s': [borderWidth]
+        }],
+        /**
+         * Border Width End
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-e': [{
+          'border-e': [borderWidth]
+        }],
+        /**
+         * Border Width Top
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-t': [{
+          'border-t': [borderWidth]
+        }],
+        /**
+         * Border Width Right
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-r': [{
+          'border-r': [borderWidth]
+        }],
+        /**
+         * Border Width Bottom
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-b': [{
+          'border-b': [borderWidth]
+        }],
+        /**
+         * Border Width Left
+         * @see https://tailwindcss.com/docs/border-width
+         */
+        'border-w-l': [{
+          'border-l': [borderWidth]
+        }],
+        /**
+         * Border Opacity
+         * @see https://tailwindcss.com/docs/border-opacity
+         */
+        'border-opacity': [{
+          'border-opacity': [opacity]
+        }],
+        /**
+         * Border Style
+         * @see https://tailwindcss.com/docs/border-style
+         */
+        'border-style': [{
+          border: [...getLineStyles(), 'hidden']
+        }],
+        /**
+         * Divide Width X
+         * @see https://tailwindcss.com/docs/divide-width
+         */
+        'divide-x': [{
+          'divide-x': [borderWidth]
+        }],
+        /**
+         * Divide Width X Reverse
+         * @see https://tailwindcss.com/docs/divide-width
+         */
+        'divide-x-reverse': ['divide-x-reverse'],
+        /**
+         * Divide Width Y
+         * @see https://tailwindcss.com/docs/divide-width
+         */
+        'divide-y': [{
+          'divide-y': [borderWidth]
+        }],
+        /**
+         * Divide Width Y Reverse
+         * @see https://tailwindcss.com/docs/divide-width
+         */
+        'divide-y-reverse': ['divide-y-reverse'],
+        /**
+         * Divide Opacity
+         * @see https://tailwindcss.com/docs/divide-opacity
+         */
+        'divide-opacity': [{
+          'divide-opacity': [opacity]
+        }],
+        /**
+         * Divide Style
+         * @see https://tailwindcss.com/docs/divide-style
+         */
+        'divide-style': [{
+          divide: getLineStyles()
+        }],
+        /**
+         * Border Color
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color': [{
+          border: [borderColor]
+        }],
+        /**
+         * Border Color X
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-x': [{
+          'border-x': [borderColor]
+        }],
+        /**
+         * Border Color Y
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-y': [{
+          'border-y': [borderColor]
+        }],
+        /**
+         * Border Color Top
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-t': [{
+          'border-t': [borderColor]
+        }],
+        /**
+         * Border Color Right
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-r': [{
+          'border-r': [borderColor]
+        }],
+        /**
+         * Border Color Bottom
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-b': [{
+          'border-b': [borderColor]
+        }],
+        /**
+         * Border Color Left
+         * @see https://tailwindcss.com/docs/border-color
+         */
+        'border-color-l': [{
+          'border-l': [borderColor]
+        }],
+        /**
+         * Divide Color
+         * @see https://tailwindcss.com/docs/divide-color
+         */
+        'divide-color': [{
+          divide: [borderColor]
+        }],
+        /**
+         * Outline Style
+         * @see https://tailwindcss.com/docs/outline-style
+         */
+        'outline-style': [{
+          outline: ['', ...getLineStyles()]
+        }],
+        /**
+         * Outline Offset
+         * @see https://tailwindcss.com/docs/outline-offset
+         */
+        'outline-offset': [{
+          'outline-offset': [isLength, isArbitraryValue]
+        }],
+        /**
+         * Outline Width
+         * @see https://tailwindcss.com/docs/outline-width
+         */
+        'outline-w': [{
+          outline: [isLength, isArbitraryLength]
+        }],
+        /**
+         * Outline Color
+         * @see https://tailwindcss.com/docs/outline-color
+         */
+        'outline-color': [{
+          outline: [colors]
+        }],
+        /**
+         * Ring Width
+         * @see https://tailwindcss.com/docs/ring-width
+         */
+        'ring-w': [{
+          ring: getLengthWithEmptyAndArbitrary()
+        }],
+        /**
+         * Ring Width Inset
+         * @see https://tailwindcss.com/docs/ring-width
+         */
+        'ring-w-inset': ['ring-inset'],
+        /**
+         * Ring Color
+         * @see https://tailwindcss.com/docs/ring-color
+         */
+        'ring-color': [{
+          ring: [colors]
+        }],
+        /**
+         * Ring Opacity
+         * @see https://tailwindcss.com/docs/ring-opacity
+         */
+        'ring-opacity': [{
+          'ring-opacity': [opacity]
+        }],
+        /**
+         * Ring Offset Width
+         * @see https://tailwindcss.com/docs/ring-offset-width
+         */
+        'ring-offset-w': [{
+          'ring-offset': [isLength, isArbitraryLength]
+        }],
+        /**
+         * Ring Offset Color
+         * @see https://tailwindcss.com/docs/ring-offset-color
+         */
+        'ring-offset-color': [{
+          'ring-offset': [colors]
+        }],
+        // Effects
+        /**
+         * Box Shadow
+         * @see https://tailwindcss.com/docs/box-shadow
+         */
+        shadow: [{
+          shadow: ['', 'inner', 'none', isTshirtSize, isArbitraryShadow]
+        }],
+        /**
+         * Box Shadow Color
+         * @see https://tailwindcss.com/docs/box-shadow-color
+         */
+        'shadow-color': [{
+          shadow: [isAny]
+        }],
+        /**
+         * Opacity
+         * @see https://tailwindcss.com/docs/opacity
+         */
+        opacity: [{
+          opacity: [opacity]
+        }],
+        /**
+         * Mix Blend Mode
+         * @see https://tailwindcss.com/docs/mix-blend-mode
+         */
+        'mix-blend': [{
+          'mix-blend': [...getBlendModes(), 'plus-lighter', 'plus-darker']
+        }],
+        /**
+         * Background Blend Mode
+         * @see https://tailwindcss.com/docs/background-blend-mode
+         */
+        'bg-blend': [{
+          'bg-blend': getBlendModes()
+        }],
+        // Filters
+        /**
+         * Filter
+         * @deprecated since Tailwind CSS v3.0.0
+         * @see https://tailwindcss.com/docs/filter
+         */
+        filter: [{
+          filter: ['', 'none']
+        }],
+        /**
+         * Blur
+         * @see https://tailwindcss.com/docs/blur
+         */
+        blur: [{
+          blur: [blur]
+        }],
+        /**
+         * Brightness
+         * @see https://tailwindcss.com/docs/brightness
+         */
+        brightness: [{
+          brightness: [brightness]
+        }],
+        /**
+         * Contrast
+         * @see https://tailwindcss.com/docs/contrast
+         */
+        contrast: [{
+          contrast: [contrast]
+        }],
+        /**
+         * Drop Shadow
+         * @see https://tailwindcss.com/docs/drop-shadow
+         */
+        'drop-shadow': [{
+          'drop-shadow': ['', 'none', isTshirtSize, isArbitraryValue]
+        }],
+        /**
+         * Grayscale
+         * @see https://tailwindcss.com/docs/grayscale
+         */
+        grayscale: [{
+          grayscale: [grayscale]
+        }],
+        /**
+         * Hue Rotate
+         * @see https://tailwindcss.com/docs/hue-rotate
+         */
+        'hue-rotate': [{
+          'hue-rotate': [hueRotate]
+        }],
+        /**
+         * Invert
+         * @see https://tailwindcss.com/docs/invert
+         */
+        invert: [{
+          invert: [invert]
+        }],
+        /**
+         * Saturate
+         * @see https://tailwindcss.com/docs/saturate
+         */
+        saturate: [{
+          saturate: [saturate]
+        }],
+        /**
+         * Sepia
+         * @see https://tailwindcss.com/docs/sepia
+         */
+        sepia: [{
+          sepia: [sepia]
+        }],
+        /**
+         * Backdrop Filter
+         * @deprecated since Tailwind CSS v3.0.0
+         * @see https://tailwindcss.com/docs/backdrop-filter
+         */
+        'backdrop-filter': [{
+          'backdrop-filter': ['', 'none']
+        }],
+        /**
+         * Backdrop Blur
+         * @see https://tailwindcss.com/docs/backdrop-blur
+         */
+        'backdrop-blur': [{
+          'backdrop-blur': [blur]
+        }],
+        /**
+         * Backdrop Brightness
+         * @see https://tailwindcss.com/docs/backdrop-brightness
+         */
+        'backdrop-brightness': [{
+          'backdrop-brightness': [brightness]
+        }],
+        /**
+         * Backdrop Contrast
+         * @see https://tailwindcss.com/docs/backdrop-contrast
+         */
+        'backdrop-contrast': [{
+          'backdrop-contrast': [contrast]
+        }],
+        /**
+         * Backdrop Grayscale
+         * @see https://tailwindcss.com/docs/backdrop-grayscale
+         */
+        'backdrop-grayscale': [{
+          'backdrop-grayscale': [grayscale]
+        }],
+        /**
+         * Backdrop Hue Rotate
+         * @see https://tailwindcss.com/docs/backdrop-hue-rotate
+         */
+        'backdrop-hue-rotate': [{
+          'backdrop-hue-rotate': [hueRotate]
+        }],
+        /**
+         * Backdrop Invert
+         * @see https://tailwindcss.com/docs/backdrop-invert
+         */
+        'backdrop-invert': [{
+          'backdrop-invert': [invert]
+        }],
+        /**
+         * Backdrop Opacity
+         * @see https://tailwindcss.com/docs/backdrop-opacity
+         */
+        'backdrop-opacity': [{
+          'backdrop-opacity': [opacity]
+        }],
+        /**
+         * Backdrop Saturate
+         * @see https://tailwindcss.com/docs/backdrop-saturate
+         */
+        'backdrop-saturate': [{
+          'backdrop-saturate': [saturate]
+        }],
+        /**
+         * Backdrop Sepia
+         * @see https://tailwindcss.com/docs/backdrop-sepia
+         */
+        'backdrop-sepia': [{
+          'backdrop-sepia': [sepia]
+        }],
+        // Tables
+        /**
+         * Border Collapse
+         * @see https://tailwindcss.com/docs/border-collapse
+         */
+        'border-collapse': [{
+          border: ['collapse', 'separate']
+        }],
+        /**
+         * Border Spacing
+         * @see https://tailwindcss.com/docs/border-spacing
+         */
+        'border-spacing': [{
+          'border-spacing': [borderSpacing]
+        }],
+        /**
+         * Border Spacing X
+         * @see https://tailwindcss.com/docs/border-spacing
+         */
+        'border-spacing-x': [{
+          'border-spacing-x': [borderSpacing]
+        }],
+        /**
+         * Border Spacing Y
+         * @see https://tailwindcss.com/docs/border-spacing
+         */
+        'border-spacing-y': [{
+          'border-spacing-y': [borderSpacing]
+        }],
+        /**
+         * Table Layout
+         * @see https://tailwindcss.com/docs/table-layout
+         */
+        'table-layout': [{
+          table: ['auto', 'fixed']
+        }],
+        /**
+         * Caption Side
+         * @see https://tailwindcss.com/docs/caption-side
+         */
+        caption: [{
+          caption: ['top', 'bottom']
+        }],
+        // Transitions and Animation
+        /**
+         * Tranisition Property
+         * @see https://tailwindcss.com/docs/transition-property
+         */
+        transition: [{
+          transition: ['none', 'all', '', 'colors', 'opacity', 'shadow', 'transform', isArbitraryValue]
+        }],
+        /**
+         * Transition Duration
+         * @see https://tailwindcss.com/docs/transition-duration
+         */
+        duration: [{
+          duration: getNumberAndArbitrary()
+        }],
+        /**
+         * Transition Timing Function
+         * @see https://tailwindcss.com/docs/transition-timing-function
+         */
+        ease: [{
+          ease: ['linear', 'in', 'out', 'in-out', isArbitraryValue]
+        }],
+        /**
+         * Transition Delay
+         * @see https://tailwindcss.com/docs/transition-delay
+         */
+        delay: [{
+          delay: getNumberAndArbitrary()
+        }],
+        /**
+         * Animation
+         * @see https://tailwindcss.com/docs/animation
+         */
+        animate: [{
+          animate: ['none', 'spin', 'ping', 'pulse', 'bounce', isArbitraryValue]
+        }],
+        // Transforms
+        /**
+         * Transform
+         * @see https://tailwindcss.com/docs/transform
+         */
+        transform: [{
+          transform: ['', 'gpu', 'none']
+        }],
+        /**
+         * Scale
+         * @see https://tailwindcss.com/docs/scale
+         */
+        scale: [{
+          scale: [scale]
+        }],
+        /**
+         * Scale X
+         * @see https://tailwindcss.com/docs/scale
+         */
+        'scale-x': [{
+          'scale-x': [scale]
+        }],
+        /**
+         * Scale Y
+         * @see https://tailwindcss.com/docs/scale
+         */
+        'scale-y': [{
+          'scale-y': [scale]
+        }],
+        /**
+         * Rotate
+         * @see https://tailwindcss.com/docs/rotate
+         */
+        rotate: [{
+          rotate: [isInteger, isArbitraryValue]
+        }],
+        /**
+         * Translate X
+         * @see https://tailwindcss.com/docs/translate
+         */
+        'translate-x': [{
+          'translate-x': [translate]
+        }],
+        /**
+         * Translate Y
+         * @see https://tailwindcss.com/docs/translate
+         */
+        'translate-y': [{
+          'translate-y': [translate]
+        }],
+        /**
+         * Skew X
+         * @see https://tailwindcss.com/docs/skew
+         */
+        'skew-x': [{
+          'skew-x': [skew]
+        }],
+        /**
+         * Skew Y
+         * @see https://tailwindcss.com/docs/skew
+         */
+        'skew-y': [{
+          'skew-y': [skew]
+        }],
+        /**
+         * Transform Origin
+         * @see https://tailwindcss.com/docs/transform-origin
+         */
+        'transform-origin': [{
+          origin: ['center', 'top', 'top-right', 'right', 'bottom-right', 'bottom', 'bottom-left', 'left', 'top-left', isArbitraryValue]
+        }],
+        // Interactivity
+        /**
+         * Accent Color
+         * @see https://tailwindcss.com/docs/accent-color
+         */
+        accent: [{
+          accent: ['auto', colors]
+        }],
+        /**
+         * Appearance
+         * @see https://tailwindcss.com/docs/appearance
+         */
+        appearance: [{
+          appearance: ['none', 'auto']
+        }],
+        /**
+         * Cursor
+         * @see https://tailwindcss.com/docs/cursor
+         */
+        cursor: [{
+          cursor: ['auto', 'default', 'pointer', 'wait', 'text', 'move', 'help', 'not-allowed', 'none', 'context-menu', 'progress', 'cell', 'crosshair', 'vertical-text', 'alias', 'copy', 'no-drop', 'grab', 'grabbing', 'all-scroll', 'col-resize', 'row-resize', 'n-resize', 'e-resize', 's-resize', 'w-resize', 'ne-resize', 'nw-resize', 'se-resize', 'sw-resize', 'ew-resize', 'ns-resize', 'nesw-resize', 'nwse-resize', 'zoom-in', 'zoom-out', isArbitraryValue]
+        }],
+        /**
+         * Caret Color
+         * @see https://tailwindcss.com/docs/just-in-time-mode#caret-color-utilities
+         */
+        'caret-color': [{
+          caret: [colors]
+        }],
+        /**
+         * Pointer Events
+         * @see https://tailwindcss.com/docs/pointer-events
+         */
+        'pointer-events': [{
+          'pointer-events': ['none', 'auto']
+        }],
+        /**
+         * Resize
+         * @see https://tailwindcss.com/docs/resize
+         */
+        resize: [{
+          resize: ['none', 'y', 'x', '']
+        }],
+        /**
+         * Scroll Behavior
+         * @see https://tailwindcss.com/docs/scroll-behavior
+         */
+        'scroll-behavior': [{
+          scroll: ['auto', 'smooth']
+        }],
+        /**
+         * Scroll Margin
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-m': [{
+          'scroll-m': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin X
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-mx': [{
+          'scroll-mx': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Y
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-my': [{
+          'scroll-my': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Start
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-ms': [{
+          'scroll-ms': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin End
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-me': [{
+          'scroll-me': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Top
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-mt': [{
+          'scroll-mt': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Right
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-mr': [{
+          'scroll-mr': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Bottom
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-mb': [{
+          'scroll-mb': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Margin Left
+         * @see https://tailwindcss.com/docs/scroll-margin
+         */
+        'scroll-ml': [{
+          'scroll-ml': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-p': [{
+          'scroll-p': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding X
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-px': [{
+          'scroll-px': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Y
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-py': [{
+          'scroll-py': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Start
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-ps': [{
+          'scroll-ps': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding End
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-pe': [{
+          'scroll-pe': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Top
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-pt': [{
+          'scroll-pt': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Right
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-pr': [{
+          'scroll-pr': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Bottom
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-pb': [{
+          'scroll-pb': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Padding Left
+         * @see https://tailwindcss.com/docs/scroll-padding
+         */
+        'scroll-pl': [{
+          'scroll-pl': getSpacingWithArbitrary()
+        }],
+        /**
+         * Scroll Snap Align
+         * @see https://tailwindcss.com/docs/scroll-snap-align
+         */
+        'snap-align': [{
+          snap: ['start', 'end', 'center', 'align-none']
+        }],
+        /**
+         * Scroll Snap Stop
+         * @see https://tailwindcss.com/docs/scroll-snap-stop
+         */
+        'snap-stop': [{
+          snap: ['normal', 'always']
+        }],
+        /**
+         * Scroll Snap Type
+         * @see https://tailwindcss.com/docs/scroll-snap-type
+         */
+        'snap-type': [{
+          snap: ['none', 'x', 'y', 'both']
+        }],
+        /**
+         * Scroll Snap Type Strictness
+         * @see https://tailwindcss.com/docs/scroll-snap-type
+         */
+        'snap-strictness': [{
+          snap: ['mandatory', 'proximity']
+        }],
+        /**
+         * Touch Action
+         * @see https://tailwindcss.com/docs/touch-action
+         */
+        touch: [{
+          touch: ['auto', 'none', 'manipulation']
+        }],
+        /**
+         * Touch Action X
+         * @see https://tailwindcss.com/docs/touch-action
+         */
+        'touch-x': [{
+          'touch-pan': ['x', 'left', 'right']
+        }],
+        /**
+         * Touch Action Y
+         * @see https://tailwindcss.com/docs/touch-action
+         */
+        'touch-y': [{
+          'touch-pan': ['y', 'up', 'down']
+        }],
+        /**
+         * Touch Action Pinch Zoom
+         * @see https://tailwindcss.com/docs/touch-action
+         */
+        'touch-pz': ['touch-pinch-zoom'],
+        /**
+         * User Select
+         * @see https://tailwindcss.com/docs/user-select
+         */
+        select: [{
+          select: ['none', 'text', 'all', 'auto']
+        }],
+        /**
+         * Will Change
+         * @see https://tailwindcss.com/docs/will-change
+         */
+        'will-change': [{
+          'will-change': ['auto', 'scroll', 'contents', 'transform', isArbitraryValue]
+        }],
+        // SVG
+        /**
+         * Fill
+         * @see https://tailwindcss.com/docs/fill
+         */
+        fill: [{
+          fill: [colors, 'none']
+        }],
+        /**
+         * Stroke Width
+         * @see https://tailwindcss.com/docs/stroke-width
+         */
+        'stroke-w': [{
+          stroke: [isLength, isArbitraryLength, isArbitraryNumber]
+        }],
+        /**
+         * Stroke
+         * @see https://tailwindcss.com/docs/stroke
+         */
+        stroke: [{
+          stroke: [colors, 'none']
+        }],
+        // Accessibility
+        /**
+         * Screen Readers
+         * @see https://tailwindcss.com/docs/screen-readers
+         */
+        sr: ['sr-only', 'not-sr-only'],
+        /**
+         * Forced Color Adjust
+         * @see https://tailwindcss.com/docs/forced-color-adjust
+         */
+        'forced-color-adjust': [{
+          'forced-color-adjust': ['auto', 'none']
+        }]
+      },
+      conflictingClassGroups: {
+        overflow: ['overflow-x', 'overflow-y'],
+        overscroll: ['overscroll-x', 'overscroll-y'],
+        inset: ['inset-x', 'inset-y', 'start', 'end', 'top', 'right', 'bottom', 'left'],
+        'inset-x': ['right', 'left'],
+        'inset-y': ['top', 'bottom'],
+        flex: ['basis', 'grow', 'shrink'],
+        gap: ['gap-x', 'gap-y'],
+        p: ['px', 'py', 'ps', 'pe', 'pt', 'pr', 'pb', 'pl'],
+        px: ['pr', 'pl'],
+        py: ['pt', 'pb'],
+        m: ['mx', 'my', 'ms', 'me', 'mt', 'mr', 'mb', 'ml'],
+        mx: ['mr', 'ml'],
+        my: ['mt', 'mb'],
+        size: ['w', 'h'],
+        'font-size': ['leading'],
+        'fvn-normal': ['fvn-ordinal', 'fvn-slashed-zero', 'fvn-figure', 'fvn-spacing', 'fvn-fraction'],
+        'fvn-ordinal': ['fvn-normal'],
+        'fvn-slashed-zero': ['fvn-normal'],
+        'fvn-figure': ['fvn-normal'],
+        'fvn-spacing': ['fvn-normal'],
+        'fvn-fraction': ['fvn-normal'],
+        'line-clamp': ['display', 'overflow'],
+        rounded: ['rounded-s', 'rounded-e', 'rounded-t', 'rounded-r', 'rounded-b', 'rounded-l', 'rounded-ss', 'rounded-se', 'rounded-ee', 'rounded-es', 'rounded-tl', 'rounded-tr', 'rounded-br', 'rounded-bl'],
+        'rounded-s': ['rounded-ss', 'rounded-es'],
+        'rounded-e': ['rounded-se', 'rounded-ee'],
+        'rounded-t': ['rounded-tl', 'rounded-tr'],
+        'rounded-r': ['rounded-tr', 'rounded-br'],
+        'rounded-b': ['rounded-br', 'rounded-bl'],
+        'rounded-l': ['rounded-tl', 'rounded-bl'],
+        'border-spacing': ['border-spacing-x', 'border-spacing-y'],
+        'border-w': ['border-w-s', 'border-w-e', 'border-w-t', 'border-w-r', 'border-w-b', 'border-w-l'],
+        'border-w-x': ['border-w-r', 'border-w-l'],
+        'border-w-y': ['border-w-t', 'border-w-b'],
+        'border-color': ['border-color-t', 'border-color-r', 'border-color-b', 'border-color-l'],
+        'border-color-x': ['border-color-r', 'border-color-l'],
+        'border-color-y': ['border-color-t', 'border-color-b'],
+        'scroll-m': ['scroll-mx', 'scroll-my', 'scroll-ms', 'scroll-me', 'scroll-mt', 'scroll-mr', 'scroll-mb', 'scroll-ml'],
+        'scroll-mx': ['scroll-mr', 'scroll-ml'],
+        'scroll-my': ['scroll-mt', 'scroll-mb'],
+        'scroll-p': ['scroll-px', 'scroll-py', 'scroll-ps', 'scroll-pe', 'scroll-pt', 'scroll-pr', 'scroll-pb', 'scroll-pl'],
+        'scroll-px': ['scroll-pr', 'scroll-pl'],
+        'scroll-py': ['scroll-pt', 'scroll-pb'],
+        touch: ['touch-x', 'touch-y', 'touch-pz'],
+        'touch-x': ['touch'],
+        'touch-y': ['touch'],
+        'touch-pz': ['touch']
+      },
+      conflictingClassGroupModifiers: {
+        'font-size': ['leading']
+      }
+    };
+  };
+  const twMerge = /*#__PURE__*/createTailwindMerge(getDefaultConfig);
+
+  /* node_modules\flowbite-svelte\dist\utils\Frame.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$j(ctx) {
+  	let previous_tag = /*tag*/ ctx[1];
+  	let svelte_element_anchor;
+  	let current;
+  	let svelte_element = /*tag*/ ctx[1] && create_dynamic_element_1(ctx);
+
+  	return {
+  		c() {
+  			if (svelte_element) svelte_element.c();
+  			svelte_element_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (svelte_element) svelte_element.m(target, anchor);
+  			insert$1(target, svelte_element_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*tag*/ ctx[1]) {
+  				if (!previous_tag) {
+  					svelte_element = create_dynamic_element_1(ctx);
+  					previous_tag = /*tag*/ ctx[1];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else if (safe_not_equal(previous_tag, /*tag*/ ctx[1])) {
+  					svelte_element.d(1);
+  					svelte_element = create_dynamic_element_1(ctx);
+  					previous_tag = /*tag*/ ctx[1];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else {
+  					svelte_element.p(ctx, dirty);
+  				}
+  			} else if (previous_tag) {
+  				svelte_element.d(1);
+  				svelte_element = null;
+  				previous_tag = /*tag*/ ctx[1];
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(svelte_element, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(svelte_element, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element_anchor);
+  			}
+
+  			if (svelte_element) svelte_element.d(detaching);
+  		}
+  	};
+  }
+
+  // (90:0) {#if transition && open}
+  function create_if_block$s(ctx) {
+  	let previous_tag = /*tag*/ ctx[1];
+  	let svelte_element_anchor;
+  	let tag_will_be_removed = false;
+  	let current;
+  	let svelte_element = /*tag*/ ctx[1] && create_dynamic_element$3(ctx);
+
+  	return {
+  		c() {
+  			if (svelte_element) svelte_element.c();
+  			svelte_element_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (svelte_element) svelte_element.m(target, anchor);
+  			insert$1(target, svelte_element_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*tag*/ ctx[1]) {
+  				if (!previous_tag) {
+  					svelte_element = create_dynamic_element$3(ctx);
+  					previous_tag = /*tag*/ ctx[1];
+  					svelte_element.c();
+  					transition_in(svelte_element);
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else if (safe_not_equal(previous_tag, /*tag*/ ctx[1])) {
+  					svelte_element.d(1);
+  					svelte_element = create_dynamic_element$3(ctx);
+  					previous_tag = /*tag*/ ctx[1];
+  					svelte_element.c();
+
+  					if (tag_will_be_removed) {
+  						tag_will_be_removed = false;
+  						transition_in(svelte_element);
+  					}
+
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else {
+  					if (tag_will_be_removed) {
+  						tag_will_be_removed = false;
+  						transition_in(svelte_element);
+  					}
+
+  					svelte_element.p(ctx, dirty);
+  				}
+  			} else if (previous_tag) {
+  				tag_will_be_removed = true;
+  				group_outros();
+
+  				transition_out(svelte_element, 1, 1, () => {
+  					svelte_element = null;
+  					previous_tag = /*tag*/ ctx[1];
+  					tag_will_be_removed = false;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(svelte_element, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(svelte_element, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element_anchor);
+  			}
+
+  			if (svelte_element) svelte_element.d(detaching);
+  		}
+  	};
+  }
+
+  // (95:2) <svelte:element this={tag} use:use={options} bind:this={node} {role} {...$$restProps} class={divClass} on:click on:mouseenter on:mouseleave on:focusin on:focusout>
+  function create_dynamic_element_1(ctx) {
+  	let svelte_element;
+  	let use_action;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[15].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[14], null);
+
+  	let svelte_element_levels = [
+  		{ role: /*role*/ ctx[4] },
+  		/*$$restProps*/ ctx[9],
+  		{ class: /*divClass*/ ctx[8] }
+  	];
+
+  	let svelte_element_data = {};
+
+  	for (let i = 0; i < svelte_element_levels.length; i += 1) {
+  		svelte_element_data = assign(svelte_element_data, svelte_element_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			svelte_element = element(/*tag*/ ctx[1]);
+  			if (default_slot) default_slot.c();
+  			set_dynamic_element_data(/*tag*/ ctx[1])(svelte_element, svelte_element_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svelte_element, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(svelte_element, null);
+  			}
+
+  			/*svelte_element_binding_1*/ ctx[27](svelte_element);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					action_destroyer(use_action = /*use*/ ctx[2].call(null, svelte_element, /*options*/ ctx[3])),
+  					listen(svelte_element, "click", /*click_handler_1*/ ctx[21]),
+  					listen(svelte_element, "mouseenter", /*mouseenter_handler_1*/ ctx[22]),
+  					listen(svelte_element, "mouseleave", /*mouseleave_handler_1*/ ctx[23]),
+  					listen(svelte_element, "focusin", /*focusin_handler_1*/ ctx[24]),
+  					listen(svelte_element, "focusout", /*focusout_handler_1*/ ctx[25])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 16384)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[14],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[14], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_dynamic_element_data(/*tag*/ ctx[1])(svelte_element, svelte_element_data = get_spread_update(svelte_element_levels, [
+  				(!current || dirty[0] & /*role*/ 16) && { role: /*role*/ ctx[4] },
+  				dirty[0] & /*$$restProps*/ 512 && /*$$restProps*/ ctx[9],
+  				(!current || dirty[0] & /*divClass*/ 256) && { class: /*divClass*/ ctx[8] }
+  			]));
+
+  			if (use_action && is_function(use_action.update) && dirty[0] & /*options*/ 8) use_action.update.call(null, /*options*/ ctx[3]);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			/*svelte_element_binding_1*/ ctx[27](null);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (91:2) <svelte:element this={tag} transition:transition={params} use:use={options} bind:this={node} {role} {...$$restProps} class={divClass} on:click on:mouseenter on:mouseleave on:focusin on:focusout>
+  function create_dynamic_element$3(ctx) {
+  	let svelte_element;
+  	let use_action;
+  	let svelte_element_transition;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[15].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[14], null);
+
+  	let svelte_element_levels = [
+  		{ role: /*role*/ ctx[4] },
+  		/*$$restProps*/ ctx[9],
+  		{ class: /*divClass*/ ctx[8] }
+  	];
+
+  	let svelte_element_data = {};
+
+  	for (let i = 0; i < svelte_element_levels.length; i += 1) {
+  		svelte_element_data = assign(svelte_element_data, svelte_element_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			svelte_element = element(/*tag*/ ctx[1]);
+  			if (default_slot) default_slot.c();
+  			set_dynamic_element_data(/*tag*/ ctx[1])(svelte_element, svelte_element_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svelte_element, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(svelte_element, null);
+  			}
+
+  			/*svelte_element_binding*/ ctx[26](svelte_element);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					action_destroyer(use_action = /*use*/ ctx[2].call(null, svelte_element, /*options*/ ctx[3])),
+  					listen(svelte_element, "click", /*click_handler*/ ctx[16]),
+  					listen(svelte_element, "mouseenter", /*mouseenter_handler*/ ctx[17]),
+  					listen(svelte_element, "mouseleave", /*mouseleave_handler*/ ctx[18]),
+  					listen(svelte_element, "focusin", /*focusin_handler*/ ctx[19]),
+  					listen(svelte_element, "focusout", /*focusout_handler*/ ctx[20])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 16384)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[14],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[14], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_dynamic_element_data(/*tag*/ ctx[1])(svelte_element, svelte_element_data = get_spread_update(svelte_element_levels, [
+  				(!current || dirty[0] & /*role*/ 16) && { role: /*role*/ ctx[4] },
+  				dirty[0] & /*$$restProps*/ 512 && /*$$restProps*/ ctx[9],
+  				(!current || dirty[0] & /*divClass*/ 256) && { class: /*divClass*/ ctx[8] }
+  			]));
+
+  			if (use_action && is_function(use_action.update) && dirty[0] & /*options*/ 8) use_action.update.call(null, /*options*/ ctx[3]);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+
+  			if (local) {
+  				add_render_callback(() => {
+  					if (!current) return;
+  					if (!svelte_element_transition) svelte_element_transition = create_bidirectional_transition(svelte_element, /*transition*/ ctx[5], /*params*/ ctx[6], true);
+  					svelte_element_transition.run(1);
+  				});
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+
+  			if (local) {
+  				if (!svelte_element_transition) svelte_element_transition = create_bidirectional_transition(svelte_element, /*transition*/ ctx[5], /*params*/ ctx[6], false);
+  				svelte_element_transition.run(0);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			/*svelte_element_binding*/ ctx[26](null);
+  			if (detaching && svelte_element_transition) svelte_element_transition.end();
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function create_fragment$C(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$s, create_if_block_1$j];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*transition*/ ctx[5] && /*open*/ ctx[7]) return 0;
+  		if (/*open*/ ctx[7]) return 1;
+  		return -1;
+  	}
+
+  	if (~(current_block_type_index = select_block_type(ctx))) {
+  		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  	}
+
+  	return {
+  		c() {
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (~current_block_type_index) {
+  				if_blocks[current_block_type_index].m(target, anchor);
+  			}
+
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if (~current_block_type_index) {
+  					if_blocks[current_block_type_index].p(ctx, dirty);
+  				}
+  			} else {
+  				if (if_block) {
+  					group_outros();
+
+  					transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  						if_blocks[previous_block_index] = null;
+  					});
+
+  					check_outros();
+  				}
+
+  				if (~current_block_type_index) {
+  					if_block = if_blocks[current_block_type_index];
+
+  					if (!if_block) {
+  						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  						if_block.c();
+  					} else {
+  						if_block.p(ctx, dirty);
+  					}
+
+  					transition_in(if_block, 1);
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				} else {
+  					if_block = null;
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if (~current_block_type_index) {
+  				if_blocks[current_block_type_index].d(detaching);
+  			}
+  		}
+  	};
+  }
+
+  const bgColors = {
+  	gray: "bg-gray-50 dark:bg-gray-800",
+  	red: "bg-red-50 dark:bg-gray-800",
+  	yellow: "bg-yellow-50 dark:bg-gray-800 ",
+  	green: "bg-green-50 dark:bg-gray-800 ",
+  	indigo: "bg-indigo-50 dark:bg-gray-800 ",
+  	purple: "bg-purple-50 dark:bg-gray-800 ",
+  	pink: "bg-pink-50 dark:bg-gray-800 ",
+  	blue: "bg-blue-50 dark:bg-gray-800 ",
+  	light: "bg-gray-50 dark:bg-gray-700",
+  	dark: "bg-gray-50 dark:bg-gray-800",
+  	default: "bg-white dark:bg-gray-800",
+  	dropdown: "bg-white dark:bg-gray-700",
+  	navbar: "bg-white dark:bg-gray-900",
+  	navbarUl: "bg-gray-50 dark:bg-gray-800",
+  	form: "bg-gray-50 dark:bg-gray-700",
+  	primary: "bg-primary-50 dark:bg-gray-800 ",
+  	orange: "bg-orange-50 dark:bg-orange-800",
+  	none: ""
+  };
+
+  function instance$C($$self, $$props, $$invalidate) {
+  	const omit_props_names = [
+  		"tag","color","rounded","border","shadow","node","use","options","role","transition","params","open"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+
+  	const noop = () => {
+  		
+  	};
+
+  	setContext("background", true);
+  	let { tag = $$restProps.href ? "a" : "div" } = $$props;
+  	let { color = "default" } = $$props;
+  	let { rounded = false } = $$props;
+  	let { border = false } = $$props;
+  	let { shadow = false } = $$props;
+  	let { node = void 0 } = $$props;
+  	let { use = noop } = $$props;
+  	let { options = {} } = $$props;
+  	let { role = void 0 } = $$props;
+  	let { transition = void 0 } = $$props;
+  	let { params = {} } = $$props;
+  	let { open = true } = $$props;
+  	const dispatch = createEventDispatcher();
+
+  	const textColors = {
+  		gray: "text-gray-800 dark:text-gray-300",
+  		red: "text-red-800 dark:text-red-400",
+  		yellow: "text-yellow-800 dark:text-yellow-300",
+  		green: "text-green-800 dark:text-green-400",
+  		indigo: "text-indigo-800 dark:text-indigo-400",
+  		purple: "text-purple-800 dark:text-purple-400",
+  		pink: "text-pink-800 dark:text-pink-400",
+  		blue: "text-blue-800 dark:text-blue-400",
+  		light: "text-gray-700 dark:text-gray-300",
+  		dark: "text-gray-700 dark:text-gray-300",
+  		default: "text-gray-500 dark:text-gray-400",
+  		dropdown: "text-gray-700 dark:text-gray-200",
+  		navbar: "text-gray-700 dark:text-gray-200",
+  		navbarUl: "text-gray-700 dark:text-gray-400",
+  		form: "text-gray-900 dark:text-white",
+  		primary: "text-primary-800 dark:text-primary-400",
+  		orange: "text-orange-800 dark:text-orange-400",
+  		none: ""
+  	};
+
+  	const borderColors = {
+  		gray: "border-gray-300 dark:border-gray-800 divide-gray-300 dark:divide-gray-800",
+  		red: "border-red-300 dark:border-red-800 divide-red-300 dark:divide-red-800",
+  		yellow: "border-yellow-300 dark:border-yellow-800 divide-yellow-300 dark:divide-yellow-800",
+  		green: "border-green-300 dark:border-green-800 divide-green-300 dark:divide-green-800",
+  		indigo: "border-indigo-300 dark:border-indigo-800 divide-indigo-300 dark:divide-indigo-800",
+  		purple: "border-purple-300 dark:border-purple-800 divide-purple-300 dark:divide-purple-800",
+  		pink: "border-pink-300 dark:border-pink-800 divide-pink-300 dark:divide-pink-800",
+  		blue: "border-blue-300 dark:border-blue-800 divide-blue-300 dark:divide-blue-800",
+  		light: "border-gray-500 divide-gray-500",
+  		dark: "border-gray-500 divide-gray-500",
+  		default: "border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700",
+  		dropdown: "border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600",
+  		navbar: "border-gray-100 dark:border-gray-700 divide-gray-100 dark:divide-gray-700",
+  		navbarUl: "border-gray-100 dark:border-gray-700 divide-gray-100 dark:divide-gray-700",
+  		form: "border-gray-300 dark:border-gray-700 divide-gray-300 dark:divide-gray-700",
+  		primary: "border-primary-500 dark:border-primary-200  divide-primary-500 dark:divide-primary-200 ",
+  		orange: "border-orange-300 dark:border-orange-800 divide-orange-300 dark:divide-orange-800",
+  		none: ""
+  	};
+
+  	let divClass;
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focusin_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focusout_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function click_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focusin_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focusout_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function svelte_element_binding($$value) {
+  		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+  			node = $$value;
+  			$$invalidate(0, node);
+  		});
+  	}
+
+  	function svelte_element_binding_1($$value) {
+  		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+  			node = $$value;
+  			$$invalidate(0, node);
+  		});
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(32, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(9, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('tag' in $$new_props) $$invalidate(1, tag = $$new_props.tag);
+  		if ('color' in $$new_props) $$invalidate(10, color = $$new_props.color);
+  		if ('rounded' in $$new_props) $$invalidate(11, rounded = $$new_props.rounded);
+  		if ('border' in $$new_props) $$invalidate(12, border = $$new_props.border);
+  		if ('shadow' in $$new_props) $$invalidate(13, shadow = $$new_props.shadow);
+  		if ('node' in $$new_props) $$invalidate(0, node = $$new_props.node);
+  		if ('use' in $$new_props) $$invalidate(2, use = $$new_props.use);
+  		if ('options' in $$new_props) $$invalidate(3, options = $$new_props.options);
+  		if ('role' in $$new_props) $$invalidate(4, role = $$new_props.role);
+  		if ('transition' in $$new_props) $$invalidate(5, transition = $$new_props.transition);
+  		if ('params' in $$new_props) $$invalidate(6, params = $$new_props.params);
+  		if ('open' in $$new_props) $$invalidate(7, open = $$new_props.open);
+  		if ('$$scope' in $$new_props) $$invalidate(14, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty[0] & /*open*/ 128) {
+  			dispatch(open ? "open" : "close");
+  		}
+
+  		if ($$self.$$.dirty[0] & /*open*/ 128) {
+  			dispatch("show", open);
+  		}
+
+  		if ($$self.$$.dirty[0] & /*color*/ 1024) {
+  			$$invalidate(10, color = color ?? "default");
+  		}
+
+  		if ($$self.$$.dirty[0] & /*color*/ 1024) {
+  			setContext("color", color);
+  		}
+
+  		$$invalidate(8, divClass = twMerge(bgColors[color], textColors[color], rounded && "rounded-lg", border && "border", borderColors[color], shadow && "shadow-md", $$props.class));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		node,
+  		tag,
+  		use,
+  		options,
+  		role,
+  		transition,
+  		params,
+  		open,
+  		divClass,
+  		$$restProps,
+  		color,
+  		rounded,
+  		border,
+  		shadow,
+  		$$scope,
+  		slots,
+  		click_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		focusin_handler,
+  		focusout_handler,
+  		click_handler_1,
+  		mouseenter_handler_1,
+  		mouseleave_handler_1,
+  		focusin_handler_1,
+  		focusout_handler_1,
+  		svelte_element_binding,
+  		svelte_element_binding_1
+  	];
+  }
+
+  class Frame extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(
+  			this,
+  			options,
+  			instance$C,
+  			create_fragment$C,
+  			safe_not_equal,
+  			{
+  				tag: 1,
+  				color: 10,
+  				rounded: 11,
+  				border: 12,
+  				shadow: 13,
+  				node: 0,
+  				use: 2,
+  				options: 3,
+  				role: 4,
+  				transition: 5,
+  				params: 6,
+  				open: 7
+  			},
+  			null,
+  			[-1, -1]
+  		);
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\toolbar\ToolbarButton.svelte generated by Svelte v4.2.19 */
+  const get_default_slot_changes_1 = dirty => ({ svgSize: dirty & /*size*/ 4 });
+
+  const get_default_slot_context_1 = ctx => ({
+  	svgSize: /*svgSizes*/ ctx[5][/*size*/ ctx[2]]
+  });
+
+  const get_default_slot_changes$1 = dirty => ({ svgSize: dirty & /*size*/ 4 });
+
+  const get_default_slot_context$1 = ctx => ({
+  	svgSize: /*svgSizes*/ ctx[5][/*size*/ ctx[2]]
+  });
+
+  // (43:0) {:else}
+  function create_else_block$8(ctx) {
+  	let button;
+  	let t;
+  	let button_aria_label_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	let if_block = /*name*/ ctx[0] && create_if_block_2$4(ctx);
+  	const default_slot_template = /*#slots*/ ctx[9].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context_1);
+
+  	let button_levels = [
+  		{ type: "button" },
+  		/*$$restProps*/ ctx[6],
+  		{ class: /*buttonClass*/ ctx[4] },
+  		{
+  			"aria-label": button_aria_label_value = /*ariaLabel*/ ctx[1] ?? /*name*/ ctx[0]
+  		}
+  	];
+
+  	let button_data = {};
+
+  	for (let i = 0; i < button_levels.length; i += 1) {
+  		button_data = assign(button_data, button_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			if (if_block) if_block.c();
+  			t = space$1();
+  			if (default_slot) default_slot.c();
+  			set_attributes(button, button_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			if (if_block) if_block.m(button, null);
+  			append(button, t);
+
+  			if (default_slot) {
+  				default_slot.m(button, null);
+  			}
+
+  			if (button.autofocus) button.focus();
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*click_handler*/ ctx[10]);
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (/*name*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+  				} else {
+  					if_block = create_if_block_2$4(ctx);
+  					if_block.c();
+  					if_block.m(button, t);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope, size*/ 260)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[8],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[8], dirty, get_default_slot_changes_1),
+  						get_default_slot_context_1
+  					);
+  				}
+  			}
+
+  			set_attributes(button, button_data = get_spread_update(button_levels, [
+  				{ type: "button" },
+  				dirty & /*$$restProps*/ 64 && /*$$restProps*/ ctx[6],
+  				(!current || dirty & /*buttonClass*/ 16) && { class: /*buttonClass*/ ctx[4] },
+  				(!current || dirty & /*ariaLabel, name*/ 3 && button_aria_label_value !== (button_aria_label_value = /*ariaLabel*/ ctx[1] ?? /*name*/ ctx[0])) && { "aria-label": button_aria_label_value }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			if (if_block) if_block.d();
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (38:0) {#if href}
+  function create_if_block$r(ctx) {
+  	let a;
+  	let t;
+  	let a_aria_label_value;
+  	let current;
+  	let if_block = /*name*/ ctx[0] && create_if_block_1$i(ctx);
+  	const default_slot_template = /*#slots*/ ctx[9].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context$1);
+
+  	let a_levels = [
+  		{ href: /*href*/ ctx[3] },
+  		/*$$restProps*/ ctx[6],
+  		{ class: /*buttonClass*/ ctx[4] },
+  		{
+  			"aria-label": a_aria_label_value = /*ariaLabel*/ ctx[1] ?? /*name*/ ctx[0]
+  		}
+  	];
+
+  	let a_data = {};
+
+  	for (let i = 0; i < a_levels.length; i += 1) {
+  		a_data = assign(a_data, a_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			a = element("a");
+  			if (if_block) if_block.c();
+  			t = space$1();
+  			if (default_slot) default_slot.c();
+  			set_attributes(a, a_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, a, anchor);
+  			if (if_block) if_block.m(a, null);
+  			append(a, t);
+
+  			if (default_slot) {
+  				default_slot.m(a, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*name*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+  				} else {
+  					if_block = create_if_block_1$i(ctx);
+  					if_block.c();
+  					if_block.m(a, t);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope, size*/ 260)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[8],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[8], dirty, get_default_slot_changes$1),
+  						get_default_slot_context$1
+  					);
+  				}
+  			}
+
+  			set_attributes(a, a_data = get_spread_update(a_levels, [
+  				(!current || dirty & /*href*/ 8) && { href: /*href*/ ctx[3] },
+  				dirty & /*$$restProps*/ 64 && /*$$restProps*/ ctx[6],
+  				(!current || dirty & /*buttonClass*/ 16) && { class: /*buttonClass*/ ctx[4] },
+  				(!current || dirty & /*ariaLabel, name*/ 3 && a_aria_label_value !== (a_aria_label_value = /*ariaLabel*/ ctx[1] ?? /*name*/ ctx[0])) && { "aria-label": a_aria_label_value }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(a);
+  			}
+
+  			if (if_block) if_block.d();
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (45:4) {#if name}
+  function create_if_block_2$4(ctx) {
+  	let span;
+  	let t;
+
+  	return {
+  		c() {
+  			span = element("span");
+  			t = text(/*name*/ ctx[0]);
+  			attr(span, "class", "sr-only");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, span, anchor);
+  			append(span, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*name*/ 1) set_data(t, /*name*/ ctx[0]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(span);
+  			}
+  		}
+  	};
+  }
+
+  // (40:4) {#if name}
+  function create_if_block_1$i(ctx) {
+  	let span;
+  	let t;
+
+  	return {
+  		c() {
+  			span = element("span");
+  			t = text(/*name*/ ctx[0]);
+  			attr(span, "class", "sr-only");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, span, anchor);
+  			append(span, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*name*/ 1) set_data(t, /*name*/ ctx[0]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(span);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$B(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$r, create_else_block$8];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*href*/ ctx[3]) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_blocks[current_block_type_index].m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_blocks[current_block_type_index].d(detaching);
+  		}
+  	};
+  }
+
+  function instance$B($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["color","name","ariaLabel","size","href"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const background = getContext("background");
+  	let { color = "default" } = $$props;
+  	let { name = void 0 } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { size = "md" } = $$props;
+  	let { href = void 0 } = $$props;
+
+  	const colors = {
+  		dark: "text-gray-500 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600",
+  		gray: "text-gray-500 focus:ring-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-300",
+  		red: "text-red-500 focus:ring-red-400 hover:bg-red-200 dark:hover:bg-red-800 dark:hover:text-red-300",
+  		yellow: "text-yellow-500 focus:ring-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-800 dark:hover:text-yellow-300",
+  		green: "text-green-500 focus:ring-green-400 hover:bg-green-200 dark:hover:bg-green-800 dark:hover:text-green-300",
+  		indigo: "text-indigo-500 focus:ring-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-800 dark:hover:text-indigo-300",
+  		purple: "text-purple-500 focus:ring-purple-400 hover:bg-purple-200 dark:hover:bg-purple-800 dark:hover:text-purple-300",
+  		pink: "text-pink-500 focus:ring-pink-400 hover:bg-pink-200 dark:hover:bg-pink-800 dark:hover:text-pink-300",
+  		blue: "text-blue-500 focus:ring-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800 dark:hover:text-blue-300",
+  		primary: "text-primary-500 focus:ring-primary-400 hover:bg-primary-200 dark:hover:bg-primary-800 dark:hover:text-primary-300",
+  		default: "focus:ring-gray-400 hover:bg-gray-100"
+  	};
+
+  	const sizing = {
+  		xs: "m-0.5 rounded-sm focus:ring-1 p-0.5",
+  		sm: "m-0.5 rounded focus:ring-1 p-0.5",
+  		md: "m-0.5 rounded-lg focus:ring-2 p-1.5",
+  		lg: "m-0.5 rounded-lg focus:ring-2 p-2.5"
+  	};
+
+  	let buttonClass;
+
+  	const svgSizes = {
+  		xs: "w-3 h-3",
+  		sm: "w-3.5 h-3.5",
+  		md: "w-5 h-5",
+  		lg: "w-5 h-5"
+  	};
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(14, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(6, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('color' in $$new_props) $$invalidate(7, color = $$new_props.color);
+  		if ('name' in $$new_props) $$invalidate(0, name = $$new_props.name);
+  		if ('ariaLabel' in $$new_props) $$invalidate(1, ariaLabel = $$new_props.ariaLabel);
+  		if ('size' in $$new_props) $$invalidate(2, size = $$new_props.size);
+  		if ('href' in $$new_props) $$invalidate(3, href = $$new_props.href);
+  		if ('$$scope' in $$new_props) $$invalidate(8, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(4, buttonClass = twMerge(
+  			"focus:outline-none whitespace-normal",
+  			sizing[size],
+  			colors[color],
+  			color === "default" && (background
+  			? "dark:hover:bg-gray-600"
+  			: "dark:hover:bg-gray-700"),
+  			$$props.class
+  		));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		name,
+  		ariaLabel,
+  		size,
+  		href,
+  		buttonClass,
+  		svgSizes,
+  		$$restProps,
+  		color,
+  		$$scope,
+  		slots,
+  		click_handler
+  	];
+  }
+
+  class ToolbarButton extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$B, create_fragment$B, safe_not_equal, {
+  			color: 7,
+  			name: 0,
+  			ariaLabel: 1,
+  			size: 2,
+  			href: 3
+  		});
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\utils\CloseButton.svelte generated by Svelte v4.2.19 */
+
+  function create_default_slot$c(ctx) {
+  	let svg;
+  	let path;
+  	let svg_class_value;
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			path = svg_element("path");
+  			attr(path, "fill-rule", "evenodd");
+  			attr(path, "d", "M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z");
+  			attr(path, "clip-rule", "evenodd");
+  			attr(svg, "class", svg_class_value = /*svgSize*/ ctx[4]);
+  			attr(svg, "fill", "currentColor");
+  			attr(svg, "viewBox", "0 0 20 20");
+  			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			append(svg, path);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*svgSize*/ 16 && svg_class_value !== (svg_class_value = /*svgSize*/ ctx[4])) {
+  				attr(svg, "class", svg_class_value);
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$A(ctx) {
+  	let toolbarbutton;
+  	let current;
+
+  	const toolbarbutton_spread_levels = [
+  		{ name: /*name*/ ctx[0] },
+  		/*$$restProps*/ ctx[1],
+  		{
+  			class: twMerge('ms-auto', /*$$props*/ ctx[2].class)
+  		}
+  	];
+
+  	let toolbarbutton_props = {
+  		$$slots: {
+  			default: [
+  				create_default_slot$c,
+  				({ svgSize }) => ({ 4: svgSize }),
+  				({ svgSize }) => svgSize ? 16 : 0
+  			]
+  		},
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < toolbarbutton_spread_levels.length; i += 1) {
+  		toolbarbutton_props = assign(toolbarbutton_props, toolbarbutton_spread_levels[i]);
+  	}
+
+  	toolbarbutton = new ToolbarButton({ props: toolbarbutton_props });
+  	toolbarbutton.$on("click", /*click_handler*/ ctx[3]);
+
+  	return {
+  		c() {
+  			create_component(toolbarbutton.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(toolbarbutton, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const toolbarbutton_changes = (dirty & /*name, $$restProps, $$props*/ 7)
+  			? get_spread_update(toolbarbutton_spread_levels, [
+  					dirty & /*name*/ 1 && { name: /*name*/ ctx[0] },
+  					dirty & /*$$restProps*/ 2 && get_spread_object(/*$$restProps*/ ctx[1]),
+  					dirty & /*$$props*/ 4 && {
+  						class: twMerge('ms-auto', /*$$props*/ ctx[2].class)
+  					}
+  				])
+  			: {};
+
+  			if (dirty & /*$$scope, svgSize*/ 48) {
+  				toolbarbutton_changes.$$scope = { dirty, ctx };
+  			}
+
+  			toolbarbutton.$set(toolbarbutton_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(toolbarbutton.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(toolbarbutton.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(toolbarbutton, detaching);
+  		}
+  	};
+  }
+
+  function instance$A($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["name"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { name = "Close" } = $$props;
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(2, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(1, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('name' in $$new_props) $$invalidate(0, name = $$new_props.name);
+  	};
+
+  	$$props = exclude_internal_props($$props);
+  	return [name, $$restProps, $$props, click_handler];
+  }
+
+  class CloseButton extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$A, create_fragment$A, safe_not_equal, { name: 0 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\buttons\Button.svelte generated by Svelte v4.2.19 */
+
+  function create_else_block$7(ctx) {
+  	let previous_tag = /*tag*/ ctx[2];
+  	let svelte_element_anchor;
+  	let current;
+  	let svelte_element = /*tag*/ ctx[2] && create_dynamic_element$2(ctx);
+
+  	return {
+  		c() {
+  			if (svelte_element) svelte_element.c();
+  			svelte_element_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (svelte_element) svelte_element.m(target, anchor);
+  			insert$1(target, svelte_element_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*tag*/ ctx[2]) {
+  				if (!previous_tag) {
+  					svelte_element = create_dynamic_element$2(ctx);
+  					previous_tag = /*tag*/ ctx[2];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else if (safe_not_equal(previous_tag, /*tag*/ ctx[2])) {
+  					svelte_element.d(1);
+  					svelte_element = create_dynamic_element$2(ctx);
+  					previous_tag = /*tag*/ ctx[2];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else {
+  					svelte_element.p(ctx, dirty);
+  				}
+  			} else if (previous_tag) {
+  				svelte_element.d(1);
+  				svelte_element = null;
+  				previous_tag = /*tag*/ ctx[2];
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(svelte_element, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(svelte_element, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element_anchor);
+  			}
+
+  			if (svelte_element) svelte_element.d(detaching);
+  		}
+  	};
+  }
+
+  // (110:28) 
+  function create_if_block_1$h(ctx) {
+  	let button;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[13].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[12], null);
+
+  	let button_levels = [
+  		{ type: /*type*/ ctx[1] },
+  		/*$$restProps*/ ctx[5],
+  		{ disabled: /*disabled*/ ctx[3] },
+  		{ class: /*buttonClass*/ ctx[4] }
+  	];
+
+  	let button_data = {};
+
+  	for (let i = 0; i < button_levels.length; i += 1) {
+  		button_data = assign(button_data, button_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			if (default_slot) default_slot.c();
+  			set_attributes(button, button_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(button, null);
+  			}
+
+  			if (button.autofocus) button.focus();
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button, "click", /*click_handler_1*/ ctx[23]),
+  					listen(button, "change", /*change_handler_1*/ ctx[24]),
+  					listen(button, "keydown", /*keydown_handler_1*/ ctx[25]),
+  					listen(button, "keyup", /*keyup_handler_1*/ ctx[26]),
+  					listen(button, "touchstart", /*touchstart_handler_1*/ ctx[27], { passive: true }),
+  					listen(button, "touchend", /*touchend_handler_1*/ ctx[28]),
+  					listen(button, "touchcancel", /*touchcancel_handler_1*/ ctx[29]),
+  					listen(button, "mouseenter", /*mouseenter_handler_1*/ ctx[30]),
+  					listen(button, "mouseleave", /*mouseleave_handler_1*/ ctx[31])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 4096)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[12],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[12])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[12], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(button, button_data = get_spread_update(button_levels, [
+  				(!current || dirty[0] & /*type*/ 2) && { type: /*type*/ ctx[1] },
+  				dirty[0] & /*$$restProps*/ 32 && /*$$restProps*/ ctx[5],
+  				(!current || dirty[0] & /*disabled*/ 8) && { disabled: /*disabled*/ ctx[3] },
+  				(!current || dirty[0] & /*buttonClass*/ 16) && { class: /*buttonClass*/ ctx[4] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (106:0) {#if href && !disabled}
+  function create_if_block$q(ctx) {
+  	let a;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[13].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[12], null);
+
+  	let a_levels = [
+  		{ href: /*href*/ ctx[0] },
+  		/*$$restProps*/ ctx[5],
+  		{ class: /*buttonClass*/ ctx[4] },
+  		{ role: "button" }
+  	];
+
+  	let a_data = {};
+
+  	for (let i = 0; i < a_levels.length; i += 1) {
+  		a_data = assign(a_data, a_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			a = element("a");
+  			if (default_slot) default_slot.c();
+  			set_attributes(a, a_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, a, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(a, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(a, "click", /*click_handler*/ ctx[14]),
+  					listen(a, "change", /*change_handler*/ ctx[15]),
+  					listen(a, "keydown", /*keydown_handler*/ ctx[16]),
+  					listen(a, "keyup", /*keyup_handler*/ ctx[17]),
+  					listen(a, "touchstart", /*touchstart_handler*/ ctx[18], { passive: true }),
+  					listen(a, "touchend", /*touchend_handler*/ ctx[19]),
+  					listen(a, "touchcancel", /*touchcancel_handler*/ ctx[20]),
+  					listen(a, "mouseenter", /*mouseenter_handler*/ ctx[21]),
+  					listen(a, "mouseleave", /*mouseleave_handler*/ ctx[22])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 4096)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[12],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[12])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[12], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(a, a_data = get_spread_update(a_levels, [
+  				(!current || dirty[0] & /*href*/ 1) && { href: /*href*/ ctx[0] },
+  				dirty[0] & /*$$restProps*/ 32 && /*$$restProps*/ ctx[5],
+  				(!current || dirty[0] & /*buttonClass*/ 16) && { class: /*buttonClass*/ ctx[4] },
+  				{ role: "button" }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(a);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (115:2) <svelte:element this={tag} {...$$restProps} class={buttonClass}>
+  function create_dynamic_element$2(ctx) {
+  	let svelte_element;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[13].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[12], null);
+  	let svelte_element_levels = [/*$$restProps*/ ctx[5], { class: /*buttonClass*/ ctx[4] }];
+  	let svelte_element_data = {};
+
+  	for (let i = 0; i < svelte_element_levels.length; i += 1) {
+  		svelte_element_data = assign(svelte_element_data, svelte_element_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			svelte_element = element(/*tag*/ ctx[2]);
+  			if (default_slot) default_slot.c();
+  			set_dynamic_element_data(/*tag*/ ctx[2])(svelte_element, svelte_element_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svelte_element, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(svelte_element, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 4096)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[12],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[12])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[12], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_dynamic_element_data(/*tag*/ ctx[2])(svelte_element, svelte_element_data = get_spread_update(svelte_element_levels, [
+  				dirty[0] & /*$$restProps*/ 32 && /*$$restProps*/ ctx[5],
+  				(!current || dirty[0] & /*buttonClass*/ 16) && { class: /*buttonClass*/ ctx[4] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$z(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$q, create_if_block_1$h, create_else_block$7];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*href*/ ctx[0] && !/*disabled*/ ctx[3]) return 0;
+  		if (/*tag*/ ctx[2] === 'button') return 1;
+  		return 2;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_blocks[current_block_type_index].m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_blocks[current_block_type_index].d(detaching);
+  		}
+  	};
+  }
+
+  function instance$z($$self, $$props, $$invalidate) {
+  	const omit_props_names = [
+  		"pill","outline","size","href","type","color","shadow","tag","checked","disabled"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const group = getContext("group");
+  	let { pill = false } = $$props;
+  	let { outline = false } = $$props;
+  	let { size = group ? "sm" : "md" } = $$props;
+  	let { href = void 0 } = $$props;
+  	let { type = "button" } = $$props;
+  	let { color = group ? outline ? "dark" : "alternative" : "primary" } = $$props;
+  	let { shadow = false } = $$props;
+  	let { tag = "button" } = $$props;
+  	let { checked = void 0 } = $$props;
+  	let { disabled = false } = $$props;
+
+  	const colorClasses = {
+  		alternative: "text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-400 hover:text-primary-700 focus-within:text-primary-700 dark:focus-within:text-white dark:hover:text-white dark:hover:bg-gray-700",
+  		blue: "text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700",
+  		dark: "text-white bg-gray-800 hover:bg-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700",
+  		green: "text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700",
+  		light: "text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600",
+  		primary: "text-white bg-primary-700 hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700",
+  		purple: "text-white bg-purple-700 hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-700",
+  		red: "text-white bg-red-700 hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700",
+  		yellow: "text-white bg-yellow-400 hover:bg-yellow-500 ",
+  		none: ""
+  	};
+
+  	const colorCheckedClasses = {
+  		alternative: "text-primary-700 border dark:text-primary-500 bg-gray-100 dark:bg-gray-700 border-gray-300 shadow-gray-300 dark:shadow-gray-800 shadow-inner",
+  		blue: "text-blue-900 bg-blue-400 dark:bg-blue-500 shadow-blue-700 dark:shadow-blue-800 shadow-inner",
+  		dark: "text-white bg-gray-500 dark:bg-gray-600 shadow-gray-800 dark:shadow-gray-900 shadow-inner",
+  		green: "text-green-900 bg-green-400 dark:bg-green-500 shadow-green-700 dark:shadow-green-800 shadow-inner",
+  		light: "text-gray-900 bg-gray-100 border border-gray-300 dark:bg-gray-500 dark:text-gray-900 dark:border-gray-700 shadow-gray-300 dark:shadow-gray-700 shadow-inner",
+  		primary: "text-primary-900 bg-primary-400 dark:bg-primary-500 shadow-primary-700 dark:shadow-primary-800 shadow-inner",
+  		purple: "text-purple-900 bg-purple-400 dark:bg-purple-500 shadow-purple-700 dark:shadow-purple-800 shadow-inner",
+  		red: "text-red-900 bg-red-400 dark:bg-red-500 shadow-red-700 dark:shadow-red-800 shadow-inner",
+  		yellow: "text-yellow-900 bg-yellow-300 dark:bg-yellow-400 shadow-yellow-500 dark:shadow-yellow-700 shadow-inner",
+  		none: ""
+  	};
+
+  	const coloredFocusClasses = {
+  		alternative: "focus-within:ring-gray-200 dark:focus-within:ring-gray-700",
+  		blue: "focus-within:ring-blue-300 dark:focus-within:ring-blue-800",
+  		dark: "focus-within:ring-gray-300 dark:focus-within:ring-gray-700",
+  		green: "focus-within:ring-green-300 dark:focus-within:ring-green-800",
+  		light: "focus-within:ring-gray-200 dark:focus-within:ring-gray-700",
+  		primary: "focus-within:ring-primary-300 dark:focus-within:ring-primary-800",
+  		purple: "focus-within:ring-purple-300 dark:focus-within:ring-purple-900",
+  		red: "focus-within:ring-red-300 dark:focus-within:ring-red-900",
+  		yellow: "focus-within:ring-yellow-300 dark:focus-within:ring-yellow-900",
+  		none: ""
+  	};
+
+  	const coloredShadowClasses = {
+  		alternative: "shadow-gray-500/50 dark:shadow-gray-800/80",
+  		blue: "shadow-blue-500/50 dark:shadow-blue-800/80",
+  		dark: "shadow-gray-500/50 dark:shadow-gray-800/80",
+  		green: "shadow-green-500/50 dark:shadow-green-800/80",
+  		light: "shadow-gray-500/50 dark:shadow-gray-800/80",
+  		primary: "shadow-primary-500/50 dark:shadow-primary-800/80",
+  		purple: "shadow-purple-500/50 dark:shadow-purple-800/80",
+  		red: "shadow-red-500/50 dark:shadow-red-800/80 ",
+  		yellow: "shadow-yellow-500/50 dark:shadow-yellow-800/80 ",
+  		none: ""
+  	};
+
+  	const outlineClasses = {
+  		alternative: "text-gray-900 dark:text-gray-400 hover:text-white border border-gray-800 hover:bg-gray-900 focus-within:bg-gray-900 focus-within:text-white focus-within:ring-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus-within:ring-gray-800",
+  		blue: "text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600",
+  		dark: "text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus-within:bg-gray-900 focus-within:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600",
+  		green: "text-green-700 hover:text-white border border-green-700 hover:bg-green-800 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600",
+  		light: "text-gray-500 hover:text-gray-900 bg-white border border-gray-200 dark:border-gray-600 dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600",
+  		primary: "text-primary-700 hover:text-white border border-primary-700 hover:bg-primary-700 dark:border-primary-500 dark:text-primary-500 dark:hover:text-white dark:hover:bg-primary-600",
+  		purple: "text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500",
+  		red: "text-red-700 hover:text-white border border-red-700 hover:bg-red-800 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600",
+  		yellow: "text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400",
+  		none: ""
+  	};
+
+  	const sizeClasses = {
+  		xs: "px-3 py-2 text-xs",
+  		sm: "px-4 py-2 text-sm",
+  		md: "px-5 py-2.5 text-sm",
+  		lg: "px-5 py-3 text-base",
+  		xl: "px-6 py-3.5 text-base"
+  	};
+
+  	const hasBorder = () => outline || color === "alternative" || color === "light";
+  	let buttonClass;
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function change_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keyup_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchstart_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchend_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchcancel_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function click_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function change_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keyup_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchstart_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchend_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function touchcancel_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(40, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(5, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('pill' in $$new_props) $$invalidate(6, pill = $$new_props.pill);
+  		if ('outline' in $$new_props) $$invalidate(7, outline = $$new_props.outline);
+  		if ('size' in $$new_props) $$invalidate(8, size = $$new_props.size);
+  		if ('href' in $$new_props) $$invalidate(0, href = $$new_props.href);
+  		if ('type' in $$new_props) $$invalidate(1, type = $$new_props.type);
+  		if ('color' in $$new_props) $$invalidate(9, color = $$new_props.color);
+  		if ('shadow' in $$new_props) $$invalidate(10, shadow = $$new_props.shadow);
+  		if ('tag' in $$new_props) $$invalidate(2, tag = $$new_props.tag);
+  		if ('checked' in $$new_props) $$invalidate(11, checked = $$new_props.checked);
+  		if ('disabled' in $$new_props) $$invalidate(3, disabled = $$new_props.disabled);
+  		if ('$$scope' in $$new_props) $$invalidate(12, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(4, buttonClass = twMerge(
+  			"text-center font-medium",
+  			group ? "focus-within:ring-2" : "focus-within:ring-4",
+  			group && "focus-within:z-10",
+  			group || "focus-within:outline-none",
+  			"inline-flex items-center justify-center " + sizeClasses[size],
+  			outline && checked && "border dark:border-gray-900",
+  			outline && checked && colorCheckedClasses[color],
+  			outline && !checked && outlineClasses[color],
+  			!outline && checked && colorCheckedClasses[color],
+  			!outline && !checked && colorClasses[color],
+  			color === "alternative" && (group && !checked
+  			? "dark:bg-gray-700 dark:text-white dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-600"
+  			: "dark:bg-transparent dark:border-gray-600 dark:hover:border-gray-600"),
+  			outline && color === "dark" && (group
+  			? checked
+  				? "bg-gray-900 border-gray-800 dark:border-white dark:bg-gray-600"
+  				: "dark:text-white border-gray-800 dark:border-white"
+  			: "dark:text-gray-400 dark:border-gray-700"),
+  			coloredFocusClasses[color],
+  			hasBorder() && group && "[&:not(:first-child)]:-ms-px",
+  			group
+  			? pill && "first:rounded-s-full last:rounded-e-full" || "first:rounded-s-lg last:rounded-e-lg"
+  			: pill && "rounded-full" || "rounded-lg",
+  			shadow && "shadow-lg",
+  			shadow && coloredShadowClasses[color],
+  			disabled && "cursor-not-allowed opacity-50",
+  			$$props.class
+  		));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		href,
+  		type,
+  		tag,
+  		disabled,
+  		buttonClass,
+  		$$restProps,
+  		pill,
+  		outline,
+  		size,
+  		color,
+  		shadow,
+  		checked,
+  		$$scope,
+  		slots,
+  		click_handler,
+  		change_handler,
+  		keydown_handler,
+  		keyup_handler,
+  		touchstart_handler,
+  		touchend_handler,
+  		touchcancel_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		click_handler_1,
+  		change_handler_1,
+  		keydown_handler_1,
+  		keyup_handler_1,
+  		touchstart_handler_1,
+  		touchend_handler_1,
+  		touchcancel_handler_1,
+  		mouseenter_handler_1,
+  		mouseleave_handler_1
+  	];
+  }
+
+  class Button extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(
+  			this,
+  			options,
+  			instance$z,
+  			create_fragment$z,
+  			safe_not_equal,
+  			{
+  				pill: 6,
+  				outline: 7,
+  				size: 8,
+  				href: 0,
+  				type: 1,
+  				color: 9,
+  				shadow: 10,
+  				tag: 2,
+  				checked: 11,
+  				disabled: 3
+  			},
+  			null,
+  			[-1, -1]
+  		);
+  	}
+  }
+
+  /**
+   * Custom positioning reference element.
+   * @see https://floating-ui.com/docs/virtual-elements
+   */
+
+  const min = Math.min;
+  const max = Math.max;
+  const round = Math.round;
+  const floor = Math.floor;
+  const createCoords = v => ({
+    x: v,
+    y: v
+  });
+  const oppositeSideMap = {
+    left: 'right',
+    right: 'left',
+    bottom: 'top',
+    top: 'bottom'
+  };
+  const oppositeAlignmentMap = {
+    start: 'end',
+    end: 'start'
+  };
+  function clamp(start, value, end) {
+    return max(start, min(value, end));
+  }
+  function evaluate(value, param) {
+    return typeof value === 'function' ? value(param) : value;
+  }
+  function getSide(placement) {
+    return placement.split('-')[0];
+  }
+  function getAlignment(placement) {
+    return placement.split('-')[1];
+  }
+  function getOppositeAxis(axis) {
+    return axis === 'x' ? 'y' : 'x';
+  }
+  function getAxisLength(axis) {
+    return axis === 'y' ? 'height' : 'width';
+  }
+  function getSideAxis(placement) {
+    return ['top', 'bottom'].includes(getSide(placement)) ? 'y' : 'x';
+  }
+  function getAlignmentAxis(placement) {
+    return getOppositeAxis(getSideAxis(placement));
+  }
+  function getAlignmentSides(placement, rects, rtl) {
+    if (rtl === void 0) {
+      rtl = false;
+    }
+    const alignment = getAlignment(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const length = getAxisLength(alignmentAxis);
+    let mainAlignmentSide = alignmentAxis === 'x' ? alignment === (rtl ? 'end' : 'start') ? 'right' : 'left' : alignment === 'start' ? 'bottom' : 'top';
+    if (rects.reference[length] > rects.floating[length]) {
+      mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
+    }
+    return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
+  }
+  function getExpandedPlacements(placement) {
+    const oppositePlacement = getOppositePlacement(placement);
+    return [getOppositeAlignmentPlacement(placement), oppositePlacement, getOppositeAlignmentPlacement(oppositePlacement)];
+  }
+  function getOppositeAlignmentPlacement(placement) {
+    return placement.replace(/start|end/g, alignment => oppositeAlignmentMap[alignment]);
+  }
+  function getSideList(side, isStart, rtl) {
+    const lr = ['left', 'right'];
+    const rl = ['right', 'left'];
+    const tb = ['top', 'bottom'];
+    const bt = ['bottom', 'top'];
+    switch (side) {
+      case 'top':
+      case 'bottom':
+        if (rtl) return isStart ? rl : lr;
+        return isStart ? lr : rl;
+      case 'left':
+      case 'right':
+        return isStart ? tb : bt;
+      default:
+        return [];
+    }
+  }
+  function getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
+    const alignment = getAlignment(placement);
+    let list = getSideList(getSide(placement), direction === 'start', rtl);
+    if (alignment) {
+      list = list.map(side => side + "-" + alignment);
+      if (flipAlignment) {
+        list = list.concat(list.map(getOppositeAlignmentPlacement));
+      }
+    }
+    return list;
+  }
+  function getOppositePlacement(placement) {
+    return placement.replace(/left|right|bottom|top/g, side => oppositeSideMap[side]);
+  }
+  function expandPaddingObject(padding) {
+    return {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      ...padding
+    };
+  }
+  function getPaddingObject(padding) {
+    return typeof padding !== 'number' ? expandPaddingObject(padding) : {
+      top: padding,
+      right: padding,
+      bottom: padding,
+      left: padding
+    };
+  }
+  function rectToClientRect(rect) {
+    const {
+      x,
+      y,
+      width,
+      height
+    } = rect;
+    return {
+      width,
+      height,
+      top: y,
+      left: x,
+      right: x + width,
+      bottom: y + height,
+      x,
+      y
+    };
+  }
+
+  function computeCoordsFromPlacement(_ref, placement, rtl) {
+    let {
+      reference,
+      floating
+    } = _ref;
+    const sideAxis = getSideAxis(placement);
+    const alignmentAxis = getAlignmentAxis(placement);
+    const alignLength = getAxisLength(alignmentAxis);
+    const side = getSide(placement);
+    const isVertical = sideAxis === 'y';
+    const commonX = reference.x + reference.width / 2 - floating.width / 2;
+    const commonY = reference.y + reference.height / 2 - floating.height / 2;
+    const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
+    let coords;
+    switch (side) {
+      case 'top':
+        coords = {
+          x: commonX,
+          y: reference.y - floating.height
+        };
+        break;
+      case 'bottom':
+        coords = {
+          x: commonX,
+          y: reference.y + reference.height
+        };
+        break;
+      case 'right':
+        coords = {
+          x: reference.x + reference.width,
+          y: commonY
+        };
+        break;
+      case 'left':
+        coords = {
+          x: reference.x - floating.width,
+          y: commonY
+        };
+        break;
+      default:
+        coords = {
+          x: reference.x,
+          y: reference.y
+        };
+    }
+    switch (getAlignment(placement)) {
+      case 'start':
+        coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+        break;
+      case 'end':
+        coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
+        break;
+    }
+    return coords;
+  }
+
+  /**
+   * Computes the `x` and `y` coordinates that will place the floating element
+   * next to a given reference element.
+   *
+   * This export does not have any `platform` interface logic. You will need to
+   * write one for the platform you are using Floating UI with.
+   */
+  const computePosition$1 = async (reference, floating, config) => {
+    const {
+      placement = 'bottom',
+      strategy = 'absolute',
+      middleware = [],
+      platform
+    } = config;
+    const validMiddleware = middleware.filter(Boolean);
+    const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(floating));
+    let rects = await platform.getElementRects({
+      reference,
+      floating,
+      strategy
+    });
+    let {
+      x,
+      y
+    } = computeCoordsFromPlacement(rects, placement, rtl);
+    let statefulPlacement = placement;
+    let middlewareData = {};
+    let resetCount = 0;
+    for (let i = 0; i < validMiddleware.length; i++) {
+      const {
+        name,
+        fn
+      } = validMiddleware[i];
+      const {
+        x: nextX,
+        y: nextY,
+        data,
+        reset
+      } = await fn({
+        x,
+        y,
+        initialPlacement: placement,
+        placement: statefulPlacement,
+        strategy,
+        middlewareData,
+        rects,
+        platform,
+        elements: {
+          reference,
+          floating
+        }
+      });
+      x = nextX != null ? nextX : x;
+      y = nextY != null ? nextY : y;
+      middlewareData = {
+        ...middlewareData,
+        [name]: {
+          ...middlewareData[name],
+          ...data
+        }
+      };
+      if (reset && resetCount <= 50) {
+        resetCount++;
+        if (typeof reset === 'object') {
+          if (reset.placement) {
+            statefulPlacement = reset.placement;
+          }
+          if (reset.rects) {
+            rects = reset.rects === true ? await platform.getElementRects({
+              reference,
+              floating,
+              strategy
+            }) : reset.rects;
+          }
+          ({
+            x,
+            y
+          } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
+        }
+        i = -1;
+      }
+    }
+    return {
+      x,
+      y,
+      placement: statefulPlacement,
+      strategy,
+      middlewareData
+    };
+  };
+
+  /**
+   * Resolves with an object of overflow side offsets that determine how much the
+   * element is overflowing a given clipping boundary on each side.
+   * - positive = overflowing the boundary by that number of pixels
+   * - negative = how many pixels left before it will overflow
+   * - 0 = lies flush with the boundary
+   * @see https://floating-ui.com/docs/detectOverflow
+   */
+  async function detectOverflow(state, options) {
+    var _await$platform$isEle;
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      x,
+      y,
+      platform,
+      rects,
+      elements,
+      strategy
+    } = state;
+    const {
+      boundary = 'clippingAncestors',
+      rootBoundary = 'viewport',
+      elementContext = 'floating',
+      altBoundary = false,
+      padding = 0
+    } = evaluate(options, state);
+    const paddingObject = getPaddingObject(padding);
+    const altContext = elementContext === 'floating' ? 'reference' : 'floating';
+    const element = elements[altBoundary ? altContext : elementContext];
+    const clippingClientRect = rectToClientRect(await platform.getClippingRect({
+      element: ((_await$platform$isEle = await (platform.isElement == null ? void 0 : platform.isElement(element))) != null ? _await$platform$isEle : true) ? element : element.contextElement || (await (platform.getDocumentElement == null ? void 0 : platform.getDocumentElement(elements.floating))),
+      boundary,
+      rootBoundary,
+      strategy
+    }));
+    const rect = elementContext === 'floating' ? {
+      x,
+      y,
+      width: rects.floating.width,
+      height: rects.floating.height
+    } : rects.reference;
+    const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
+    const offsetScale = (await (platform.isElement == null ? void 0 : platform.isElement(offsetParent))) ? (await (platform.getScale == null ? void 0 : platform.getScale(offsetParent))) || {
+      x: 1,
+      y: 1
+    } : {
+      x: 1,
+      y: 1
+    };
+    const elementClientRect = rectToClientRect(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+      elements,
+      rect,
+      offsetParent,
+      strategy
+    }) : rect);
+    return {
+      top: (clippingClientRect.top - elementClientRect.top + paddingObject.top) / offsetScale.y,
+      bottom: (elementClientRect.bottom - clippingClientRect.bottom + paddingObject.bottom) / offsetScale.y,
+      left: (clippingClientRect.left - elementClientRect.left + paddingObject.left) / offsetScale.x,
+      right: (elementClientRect.right - clippingClientRect.right + paddingObject.right) / offsetScale.x
+    };
+  }
+
+  /**
+   * Provides data to position an inner element of the floating element so that it
+   * appears centered to the reference element.
+   * @see https://floating-ui.com/docs/arrow
+   */
+  const arrow$1 = options => ({
+    name: 'arrow',
+    options,
+    async fn(state) {
+      const {
+        x,
+        y,
+        placement,
+        rects,
+        platform,
+        elements,
+        middlewareData
+      } = state;
+      // Since `element` is required, we don't Partial<> the type.
+      const {
+        element,
+        padding = 0
+      } = evaluate(options, state) || {};
+      if (element == null) {
+        return {};
+      }
+      const paddingObject = getPaddingObject(padding);
+      const coords = {
+        x,
+        y
+      };
+      const axis = getAlignmentAxis(placement);
+      const length = getAxisLength(axis);
+      const arrowDimensions = await platform.getDimensions(element);
+      const isYAxis = axis === 'y';
+      const minProp = isYAxis ? 'top' : 'left';
+      const maxProp = isYAxis ? 'bottom' : 'right';
+      const clientProp = isYAxis ? 'clientHeight' : 'clientWidth';
+      const endDiff = rects.reference[length] + rects.reference[axis] - coords[axis] - rects.floating[length];
+      const startDiff = coords[axis] - rects.reference[axis];
+      const arrowOffsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(element));
+      let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
+
+      // DOM platform can return `window` as the `offsetParent`.
+      if (!clientSize || !(await (platform.isElement == null ? void 0 : platform.isElement(arrowOffsetParent)))) {
+        clientSize = elements.floating[clientProp] || rects.floating[length];
+      }
+      const centerToReference = endDiff / 2 - startDiff / 2;
+
+      // If the padding is large enough that it causes the arrow to no longer be
+      // centered, modify the padding so that it is centered.
+      const largestPossiblePadding = clientSize / 2 - arrowDimensions[length] / 2 - 1;
+      const minPadding = min(paddingObject[minProp], largestPossiblePadding);
+      const maxPadding = min(paddingObject[maxProp], largestPossiblePadding);
+
+      // Make sure the arrow doesn't overflow the floating element if the center
+      // point is outside the floating element's bounds.
+      const min$1 = minPadding;
+      const max = clientSize - arrowDimensions[length] - maxPadding;
+      const center = clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
+      const offset = clamp(min$1, center, max);
+
+      // If the reference is small enough that the arrow's padding causes it to
+      // to point to nothing for an aligned placement, adjust the offset of the
+      // floating element itself. To ensure `shift()` continues to take action,
+      // a single reset is performed when this is true.
+      const shouldAddOffset = !middlewareData.arrow && getAlignment(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+      const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
+      return {
+        [axis]: coords[axis] + alignmentOffset,
+        data: {
+          [axis]: offset,
+          centerOffset: center - offset - alignmentOffset,
+          ...(shouldAddOffset && {
+            alignmentOffset
+          })
+        },
+        reset: shouldAddOffset
+      };
+    }
+  });
+
+  /**
+   * Optimizes the visibility of the floating element by flipping the `placement`
+   * in order to keep it in view when the preferred placement(s) will overflow the
+   * clipping boundary. Alternative to `autoPlacement`.
+   * @see https://floating-ui.com/docs/flip
+   */
+  const flip$1 = function (options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: 'flip',
+      options,
+      async fn(state) {
+        var _middlewareData$arrow, _middlewareData$flip;
+        const {
+          placement,
+          middlewareData,
+          rects,
+          initialPlacement,
+          platform,
+          elements
+        } = state;
+        const {
+          mainAxis: checkMainAxis = true,
+          crossAxis: checkCrossAxis = true,
+          fallbackPlacements: specifiedFallbackPlacements,
+          fallbackStrategy = 'bestFit',
+          fallbackAxisSideDirection = 'none',
+          flipAlignment = true,
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+
+        // If a reset by the arrow was caused due to an alignment offset being
+        // added, we should skip any logic now since `flip()` has already done its
+        // work.
+        // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
+        if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+          return {};
+        }
+        const side = getSide(placement);
+        const initialSideAxis = getSideAxis(initialPlacement);
+        const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+        const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
+        const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
+        const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== 'none';
+        if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
+          fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
+        }
+        const placements = [initialPlacement, ...fallbackPlacements];
+        const overflow = await detectOverflow(state, detectOverflowOptions);
+        const overflows = [];
+        let overflowsData = ((_middlewareData$flip = middlewareData.flip) == null ? void 0 : _middlewareData$flip.overflows) || [];
+        if (checkMainAxis) {
+          overflows.push(overflow[side]);
+        }
+        if (checkCrossAxis) {
+          const sides = getAlignmentSides(placement, rects, rtl);
+          overflows.push(overflow[sides[0]], overflow[sides[1]]);
+        }
+        overflowsData = [...overflowsData, {
+          placement,
+          overflows
+        }];
+
+        // One or more sides is overflowing.
+        if (!overflows.every(side => side <= 0)) {
+          var _middlewareData$flip2, _overflowsData$filter;
+          const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
+          const nextPlacement = placements[nextIndex];
+          if (nextPlacement) {
+            // Try next placement and re-run the lifecycle.
+            return {
+              data: {
+                index: nextIndex,
+                overflows: overflowsData
+              },
+              reset: {
+                placement: nextPlacement
+              }
+            };
+          }
+
+          // First, find the candidates that fit on the mainAxis side of overflow,
+          // then find the placement that fits the best on the main crossAxis side.
+          let resetPlacement = (_overflowsData$filter = overflowsData.filter(d => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+
+          // Otherwise fallback.
+          if (!resetPlacement) {
+            switch (fallbackStrategy) {
+              case 'bestFit':
+                {
+                  var _overflowsData$filter2;
+                  const placement = (_overflowsData$filter2 = overflowsData.filter(d => {
+                    if (hasFallbackAxisSideDirection) {
+                      const currentSideAxis = getSideAxis(d.placement);
+                      return currentSideAxis === initialSideAxis ||
+                      // Create a bias to the `y` side axis due to horizontal
+                      // reading directions favoring greater width.
+                      currentSideAxis === 'y';
+                    }
+                    return true;
+                  }).map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
+                  if (placement) {
+                    resetPlacement = placement;
+                  }
+                  break;
+                }
+              case 'initialPlacement':
+                resetPlacement = initialPlacement;
+                break;
+            }
+          }
+          if (placement !== resetPlacement) {
+            return {
+              reset: {
+                placement: resetPlacement
+              }
+            };
+          }
+        }
+        return {};
+      }
+    };
+  };
+
+  // For type backwards-compatibility, the `OffsetOptions` type was also
+  // Derivable.
+
+  async function convertValueToCoords(state, options) {
+    const {
+      placement,
+      platform,
+      elements
+    } = state;
+    const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
+    const side = getSide(placement);
+    const alignment = getAlignment(placement);
+    const isVertical = getSideAxis(placement) === 'y';
+    const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+    const crossAxisMulti = rtl && isVertical ? -1 : 1;
+    const rawValue = evaluate(options, state);
+
+    // eslint-disable-next-line prefer-const
+    let {
+      mainAxis,
+      crossAxis,
+      alignmentAxis
+    } = typeof rawValue === 'number' ? {
+      mainAxis: rawValue,
+      crossAxis: 0,
+      alignmentAxis: null
+    } : {
+      mainAxis: 0,
+      crossAxis: 0,
+      alignmentAxis: null,
+      ...rawValue
+    };
+    if (alignment && typeof alignmentAxis === 'number') {
+      crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
+    }
+    return isVertical ? {
+      x: crossAxis * crossAxisMulti,
+      y: mainAxis * mainAxisMulti
+    } : {
+      x: mainAxis * mainAxisMulti,
+      y: crossAxis * crossAxisMulti
+    };
+  }
+
+  /**
+   * Modifies the placement by translating the floating element along the
+   * specified axes.
+   * A number (shorthand for `mainAxis` or distance), or an axes configuration
+   * object may be passed.
+   * @see https://floating-ui.com/docs/offset
+   */
+  const offset$1 = function (options) {
+    if (options === void 0) {
+      options = 0;
+    }
+    return {
+      name: 'offset',
+      options,
+      async fn(state) {
+        var _middlewareData$offse, _middlewareData$arrow;
+        const {
+          x,
+          y,
+          placement,
+          middlewareData
+        } = state;
+        const diffCoords = await convertValueToCoords(state, options);
+
+        // If the placement is the same and the arrow caused an alignment offset
+        // then we don't need to change the positioning coordinates.
+        if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+          return {};
+        }
+        return {
+          x: x + diffCoords.x,
+          y: y + diffCoords.y,
+          data: {
+            ...diffCoords,
+            placement
+          }
+        };
+      }
+    };
+  };
+
+  /**
+   * Optimizes the visibility of the floating element by shifting it in order to
+   * keep it in view when it will overflow the clipping boundary.
+   * @see https://floating-ui.com/docs/shift
+   */
+  const shift$2 = function (options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return {
+      name: 'shift',
+      options,
+      async fn(state) {
+        const {
+          x,
+          y,
+          placement
+        } = state;
+        const {
+          mainAxis: checkMainAxis = true,
+          crossAxis: checkCrossAxis = false,
+          limiter = {
+            fn: _ref => {
+              let {
+                x,
+                y
+              } = _ref;
+              return {
+                x,
+                y
+              };
+            }
+          },
+          ...detectOverflowOptions
+        } = evaluate(options, state);
+        const coords = {
+          x,
+          y
+        };
+        const overflow = await detectOverflow(state, detectOverflowOptions);
+        const crossAxis = getSideAxis(getSide(placement));
+        const mainAxis = getOppositeAxis(crossAxis);
+        let mainAxisCoord = coords[mainAxis];
+        let crossAxisCoord = coords[crossAxis];
+        if (checkMainAxis) {
+          const minSide = mainAxis === 'y' ? 'top' : 'left';
+          const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
+          const min = mainAxisCoord + overflow[minSide];
+          const max = mainAxisCoord - overflow[maxSide];
+          mainAxisCoord = clamp(min, mainAxisCoord, max);
+        }
+        if (checkCrossAxis) {
+          const minSide = crossAxis === 'y' ? 'top' : 'left';
+          const maxSide = crossAxis === 'y' ? 'bottom' : 'right';
+          const min = crossAxisCoord + overflow[minSide];
+          const max = crossAxisCoord - overflow[maxSide];
+          crossAxisCoord = clamp(min, crossAxisCoord, max);
+        }
+        const limitedCoords = limiter.fn({
+          ...state,
+          [mainAxis]: mainAxisCoord,
+          [crossAxis]: crossAxisCoord
+        });
+        return {
+          ...limitedCoords,
+          data: {
+            x: limitedCoords.x - x,
+            y: limitedCoords.y - y
+          }
+        };
+      }
+    };
+  };
+
+  function getNodeName(node) {
+    if (isNode(node)) {
+      return (node.nodeName || '').toLowerCase();
+    }
+    // Mocked nodes in testing environments may not be instances of Node. By
+    // returning `#document` an infinite loop won't occur.
+    // https://github.com/floating-ui/floating-ui/issues/2317
+    return '#document';
+  }
+  function getWindow(node) {
+    var _node$ownerDocument;
+    return (node == null || (_node$ownerDocument = node.ownerDocument) == null ? void 0 : _node$ownerDocument.defaultView) || window;
+  }
+  function getDocumentElement(node) {
+    var _ref;
+    return (_ref = (isNode(node) ? node.ownerDocument : node.document) || window.document) == null ? void 0 : _ref.documentElement;
+  }
+  function isNode(value) {
+    return value instanceof Node || value instanceof getWindow(value).Node;
+  }
+  function isElement(value) {
+    return value instanceof Element || value instanceof getWindow(value).Element;
+  }
+  function isHTMLElement(value) {
+    return value instanceof HTMLElement || value instanceof getWindow(value).HTMLElement;
+  }
+  function isShadowRoot(value) {
+    // Browsers without `ShadowRoot` support.
+    if (typeof ShadowRoot === 'undefined') {
+      return false;
+    }
+    return value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot;
+  }
+  function isOverflowElement(element) {
+    const {
+      overflow,
+      overflowX,
+      overflowY,
+      display
+    } = getComputedStyle$1(element);
+    return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !['inline', 'contents'].includes(display);
+  }
+  function isTableElement(element) {
+    return ['table', 'td', 'th'].includes(getNodeName(element));
+  }
+  function isTopLayer(element) {
+    return [':popover-open', ':modal'].some(selector => {
+      try {
+        return element.matches(selector);
+      } catch (e) {
+        return false;
+      }
+    });
+  }
+  function isContainingBlock(elementOrCss) {
+    const webkit = isWebKit();
+    const css = isElement(elementOrCss) ? getComputedStyle$1(elementOrCss) : elementOrCss;
+
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+    return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
+  }
+  function getContainingBlock(element) {
+    let currentNode = getParentNode(element);
+    while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      if (isContainingBlock(currentNode)) {
+        return currentNode;
+      } else if (isTopLayer(currentNode)) {
+        return null;
+      }
+      currentNode = getParentNode(currentNode);
+    }
+    return null;
+  }
+  function isWebKit() {
+    if (typeof CSS === 'undefined' || !CSS.supports) return false;
+    return CSS.supports('-webkit-backdrop-filter', 'none');
+  }
+  function isLastTraversableNode(node) {
+    return ['html', 'body', '#document'].includes(getNodeName(node));
+  }
+  function getComputedStyle$1(element) {
+    return getWindow(element).getComputedStyle(element);
+  }
+  function getNodeScroll(element) {
+    if (isElement(element)) {
+      return {
+        scrollLeft: element.scrollLeft,
+        scrollTop: element.scrollTop
+      };
+    }
+    return {
+      scrollLeft: element.scrollX,
+      scrollTop: element.scrollY
+    };
+  }
+  function getParentNode(node) {
+    if (getNodeName(node) === 'html') {
+      return node;
+    }
+    const result =
+    // Step into the shadow DOM of the parent of a slotted node.
+    node.assignedSlot ||
+    // DOM Element detected.
+    node.parentNode ||
+    // ShadowRoot detected.
+    isShadowRoot(node) && node.host ||
+    // Fallback.
+    getDocumentElement(node);
+    return isShadowRoot(result) ? result.host : result;
+  }
+  function getNearestOverflowAncestor(node) {
+    const parentNode = getParentNode(node);
+    if (isLastTraversableNode(parentNode)) {
+      return node.ownerDocument ? node.ownerDocument.body : node.body;
+    }
+    if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+      return parentNode;
+    }
+    return getNearestOverflowAncestor(parentNode);
+  }
+  function getOverflowAncestors(node, list, traverseIframes) {
+    var _node$ownerDocument2;
+    if (list === void 0) {
+      list = [];
+    }
+    if (traverseIframes === void 0) {
+      traverseIframes = true;
+    }
+    const scrollableAncestor = getNearestOverflowAncestor(node);
+    const isBody = scrollableAncestor === ((_node$ownerDocument2 = node.ownerDocument) == null ? void 0 : _node$ownerDocument2.body);
+    const win = getWindow(scrollableAncestor);
+    if (isBody) {
+      const frameElement = getFrameElement(win);
+      return list.concat(win, win.visualViewport || [], isOverflowElement(scrollableAncestor) ? scrollableAncestor : [], frameElement && traverseIframes ? getOverflowAncestors(frameElement) : []);
+    }
+    return list.concat(scrollableAncestor, getOverflowAncestors(scrollableAncestor, [], traverseIframes));
+  }
+  function getFrameElement(win) {
+    return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
+  }
+
+  function getCssDimensions(element) {
+    const css = getComputedStyle$1(element);
+    // In testing environments, the `width` and `height` properties are empty
+    // strings for SVG elements, returning NaN. Fallback to `0` in this case.
+    let width = parseFloat(css.width) || 0;
+    let height = parseFloat(css.height) || 0;
+    const hasOffset = isHTMLElement(element);
+    const offsetWidth = hasOffset ? element.offsetWidth : width;
+    const offsetHeight = hasOffset ? element.offsetHeight : height;
+    const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
+    if (shouldFallback) {
+      width = offsetWidth;
+      height = offsetHeight;
+    }
+    return {
+      width,
+      height,
+      $: shouldFallback
+    };
+  }
+
+  function unwrapElement(element) {
+    return !isElement(element) ? element.contextElement : element;
+  }
+
+  function getScale$1(element) {
+    const domElement = unwrapElement(element);
+    if (!isHTMLElement(domElement)) {
+      return createCoords(1);
+    }
+    const rect = domElement.getBoundingClientRect();
+    const {
+      width,
+      height,
+      $
+    } = getCssDimensions(domElement);
+    let x = ($ ? round(rect.width) : rect.width) / width;
+    let y = ($ ? round(rect.height) : rect.height) / height;
+
+    // 0, NaN, or Infinity should always fallback to 1.
+
+    if (!x || !Number.isFinite(x)) {
+      x = 1;
+    }
+    if (!y || !Number.isFinite(y)) {
+      y = 1;
+    }
+    return {
+      x,
+      y
+    };
+  }
+
+  const noOffsets = /*#__PURE__*/createCoords(0);
+  function getVisualOffsets(element) {
+    const win = getWindow(element);
+    if (!isWebKit() || !win.visualViewport) {
+      return noOffsets;
+    }
+    return {
+      x: win.visualViewport.offsetLeft,
+      y: win.visualViewport.offsetTop
+    };
+  }
+  function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
+    if (isFixed === void 0) {
+      isFixed = false;
+    }
+    if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) {
+      return false;
+    }
+    return isFixed;
+  }
+
+  function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
+    if (includeScale === void 0) {
+      includeScale = false;
+    }
+    if (isFixedStrategy === void 0) {
+      isFixedStrategy = false;
+    }
+    const clientRect = element.getBoundingClientRect();
+    const domElement = unwrapElement(element);
+    let scale = createCoords(1);
+    if (includeScale) {
+      if (offsetParent) {
+        if (isElement(offsetParent)) {
+          scale = getScale$1(offsetParent);
+        }
+      } else {
+        scale = getScale$1(element);
+      }
+    }
+    const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
+    let x = (clientRect.left + visualOffsets.x) / scale.x;
+    let y = (clientRect.top + visualOffsets.y) / scale.y;
+    let width = clientRect.width / scale.x;
+    let height = clientRect.height / scale.y;
+    if (domElement) {
+      const win = getWindow(domElement);
+      const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+      let currentWin = win;
+      let currentIFrame = getFrameElement(currentWin);
+      while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+        const iframeScale = getScale$1(currentIFrame);
+        const iframeRect = currentIFrame.getBoundingClientRect();
+        const css = getComputedStyle$1(currentIFrame);
+        const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) * iframeScale.x;
+        const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
+        x *= iframeScale.x;
+        y *= iframeScale.y;
+        width *= iframeScale.x;
+        height *= iframeScale.y;
+        x += left;
+        y += top;
+        currentWin = getWindow(currentIFrame);
+        currentIFrame = getFrameElement(currentWin);
+      }
+    }
+    return rectToClientRect({
+      width,
+      height,
+      x,
+      y
+    });
+  }
+
+  function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
+    let {
+      elements,
+      rect,
+      offsetParent,
+      strategy
+    } = _ref;
+    const isFixed = strategy === 'fixed';
+    const documentElement = getDocumentElement(offsetParent);
+    const topLayer = elements ? isTopLayer(elements.floating) : false;
+    if (offsetParent === documentElement || topLayer && isFixed) {
+      return rect;
+    }
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    let scale = createCoords(1);
+    const offsets = createCoords(0);
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+      if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isHTMLElement(offsetParent)) {
+        const offsetRect = getBoundingClientRect(offsetParent);
+        scale = getScale$1(offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      }
+    }
+    return {
+      width: rect.width * scale.x,
+      height: rect.height * scale.y,
+      x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
+      y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
+    };
+  }
+
+  function getClientRects(element) {
+    return Array.from(element.getClientRects());
+  }
+
+  function getWindowScrollBarX(element) {
+    // If <html> has a CSS width greater than the viewport, then this will be
+    // incorrect for RTL.
+    return getBoundingClientRect(getDocumentElement(element)).left + getNodeScroll(element).scrollLeft;
+  }
+
+  // Gets the entire size of the scrollable document area, even extending outside
+  // of the `<html>` and `<body>` rect bounds if horizontally scrollable.
+  function getDocumentRect(element) {
+    const html = getDocumentElement(element);
+    const scroll = getNodeScroll(element);
+    const body = element.ownerDocument.body;
+    const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+    const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+    let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+    const y = -scroll.scrollTop;
+    if (getComputedStyle$1(body).direction === 'rtl') {
+      x += max(html.clientWidth, body.clientWidth) - width;
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+
+  function getViewportRect(element, strategy) {
+    const win = getWindow(element);
+    const html = getDocumentElement(element);
+    const visualViewport = win.visualViewport;
+    let width = html.clientWidth;
+    let height = html.clientHeight;
+    let x = 0;
+    let y = 0;
+    if (visualViewport) {
+      width = visualViewport.width;
+      height = visualViewport.height;
+      const visualViewportBased = isWebKit();
+      if (!visualViewportBased || visualViewportBased && strategy === 'fixed') {
+        x = visualViewport.offsetLeft;
+        y = visualViewport.offsetTop;
+      }
+    }
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+
+  // Returns the inner client rect, subtracting scrollbars if present.
+  function getInnerBoundingClientRect(element, strategy) {
+    const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
+    const top = clientRect.top + element.clientTop;
+    const left = clientRect.left + element.clientLeft;
+    const scale = isHTMLElement(element) ? getScale$1(element) : createCoords(1);
+    const width = element.clientWidth * scale.x;
+    const height = element.clientHeight * scale.y;
+    const x = left * scale.x;
+    const y = top * scale.y;
+    return {
+      width,
+      height,
+      x,
+      y
+    };
+  }
+  function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
+    let rect;
+    if (clippingAncestor === 'viewport') {
+      rect = getViewportRect(element, strategy);
+    } else if (clippingAncestor === 'document') {
+      rect = getDocumentRect(getDocumentElement(element));
+    } else if (isElement(clippingAncestor)) {
+      rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+    } else {
+      const visualOffsets = getVisualOffsets(element);
+      rect = {
+        ...clippingAncestor,
+        x: clippingAncestor.x - visualOffsets.x,
+        y: clippingAncestor.y - visualOffsets.y
+      };
+    }
+    return rectToClientRect(rect);
+  }
+  function hasFixedPositionAncestor(element, stopNode) {
+    const parentNode = getParentNode(element);
+    if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) {
+      return false;
+    }
+    return getComputedStyle$1(parentNode).position === 'fixed' || hasFixedPositionAncestor(parentNode, stopNode);
+  }
+
+  // A "clipping ancestor" is an `overflow` element with the characteristic of
+  // clipping (or hiding) child elements. This returns all clipping ancestors
+  // of the given element up the tree.
+  function getClippingElementAncestors(element, cache) {
+    const cachedResult = cache.get(element);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    let result = getOverflowAncestors(element, [], false).filter(el => isElement(el) && getNodeName(el) !== 'body');
+    let currentContainingBlockComputedStyle = null;
+    const elementIsFixed = getComputedStyle$1(element).position === 'fixed';
+    let currentNode = elementIsFixed ? getParentNode(element) : element;
+
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+    while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+      const computedStyle = getComputedStyle$1(currentNode);
+      const currentNodeIsContaining = isContainingBlock(currentNode);
+      if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
+        currentContainingBlockComputedStyle = null;
+      }
+      const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+      if (shouldDropCurrentNode) {
+        // Drop non-containing blocks.
+        result = result.filter(ancestor => ancestor !== currentNode);
+      } else {
+        // Record last containing block for next iteration.
+        currentContainingBlockComputedStyle = computedStyle;
+      }
+      currentNode = getParentNode(currentNode);
+    }
+    cache.set(element, result);
+    return result;
+  }
+
+  // Gets the maximum area that the element is visible in due to any number of
+  // clipping ancestors.
+  function getClippingRect(_ref) {
+    let {
+      element,
+      boundary,
+      rootBoundary,
+      strategy
+    } = _ref;
+    const elementClippingAncestors = boundary === 'clippingAncestors' ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
+    const clippingAncestors = [...elementClippingAncestors, rootBoundary];
+    const firstClippingAncestor = clippingAncestors[0];
+    const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
+      const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
+      accRect.top = max(rect.top, accRect.top);
+      accRect.right = min(rect.right, accRect.right);
+      accRect.bottom = min(rect.bottom, accRect.bottom);
+      accRect.left = max(rect.left, accRect.left);
+      return accRect;
+    }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
+    return {
+      width: clippingRect.right - clippingRect.left,
+      height: clippingRect.bottom - clippingRect.top,
+      x: clippingRect.left,
+      y: clippingRect.top
+    };
+  }
+
+  function getDimensions(element) {
+    const {
+      width,
+      height
+    } = getCssDimensions(element);
+    return {
+      width,
+      height
+    };
+  }
+
+  function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
+    const isOffsetParentAnElement = isHTMLElement(offsetParent);
+    const documentElement = getDocumentElement(offsetParent);
+    const isFixed = strategy === 'fixed';
+    const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
+    let scroll = {
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+    const offsets = createCoords(0);
+    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+      if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
+        scroll = getNodeScroll(offsetParent);
+      }
+      if (isOffsetParentAnElement) {
+        const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
+        offsets.x = offsetRect.x + offsetParent.clientLeft;
+        offsets.y = offsetRect.y + offsetParent.clientTop;
+      } else if (documentElement) {
+        offsets.x = getWindowScrollBarX(documentElement);
+      }
+    }
+    const x = rect.left + scroll.scrollLeft - offsets.x;
+    const y = rect.top + scroll.scrollTop - offsets.y;
+    return {
+      x,
+      y,
+      width: rect.width,
+      height: rect.height
+    };
+  }
+
+  function isStaticPositioned(element) {
+    return getComputedStyle$1(element).position === 'static';
+  }
+
+  function getTrueOffsetParent(element, polyfill) {
+    if (!isHTMLElement(element) || getComputedStyle$1(element).position === 'fixed') {
+      return null;
+    }
+    if (polyfill) {
+      return polyfill(element);
+    }
+    return element.offsetParent;
+  }
+
+  // Gets the closest ancestor positioned element. Handles some edge cases,
+  // such as table ancestors and cross browser bugs.
+  function getOffsetParent(element, polyfill) {
+    const win = getWindow(element);
+    if (isTopLayer(element)) {
+      return win;
+    }
+    if (!isHTMLElement(element)) {
+      let svgOffsetParent = getParentNode(element);
+      while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+        if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+          return svgOffsetParent;
+        }
+        svgOffsetParent = getParentNode(svgOffsetParent);
+      }
+      return win;
+    }
+    let offsetParent = getTrueOffsetParent(element, polyfill);
+    while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) {
+      offsetParent = getTrueOffsetParent(offsetParent, polyfill);
+    }
+    if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) {
+      return win;
+    }
+    return offsetParent || getContainingBlock(element) || win;
+  }
+
+  const getElementRects = async function (data) {
+    const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
+    const getDimensionsFn = this.getDimensions;
+    const floatingDimensions = await getDimensionsFn(data.floating);
+    return {
+      reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
+      floating: {
+        x: 0,
+        y: 0,
+        width: floatingDimensions.width,
+        height: floatingDimensions.height
+      }
+    };
+  };
+
+  function isRTL(element) {
+    return getComputedStyle$1(element).direction === 'rtl';
+  }
+
+  const platform = {
+    convertOffsetParentRelativeRectToViewportRelativeRect,
+    getDocumentElement,
+    getClippingRect,
+    getOffsetParent,
+    getElementRects,
+    getClientRects,
+    getDimensions,
+    getScale: getScale$1,
+    isElement,
+    isRTL
+  };
+
+  // https://samthor.au/2021/observing-dom/
+  function observeMove(element, onMove) {
+    let io = null;
+    let timeoutId;
+    const root = getDocumentElement(element);
+    function cleanup() {
+      var _io;
+      clearTimeout(timeoutId);
+      (_io = io) == null || _io.disconnect();
+      io = null;
+    }
+    function refresh(skip, threshold) {
+      if (skip === void 0) {
+        skip = false;
+      }
+      if (threshold === void 0) {
+        threshold = 1;
+      }
+      cleanup();
+      const {
+        left,
+        top,
+        width,
+        height
+      } = element.getBoundingClientRect();
+      if (!skip) {
+        onMove();
+      }
+      if (!width || !height) {
+        return;
+      }
+      const insetTop = floor(top);
+      const insetRight = floor(root.clientWidth - (left + width));
+      const insetBottom = floor(root.clientHeight - (top + height));
+      const insetLeft = floor(left);
+      const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
+      const options = {
+        rootMargin,
+        threshold: max(0, min(1, threshold)) || 1
+      };
+      let isFirstUpdate = true;
+      function handleObserve(entries) {
+        const ratio = entries[0].intersectionRatio;
+        if (ratio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh();
+          }
+          if (!ratio) {
+            // If the reference is clipped, the ratio is 0. Throttle the refresh
+            // to prevent an infinite loop of updates.
+            timeoutId = setTimeout(() => {
+              refresh(false, 1e-7);
+            }, 1000);
+          } else {
+            refresh(false, ratio);
+          }
+        }
+        isFirstUpdate = false;
+      }
+
+      // Older browsers don't support a `document` as the root and will throw an
+      // error.
+      try {
+        io = new IntersectionObserver(handleObserve, {
+          ...options,
+          // Handle <iframe>s
+          root: root.ownerDocument
+        });
+      } catch (e) {
+        io = new IntersectionObserver(handleObserve, options);
+      }
+      io.observe(element);
+    }
+    refresh(true);
+    return cleanup;
+  }
+
+  /**
+   * Automatically updates the position of the floating element when necessary.
+   * Should only be called when the floating element is mounted on the DOM or
+   * visible on the screen.
+   * @returns cleanup function that should be invoked when the floating element is
+   * removed from the DOM or hidden from the screen.
+   * @see https://floating-ui.com/docs/autoUpdate
+   */
+  function autoUpdate(reference, floating, update, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    const {
+      ancestorScroll = true,
+      ancestorResize = true,
+      elementResize = typeof ResizeObserver === 'function',
+      layoutShift = typeof IntersectionObserver === 'function',
+      animationFrame = false
+    } = options;
+    const referenceEl = unwrapElement(reference);
+    const ancestors = ancestorScroll || ancestorResize ? [...(referenceEl ? getOverflowAncestors(referenceEl) : []), ...getOverflowAncestors(floating)] : [];
+    ancestors.forEach(ancestor => {
+      ancestorScroll && ancestor.addEventListener('scroll', update, {
+        passive: true
+      });
+      ancestorResize && ancestor.addEventListener('resize', update);
+    });
+    const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+    let reobserveFrame = -1;
+    let resizeObserver = null;
+    if (elementResize) {
+      resizeObserver = new ResizeObserver(_ref => {
+        let [firstEntry] = _ref;
+        if (firstEntry && firstEntry.target === referenceEl && resizeObserver) {
+          // Prevent update loops when using the `size` middleware.
+          // https://github.com/floating-ui/floating-ui/issues/1740
+          resizeObserver.unobserve(floating);
+          cancelAnimationFrame(reobserveFrame);
+          reobserveFrame = requestAnimationFrame(() => {
+            var _resizeObserver;
+            (_resizeObserver = resizeObserver) == null || _resizeObserver.observe(floating);
+          });
+        }
+        update();
+      });
+      if (referenceEl && !animationFrame) {
+        resizeObserver.observe(referenceEl);
+      }
+      resizeObserver.observe(floating);
+    }
+    let frameId;
+    let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
+    if (animationFrame) {
+      frameLoop();
+    }
+    function frameLoop() {
+      const nextRefRect = getBoundingClientRect(reference);
+      if (prevRefRect && (nextRefRect.x !== prevRefRect.x || nextRefRect.y !== prevRefRect.y || nextRefRect.width !== prevRefRect.width || nextRefRect.height !== prevRefRect.height)) {
+        update();
+      }
+      prevRefRect = nextRefRect;
+      frameId = requestAnimationFrame(frameLoop);
+    }
+    update();
+    return () => {
+      var _resizeObserver2;
+      ancestors.forEach(ancestor => {
+        ancestorScroll && ancestor.removeEventListener('scroll', update);
+        ancestorResize && ancestor.removeEventListener('resize', update);
+      });
+      cleanupIo == null || cleanupIo();
+      (_resizeObserver2 = resizeObserver) == null || _resizeObserver2.disconnect();
+      resizeObserver = null;
+      if (animationFrame) {
+        cancelAnimationFrame(frameId);
+      }
+    };
+  }
+
+  /**
+   * Modifies the placement by translating the floating element along the
+   * specified axes.
+   * A number (shorthand for `mainAxis` or distance), or an axes configuration
+   * object may be passed.
+   * @see https://floating-ui.com/docs/offset
+   */
+  const offset = offset$1;
+
+  /**
+   * Optimizes the visibility of the floating element by shifting it in order to
+   * keep it in view when it will overflow the clipping boundary.
+   * @see https://floating-ui.com/docs/shift
+   */
+  const shift$1 = shift$2;
+
+  /**
+   * Optimizes the visibility of the floating element by flipping the `placement`
+   * in order to keep it in view when the preferred placement(s) will overflow the
+   * clipping boundary. Alternative to `autoPlacement`.
+   * @see https://floating-ui.com/docs/flip
+   */
+  const flip = flip$1;
+
+  /**
+   * Provides data to position an inner element of the floating element so that it
+   * appears centered to the reference element.
+   * @see https://floating-ui.com/docs/arrow
+   */
+  const arrow = arrow$1;
+
+  /**
+   * Computes the `x` and `y` coordinates that will place the floating element
+   * next to a given reference element.
+   */
+  const computePosition = (reference, floating, options) => {
+    // This caches the expensive `getClippingElementAncestors` function so that
+    // multiple lifecycle resets re-use the same result. It only lives for a
+    // single call. If other functions become expensive, we can add them as well.
+    const cache = new Map();
+    const mergedOptions = {
+      platform,
+      ...options
+    };
+    const platformWithCache = {
+      ...mergedOptions.platform,
+      _c: cache
+    };
+    return computePosition$1(reference, floating, {
+      ...mergedOptions,
+      platform: platformWithCache
+    });
+  };
+
+  /* node_modules\flowbite-svelte\dist\utils\Popper.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_2$3(ctx) {
+  	let div;
+
+  	return {
+  		c() {
+  			div = element("div");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			/*div_binding*/ ctx[23](div);
+  		},
+  		p: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			/*div_binding*/ ctx[23](null);
+  		}
+  	};
+  }
+
+  // (154:0) {#if referenceEl}
+  function create_if_block$p(ctx) {
+  	let frame;
+  	let updating_open;
+  	let current;
+
+  	const frame_spread_levels = [
+  		{ use: /*init*/ ctx[9] },
+  		{ options: /*referenceEl*/ ctx[3] },
+  		{ role: "tooltip" },
+  		{
+  			tabindex: /*activeContent*/ ctx[1] ? -1 : undefined
+  		},
+  		/*$$restProps*/ ctx[11]
+  	];
+
+  	function frame_open_binding(value) {
+  		/*frame_open_binding*/ ctx[24](value);
+  	}
+
+  	let frame_props = {
+  		$$slots: { default: [create_default_slot$b] },
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < frame_spread_levels.length; i += 1) {
+  		frame_props = assign(frame_props, frame_spread_levels[i]);
+  	}
+
+  	if (/*open*/ ctx[0] !== void 0) {
+  		frame_props.open = /*open*/ ctx[0];
+  	}
+
+  	frame = new Frame({ props: frame_props });
+  	binding_callbacks.push(() => bind(frame, 'open', frame_open_binding));
+
+  	frame.$on("focusin", function () {
+  		if (is_function(optional(/*activeContent*/ ctx[1], /*showHandler*/ ctx[7]))) optional(/*activeContent*/ ctx[1], /*showHandler*/ ctx[7]).apply(this, arguments);
+  	});
+
+  	frame.$on("focusout", function () {
+  		if (is_function(optional(/*activeContent*/ ctx[1], /*hideHandler*/ ctx[8]))) optional(/*activeContent*/ ctx[1], /*hideHandler*/ ctx[8]).apply(this, arguments);
+  	});
+
+  	frame.$on("mouseenter", function () {
+  		if (is_function(optional(/*activeContent*/ ctx[1] && /*hoverable*/ ctx[4], /*showHandler*/ ctx[7]))) optional(/*activeContent*/ ctx[1] && /*hoverable*/ ctx[4], /*showHandler*/ ctx[7]).apply(this, arguments);
+  	});
+
+  	frame.$on("mouseleave", function () {
+  		if (is_function(optional(/*activeContent*/ ctx[1] && /*hoverable*/ ctx[4], /*hideHandler*/ ctx[8]))) optional(/*activeContent*/ ctx[1] && /*hoverable*/ ctx[4], /*hideHandler*/ ctx[8]).apply(this, arguments);
+  	});
+
+  	return {
+  		c() {
+  			create_component(frame.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(frame, target, anchor);
+  			current = true;
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+
+  			const frame_changes = (dirty[0] & /*init, referenceEl, activeContent, $$restProps*/ 2570)
+  			? get_spread_update(frame_spread_levels, [
+  					dirty[0] & /*init*/ 512 && { use: /*init*/ ctx[9] },
+  					dirty[0] & /*referenceEl*/ 8 && { options: /*referenceEl*/ ctx[3] },
+  					frame_spread_levels[2],
+  					dirty[0] & /*activeContent*/ 2 && {
+  						tabindex: /*activeContent*/ ctx[1] ? -1 : undefined
+  					},
+  					dirty[0] & /*$$restProps*/ 2048 && get_spread_object(/*$$restProps*/ ctx[11])
+  				])
+  			: {};
+
+  			if (dirty[0] & /*$$scope, arrowClass, arrow*/ 33554500) {
+  				frame_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open && dirty[0] & /*open*/ 1) {
+  				updating_open = true;
+  				frame_changes.open = /*open*/ ctx[0];
+  				add_flush_callback(() => updating_open = false);
+  			}
+
+  			frame.$set(frame_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(frame.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(frame.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(frame, detaching);
+  		}
+  	};
+  }
+
+  // (157:4) {#if arrow}
+  function create_if_block_1$g(ctx) {
+  	let div;
+  	let mounted;
+  	let dispose;
+
+  	return {
+  		c() {
+  			div = element("div");
+  			attr(div, "class", /*arrowClass*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+
+  			if (!mounted) {
+  				dispose = action_destroyer(/*initArrow*/ ctx[10].call(null, div));
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (dirty[0] & /*arrowClass*/ 64) {
+  				attr(div, "class", /*arrowClass*/ ctx[6]);
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (155:2) <Frame use={init} options={referenceEl} bind:open role="tooltip" tabindex={activeContent ? -1 : undefined} on:focusin={optional(activeContent, showHandler)} on:focusout={optional(activeContent, hideHandler)} on:mouseenter={optional(activeContent && hoverable, showHandler)} on:mouseleave={optional(activeContent && hoverable, hideHandler)} {...$$restProps}>
+  function create_default_slot$b(ctx) {
+  	let t;
+  	let if_block_anchor;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[22].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[25], null);
+  	let if_block = /*arrow*/ ctx[2] && create_if_block_1$g(ctx);
+
+  	return {
+  		c() {
+  			if (default_slot) default_slot.c();
+  			t = space$1();
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			insert$1(target, t, anchor);
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 33554432)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[25],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[25])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[25], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			if (/*arrow*/ ctx[2]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+  				} else {
+  					if_block = create_if_block_1$g(ctx);
+  					if_block.c();
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  				detach(if_block_anchor);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			if (if_block) if_block.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$y(ctx) {
+  	let t;
+  	let if_block1_anchor;
+  	let current;
+  	let if_block0 = !/*referenceEl*/ ctx[3] && create_if_block_2$3(ctx);
+  	let if_block1 = /*referenceEl*/ ctx[3] && create_if_block$p(ctx);
+
+  	return {
+  		c() {
+  			if (if_block0) if_block0.c();
+  			t = space$1();
+  			if (if_block1) if_block1.c();
+  			if_block1_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (if_block0) if_block0.m(target, anchor);
+  			insert$1(target, t, anchor);
+  			if (if_block1) if_block1.m(target, anchor);
+  			insert$1(target, if_block1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (!/*referenceEl*/ ctx[3]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_2$3(ctx);
+  					if_block0.c();
+  					if_block0.m(t.parentNode, t);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*referenceEl*/ ctx[3]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+
+  					if (dirty[0] & /*referenceEl*/ 8) {
+  						transition_in(if_block1, 1);
+  					}
+  				} else {
+  					if_block1 = create_if_block$p(ctx);
+  					if_block1.c();
+  					transition_in(if_block1, 1);
+  					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+  				}
+  			} else if (if_block1) {
+  				group_outros();
+
+  				transition_out(if_block1, 1, 1, () => {
+  					if_block1 = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block1);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block1);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  				detach(if_block1_anchor);
+  			}
+
+  			if (if_block0) if_block0.d(detaching);
+  			if (if_block1) if_block1.d(detaching);
+  		}
+  	};
+  }
+
+  function optional(pred, func) {
+  	return pred ? func : () => void 0;
+  }
+
+  function instance$y($$self, $$props, $$invalidate) {
+  	let middleware;
+
+  	const omit_props_names = [
+  		"activeContent","arrow","offset","placement","trigger","triggeredBy","reference","strategy","open","yOnly","middlewares"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { activeContent = false } = $$props;
+  	let { arrow: arrow$1 = true } = $$props;
+  	let { offset: offset$1 = 8 } = $$props;
+  	let { placement = "top" } = $$props;
+  	let { trigger = "hover" } = $$props;
+  	let { triggeredBy = void 0 } = $$props;
+  	let { reference = void 0 } = $$props;
+  	let { strategy = "absolute" } = $$props;
+  	let { open = false } = $$props;
+  	let { yOnly = false } = $$props;
+  	let { middlewares = [flip(), shift$1()] } = $$props;
+  	const dispatch = createEventDispatcher();
+  	let clickable;
+  	let hoverable;
+  	let referenceEl;
+  	let floatingEl;
+  	let arrowEl;
+  	let contentEl;
+  	let triggerEls = [];
+  	let _blocked = false;
+  	const block = () => (_blocked = true, setTimeout(() => _blocked = false, 250));
+
+  	const showHandler = ev => {
+  		if (referenceEl === void 0) console.error("trigger undefined");
+
+  		if (!reference && triggerEls.includes(ev.target) && referenceEl !== ev.target) {
+  			$$invalidate(3, referenceEl = ev.target);
+  			block();
+  		}
+
+  		if (clickable && ev.type === "focusin" && !open) block();
+
+  		$$invalidate(0, open = clickable && ev.type === "click" && !_blocked
+  		? !open
+  		: true);
+  	};
+
+  	const hasHover = el => el.matches(":hover");
+  	const hasFocus = el => el.contains(document.activeElement);
+  	const px = n => n != null ? `${n}px` : "";
+
+  	const hideHandler = ev => {
+  		if (activeContent) {
+  			setTimeout(
+  				() => {
+  					const elements = [referenceEl, floatingEl, ...triggerEls].filter(Boolean);
+  					if (ev.type === "mouseleave" && elements.some(hasHover)) return;
+  					if (ev.type === "focusout" && elements.some(hasFocus)) return;
+  					$$invalidate(0, open = false);
+  				},
+  				100
+  			);
+  		} else $$invalidate(0, open = false);
+  	};
+
+  	let arrowSide;
+
+  	const oppositeSideMap = {
+  		left: "right",
+  		right: "left",
+  		bottom: "top",
+  		top: "bottom"
+  	};
+
+  	function updatePosition() {
+  		computePosition(referenceEl, floatingEl, { placement, strategy, middleware }).then(({ x, y, middlewareData, placement: placement2, strategy: strategy2 }) => {
+  			floatingEl.style.position = strategy2;
+  			floatingEl.style.left = yOnly ? "0" : px(x);
+  			floatingEl.style.top = px(y);
+
+  			if (middlewareData.arrow && arrowEl instanceof HTMLDivElement) {
+  				$$invalidate(20, arrowEl.style.left = px(middlewareData.arrow.x), arrowEl);
+  				$$invalidate(20, arrowEl.style.top = px(middlewareData.arrow.y), arrowEl);
+  				$$invalidate(21, arrowSide = oppositeSideMap[placement2.split("-")[0]]);
+  				$$invalidate(20, arrowEl.style[arrowSide] = px(-arrowEl.offsetWidth / 2 - ($$props.border ? 1 : 0)), arrowEl);
+  			}
+  		});
+  	}
+
+  	function init(node, _referenceEl) {
+  		floatingEl = node;
+  		let cleanup = autoUpdate(_referenceEl, floatingEl, updatePosition);
+
+  		return {
+  			update(_referenceEl2) {
+  				cleanup();
+  				cleanup = autoUpdate(_referenceEl2, floatingEl, updatePosition);
+  			},
+  			destroy() {
+  				cleanup();
+  			}
+  		};
+  	}
+
+  	onMount(() => {
+  		const events = [
+  			["focusin", showHandler, true],
+  			["focusout", hideHandler, true],
+  			["click", showHandler, clickable],
+  			["mouseenter", showHandler, hoverable],
+  			["mouseleave", hideHandler, hoverable]
+  		];
+
+  		if (triggeredBy) triggerEls = [...document.querySelectorAll(triggeredBy)]; else triggerEls = contentEl.previousElementSibling
+  		? [contentEl.previousElementSibling]
+  		: [];
+
+  		if (!triggerEls.length) {
+  			console.error("No triggers found.");
+  		}
+
+  		triggerEls.forEach(element => {
+  			if (element.tabIndex < 0) element.tabIndex = 0;
+  			for (const [name, handler, cond] of events) if (cond) element.addEventListener(name, handler);
+  		});
+
+  		if (reference) {
+  			$$invalidate(3, referenceEl = document.querySelector(reference) ?? document.body);
+
+  			if (referenceEl === document.body) {
+  				console.error(`Popup reference not found: '${reference}'`);
+  			} else {
+  				referenceEl.addEventListener("focusout", hideHandler);
+  				if (hoverable) referenceEl.addEventListener("mouseleave", hideHandler);
+  			}
+  		} else {
+  			$$invalidate(3, referenceEl = triggerEls[0]);
+  		}
+
+  		document.addEventListener("click", closeOnClickOutside);
+
+  		return () => {
+  			triggerEls.forEach(element => {
+  				if (element) {
+  					for (const [name, handler] of events) element.removeEventListener(name, handler);
+  				}
+  			});
+
+  			if (referenceEl) {
+  				referenceEl.removeEventListener("focusout", hideHandler);
+  				referenceEl.removeEventListener("mouseleave", hideHandler);
+  			}
+
+  			document.removeEventListener("click", closeOnClickOutside);
+  		};
+  	});
+
+  	function closeOnClickOutside(event) {
+  		if (open) {
+  			if (!event.composedPath().includes(floatingEl) && !triggerEls.some(el => event.composedPath().includes(el))) {
+  				hideHandler(event);
+  			}
+  		}
+  	}
+
+  	let arrowClass;
+
+  	function initArrow(node) {
+  		$$invalidate(20, arrowEl = node);
+
+  		return {
+  			destroy() {
+  				$$invalidate(20, arrowEl = null);
+  			}
+  		};
+  	}
+
+  	function div_binding($$value) {
+  		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+  			contentEl = $$value;
+  			$$invalidate(5, contentEl);
+  		});
+  	}
+
+  	function frame_open_binding(value) {
+  		open = value;
+  		$$invalidate(0, open);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(39, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(11, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('activeContent' in $$new_props) $$invalidate(1, activeContent = $$new_props.activeContent);
+  		if ('arrow' in $$new_props) $$invalidate(2, arrow$1 = $$new_props.arrow);
+  		if ('offset' in $$new_props) $$invalidate(12, offset$1 = $$new_props.offset);
+  		if ('placement' in $$new_props) $$invalidate(13, placement = $$new_props.placement);
+  		if ('trigger' in $$new_props) $$invalidate(14, trigger = $$new_props.trigger);
+  		if ('triggeredBy' in $$new_props) $$invalidate(15, triggeredBy = $$new_props.triggeredBy);
+  		if ('reference' in $$new_props) $$invalidate(16, reference = $$new_props.reference);
+  		if ('strategy' in $$new_props) $$invalidate(17, strategy = $$new_props.strategy);
+  		if ('open' in $$new_props) $$invalidate(0, open = $$new_props.open);
+  		if ('yOnly' in $$new_props) $$invalidate(18, yOnly = $$new_props.yOnly);
+  		if ('middlewares' in $$new_props) $$invalidate(19, middlewares = $$new_props.middlewares);
+  		if ('$$scope' in $$new_props) $$invalidate(25, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty[0] & /*trigger*/ 16384) {
+  			clickable = trigger === "click";
+  		}
+
+  		if ($$self.$$.dirty[0] & /*trigger*/ 16384) {
+  			$$invalidate(4, hoverable = trigger === "hover");
+  		}
+
+  		if ($$self.$$.dirty[0] & /*open*/ 1) {
+  			dispatch("show", open);
+  		}
+
+  		if ($$self.$$.dirty[0] & /*placement, referenceEl*/ 8200) {
+  			placement && ($$invalidate(3, referenceEl), $$invalidate(13, placement));
+  		}
+
+  		if ($$self.$$.dirty[0] & /*middlewares, offset, arrowEl*/ 1576960) {
+  			middleware = [
+  				...middlewares,
+  				offset(+offset$1),
+  				arrowEl && arrow({ element: arrowEl, padding: 10 })
+  			];
+  		}
+
+  		$$invalidate(6, arrowClass = twJoin("absolute pointer-events-none block w-[10px] h-[10px] rotate-45 bg-inherit border-inherit", $$props.border && arrowSide === "bottom" && "border-b border-e", $$props.border && arrowSide === "top" && "border-t border-s ", $$props.border && arrowSide === "right" && "border-t border-e ", $$props.border && arrowSide === "left" && "border-b border-s "));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		open,
+  		activeContent,
+  		arrow$1,
+  		referenceEl,
+  		hoverable,
+  		contentEl,
+  		arrowClass,
+  		showHandler,
+  		hideHandler,
+  		init,
+  		initArrow,
+  		$$restProps,
+  		offset$1,
+  		placement,
+  		trigger,
+  		triggeredBy,
+  		reference,
+  		strategy,
+  		yOnly,
+  		middlewares,
+  		arrowEl,
+  		arrowSide,
+  		slots,
+  		div_binding,
+  		frame_open_binding,
+  		$$scope
+  	];
+  }
+
+  class Popper extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(
+  			this,
+  			options,
+  			instance$y,
+  			create_fragment$y,
+  			safe_not_equal,
+  			{
+  				activeContent: 1,
+  				arrow: 2,
+  				offset: 12,
+  				placement: 13,
+  				trigger: 14,
+  				triggeredBy: 15,
+  				reference: 16,
+  				strategy: 17,
+  				open: 0,
+  				yOnly: 18,
+  				middlewares: 19
+  			},
+  			null,
+  			[-1, -1]
+  		);
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\dropdown\Dropdown.svelte generated by Svelte v4.2.19 */
+  const get_footer_slot_changes$1 = dirty => ({});
+  const get_footer_slot_context$1 = ctx => ({});
+  const get_header_slot_changes$1 = dirty => ({});
+  const get_header_slot_context$1 = ctx => ({});
+
+  // (35:2) {#if $$slots.header}
+  function create_if_block_1$f(ctx) {
+  	let div;
+  	let current;
+  	const header_slot_template = /*#slots*/ ctx[22].header;
+  	const header_slot = create_slot(header_slot_template, ctx, /*$$scope*/ ctx[25], get_header_slot_context$1);
+
+  	return {
+  		c() {
+  			div = element("div");
+  			if (header_slot) header_slot.c();
+  			attr(div, "class", /*headerCls*/ ctx[9]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+
+  			if (header_slot) {
+  				header_slot.m(div, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (header_slot) {
+  				if (header_slot.p && (!current || dirty & /*$$scope*/ 33554432)) {
+  					update_slot_base(
+  						header_slot,
+  						header_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[25],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[25])
+  						: get_slot_changes(header_slot_template, /*$$scope*/ ctx[25], dirty, get_header_slot_changes$1),
+  						get_header_slot_context$1
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*headerCls*/ 512) {
+  				attr(div, "class", /*headerCls*/ ctx[9]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(header_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(header_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (header_slot) header_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (43:2) {#if $$slots.footer}
+  function create_if_block$o(ctx) {
+  	let div;
+  	let current;
+  	const footer_slot_template = /*#slots*/ ctx[22].footer;
+  	const footer_slot = create_slot(footer_slot_template, ctx, /*$$scope*/ ctx[25], get_footer_slot_context$1);
+
+  	return {
+  		c() {
+  			div = element("div");
+  			if (footer_slot) footer_slot.c();
+  			attr(div, "class", /*footerCls*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+
+  			if (footer_slot) {
+  				footer_slot.m(div, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (footer_slot) {
+  				if (footer_slot.p && (!current || dirty & /*$$scope*/ 33554432)) {
+  					update_slot_base(
+  						footer_slot,
+  						footer_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[25],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[25])
+  						: get_slot_changes(footer_slot_template, /*$$scope*/ ctx[25], dirty, get_footer_slot_changes$1),
+  						get_footer_slot_context$1
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*footerCls*/ 128) {
+  				attr(div, "class", /*footerCls*/ ctx[7]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(footer_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(footer_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (footer_slot) footer_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (34:0) <Popper activeContent {...$$restProps} {trigger} {arrow} {placement} {shadow} {rounded} {color} class={containerCls} on:show bind:open>
+  function create_default_slot$a(ctx) {
+  	let t0;
+  	let ul;
+  	let t1;
+  	let if_block1_anchor;
+  	let current;
+  	let if_block0 = /*$$slots*/ ctx[12].header && create_if_block_1$f(ctx);
+  	const default_slot_template = /*#slots*/ ctx[22].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[25], null);
+  	let if_block1 = /*$$slots*/ ctx[12].footer && create_if_block$o(ctx);
+
+  	return {
+  		c() {
+  			if (if_block0) if_block0.c();
+  			t0 = space$1();
+  			ul = element("ul");
+  			if (default_slot) default_slot.c();
+  			t1 = space$1();
+  			if (if_block1) if_block1.c();
+  			if_block1_anchor = empty$1();
+  			attr(ul, "class", /*ulCls*/ ctx[8]);
+  		},
+  		m(target, anchor) {
+  			if (if_block0) if_block0.m(target, anchor);
+  			insert$1(target, t0, anchor);
+  			insert$1(target, ul, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(ul, null);
+  			}
+
+  			insert$1(target, t1, anchor);
+  			if (if_block1) if_block1.m(target, anchor);
+  			insert$1(target, if_block1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*$$slots*/ ctx[12].header) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+
+  					if (dirty & /*$$slots*/ 4096) {
+  						transition_in(if_block0, 1);
+  					}
+  				} else {
+  					if_block0 = create_if_block_1$f(ctx);
+  					if_block0.c();
+  					transition_in(if_block0, 1);
+  					if_block0.m(t0.parentNode, t0);
+  				}
+  			} else if (if_block0) {
+  				group_outros();
+
+  				transition_out(if_block0, 1, 1, () => {
+  					if_block0 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 33554432)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[25],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[25])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[25], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*ulCls*/ 256) {
+  				attr(ul, "class", /*ulCls*/ ctx[8]);
+  			}
+
+  			if (/*$$slots*/ ctx[12].footer) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+
+  					if (dirty & /*$$slots*/ 4096) {
+  						transition_in(if_block1, 1);
+  					}
+  				} else {
+  					if_block1 = create_if_block$o(ctx);
+  					if_block1.c();
+  					transition_in(if_block1, 1);
+  					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+  				}
+  			} else if (if_block1) {
+  				group_outros();
+
+  				transition_out(if_block1, 1, 1, () => {
+  					if_block1 = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block0);
+  			transition_in(default_slot, local);
+  			transition_in(if_block1);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block0);
+  			transition_out(default_slot, local);
+  			transition_out(if_block1);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(ul);
+  				detach(t1);
+  				detach(if_block1_anchor);
+  			}
+
+  			if (if_block0) if_block0.d(detaching);
+  			if (default_slot) default_slot.d(detaching);
+  			if (if_block1) if_block1.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$x(ctx) {
+  	let popper;
+  	let updating_open;
+  	let current;
+
+  	const popper_spread_levels = [
+  		{ activeContent: true },
+  		/*$$restProps*/ ctx[11],
+  		{ trigger: /*trigger*/ ctx[2] },
+  		{ arrow: /*arrow*/ ctx[1] },
+  		{ placement: /*placement*/ ctx[3] },
+  		{ shadow: /*shadow*/ ctx[5] },
+  		{ rounded: /*rounded*/ ctx[6] },
+  		{ color: /*color*/ ctx[4] },
+  		{ class: /*containerCls*/ ctx[10] }
+  	];
+
+  	function popper_open_binding(value) {
+  		/*popper_open_binding*/ ctx[23](value);
+  	}
+
+  	let popper_props = {
+  		$$slots: { default: [create_default_slot$a] },
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < popper_spread_levels.length; i += 1) {
+  		popper_props = assign(popper_props, popper_spread_levels[i]);
+  	}
+
+  	if (/*open*/ ctx[0] !== void 0) {
+  		popper_props.open = /*open*/ ctx[0];
+  	}
+
+  	popper = new Popper({ props: popper_props });
+  	binding_callbacks.push(() => bind(popper, 'open', popper_open_binding));
+  	popper.$on("show", /*show_handler*/ ctx[24]);
+
+  	return {
+  		c() {
+  			create_component(popper.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(popper, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const popper_changes = (dirty & /*$$restProps, trigger, arrow, placement, shadow, rounded, color, containerCls*/ 3198)
+  			? get_spread_update(popper_spread_levels, [
+  					popper_spread_levels[0],
+  					dirty & /*$$restProps*/ 2048 && get_spread_object(/*$$restProps*/ ctx[11]),
+  					dirty & /*trigger*/ 4 && { trigger: /*trigger*/ ctx[2] },
+  					dirty & /*arrow*/ 2 && { arrow: /*arrow*/ ctx[1] },
+  					dirty & /*placement*/ 8 && { placement: /*placement*/ ctx[3] },
+  					dirty & /*shadow*/ 32 && { shadow: /*shadow*/ ctx[5] },
+  					dirty & /*rounded*/ 64 && { rounded: /*rounded*/ ctx[6] },
+  					dirty & /*color*/ 16 && { color: /*color*/ ctx[4] },
+  					dirty & /*containerCls*/ 1024 && { class: /*containerCls*/ ctx[10] }
+  				])
+  			: {};
+
+  			if (dirty & /*$$scope, footerCls, $$slots, ulCls, headerCls*/ 33559424) {
+  				popper_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open && dirty & /*open*/ 1) {
+  				updating_open = true;
+  				popper_changes.open = /*open*/ ctx[0];
+  				add_flush_callback(() => updating_open = false);
+  			}
+
+  			popper.$set(popper_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(popper.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(popper.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(popper, detaching);
+  		}
+  	};
+  }
+
+  function instance$x($$self, $$props, $$invalidate) {
+  	let containerCls;
+  	let headerCls;
+  	let ulCls;
+  	let footerCls;
+
+  	const omit_props_names = [
+  		"activeUrl","open","containerClass","classContainer","headerClass","classHeader","footerClass","classFooter","activeClass","classActive","arrow","trigger","placement","color","shadow","rounded"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const $$slots = compute_slots(slots);
+  	const activeUrlStore = writable("");
+  	let { activeUrl = "" } = $$props;
+  	let { open = false } = $$props;
+  	let { containerClass = "divide-y z-50" } = $$props;
+  	let { classContainer = void 0 } = $$props;
+  	let { headerClass = "py-1 overflow-hidden rounded-t-lg" } = $$props;
+  	let { classHeader = void 0 } = $$props;
+  	let { footerClass = "py-1 overflow-hidden rounded-b-lg" } = $$props;
+  	let { classFooter = void 0 } = $$props;
+  	let { activeClass = "text-primary-700 dark:text-primary-700 hover:text-primary-900 dark:hover:text-primary-900" } = $$props;
+  	let { classActive = void 0 } = $$props;
+  	let { arrow = false } = $$props;
+  	let { trigger = "click" } = $$props;
+  	let { placement = "bottom" } = $$props;
+  	let { color = "dropdown" } = $$props;
+  	let { shadow = true } = $$props;
+  	let { rounded = true } = $$props;
+  	let activeCls = twMerge(activeClass, classActive);
+  	setContext("DropdownType", { activeClass: activeCls });
+  	setContext("activeUrl", activeUrlStore);
+
+  	function popper_open_binding(value) {
+  		open = value;
+  		$$invalidate(0, open);
+  	}
+
+  	function show_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(28, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(11, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('activeUrl' in $$new_props) $$invalidate(13, activeUrl = $$new_props.activeUrl);
+  		if ('open' in $$new_props) $$invalidate(0, open = $$new_props.open);
+  		if ('containerClass' in $$new_props) $$invalidate(14, containerClass = $$new_props.containerClass);
+  		if ('classContainer' in $$new_props) $$invalidate(15, classContainer = $$new_props.classContainer);
+  		if ('headerClass' in $$new_props) $$invalidate(16, headerClass = $$new_props.headerClass);
+  		if ('classHeader' in $$new_props) $$invalidate(17, classHeader = $$new_props.classHeader);
+  		if ('footerClass' in $$new_props) $$invalidate(18, footerClass = $$new_props.footerClass);
+  		if ('classFooter' in $$new_props) $$invalidate(19, classFooter = $$new_props.classFooter);
+  		if ('activeClass' in $$new_props) $$invalidate(20, activeClass = $$new_props.activeClass);
+  		if ('classActive' in $$new_props) $$invalidate(21, classActive = $$new_props.classActive);
+  		if ('arrow' in $$new_props) $$invalidate(1, arrow = $$new_props.arrow);
+  		if ('trigger' in $$new_props) $$invalidate(2, trigger = $$new_props.trigger);
+  		if ('placement' in $$new_props) $$invalidate(3, placement = $$new_props.placement);
+  		if ('color' in $$new_props) $$invalidate(4, color = $$new_props.color);
+  		if ('shadow' in $$new_props) $$invalidate(5, shadow = $$new_props.shadow);
+  		if ('rounded' in $$new_props) $$invalidate(6, rounded = $$new_props.rounded);
+  		if ('$$scope' in $$new_props) $$invalidate(25, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*activeUrl*/ 8192) {
+  			activeUrlStore.set(activeUrl);
+  		}
+
+  		if ($$self.$$.dirty & /*containerClass, classContainer*/ 49152) {
+  			$$invalidate(10, containerCls = twMerge(containerClass, classContainer));
+  		}
+
+  		if ($$self.$$.dirty & /*headerClass, classHeader*/ 196608) {
+  			$$invalidate(9, headerCls = twMerge(headerClass, classHeader));
+  		}
+
+  		$$invalidate(8, ulCls = twMerge("py-1", $$props.class));
+
+  		if ($$self.$$.dirty & /*footerClass, classFooter*/ 786432) {
+  			$$invalidate(7, footerCls = twMerge(footerClass, classFooter));
+  		}
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		open,
+  		arrow,
+  		trigger,
+  		placement,
+  		color,
+  		shadow,
+  		rounded,
+  		footerCls,
+  		ulCls,
+  		headerCls,
+  		containerCls,
+  		$$restProps,
+  		$$slots,
+  		activeUrl,
+  		containerClass,
+  		classContainer,
+  		headerClass,
+  		classHeader,
+  		footerClass,
+  		classFooter,
+  		activeClass,
+  		classActive,
+  		slots,
+  		popper_open_binding,
+  		show_handler,
+  		$$scope
+  	];
+  }
+
+  class Dropdown extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$x, create_fragment$x, safe_not_equal, {
+  			activeUrl: 13,
+  			open: 0,
+  			containerClass: 14,
+  			classContainer: 15,
+  			headerClass: 16,
+  			classHeader: 17,
+  			footerClass: 18,
+  			classFooter: 19,
+  			activeClass: 20,
+  			classActive: 21,
+  			arrow: 1,
+  			trigger: 2,
+  			placement: 3,
+  			color: 4,
+  			shadow: 5,
+  			rounded: 6
+  		});
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\utils\Wrapper.svelte generated by Svelte v4.2.19 */
+
+  function create_else_block$6(ctx) {
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[5].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[4], null);
+
+  	return {
+  		c() {
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 16)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[4],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[4])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[4], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (7:0) {#if show}
+  function create_if_block$n(ctx) {
+  	let previous_tag = /*tag*/ ctx[0];
+  	let svelte_element_anchor;
+  	let current;
+  	let svelte_element = /*tag*/ ctx[0] && create_dynamic_element$1(ctx);
+
+  	return {
+  		c() {
+  			if (svelte_element) svelte_element.c();
+  			svelte_element_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (svelte_element) svelte_element.m(target, anchor);
+  			insert$1(target, svelte_element_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*tag*/ ctx[0]) {
+  				if (!previous_tag) {
+  					svelte_element = create_dynamic_element$1(ctx);
+  					previous_tag = /*tag*/ ctx[0];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else if (safe_not_equal(previous_tag, /*tag*/ ctx[0])) {
+  					svelte_element.d(1);
+  					svelte_element = create_dynamic_element$1(ctx);
+  					previous_tag = /*tag*/ ctx[0];
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else {
+  					svelte_element.p(ctx, dirty);
+  				}
+  			} else if (previous_tag) {
+  				svelte_element.d(1);
+  				svelte_element = null;
+  				previous_tag = /*tag*/ ctx[0];
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(svelte_element, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(svelte_element, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element_anchor);
+  			}
+
+  			if (svelte_element) svelte_element.d(detaching);
+  		}
+  	};
+  }
+
+  // (8:2) <svelte:element this={tag} use:use {...$$restProps}>
+  function create_dynamic_element$1(ctx) {
+  	let svelte_element;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[5].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[4], null);
+  	let svelte_element_levels = [/*$$restProps*/ ctx[3]];
+  	let svelte_element_data = {};
+
+  	for (let i = 0; i < svelte_element_levels.length; i += 1) {
+  		svelte_element_data = assign(svelte_element_data, svelte_element_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			svelte_element = element(/*tag*/ ctx[0]);
+  			if (default_slot) default_slot.c();
+  			set_dynamic_element_data(/*tag*/ ctx[0])(svelte_element, svelte_element_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svelte_element, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(svelte_element, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = action_destroyer(/*use*/ ctx[2].call(null, svelte_element));
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 16)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[4],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[4])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[4], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_dynamic_element_data(/*tag*/ ctx[0])(svelte_element, svelte_element_data = get_spread_update(svelte_element_levels, [dirty & /*$$restProps*/ 8 && /*$$restProps*/ ctx[3]]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  function create_fragment$w(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$n, create_else_block$6];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*show*/ ctx[1]) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_blocks[current_block_type_index].m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_blocks[current_block_type_index].d(detaching);
+  		}
+  	};
+  }
+
+  function instance$w($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["tag","show","use"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { tag = "div" } = $$props;
+  	let { show } = $$props;
+
+  	let { use = () => {
+  		
+  	} } = $$props;
+
+  	$$self.$$set = $$new_props => {
+  		$$props = assign(assign({}, $$props), exclude_internal_props($$new_props));
+  		$$invalidate(3, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('tag' in $$new_props) $$invalidate(0, tag = $$new_props.tag);
+  		if ('show' in $$new_props) $$invalidate(1, show = $$new_props.show);
+  		if ('use' in $$new_props) $$invalidate(2, use = $$new_props.use);
+  		if ('$$scope' in $$new_props) $$invalidate(4, $$scope = $$new_props.$$scope);
+  	};
+
+  	return [tag, show, use, $$restProps, $$scope, slots];
+  }
+
+  class Wrapper extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$w, create_fragment$w, safe_not_equal, { tag: 0, show: 1, use: 2 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\dropdown\DropdownItem.svelte generated by Svelte v4.2.19 */
+
+  function create_dynamic_element(ctx) {
+  	let svelte_element;
+  	let svelte_element_type_value;
+  	let svelte_element_role_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[9].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[18], null);
+
+  	let svelte_element_levels = [
+  		{ href: /*href*/ ctx[0] },
+  		{
+  			type: svelte_element_type_value = /*href*/ ctx[0] ? undefined : 'button'
+  		},
+  		{
+  			role: svelte_element_role_value = /*href*/ ctx[0] ? 'link' : 'button'
+  		},
+  		/*$$restProps*/ ctx[4],
+  		{ class: /*liClass*/ ctx[2] }
+  	];
+
+  	let svelte_element_data = {};
+
+  	for (let i = 0; i < svelte_element_levels.length; i += 1) {
+  		svelte_element_data = assign(svelte_element_data, svelte_element_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			svelte_element = element(/*href*/ ctx[0] ? 'a' : 'button');
+  			if (default_slot) default_slot.c();
+  			set_dynamic_element_data(/*href*/ ctx[0] ? 'a' : 'button')(svelte_element, svelte_element_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svelte_element, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(svelte_element, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(svelte_element, "click", /*click_handler*/ ctx[10]),
+  					listen(svelte_element, "change", /*change_handler*/ ctx[11]),
+  					listen(svelte_element, "keydown", /*keydown_handler*/ ctx[12]),
+  					listen(svelte_element, "keyup", /*keyup_handler*/ ctx[13]),
+  					listen(svelte_element, "focus", /*focus_handler*/ ctx[14]),
+  					listen(svelte_element, "blur", /*blur_handler*/ ctx[15]),
+  					listen(svelte_element, "mouseenter", /*mouseenter_handler*/ ctx[16]),
+  					listen(svelte_element, "mouseleave", /*mouseleave_handler*/ ctx[17])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 262144)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[18],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[18])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[18], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_dynamic_element_data(/*href*/ ctx[0] ? 'a' : 'button')(svelte_element, svelte_element_data = get_spread_update(svelte_element_levels, [
+  				(!current || dirty & /*href*/ 1) && { href: /*href*/ ctx[0] },
+  				(!current || dirty & /*href*/ 1 && svelte_element_type_value !== (svelte_element_type_value = /*href*/ ctx[0] ? undefined : 'button')) && { type: svelte_element_type_value },
+  				(!current || dirty & /*href*/ 1 && svelte_element_role_value !== (svelte_element_role_value = /*href*/ ctx[0] ? 'link' : 'button')) && { role: svelte_element_role_value },
+  				dirty & /*$$restProps*/ 16 && /*$$restProps*/ ctx[4],
+  				(!current || dirty & /*liClass*/ 4) && { class: /*liClass*/ ctx[2] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (21:0) <Wrapper tag="li" show={wrap} use={init}>
+  function create_default_slot$9(ctx) {
+  	let previous_tag = /*href*/ ctx[0] ? 'a' : 'button';
+  	let svelte_element_anchor;
+  	let current;
+  	let svelte_element = (/*href*/ ctx[0] ? 'a' : 'button') && create_dynamic_element(ctx);
+
+  	return {
+  		c() {
+  			if (svelte_element) svelte_element.c();
+  			svelte_element_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (svelte_element) svelte_element.m(target, anchor);
+  			insert$1(target, svelte_element_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*href*/ ctx[0] ? 'a' : 'button') {
+  				if (!previous_tag) {
+  					svelte_element = create_dynamic_element(ctx);
+  					previous_tag = /*href*/ ctx[0] ? 'a' : 'button';
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else if (safe_not_equal(previous_tag, /*href*/ ctx[0] ? 'a' : 'button')) {
+  					svelte_element.d(1);
+  					svelte_element = create_dynamic_element(ctx);
+  					previous_tag = /*href*/ ctx[0] ? 'a' : 'button';
+  					svelte_element.c();
+  					svelte_element.m(svelte_element_anchor.parentNode, svelte_element_anchor);
+  				} else {
+  					svelte_element.p(ctx, dirty);
+  				}
+  			} else if (previous_tag) {
+  				svelte_element.d(1);
+  				svelte_element = null;
+  				previous_tag = /*href*/ ctx[0] ? 'a' : 'button';
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(svelte_element, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(svelte_element, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svelte_element_anchor);
+  			}
+
+  			if (svelte_element) svelte_element.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$v(ctx) {
+  	let wrapper;
+  	let current;
+
+  	wrapper = new Wrapper({
+  			props: {
+  				tag: "li",
+  				show: /*wrap*/ ctx[1],
+  				use: /*init*/ ctx[3],
+  				$$slots: { default: [create_default_slot$9] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(wrapper.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(wrapper, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const wrapper_changes = {};
+  			if (dirty & /*wrap*/ 2) wrapper_changes.show = /*wrap*/ ctx[1];
+
+  			if (dirty & /*$$scope, href, $$restProps, liClass*/ 262165) {
+  				wrapper_changes.$$scope = { dirty, ctx };
+  			}
+
+  			wrapper.$set(wrapper_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(wrapper.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(wrapper.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(wrapper, detaching);
+  		}
+  	};
+  }
+
+  function instance$v($$self, $$props, $$invalidate) {
+  	let active;
+  	let liClass;
+  	const omit_props_names = ["defaultClass","href","activeClass"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { defaultClass = "font-medium py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600" } = $$props;
+  	let { href = void 0 } = $$props;
+  	let { activeClass = void 0 } = $$props;
+  	const context = getContext("DropdownType") ?? {};
+  	const activeUrlStore = getContext("activeUrl");
+  	let sidebarUrl = "";
+
+  	activeUrlStore.subscribe(value => {
+  		$$invalidate(7, sidebarUrl = value);
+  	});
+
+  	let wrap = true;
+
+  	function init(node) {
+  		$$invalidate(1, wrap = node.parentElement?.tagName === "UL");
+  	}
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function change_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keyup_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focus_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function blur_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(21, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(4, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('defaultClass' in $$new_props) $$invalidate(5, defaultClass = $$new_props.defaultClass);
+  		if ('href' in $$new_props) $$invalidate(0, href = $$new_props.href);
+  		if ('activeClass' in $$new_props) $$invalidate(6, activeClass = $$new_props.activeClass);
+  		if ('$$scope' in $$new_props) $$invalidate(18, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*sidebarUrl, href*/ 129) {
+  			$$invalidate(8, active = sidebarUrl ? href === sidebarUrl : false);
+  		}
+
+  		$$invalidate(2, liClass = twMerge(defaultClass, href ? "block" : "w-full text-left", active && (activeClass ?? context.activeClass), $$props.class));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		href,
+  		wrap,
+  		liClass,
+  		init,
+  		$$restProps,
+  		defaultClass,
+  		activeClass,
+  		sidebarUrl,
+  		active,
+  		slots,
+  		click_handler,
+  		change_handler,
+  		keydown_handler,
+  		keyup_handler,
+  		focus_handler,
+  		blur_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		$$scope
+  	];
+  }
+
+  class DropdownItem extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$v, create_fragment$v, safe_not_equal, { defaultClass: 5, href: 0, activeClass: 6 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\forms\Label.svelte generated by Svelte v4.2.19 */
+
+  function create_else_block$5(ctx) {
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[7].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[6], null);
+
+  	return {
+  		c() {
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 64)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[6],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[6])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[6], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (19:0) {#if show}
+  function create_if_block$m(ctx) {
+  	let label;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[7].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[6], null);
+  	let label_levels = [/*$$restProps*/ ctx[3], { class: /*labelClass*/ ctx[2] }];
+  	let label_data = {};
+
+  	for (let i = 0; i < label_levels.length; i += 1) {
+  		label_data = assign(label_data, label_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			label = element("label");
+  			if (default_slot) default_slot.c();
+  			set_attributes(label, label_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, label, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(label, null);
+  			}
+
+  			/*label_binding*/ ctx[8](label);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 64)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[6],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[6])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[6], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(label, label_data = get_spread_update(label_levels, [
+  				dirty & /*$$restProps*/ 8 && /*$$restProps*/ ctx[3],
+  				(!current || dirty & /*labelClass*/ 4) && { class: /*labelClass*/ ctx[2] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(label);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			/*label_binding*/ ctx[8](null);
+  		}
+  	};
+  }
+
+  function create_fragment$u(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$m, create_else_block$5];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*show*/ ctx[0]) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_blocks[current_block_type_index].m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_blocks[current_block_type_index].d(detaching);
+  		}
+  	};
+  }
+
+  function instance$u($$self, $$props, $$invalidate) {
+  	let labelClass;
+  	const omit_props_names = ["color","defaultClass","show"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { color = "gray" } = $$props;
+  	let { defaultClass = "text-sm rtl:text-right font-medium block" } = $$props;
+  	let { show = true } = $$props;
+  	let node;
+
+  	const colorClasses = {
+  		gray: "text-gray-900 dark:text-gray-300",
+  		green: "text-green-700 dark:text-green-500",
+  		red: "text-red-700 dark:text-red-500",
+  		disabled: "text-gray-400 dark:text-gray-500"
+  	};
+
+  	function label_binding($$value) {
+  		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+  			node = $$value;
+  			$$invalidate(1, node);
+  		});
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(10, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(3, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('color' in $$new_props) $$invalidate(4, color = $$new_props.color);
+  		if ('defaultClass' in $$new_props) $$invalidate(5, defaultClass = $$new_props.defaultClass);
+  		if ('show' in $$new_props) $$invalidate(0, show = $$new_props.show);
+  		if ('$$scope' in $$new_props) $$invalidate(6, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*node, color*/ 18) {
+  			{
+  				const control = node?.control;
+  				$$invalidate(4, color = (control?.disabled) ? "disabled" : color);
+  			}
+  		}
+
+  		$$invalidate(2, labelClass = twMerge(defaultClass, colorClasses[color], $$props.class));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		show,
+  		node,
+  		labelClass,
+  		$$restProps,
+  		color,
+  		defaultClass,
+  		$$scope,
+  		slots,
+  		label_binding
+  	];
+  }
+
+  class Label extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$u, create_fragment$u, safe_not_equal, { color: 4, defaultClass: 5, show: 0 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\forms\Radio.svelte generated by Svelte v4.2.19 */
+
+  const colorClasses = {
+  	primary: "text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600",
+  	secondary: "text-secondary-600 focus:ring-secondary-500 dark:focus:ring-secondary-600",
+  	red: "text-red-600 focus:ring-red-500 dark:focus:ring-red-600",
+  	green: "text-green-600 focus:ring-green-500 dark:focus:ring-green-600",
+  	purple: "text-purple-600 focus:ring-purple-500 dark:focus:ring-purple-600",
+  	teal: "text-teal-600 focus:ring-teal-500 dark:focus:ring-teal-600",
+  	yellow: "text-yellow-400 focus:ring-yellow-500 dark:focus:ring-yellow-600",
+  	orange: "text-orange-500 focus:ring-orange-500 dark:focus:ring-orange-600",
+  	blue: "text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600"
+  };
+
+  const labelClass = (inline, extraClass) => twMerge(inline ? "inline-flex" : "flex", "items-center", extraClass);
+
+  const inputClass = (custom, color, rounded, tinted, spacing, extraClass) => twMerge(
+  	"w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2",
+  	spacing,
+  	tinted
+  	? "dark:bg-gray-600 dark:border-gray-500"
+  	: "dark:bg-gray-700 dark:border-gray-600",
+  	custom && "sr-only peer",
+  	"rounded",
+  	colorClasses[color],
+  	extraClass
+  );
+
+  /* node_modules\flowbite-svelte\dist\forms\Checkbox.svelte generated by Svelte v4.2.19 */
+
+  function get_each_context$4(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[10] = list[i].value;
+  	child_ctx[31] = list[i].label;
+  	child_ctx[33] = i;
+  	return child_ctx;
+  }
+
+  // (24:0) {:else}
+  function create_else_block$4(ctx) {
+  	let label_1;
+  	let current;
+
+  	label_1 = new Label({
+  			props: {
+  				class: labelClass(/*inline*/ ctx[5], /*$$props*/ ctx[14].class),
+  				show: /*$$slots*/ ctx[12].default,
+  				$$slots: { default: [create_default_slot_1$5] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(label_1.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(label_1, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const label_1_changes = {};
+  			if (dirty[0] & /*inline, $$props*/ 16416) label_1_changes.class = labelClass(/*inline*/ ctx[5], /*$$props*/ ctx[14].class);
+  			if (dirty[0] & /*$$slots*/ 4096) label_1_changes.show = /*$$slots*/ ctx[12].default;
+
+  			if (dirty[0] & /*$$scope, name, value, $$restProps, custom, color, spacing, $$slots, $$props, checked*/ 1073771678) {
+  				label_1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			label_1.$set(label_1_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(label_1.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(label_1.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(label_1, detaching);
+  		}
+  	};
+  }
+
+  // (17:0) {#if choices.length > 0}
+  function create_if_block$l(ctx) {
+  	let each_1_anchor;
+  	let current;
+  	let each_value = ensure_array_like(/*choices*/ ctx[6]);
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		each_blocks[i] = create_each_block$4(get_each_context$4(ctx, each_value, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	return {
+  		c() {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			each_1_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(target, anchor);
+  				}
+  			}
+
+  			insert$1(target, each_1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (dirty[0] & /*inline, groupLabelClass, $$slots, $$scope, name, choices, $$restProps, custom, color, background, spacing, groupInputClass, group*/ 1073757181) {
+  				each_value = ensure_array_like(/*choices*/ ctx[6]);
+  				let i;
+
+  				for (i = 0; i < each_value.length; i += 1) {
+  					const child_ctx = get_each_context$4(ctx, each_value, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block$4(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(each_1_anchor);
+  			}
+
+  			destroy_each(each_blocks, detaching);
+  		}
+  	};
+  }
+
+  // (25:0) <Label class={labelClass(inline, $$props.class)} show={$$slots.default}>
+  function create_default_slot_1$5(ctx) {
+  	let input;
+  	let input_class_value;
+  	let t;
+  	let current;
+  	let mounted;
+  	let dispose;
+
+  	let input_levels = [
+  		{ name: /*name*/ ctx[2] },
+  		{ type: "checkbox" },
+  		{ __value: /*value*/ ctx[10] },
+  		/*$$restProps*/ ctx[13],
+  		{
+  			class: input_class_value = inputClass(/*custom*/ ctx[4], /*color*/ ctx[3], true, /*background*/ ctx[11], /*spacing*/ ctx[7], /*$$slots*/ ctx[12].default || /*$$props*/ ctx[14].class)
+  		}
+  	];
+
+  	let input_data = {};
+
+  	for (let i = 0; i < input_levels.length; i += 1) {
+  		input_data = assign(input_data, input_levels[i]);
+  	}
+
+  	const default_slot_template = /*#slots*/ ctx[15].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[30], null);
+
+  	return {
+  		c() {
+  			input = element("input");
+  			t = space$1();
+  			if (default_slot) default_slot.c();
+  			set_attributes(input, input_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, input, anchor);
+  			if (input.autofocus) input.focus();
+  			input.checked = /*checked*/ ctx[1];
+  			insert$1(target, t, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(input, "change", /*input_change_handler_1*/ ctx[29]),
+  					listen(input, "keyup", /*keyup_handler*/ ctx[16]),
+  					listen(input, "keydown", /*keydown_handler*/ ctx[17]),
+  					listen(input, "keypress", /*keypress_handler*/ ctx[18]),
+  					listen(input, "focus", /*focus_handler*/ ctx[19]),
+  					listen(input, "blur", /*blur_handler*/ ctx[20]),
+  					listen(input, "click", /*click_handler*/ ctx[21]),
+  					listen(input, "mouseover", /*mouseover_handler*/ ctx[22]),
+  					listen(input, "mouseenter", /*mouseenter_handler*/ ctx[23]),
+  					listen(input, "mouseleave", /*mouseleave_handler*/ ctx[24]),
+  					listen(input, "paste", /*paste_handler*/ ctx[25]),
+  					listen(input, "change", /*change_handler*/ ctx[26])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			set_attributes(input, input_data = get_spread_update(input_levels, [
+  				(!current || dirty[0] & /*name*/ 4) && { name: /*name*/ ctx[2] },
+  				{ type: "checkbox" },
+  				(!current || dirty[0] & /*value*/ 1024) && { __value: /*value*/ ctx[10] },
+  				dirty[0] & /*$$restProps*/ 8192 && /*$$restProps*/ ctx[13],
+  				(!current || dirty[0] & /*custom, color, spacing, $$slots, $$props*/ 20632 && input_class_value !== (input_class_value = inputClass(/*custom*/ ctx[4], /*color*/ ctx[3], true, /*background*/ ctx[11], /*spacing*/ ctx[7], /*$$slots*/ ctx[12].default || /*$$props*/ ctx[14].class))) && { class: input_class_value }
+  			]));
+
+  			if (dirty[0] & /*checked*/ 2) {
+  				input.checked = /*checked*/ ctx[1];
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 1073741824)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[30],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[30])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[30], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(input);
+  				detach(t);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (19:4) <Label class={labelClass(inline, groupLabelClass)} show={$$slots.default} for={`checkbox-${i}`}>
+  function create_default_slot$8(ctx) {
+  	let t0_value = /*label*/ ctx[31] + "";
+  	let t0;
+  	let t1;
+  	let input;
+  	let input_id_value;
+  	let input_value_value;
+  	let input_class_value;
+  	let t2;
+  	let t3;
+  	let current;
+  	let binding_group;
+  	let mounted;
+  	let dispose;
+
+  	let input_levels = [
+  		{ name: /*name*/ ctx[2] },
+  		{
+  			id: input_id_value = `checkbox-${/*i*/ ctx[33]}`
+  		},
+  		{ type: "checkbox" },
+  		{
+  			__value: input_value_value = /*value*/ ctx[10]
+  		},
+  		/*$$restProps*/ ctx[13],
+  		{
+  			class: input_class_value = inputClass(/*custom*/ ctx[4], /*color*/ ctx[3], true, /*background*/ ctx[11], /*spacing*/ ctx[7], /*groupInputClass*/ ctx[9])
+  		}
+  	];
+
+  	let input_data = {};
+
+  	for (let i = 0; i < input_levels.length; i += 1) {
+  		input_data = assign(input_data, input_levels[i]);
+  	}
+
+  	const default_slot_template = /*#slots*/ ctx[15].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[30], null);
+  	binding_group = init_binding_group(/*$$binding_groups*/ ctx[28][0]);
+
+  	return {
+  		c() {
+  			t0 = text(t0_value);
+  			t1 = space$1();
+  			input = element("input");
+  			t2 = space$1();
+  			if (default_slot) default_slot.c();
+  			t3 = space$1();
+  			set_attributes(input, input_data);
+  			binding_group.p(input);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t0, anchor);
+  			insert$1(target, t1, anchor);
+  			insert$1(target, input, anchor);
+  			if (input.autofocus) input.focus();
+  			input.checked = ~(/*group*/ ctx[0] || []).indexOf(input.__value);
+  			insert$1(target, t2, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			insert$1(target, t3, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(input, "change", /*input_change_handler*/ ctx[27]);
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if ((!current || dirty[0] & /*choices*/ 64) && t0_value !== (t0_value = /*label*/ ctx[31] + "")) set_data(t0, t0_value);
+
+  			set_attributes(input, input_data = get_spread_update(input_levels, [
+  				(!current || dirty[0] & /*name*/ 4) && { name: /*name*/ ctx[2] },
+  				{ id: input_id_value },
+  				{ type: "checkbox" },
+  				(!current || dirty[0] & /*choices*/ 64 && input_value_value !== (input_value_value = /*value*/ ctx[10])) && { __value: input_value_value },
+  				dirty[0] & /*$$restProps*/ 8192 && /*$$restProps*/ ctx[13],
+  				(!current || dirty[0] & /*custom, color, spacing, groupInputClass*/ 664 && input_class_value !== (input_class_value = inputClass(/*custom*/ ctx[4], /*color*/ ctx[3], true, /*background*/ ctx[11], /*spacing*/ ctx[7], /*groupInputClass*/ ctx[9]))) && { class: input_class_value }
+  			]));
+
+  			if (dirty[0] & /*group, choices*/ 65) {
+  				input.checked = ~(/*group*/ ctx[0] || []).indexOf(input.__value);
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[0] & /*$$scope*/ 1073741824)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[30],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[30])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[30], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(t1);
+  				detach(input);
+  				detach(t2);
+  				detach(t3);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			binding_group.r();
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (18:2) {#each choices as {value, label}
+  function create_each_block$4(ctx) {
+  	let label_1;
+  	let current;
+
+  	label_1 = new Label({
+  			props: {
+  				class: labelClass(/*inline*/ ctx[5], /*groupLabelClass*/ ctx[8]),
+  				show: /*$$slots*/ ctx[12].default,
+  				for: `checkbox-${/*i*/ ctx[33]}`,
+  				$$slots: { default: [create_default_slot$8] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(label_1.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(label_1, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const label_1_changes = {};
+  			if (dirty[0] & /*inline, groupLabelClass*/ 288) label_1_changes.class = labelClass(/*inline*/ ctx[5], /*groupLabelClass*/ ctx[8]);
+  			if (dirty[0] & /*$$slots*/ 4096) label_1_changes.show = /*$$slots*/ ctx[12].default;
+
+  			if (dirty[0] & /*$$scope, name, choices, $$restProps, custom, color, spacing, groupInputClass, group*/ 1073750749) {
+  				label_1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			label_1.$set(label_1_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(label_1.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(label_1.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(label_1, detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$t(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$l, create_else_block$4];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*choices*/ ctx[6].length > 0) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_blocks[current_block_type_index].m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_blocks[current_block_type_index].d(detaching);
+  		}
+  	};
+  }
+
+  function instance$t($$self, $$props, $$invalidate) {
+  	const omit_props_names = [
+  		"name","color","custom","inline","group","choices","value","checked","spacing","groupLabelClass","groupInputClass"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const $$slots = compute_slots(slots);
+  	let { name = void 0 } = $$props;
+  	let { color = "primary" } = $$props;
+  	let { custom = false } = $$props;
+  	let { inline = false } = $$props;
+  	let { group = [] } = $$props;
+  	let { choices = [] } = $$props;
+  	let { value = "on" } = $$props;
+  	let { checked = void 0 } = $$props;
+  	let { spacing = $$slots.default ? "me-2" : "" } = $$props;
+  	let { groupLabelClass = "" } = $$props;
+  	let { groupInputClass = "" } = $$props;
+  	let background = getContext("background");
+  	const $$binding_groups = [[]];
+
+  	function keyup_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keypress_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focus_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function blur_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseover_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function paste_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function change_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function input_change_handler() {
+  		group = get_binding_group_value($$binding_groups[0], this.__value, this.checked);
+  		$$invalidate(0, group);
+  	}
+
+  	function input_change_handler_1() {
+  		checked = this.checked;
+  		$$invalidate(1, checked);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(14, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(13, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('name' in $$new_props) $$invalidate(2, name = $$new_props.name);
+  		if ('color' in $$new_props) $$invalidate(3, color = $$new_props.color);
+  		if ('custom' in $$new_props) $$invalidate(4, custom = $$new_props.custom);
+  		if ('inline' in $$new_props) $$invalidate(5, inline = $$new_props.inline);
+  		if ('group' in $$new_props) $$invalidate(0, group = $$new_props.group);
+  		if ('choices' in $$new_props) $$invalidate(6, choices = $$new_props.choices);
+  		if ('value' in $$new_props) $$invalidate(10, value = $$new_props.value);
+  		if ('checked' in $$new_props) $$invalidate(1, checked = $$new_props.checked);
+  		if ('spacing' in $$new_props) $$invalidate(7, spacing = $$new_props.spacing);
+  		if ('groupLabelClass' in $$new_props) $$invalidate(8, groupLabelClass = $$new_props.groupLabelClass);
+  		if ('groupInputClass' in $$new_props) $$invalidate(9, groupInputClass = $$new_props.groupInputClass);
+  		if ('$$scope' in $$new_props) $$invalidate(30, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		group,
+  		checked,
+  		name,
+  		color,
+  		custom,
+  		inline,
+  		choices,
+  		spacing,
+  		groupLabelClass,
+  		groupInputClass,
+  		value,
+  		background,
+  		$$slots,
+  		$$restProps,
+  		$$props,
+  		slots,
+  		keyup_handler,
+  		keydown_handler,
+  		keypress_handler,
+  		focus_handler,
+  		blur_handler,
+  		click_handler,
+  		mouseover_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		paste_handler,
+  		change_handler,
+  		input_change_handler,
+  		$$binding_groups,
+  		input_change_handler_1,
+  		$$scope
+  	];
+  }
+
+  class Checkbox extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(
+  			this,
+  			options,
+  			instance$t,
+  			create_fragment$t,
+  			safe_not_equal,
+  			{
+  				name: 2,
+  				color: 3,
+  				custom: 4,
+  				inline: 5,
+  				group: 0,
+  				choices: 6,
+  				value: 10,
+  				checked: 1,
+  				spacing: 7,
+  				groupLabelClass: 8,
+  				groupInputClass: 9
+  			},
+  			null,
+  			[-1, -1]
+  		);
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\forms\Toggle.svelte generated by Svelte v4.2.19 */
+
+  function create_default_slot$7(ctx) {
+  	let span;
+  	let t;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[8].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[13], null);
+
+  	return {
+  		c() {
+  			span = element("span");
+  			t = space$1();
+  			if (default_slot) default_slot.c();
+  			attr(span, "class", /*divClass*/ ctx[3]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, span, anchor);
+  			insert$1(target, t, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (!current || dirty & /*divClass*/ 8) {
+  				attr(span, "class", /*divClass*/ ctx[3]);
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 8192)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[13],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[13])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[13], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(span);
+  				detach(t);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$s(ctx) {
+  	let checkbox;
+  	let updating_checked;
+  	let updating_group;
+  	let current;
+
+  	const checkbox_spread_levels = [
+  		{ custom: true },
+  		/*$$restProps*/ ctx[5],
+  		{ class: /*$$props*/ ctx[4].class },
+  		{ value: /*value*/ ctx[2] }
+  	];
+
+  	function checkbox_checked_binding(value) {
+  		/*checkbox_checked_binding*/ ctx[9](value);
+  	}
+
+  	function checkbox_group_binding(value) {
+  		/*checkbox_group_binding*/ ctx[10](value);
+  	}
+
+  	let checkbox_props = {
+  		$$slots: { default: [create_default_slot$7] },
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < checkbox_spread_levels.length; i += 1) {
+  		checkbox_props = assign(checkbox_props, checkbox_spread_levels[i]);
+  	}
+
+  	if (/*checked*/ ctx[1] !== void 0) {
+  		checkbox_props.checked = /*checked*/ ctx[1];
+  	}
+
+  	if (/*group*/ ctx[0] !== void 0) {
+  		checkbox_props.group = /*group*/ ctx[0];
+  	}
+
+  	checkbox = new Checkbox({ props: checkbox_props });
+  	binding_callbacks.push(() => bind(checkbox, 'checked', checkbox_checked_binding));
+  	binding_callbacks.push(() => bind(checkbox, 'group', checkbox_group_binding));
+  	checkbox.$on("click", /*click_handler*/ ctx[11]);
+  	checkbox.$on("change", /*change_handler*/ ctx[12]);
+
+  	return {
+  		c() {
+  			create_component(checkbox.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(checkbox, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const checkbox_changes = (dirty & /*$$restProps, $$props, value*/ 52)
+  			? get_spread_update(checkbox_spread_levels, [
+  					checkbox_spread_levels[0],
+  					dirty & /*$$restProps*/ 32 && get_spread_object(/*$$restProps*/ ctx[5]),
+  					dirty & /*$$props*/ 16 && { class: /*$$props*/ ctx[4].class },
+  					dirty & /*value*/ 4 && { value: /*value*/ ctx[2] }
+  				])
+  			: {};
+
+  			if (dirty & /*$$scope, divClass*/ 8200) {
+  				checkbox_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_checked && dirty & /*checked*/ 2) {
+  				updating_checked = true;
+  				checkbox_changes.checked = /*checked*/ ctx[1];
+  				add_flush_callback(() => updating_checked = false);
+  			}
+
+  			if (!updating_group && dirty & /*group*/ 1) {
+  				updating_group = true;
+  				checkbox_changes.group = /*group*/ ctx[0];
+  				add_flush_callback(() => updating_group = false);
+  			}
+
+  			checkbox.$set(checkbox_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(checkbox.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(checkbox.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(checkbox, detaching);
+  		}
+  	};
+  }
+
+  const common = "me-3 shrink-0 bg-gray-200 rounded-full peer-focus:ring-4 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:bg-white after:border-gray-300 after:border after:rounded-full after:transition-all";
+
+  function instance$s($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["size","group","value","checked","customSize"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { size = "default" } = $$props;
+  	let { group = [] } = $$props;
+  	let { value = "" } = $$props;
+  	let { checked = void 0 } = $$props;
+  	let { customSize = "" } = $$props;
+  	let background = getContext("background");
+
+  	const colors = {
+  		primary: "peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 peer-checked:bg-primary-600",
+  		secondary: "peer-focus:ring-secondary-300 dark:peer-focus:ring-secondary-800 peer-checked:bg-secondary-600",
+  		red: "peer-focus:ring-red-300 dark:peer-focus:ring-red-800 peer-checked:bg-red-600",
+  		green: "peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:bg-green-600",
+  		purple: "peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:bg-purple-600",
+  		yellow: "peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:bg-yellow-400",
+  		teal: "peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:bg-teal-600",
+  		orange: "peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 peer-checked:bg-orange-500",
+  		blue: "peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 peer-checked:bg-blue-600"
+  	};
+
+  	const sizes = {
+  		small: "w-9 h-5 after:top-[2px] after:start-[2px] after:h-4 after:w-4",
+  		default: "w-11 h-6 after:top-0.5 after:start-[2px] after:h-5 after:w-5",
+  		large: "w-14 h-7 after:top-0.5 after:start-[4px]  after:h-6 after:w-6",
+  		custom: customSize
+  	};
+
+  	let divClass;
+
+  	function checkbox_checked_binding(value) {
+  		checked = value;
+  		$$invalidate(1, checked);
+  	}
+
+  	function checkbox_group_binding(value) {
+  		group = value;
+  		$$invalidate(0, group);
+  	}
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function change_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(4, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(5, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('size' in $$new_props) $$invalidate(6, size = $$new_props.size);
+  		if ('group' in $$new_props) $$invalidate(0, group = $$new_props.group);
+  		if ('value' in $$new_props) $$invalidate(2, value = $$new_props.value);
+  		if ('checked' in $$new_props) $$invalidate(1, checked = $$new_props.checked);
+  		if ('customSize' in $$new_props) $$invalidate(7, customSize = $$new_props.customSize);
+  		if ('$$scope' in $$new_props) $$invalidate(13, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(3, divClass = twMerge(
+  			common,
+  			background
+  			? "dark:bg-gray-600 dark:border-gray-500"
+  			: "dark:bg-gray-700 dark:border-gray-600",
+  			colors[$$restProps.color ?? "primary"],
+  			sizes[size],
+  			"relative",
+  			$$props.classDiv
+  		));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		group,
+  		checked,
+  		value,
+  		divClass,
+  		$$props,
+  		$$restProps,
+  		size,
+  		customSize,
+  		slots,
+  		checkbox_checked_binding,
+  		checkbox_group_binding,
+  		click_handler,
+  		change_handler,
+  		$$scope
+  	];
+  }
+
+  class Toggle extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$s, create_fragment$s, safe_not_equal, {
+  			size: 6,
+  			group: 0,
+  			value: 2,
+  			checked: 1,
+  			customSize: 7
+  		});
+  	}
+  }
+
+  //
+  // Taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
+  //
+
+  // add all the elements inside modal which you want to make focusable
+  const selectorTabbable = `
+  a[href], area[href], input:not([disabled]):not([tabindex='-1']),
+  button:not([disabled]):not([tabindex='-1']),select:not([disabled]):not([tabindex='-1']),
+  textarea:not([disabled]):not([tabindex='-1']),
+  iframe, object, embed, *[tabindex]:not([tabindex='-1']):not([disabled]), *[contenteditable=true]
+`;
+
+  /** @type {import('svelte/action').Action<HTMLElement, any>} */
+  function focusTrap(node) {
+    /** @type {(e:KeyboardEvent)=>void} */
+    function handleFocusTrap(e) {
+      let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+
+      if (!isTabPressed) {
+        return;
+      }
+
+      const tabbable = Array.from(node.querySelectorAll(selectorTabbable)).filter((el) => el.hidden !== true);
+
+      let index = tabbable.indexOf(document.activeElement ?? node);
+      if (index === -1 && e.shiftKey) index = 0;
+      index += tabbable.length + (e.shiftKey ? -1 : 1);
+      index %= tabbable.length;
+      /** @ts-ignore */
+      tabbable[index].focus();
+
+      e.preventDefault();
+    }
+
+    document.addEventListener('keydown', handleFocusTrap, true);
+
+    return {
+      destroy() {
+        document.removeEventListener('keydown', handleFocusTrap, true);
+      }
+    };
+  }
+
+  /* node_modules\flowbite-svelte\dist\modal\Modal.svelte generated by Svelte v4.2.19 */
+  const get_footer_slot_changes = dirty => ({});
+  const get_footer_slot_context = ctx => ({});
+  const get_header_slot_changes = dirty => ({});
+  const get_header_slot_context = ctx => ({});
+
+  // (94:0) {#if open}
+  function create_if_block$k(ctx) {
+  	let div0;
+  	let t;
+  	let div2;
+  	let div1;
+  	let frame;
+  	let div1_class_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+
+  	const frame_spread_levels = [
+  		{ rounded: true },
+  		{ shadow: true },
+  		/*$$restProps*/ ctx[17],
+  		{ class: /*frameCls*/ ctx[8] },
+  		{ color: /*color*/ ctx[3] }
+  	];
+
+  	let frame_props = {
+  		$$slots: { default: [create_default_slot$6] },
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < frame_spread_levels.length; i += 1) {
+  		frame_props = assign(frame_props, frame_spread_levels[i]);
+  	}
+
+  	frame = new Frame({ props: frame_props });
+
+  	return {
+  		c() {
+  			div0 = element("div");
+  			t = space$1();
+  			div2 = element("div");
+  			div1 = element("div");
+  			create_component(frame.$$.fragment);
+  			attr(div0, "class", /*backdropCls*/ ctx[10]);
+  			attr(div1, "class", div1_class_value = "flex relative " + /*sizes*/ ctx[12][/*size*/ ctx[2]] + " w-full max-h-full");
+  			attr(div2, "class", /*dialogCls*/ ctx[9]);
+  			attr(div2, "tabindex", "-1");
+  			attr(div2, "aria-modal", "true");
+  			attr(div2, "role", "dialog");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div0, anchor);
+  			insert$1(target, t, anchor);
+  			insert$1(target, div2, anchor);
+  			append(div2, div1);
+  			mount_component(frame, div1, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(div2, "keydown", /*handleKeys*/ ctx[16]),
+  					listen(div2, "wheel", prevent_default(/*wheel_handler*/ ctx[34]), { passive: false }),
+  					action_destroyer(/*prepareFocus*/ ctx[11].call(null, div2)),
+  					action_destroyer(focusTrap.call(null, div2)),
+  					listen(div2, "click", /*onAutoClose*/ ctx[13]),
+  					listen(div2, "mousedown", /*onOutsideClose*/ ctx[14])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (!current || dirty[0] & /*backdropCls*/ 1024) {
+  				attr(div0, "class", /*backdropCls*/ ctx[10]);
+  			}
+
+  			const frame_changes = (dirty[0] & /*$$restProps, frameCls, color*/ 131336)
+  			? get_spread_update(frame_spread_levels, [
+  					frame_spread_levels[0],
+  					frame_spread_levels[1],
+  					dirty[0] & /*$$restProps*/ 131072 && get_spread_object(/*$$restProps*/ ctx[17]),
+  					dirty[0] & /*frameCls*/ 256 && { class: /*frameCls*/ ctx[8] },
+  					dirty[0] & /*color*/ 8 && { color: /*color*/ ctx[3] }
+  				])
+  			: {};
+
+  			if (dirty[0] & /*footerCls, color, $$slots, bodyCls, dismissable, title, headerCls*/ 262394 | dirty[1] & /*$$scope*/ 32) {
+  				frame_changes.$$scope = { dirty, ctx };
+  			}
+
+  			frame.$set(frame_changes);
+
+  			if (!current || dirty[0] & /*size*/ 4 && div1_class_value !== (div1_class_value = "flex relative " + /*sizes*/ ctx[12][/*size*/ ctx[2]] + " w-full max-h-full")) {
+  				attr(div1, "class", div1_class_value);
+  			}
+
+  			if (!current || dirty[0] & /*dialogCls*/ 512) {
+  				attr(div2, "class", /*dialogCls*/ ctx[9]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(frame.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(frame.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div0);
+  				detach(t);
+  				detach(div2);
+  			}
+
+  			destroy_component(frame);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  // (104:8) {#if $$slots.header || title}
+  function create_if_block_3$2(ctx) {
+  	let frame;
+  	let current;
+
+  	frame = new Frame({
+  			props: {
+  				class: /*headerCls*/ ctx[7],
+  				color: /*color*/ ctx[3],
+  				$$slots: { default: [create_default_slot_2$4] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(frame.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(frame, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const frame_changes = {};
+  			if (dirty[0] & /*headerCls*/ 128) frame_changes.class = /*headerCls*/ ctx[7];
+  			if (dirty[0] & /*color*/ 8) frame_changes.color = /*color*/ ctx[3];
+
+  			if (dirty[0] & /*color, dismissable, title*/ 26 | dirty[1] & /*$$scope*/ 32) {
+  				frame_changes.$$scope = { dirty, ctx };
+  			}
+
+  			frame.$set(frame_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(frame.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(frame.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(frame, detaching);
+  		}
+  	};
+  }
+
+  // (106:32)                
+  function fallback_block$2(ctx) {
+  	let h3;
+  	let t;
+  	let h3_class_value;
+
+  	return {
+  		c() {
+  			h3 = element("h3");
+  			t = text(/*title*/ ctx[1]);
+
+  			attr(h3, "class", h3_class_value = "text-xl font-semibold " + (/*color*/ ctx[3] === 'default'
+  			? ''
+  			: 'text-gray-900 dark:text-white') + " p-0");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h3, anchor);
+  			append(h3, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty[0] & /*title*/ 2) set_data(t, /*title*/ ctx[1]);
+
+  			if (dirty[0] & /*color*/ 8 && h3_class_value !== (h3_class_value = "text-xl font-semibold " + (/*color*/ ctx[3] === 'default'
+  			? ''
+  			: 'text-gray-900 dark:text-white') + " p-0")) {
+  				attr(h3, "class", h3_class_value);
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h3);
+  			}
+  		}
+  	};
+  }
+
+  // (111:12) {#if dismissable}
+  function create_if_block_4$2(ctx) {
+  	let closebutton;
+  	let current;
+
+  	closebutton = new CloseButton({
+  			props: {
+  				name: "Close modal",
+  				color: /*color*/ ctx[3]
+  			}
+  		});
+
+  	closebutton.$on("click", /*hide*/ ctx[15]);
+
+  	return {
+  		c() {
+  			create_component(closebutton.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(closebutton, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const closebutton_changes = {};
+  			if (dirty[0] & /*color*/ 8) closebutton_changes.color = /*color*/ ctx[3];
+  			closebutton.$set(closebutton_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(closebutton.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(closebutton.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(closebutton, detaching);
+  		}
+  	};
+  }
+
+  // (105:10) <Frame class={headerCls} {color}>
+  function create_default_slot_2$4(ctx) {
+  	let t;
+  	let if_block_anchor;
+  	let current;
+  	const header_slot_template = /*#slots*/ ctx[33].header;
+  	const header_slot = create_slot(header_slot_template, ctx, /*$$scope*/ ctx[36], get_header_slot_context);
+  	const header_slot_or_fallback = header_slot || fallback_block$2(ctx);
+  	let if_block = /*dismissable*/ ctx[4] && create_if_block_4$2(ctx);
+
+  	return {
+  		c() {
+  			if (header_slot_or_fallback) header_slot_or_fallback.c();
+  			t = space$1();
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (header_slot_or_fallback) {
+  				header_slot_or_fallback.m(target, anchor);
+  			}
+
+  			insert$1(target, t, anchor);
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (header_slot) {
+  				if (header_slot.p && (!current || dirty[1] & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						header_slot,
+  						header_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[36],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[36])
+  						: get_slot_changes(header_slot_template, /*$$scope*/ ctx[36], dirty, get_header_slot_changes),
+  						get_header_slot_context
+  					);
+  				}
+  			} else {
+  				if (header_slot_or_fallback && header_slot_or_fallback.p && (!current || dirty[0] & /*color, title*/ 10)) {
+  					header_slot_or_fallback.p(ctx, !current ? [-1, -1] : dirty);
+  				}
+  			}
+
+  			if (/*dismissable*/ ctx[4]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty[0] & /*dismissable*/ 16) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block_4$2(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(header_slot_or_fallback, local);
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(header_slot_or_fallback, local);
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  				detach(if_block_anchor);
+  			}
+
+  			if (header_slot_or_fallback) header_slot_or_fallback.d(detaching);
+  			if (if_block) if_block.d(detaching);
+  		}
+  	};
+  }
+
+  // (116:10) {#if dismissable && !$$slots.header && !title}
+  function create_if_block_2$2(ctx) {
+  	let closebutton;
+  	let current;
+
+  	closebutton = new CloseButton({
+  			props: {
+  				name: "Close modal",
+  				class: "absolute top-3 end-2.5",
+  				color: /*color*/ ctx[3]
+  			}
+  		});
+
+  	closebutton.$on("click", /*hide*/ ctx[15]);
+
+  	return {
+  		c() {
+  			create_component(closebutton.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(closebutton, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const closebutton_changes = {};
+  			if (dirty[0] & /*color*/ 8) closebutton_changes.color = /*color*/ ctx[3];
+  			closebutton.$set(closebutton_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(closebutton.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(closebutton.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(closebutton, detaching);
+  		}
+  	};
+  }
+
+  // (122:8) {#if $$slots.footer}
+  function create_if_block_1$e(ctx) {
+  	let frame;
+  	let current;
+
+  	frame = new Frame({
+  			props: {
+  				class: /*footerCls*/ ctx[5],
+  				color: /*color*/ ctx[3],
+  				$$slots: { default: [create_default_slot_1$4] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(frame.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(frame, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const frame_changes = {};
+  			if (dirty[0] & /*footerCls*/ 32) frame_changes.class = /*footerCls*/ ctx[5];
+  			if (dirty[0] & /*color*/ 8) frame_changes.color = /*color*/ ctx[3];
+
+  			if (dirty[1] & /*$$scope*/ 32) {
+  				frame_changes.$$scope = { dirty, ctx };
+  			}
+
+  			frame.$set(frame_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(frame.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(frame.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(frame, detaching);
+  		}
+  	};
+  }
+
+  // (123:10) <Frame class={footerCls} {color}>
+  function create_default_slot_1$4(ctx) {
+  	let current;
+  	const footer_slot_template = /*#slots*/ ctx[33].footer;
+  	const footer_slot = create_slot(footer_slot_template, ctx, /*$$scope*/ ctx[36], get_footer_slot_context);
+
+  	return {
+  		c() {
+  			if (footer_slot) footer_slot.c();
+  		},
+  		m(target, anchor) {
+  			if (footer_slot) {
+  				footer_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (footer_slot) {
+  				if (footer_slot.p && (!current || dirty[1] & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						footer_slot,
+  						footer_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[36],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[36])
+  						: get_slot_changes(footer_slot_template, /*$$scope*/ ctx[36], dirty, get_footer_slot_changes),
+  						get_footer_slot_context
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(footer_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(footer_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (footer_slot) footer_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (102:6) <Frame rounded shadow {...$$restProps} class={frameCls} {color}>
+  function create_default_slot$6(ctx) {
+  	let t0;
+  	let div;
+  	let t1;
+  	let t2;
+  	let if_block2_anchor;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	let if_block0 = (/*$$slots*/ ctx[18].header || /*title*/ ctx[1]) && create_if_block_3$2(ctx);
+  	let if_block1 = /*dismissable*/ ctx[4] && !/*$$slots*/ ctx[18].header && !/*title*/ ctx[1] && create_if_block_2$2(ctx);
+  	const default_slot_template = /*#slots*/ ctx[33].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[36], null);
+  	let if_block2 = /*$$slots*/ ctx[18].footer && create_if_block_1$e(ctx);
+
+  	return {
+  		c() {
+  			if (if_block0) if_block0.c();
+  			t0 = space$1();
+  			div = element("div");
+  			if (if_block1) if_block1.c();
+  			t1 = space$1();
+  			if (default_slot) default_slot.c();
+  			t2 = space$1();
+  			if (if_block2) if_block2.c();
+  			if_block2_anchor = empty$1();
+  			attr(div, "class", /*bodyCls*/ ctx[6]);
+  			attr(div, "role", "document");
+  		},
+  		m(target, anchor) {
+  			if (if_block0) if_block0.m(target, anchor);
+  			insert$1(target, t0, anchor);
+  			insert$1(target, div, anchor);
+  			if (if_block1) if_block1.m(div, null);
+  			append(div, t1);
+
+  			if (default_slot) {
+  				default_slot.m(div, null);
+  			}
+
+  			insert$1(target, t2, anchor);
+  			if (if_block2) if_block2.m(target, anchor);
+  			insert$1(target, if_block2_anchor, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(div, "keydown", stop_propagation(/*handleKeys*/ ctx[16])),
+  					listen(div, "wheel", stop_propagation(/*wheel_handler_1*/ ctx[35]), { passive: true })
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (/*$$slots*/ ctx[18].header || /*title*/ ctx[1]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+
+  					if (dirty[0] & /*$$slots, title*/ 262146) {
+  						transition_in(if_block0, 1);
+  					}
+  				} else {
+  					if_block0 = create_if_block_3$2(ctx);
+  					if_block0.c();
+  					transition_in(if_block0, 1);
+  					if_block0.m(t0.parentNode, t0);
+  				}
+  			} else if (if_block0) {
+  				group_outros();
+
+  				transition_out(if_block0, 1, 1, () => {
+  					if_block0 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (/*dismissable*/ ctx[4] && !/*$$slots*/ ctx[18].header && !/*title*/ ctx[1]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+
+  					if (dirty[0] & /*dismissable, $$slots, title*/ 262162) {
+  						transition_in(if_block1, 1);
+  					}
+  				} else {
+  					if_block1 = create_if_block_2$2(ctx);
+  					if_block1.c();
+  					transition_in(if_block1, 1);
+  					if_block1.m(div, t1);
+  				}
+  			} else if (if_block1) {
+  				group_outros();
+
+  				transition_out(if_block1, 1, 1, () => {
+  					if_block1 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[36],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[36])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[36], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			if (!current || dirty[0] & /*bodyCls*/ 64) {
+  				attr(div, "class", /*bodyCls*/ ctx[6]);
+  			}
+
+  			if (/*$$slots*/ ctx[18].footer) {
+  				if (if_block2) {
+  					if_block2.p(ctx, dirty);
+
+  					if (dirty[0] & /*$$slots*/ 262144) {
+  						transition_in(if_block2, 1);
+  					}
+  				} else {
+  					if_block2 = create_if_block_1$e(ctx);
+  					if_block2.c();
+  					transition_in(if_block2, 1);
+  					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
+  				}
+  			} else if (if_block2) {
+  				group_outros();
+
+  				transition_out(if_block2, 1, 1, () => {
+  					if_block2 = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block0);
+  			transition_in(if_block1);
+  			transition_in(default_slot, local);
+  			transition_in(if_block2);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block0);
+  			transition_out(if_block1);
+  			transition_out(default_slot, local);
+  			transition_out(if_block2);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(div);
+  				detach(t2);
+  				detach(if_block2_anchor);
+  			}
+
+  			if (if_block0) if_block0.d(detaching);
+  			if (if_block1) if_block1.d();
+  			if (default_slot) default_slot.d(detaching);
+  			if (if_block2) if_block2.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function create_fragment$r(ctx) {
+  	let if_block_anchor;
+  	let current;
+  	let if_block = /*open*/ ctx[0] && create_if_block$k(ctx);
+
+  	return {
+  		c() {
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*open*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty[0] & /*open*/ 1) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block$k(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if (if_block) if_block.d(detaching);
+  		}
+  	};
+  }
+
+  function instance$r($$self, $$props, $$invalidate) {
+  	let backdropCls;
+  	let dialogCls;
+  	let frameCls;
+  	let headerCls;
+  	let bodyCls;
+  	let footerCls;
+
+  	const omit_props_names = [
+  		"open","title","size","color","placement","autoclose","outsideclose","dismissable","backdropClass","classBackdrop","dialogClass","classDialog","defaultClass","headerClass","classHeader","bodyClass","classBody","footerClass","classFooter"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const $$slots = compute_slots(slots);
+  	let { open = false } = $$props;
+  	let { title = "" } = $$props;
+  	let { size = "md" } = $$props;
+  	let { color = "default" } = $$props;
+  	let { placement = "center" } = $$props;
+  	let { autoclose = false } = $$props;
+  	let { outsideclose = false } = $$props;
+  	let { dismissable = true } = $$props;
+  	let { backdropClass = "fixed inset-0 z-40 bg-gray-900 bg-opacity-50 dark:bg-opacity-80" } = $$props;
+  	let { classBackdrop = void 0 } = $$props;
+  	let { dialogClass = "fixed top-0 start-0 end-0 h-modal md:inset-0 md:h-full z-50 w-full p-4 flex" } = $$props;
+  	let { classDialog = void 0 } = $$props;
+  	let { defaultClass = "relative flex flex-col mx-auto" } = $$props;
+  	let { headerClass = "flex justify-between items-center p-4 md:p-5 rounded-t-lg" } = $$props;
+  	let { classHeader = void 0 } = $$props;
+  	let { bodyClass = "p-4 md:p-5 space-y-4 flex-1 overflow-y-auto overscroll-contain" } = $$props;
+  	let { classBody = void 0 } = $$props;
+  	let { footerClass = "flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse rounded-b-lg" } = $$props;
+  	let { classFooter = void 0 } = $$props;
+  	const dispatch = createEventDispatcher();
+
+  	function prepareFocus(node) {
+  		const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT);
+  		let n;
+
+  		while (n = walker.nextNode()) {
+  			if (n instanceof HTMLElement) {
+  				const el = n;
+  				const [x, y] = isScrollable(el);
+  				if (x || y) el.tabIndex = 0;
+  			}
+  		}
+
+  		node.focus();
+  	}
+
+  	const getPlacementClasses = placement2 => {
+  		switch (placement2) {
+  			case "top-left":
+  				return ["justify-start", "items-start"];
+  			case "top-center":
+  				return ["justify-center", "items-start"];
+  			case "top-right":
+  				return ["justify-end", "items-start"];
+  			case "center-left":
+  				return ["justify-start", "items-center"];
+  			case "center":
+  				return ["justify-center", "items-center"];
+  			case "center-right":
+  				return ["justify-end", "items-center"];
+  			case "bottom-left":
+  				return ["justify-start", "items-end"];
+  			case "bottom-center":
+  				return ["justify-center", "items-end"];
+  			case "bottom-right":
+  				return ["justify-end", "items-end"];
+  			default:
+  				return ["justify-center", "items-center"];
+  		}
+  	};
+
+  	const sizes = {
+  		xs: "max-w-md",
+  		sm: "max-w-lg",
+  		md: "max-w-2xl",
+  		lg: "max-w-4xl",
+  		xl: "max-w-7xl"
+  	};
+
+  	const onAutoClose = e => {
+  		const target = e.target;
+  		if (autoclose && target?.tagName === "BUTTON") hide(e);
+  	};
+
+  	const onOutsideClose = e => {
+  		const target = e.target;
+  		if (outsideclose && target === e.currentTarget) hide(e);
+  	};
+
+  	const hide = e => {
+  		e.preventDefault();
+  		$$invalidate(0, open = false);
+  	};
+
+  	const isScrollable = e => [
+  		e.scrollWidth > e.clientWidth && ["scroll", "auto"].indexOf(getComputedStyle(e).overflowX) >= 0,
+  		e.scrollHeight > e.clientHeight && ["scroll", "auto"].indexOf(getComputedStyle(e).overflowY) >= 0
+  	];
+
+  	function handleKeys(e) {
+  		if (e.key === "Escape" && dismissable) return hide(e);
+  	}
+
+  	function wheel_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function wheel_handler_1(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(40, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(17, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('open' in $$new_props) $$invalidate(0, open = $$new_props.open);
+  		if ('title' in $$new_props) $$invalidate(1, title = $$new_props.title);
+  		if ('size' in $$new_props) $$invalidate(2, size = $$new_props.size);
+  		if ('color' in $$new_props) $$invalidate(3, color = $$new_props.color);
+  		if ('placement' in $$new_props) $$invalidate(19, placement = $$new_props.placement);
+  		if ('autoclose' in $$new_props) $$invalidate(20, autoclose = $$new_props.autoclose);
+  		if ('outsideclose' in $$new_props) $$invalidate(21, outsideclose = $$new_props.outsideclose);
+  		if ('dismissable' in $$new_props) $$invalidate(4, dismissable = $$new_props.dismissable);
+  		if ('backdropClass' in $$new_props) $$invalidate(22, backdropClass = $$new_props.backdropClass);
+  		if ('classBackdrop' in $$new_props) $$invalidate(23, classBackdrop = $$new_props.classBackdrop);
+  		if ('dialogClass' in $$new_props) $$invalidate(24, dialogClass = $$new_props.dialogClass);
+  		if ('classDialog' in $$new_props) $$invalidate(25, classDialog = $$new_props.classDialog);
+  		if ('defaultClass' in $$new_props) $$invalidate(26, defaultClass = $$new_props.defaultClass);
+  		if ('headerClass' in $$new_props) $$invalidate(27, headerClass = $$new_props.headerClass);
+  		if ('classHeader' in $$new_props) $$invalidate(28, classHeader = $$new_props.classHeader);
+  		if ('bodyClass' in $$new_props) $$invalidate(29, bodyClass = $$new_props.bodyClass);
+  		if ('classBody' in $$new_props) $$invalidate(30, classBody = $$new_props.classBody);
+  		if ('footerClass' in $$new_props) $$invalidate(31, footerClass = $$new_props.footerClass);
+  		if ('classFooter' in $$new_props) $$invalidate(32, classFooter = $$new_props.classFooter);
+  		if ('$$scope' in $$new_props) $$invalidate(36, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty[0] & /*open*/ 1) {
+  			dispatch(open ? "open" : "close");
+  		}
+
+  		if ($$self.$$.dirty[0] & /*backdropClass, classBackdrop*/ 12582912) {
+  			$$invalidate(10, backdropCls = twMerge(backdropClass, classBackdrop));
+  		}
+
+  		if ($$self.$$.dirty[0] & /*dialogClass, classDialog, placement*/ 50855936) {
+  			$$invalidate(9, dialogCls = twMerge(dialogClass, classDialog, getPlacementClasses(placement)));
+  		}
+
+  		$$invalidate(8, frameCls = twMerge(defaultClass, "w-full divide-y", $$props.class));
+
+  		if ($$self.$$.dirty[0] & /*headerClass, classHeader*/ 402653184) {
+  			$$invalidate(7, headerCls = twMerge(headerClass, classHeader));
+  		}
+
+  		if ($$self.$$.dirty[0] & /*bodyClass, classBody*/ 1610612736) {
+  			$$invalidate(6, bodyCls = twMerge(bodyClass, classBody));
+  		}
+
+  		if ($$self.$$.dirty[1] & /*footerClass, classFooter*/ 3) {
+  			$$invalidate(5, footerCls = twMerge(footerClass, classFooter));
+  		}
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		open,
+  		title,
+  		size,
+  		color,
+  		dismissable,
+  		footerCls,
+  		bodyCls,
+  		headerCls,
+  		frameCls,
+  		dialogCls,
+  		backdropCls,
+  		prepareFocus,
+  		sizes,
+  		onAutoClose,
+  		onOutsideClose,
+  		hide,
+  		handleKeys,
+  		$$restProps,
+  		$$slots,
+  		placement,
+  		autoclose,
+  		outsideclose,
+  		backdropClass,
+  		classBackdrop,
+  		dialogClass,
+  		classDialog,
+  		defaultClass,
+  		headerClass,
+  		classHeader,
+  		bodyClass,
+  		classBody,
+  		footerClass,
+  		classFooter,
+  		slots,
+  		wheel_handler,
+  		wheel_handler_1,
+  		$$scope
+  	];
+  }
+
+  class Modal extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(
+  			this,
+  			options,
+  			instance$r,
+  			create_fragment$r,
+  			safe_not_equal,
+  			{
+  				open: 0,
+  				title: 1,
+  				size: 2,
+  				color: 3,
+  				placement: 19,
+  				autoclose: 20,
+  				outsideclose: 21,
+  				dismissable: 4,
+  				backdropClass: 22,
+  				classBackdrop: 23,
+  				dialogClass: 24,
+  				classDialog: 25,
+  				defaultClass: 26,
+  				headerClass: 27,
+  				classHeader: 28,
+  				bodyClass: 29,
+  				classBody: 30,
+  				footerClass: 31,
+  				classFooter: 32
+  			},
+  			null,
+  			[-1, -1]
+  		);
+  	}
+  }
+
+  /**
+   * @param {any} obj
+   * @returns {boolean}
+   */
+  function is_date(obj) {
+  	return Object.prototype.toString.call(obj) === '[object Date]';
+  }
+
+  /** @returns {(t: any) => any} */
+  function get_interpolator(a, b) {
+  	if (a === b || a !== a) return () => a;
+  	const type = typeof a;
+  	if (type !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+  		throw new Error('Cannot interpolate values of different type');
+  	}
+  	if (Array.isArray(a)) {
+  		const arr = b.map((bi, i) => {
+  			return get_interpolator(a[i], bi);
+  		});
+  		return (t) => arr.map((fn) => fn(t));
+  	}
+  	if (type === 'object') {
+  		if (!a || !b) throw new Error('Object cannot be null');
+  		if (is_date(a) && is_date(b)) {
+  			a = a.getTime();
+  			b = b.getTime();
+  			const delta = b - a;
+  			return (t) => new Date(a + t * delta);
+  		}
+  		const keys = Object.keys(b);
+  		const interpolators = {};
+  		keys.forEach((key) => {
+  			interpolators[key] = get_interpolator(a[key], b[key]);
+  		});
+  		return (t) => {
+  			const result = {};
+  			keys.forEach((key) => {
+  				result[key] = interpolators[key](t);
+  			});
+  			return result;
+  		};
+  	}
+  	if (type === 'number') {
+  		const delta = b - a;
+  		return (t) => a + t * delta;
+  	}
+  	throw new Error(`Cannot interpolate ${type} values`);
+  }
+
+  /**
+   * A tweened store in Svelte is a special type of store that provides smooth transitions between state values over time.
+   *
+   * https://svelte.dev/docs/svelte-motion#tweened
+   * @template T
+   * @param {T} [value]
+   * @param {import('./private.js').TweenedOptions<T>} [defaults]
+   * @returns {import('./public.js').Tweened<T>}
+   */
+  function tweened(value, defaults = {}) {
+  	const store = writable(value);
+  	/** @type {import('../internal/private.js').Task} */
+  	let task;
+  	let target_value = value;
+  	/**
+  	 * @param {T} new_value
+  	 * @param {import('./private.js').TweenedOptions<T>} [opts]
+  	 */
+  	function set(new_value, opts) {
+  		if (value == null) {
+  			store.set((value = new_value));
+  			return Promise.resolve();
+  		}
+  		target_value = new_value;
+  		let previous_task = task;
+  		let started = false;
+  		let {
+  			delay = 0,
+  			duration = 400,
+  			easing = identity,
+  			interpolate = get_interpolator
+  		} = assign(assign({}, defaults), opts);
+  		if (duration === 0) {
+  			if (previous_task) {
+  				previous_task.abort();
+  				previous_task = null;
+  			}
+  			store.set((value = target_value));
+  			return Promise.resolve();
+  		}
+  		const start = now() + delay;
+  		let fn;
+  		task = loop((now) => {
+  			if (now < start) return true;
+  			if (!started) {
+  				fn = interpolate(value, new_value);
+  				if (typeof duration === 'function') duration = duration(value, new_value);
+  				started = true;
+  			}
+  			if (previous_task) {
+  				previous_task.abort();
+  				previous_task = null;
+  			}
+  			const elapsed = now - start;
+  			if (elapsed > /** @type {number} */ (duration)) {
+  				store.set((value = new_value));
+  				return false;
+  			}
+  			// @ts-ignore
+  			store.set((value = fn(easing(elapsed / duration))));
+  			return true;
+  		});
+  		return task.promise;
+  	}
+  	return {
+  		set,
+  		update: (fn, opts) => set(fn(target_value, value), opts),
+  		subscribe: store.subscribe
+  	};
+  }
+
+  /* node_modules\flowbite-svelte\dist\progress\Progressbar.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$d(ctx) {
+  	let div;
+  	let span0;
+  	let t0;
+  	let t1;
+  	let span1;
+  	let t2;
+  	let t3;
+  	let div_class_value;
+
+  	let div_levels = [
+  		/*$$restProps*/ ctx[11],
+  		{
+  			class: div_class_value = twMerge('flex justify-between mb-1', /*$$props*/ ctx[12].classLabelOutside)
+  		}
+  	];
+
+  	let div_data = {};
+
+  	for (let i = 0; i < div_levels.length; i += 1) {
+  		div_data = assign(div_data, div_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			div = element("div");
+  			span0 = element("span");
+  			t0 = text(/*labelOutside*/ ctx[4]);
+  			t1 = space$1();
+  			span1 = element("span");
+  			t2 = text(/*progress*/ ctx[0]);
+  			t3 = text("%");
+  			attr(span0, "class", "text-base font-medium text-blue-700 dark:text-white");
+  			attr(span1, "class", "text-sm font-medium text-blue-700 dark:text-white");
+  			set_attributes(div, div_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			append(div, span0);
+  			append(span0, t0);
+  			append(div, t1);
+  			append(div, span1);
+  			append(span1, t2);
+  			append(span1, t3);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*labelOutside*/ 16) set_data(t0, /*labelOutside*/ ctx[4]);
+  			if (dirty & /*progress*/ 1) set_data(t2, /*progress*/ ctx[0]);
+
+  			set_attributes(div, div_data = get_spread_update(div_levels, [
+  				dirty & /*$$restProps*/ 2048 && /*$$restProps*/ ctx[11],
+  				dirty & /*$$props*/ 4096 && div_class_value !== (div_class_value = twMerge('flex justify-between mb-1', /*$$props*/ ctx[12].classLabelOutside)) && { class: div_class_value }
+  			]));
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+  		}
+  	};
+  }
+
+  // (43:2) {:else}
+  function create_else_block$3(ctx) {
+  	let div;
+  	let div_class_value;
+
+  	return {
+  		c() {
+  			div = element("div");
+  			attr(div, "class", div_class_value = twJoin(/*barColors*/ ctx[10][/*color*/ ctx[5]], /*size*/ ctx[2], 'rounded-full'));
+  			set_style(div, "width", /*$_progress*/ ctx[8] + "%");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*color, size*/ 36 && div_class_value !== (div_class_value = twJoin(/*barColors*/ ctx[10][/*color*/ ctx[5]], /*size*/ ctx[2], 'rounded-full'))) {
+  				attr(div, "class", div_class_value);
+  			}
+
+  			if (dirty & /*$_progress*/ 256) {
+  				set_style(div, "width", /*$_progress*/ ctx[8] + "%");
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+  		}
+  	};
+  }
+
+  // (39:2) {#if labelInside}
+  function create_if_block$j(ctx) {
+  	let div;
+  	let t0_value = /*$_progress*/ ctx[8].toFixed(/*precision*/ ctx[1]) + "";
+  	let t0;
+  	let t1;
+  	let div_class_value;
+
+  	return {
+  		c() {
+  			div = element("div");
+  			t0 = text(t0_value);
+  			t1 = text("%");
+  			attr(div, "class", div_class_value = twJoin(/*labelInsideClass*/ ctx[6], /*barColors*/ ctx[10][/*color*/ ctx[5]]));
+  			set_style(div, "width", /*$_progress*/ ctx[8] + "%");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			append(div, t0);
+  			append(div, t1);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*$_progress, precision*/ 258 && t0_value !== (t0_value = /*$_progress*/ ctx[8].toFixed(/*precision*/ ctx[1]) + "")) set_data(t0, t0_value);
+
+  			if (dirty & /*labelInsideClass, color*/ 96 && div_class_value !== (div_class_value = twJoin(/*labelInsideClass*/ ctx[6], /*barColors*/ ctx[10][/*color*/ ctx[5]]))) {
+  				attr(div, "class", div_class_value);
+  			}
+
+  			if (dirty & /*$_progress*/ 256) {
+  				set_style(div, "width", /*$_progress*/ ctx[8] + "%");
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$q(ctx) {
+  	let t;
+  	let div;
+  	let div_class_value;
+  	let if_block0 = /*labelOutside*/ ctx[4] && create_if_block_1$d(ctx);
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*labelInside*/ ctx[3]) return create_if_block$j;
+  		return create_else_block$3;
+  	}
+
+  	let current_block_type = select_block_type(ctx);
+  	let if_block1 = current_block_type(ctx);
+
+  	return {
+  		c() {
+  			if (if_block0) if_block0.c();
+  			t = space$1();
+  			div = element("div");
+  			if_block1.c();
+  			attr(div, "class", div_class_value = twMerge(/*divClass*/ ctx[7], /*size*/ ctx[2], /*$$props*/ ctx[12].class));
+  		},
+  		m(target, anchor) {
+  			if (if_block0) if_block0.m(target, anchor);
+  			insert$1(target, t, anchor);
+  			insert$1(target, div, anchor);
+  			if_block1.m(div, null);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*labelOutside*/ ctx[4]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$d(ctx);
+  					if_block0.c();
+  					if_block0.m(t.parentNode, t);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
+  				if_block1.p(ctx, dirty);
+  			} else {
+  				if_block1.d(1);
+  				if_block1 = current_block_type(ctx);
+
+  				if (if_block1) {
+  					if_block1.c();
+  					if_block1.m(div, null);
+  				}
+  			}
+
+  			if (dirty & /*divClass, size, $$props*/ 4228 && div_class_value !== (div_class_value = twMerge(/*divClass*/ ctx[7], /*size*/ ctx[2], /*$$props*/ ctx[12].class))) {
+  				attr(div, "class", div_class_value);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  				detach(div);
+  			}
+
+  			if (if_block0) if_block0.d(detaching);
+  			if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$q($$self, $$props, $$invalidate) {
+  	const omit_props_names = [
+  		"progress","precision","tweenDuration","animate","size","labelInside","labelOutside","easing","color","labelInsideClass","divClass"
+  	];
+
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let $_progress;
+  	let { progress = "45" } = $$props;
+  	let { precision = 0 } = $$props;
+  	let { tweenDuration = 400 } = $$props;
+  	let { animate = false } = $$props;
+  	let { size = "h-2.5" } = $$props;
+  	let { labelInside = false } = $$props;
+  	let { labelOutside = "" } = $$props;
+  	let { easing = cubicOut } = $$props;
+  	let { color = "primary" } = $$props;
+  	let { labelInsideClass = "text-primary-100 text-xs font-medium text-center p-0.5 leading-none rounded-full" } = $$props;
+  	let { divClass = "w-full bg-gray-200 rounded-full dark:bg-gray-700" } = $$props;
+
+  	const _progress = tweened(0, {
+  		duration: animate ? tweenDuration : 0,
+  		easing
+  	});
+
+  	component_subscribe($$self, _progress, value => $$invalidate(8, $_progress = value));
+
+  	const barColors = {
+  		primary: "bg-primary-600",
+  		blue: "bg-blue-600",
+  		gray: "bg-gray-600 dark:bg-gray-300",
+  		red: "bg-red-600 dark:bg-red-500",
+  		green: "bg-green-600 dark:bg-green-500",
+  		yellow: "bg-yellow-400",
+  		purple: "bg-purple-600 dark:bg-purple-500",
+  		indigo: "bg-indigo-600 dark:bg-indigo-500"
+  	};
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(12, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(11, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('progress' in $$new_props) $$invalidate(0, progress = $$new_props.progress);
+  		if ('precision' in $$new_props) $$invalidate(1, precision = $$new_props.precision);
+  		if ('tweenDuration' in $$new_props) $$invalidate(13, tweenDuration = $$new_props.tweenDuration);
+  		if ('animate' in $$new_props) $$invalidate(14, animate = $$new_props.animate);
+  		if ('size' in $$new_props) $$invalidate(2, size = $$new_props.size);
+  		if ('labelInside' in $$new_props) $$invalidate(3, labelInside = $$new_props.labelInside);
+  		if ('labelOutside' in $$new_props) $$invalidate(4, labelOutside = $$new_props.labelOutside);
+  		if ('easing' in $$new_props) $$invalidate(15, easing = $$new_props.easing);
+  		if ('color' in $$new_props) $$invalidate(5, color = $$new_props.color);
+  		if ('labelInsideClass' in $$new_props) $$invalidate(6, labelInsideClass = $$new_props.labelInsideClass);
+  		if ('divClass' in $$new_props) $$invalidate(7, divClass = $$new_props.divClass);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*progress*/ 1) {
+  			_progress.set(Number(progress));
+  		}
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		progress,
+  		precision,
+  		size,
+  		labelInside,
+  		labelOutside,
+  		color,
+  		labelInsideClass,
+  		divClass,
+  		$_progress,
+  		_progress,
+  		barColors,
+  		$$restProps,
+  		$$props,
+  		tweenDuration,
+  		animate,
+  		easing
+  	];
+  }
+
+  class Progressbar extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$q, create_fragment$q, safe_not_equal, {
+  			progress: 0,
+  			precision: 1,
+  			tweenDuration: 13,
+  			animate: 14,
+  			size: 2,
+  			labelInside: 3,
+  			labelOutside: 4,
+  			easing: 15,
+  			color: 5,
+  			labelInsideClass: 6,
+  			divClass: 7
+  		});
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\Table.svelte generated by Svelte v4.2.19 */
+
+  function create_fragment$p(ctx) {
+  	let div;
+  	let table;
+  	let table_class_value;
+  	let div_class_value;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[11].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[10], null);
+
+  	let table_levels = [
+  		/*$$restProps*/ ctx[4],
+  		{
+  			class: table_class_value = twMerge('w-full text-left text-sm', /*colors*/ ctx[3][/*color*/ ctx[2]], /*$$props*/ ctx[5].class)
+  		}
+  	];
+
+  	let table_data = {};
+
+  	for (let i = 0; i < table_levels.length; i += 1) {
+  		table_data = assign(table_data, table_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			div = element("div");
+  			table = element("table");
+  			if (default_slot) default_slot.c();
+  			set_attributes(table, table_data);
+  			attr(div, "class", div_class_value = twJoin(/*divClass*/ ctx[0], /*shadow*/ ctx[1] && 'shadow-md sm:rounded-lg'));
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			append(div, table);
+
+  			if (default_slot) {
+  				default_slot.m(table, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 1024)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[10],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[10])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[10], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(table, table_data = get_spread_update(table_levels, [
+  				dirty & /*$$restProps*/ 16 && /*$$restProps*/ ctx[4],
+  				(!current || dirty & /*color, $$props*/ 36 && table_class_value !== (table_class_value = twMerge('w-full text-left text-sm', /*colors*/ ctx[3][/*color*/ ctx[2]], /*$$props*/ ctx[5].class))) && { class: table_class_value }
+  			]));
+
+  			if (!current || dirty & /*divClass, shadow*/ 3 && div_class_value !== (div_class_value = twJoin(/*divClass*/ ctx[0], /*shadow*/ ctx[1] && 'shadow-md sm:rounded-lg'))) {
+  				attr(div, "class", div_class_value);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function instance$p($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["divClass","striped","hoverable","noborder","shadow","color","customeColor"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { divClass = "relative overflow-x-auto" } = $$props;
+  	let { striped = false } = $$props;
+  	let { hoverable = false } = $$props;
+  	let { noborder = false } = $$props;
+  	let { shadow = false } = $$props;
+  	let { color = "default" } = $$props;
+  	let { customeColor = "" } = $$props;
+
+  	const colors = {
+  		default: "text-gray-500 dark:text-gray-400",
+  		blue: "text-blue-100 dark:text-blue-100",
+  		green: "text-green-100 dark:text-green-100",
+  		red: "text-red-100 dark:text-red-100",
+  		yellow: "text-yellow-100 dark:text-yellow-100",
+  		purple: "text-purple-100 dark:text-purple-100",
+  		indigo: "text-indigo-100 dark:text-indigo-100",
+  		pink: "text-pink-100 dark:text-pink-100",
+  		custom: customeColor
+  	};
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(5, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(4, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('divClass' in $$new_props) $$invalidate(0, divClass = $$new_props.divClass);
+  		if ('striped' in $$new_props) $$invalidate(6, striped = $$new_props.striped);
+  		if ('hoverable' in $$new_props) $$invalidate(7, hoverable = $$new_props.hoverable);
+  		if ('noborder' in $$new_props) $$invalidate(8, noborder = $$new_props.noborder);
+  		if ('shadow' in $$new_props) $$invalidate(1, shadow = $$new_props.shadow);
+  		if ('color' in $$new_props) $$invalidate(2, color = $$new_props.color);
+  		if ('customeColor' in $$new_props) $$invalidate(9, customeColor = $$new_props.customeColor);
+  		if ('$$scope' in $$new_props) $$invalidate(10, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*striped*/ 64) {
+  			setContext("striped", striped);
+  		}
+
+  		if ($$self.$$.dirty & /*hoverable*/ 128) {
+  			setContext("hoverable", hoverable);
+  		}
+
+  		if ($$self.$$.dirty & /*noborder*/ 256) {
+  			setContext("noborder", noborder);
+  		}
+
+  		if ($$self.$$.dirty & /*color*/ 4) {
+  			setContext("color", color);
+  		}
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		divClass,
+  		shadow,
+  		color,
+  		colors,
+  		$$restProps,
+  		$$props,
+  		striped,
+  		hoverable,
+  		noborder,
+  		customeColor,
+  		$$scope,
+  		slots
+  	];
+  }
+
+  class Table extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$p, create_fragment$p, safe_not_equal, {
+  			divClass: 0,
+  			striped: 6,
+  			hoverable: 7,
+  			noborder: 8,
+  			shadow: 1,
+  			color: 2,
+  			customeColor: 9
+  		});
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\TableBody.svelte generated by Svelte v4.2.19 */
+
+  function create_fragment$o(ctx) {
+  	let tbody;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[2].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[1], null);
+
+  	return {
+  		c() {
+  			tbody = element("tbody");
+  			if (default_slot) default_slot.c();
+  			attr(tbody, "class", /*tableBodyClass*/ ctx[0]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, tbody, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(tbody, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 2)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[1],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[1])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[1], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*tableBodyClass*/ 1) {
+  				attr(tbody, "class", /*tableBodyClass*/ ctx[0]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(tbody);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function instance$o($$self, $$props, $$invalidate) {
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { tableBodyClass = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('tableBodyClass' in $$props) $$invalidate(0, tableBodyClass = $$props.tableBodyClass);
+  		if ('$$scope' in $$props) $$invalidate(1, $$scope = $$props.$$scope);
+  	};
+
+  	return [tableBodyClass, $$scope, slots];
+  }
+
+  class TableBody extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$o, create_fragment$o, safe_not_equal, { tableBodyClass: 0 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\TableBodyCell.svelte generated by Svelte v4.2.19 */
+
+  function create_else_block$2(ctx) {
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[6].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
+
+  	return {
+  		c() {
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[5],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[5])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[5], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (11:2) {#if $$props.onclick}
+  function create_if_block$i(ctx) {
+  	let button;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[6].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
+
+  	return {
+  		c() {
+  			button = element("button");
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(button, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", function () {
+  					if (is_function(/*$$props*/ ctx[1].onclick)) /*$$props*/ ctx[1].onclick.apply(this, arguments);
+  				});
+
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[5],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[5])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[5], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  function create_fragment$n(ctx) {
+  	let td;
+  	let current_block_type_index;
+  	let if_block;
+  	let current;
+  	const if_block_creators = [create_if_block$i, create_else_block$2];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*$$props*/ ctx[1].onclick) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  	let td_levels = [/*$$restProps*/ ctx[2], { class: /*tdClassfinal*/ ctx[0] }];
+  	let td_data = {};
+
+  	for (let i = 0; i < td_levels.length; i += 1) {
+  		td_data = assign(td_data, td_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			td = element("td");
+  			if_block.c();
+  			set_attributes(td, td_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, td, anchor);
+  			if_blocks[current_block_type_index].m(td, null);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(td, null);
+  			}
+
+  			set_attributes(td, td_data = get_spread_update(td_levels, [
+  				dirty & /*$$restProps*/ 4 && /*$$restProps*/ ctx[2],
+  				(!current || dirty & /*tdClassfinal*/ 1) && { class: /*tdClassfinal*/ ctx[0] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(td);
+  			}
+
+  			if_blocks[current_block_type_index].d();
+  		}
+  	};
+  }
+
+  function instance$n($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["tdClass"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { tdClass = "px-6 py-4 whitespace-nowrap font-medium " } = $$props;
+  	let color = "default";
+  	color = getContext("color");
+  	let tdClassfinal;
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(1, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(2, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('tdClass' in $$new_props) $$invalidate(3, tdClass = $$new_props.tdClass);
+  		if ('$$scope' in $$new_props) $$invalidate(5, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(0, tdClassfinal = twMerge(
+  			tdClass,
+  			color === "default"
+  			? "text-gray-900 dark:text-white"
+  			: "text-blue-50 whitespace-nowrap dark:text-blue-100",
+  			$$props.class
+  		));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+  	return [tdClassfinal, $$props, $$restProps, tdClass, color, $$scope, slots];
+  }
+
+  class TableBodyCell extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$n, create_fragment$n, safe_not_equal, { tdClass: 3 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\TableBodyRow.svelte generated by Svelte v4.2.19 */
+
+  function create_fragment$m(ctx) {
+  	let tr;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[4].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[3], null);
+  	let tr_levels = [/*$$restProps*/ ctx[1], { class: /*trClass*/ ctx[0] }];
+  	let tr_data = {};
+
+  	for (let i = 0; i < tr_levels.length; i += 1) {
+  		tr_data = assign(tr_data, tr_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			tr = element("tr");
+  			if (default_slot) default_slot.c();
+  			set_attributes(tr, tr_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, tr, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(tr, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(tr, "click", /*click_handler*/ ctx[5]),
+  					listen(tr, "contextmenu", /*contextmenu_handler*/ ctx[6]),
+  					listen(tr, "dblclick", /*dblclick_handler*/ ctx[7])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 8)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[3],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[3])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[3], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(tr, tr_data = get_spread_update(tr_levels, [
+  				dirty & /*$$restProps*/ 2 && /*$$restProps*/ ctx[1],
+  				(!current || dirty & /*trClass*/ 1) && { class: /*trClass*/ ctx[0] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(tr);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function instance$m($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["color"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { color = getContext("color") } = $$props;
+
+  	const colors = {
+  		default: "bg-white dark:bg-gray-800 dark:border-gray-700",
+  		blue: "bg-blue-500 border-blue-400",
+  		green: "bg-green-500 border-green-400",
+  		red: "bg-red-500 border-red-400",
+  		yellow: "bg-yellow-500 border-yellow-400",
+  		purple: "bg-purple-500 border-purple-400",
+  		custom: ""
+  	};
+
+  	const hoverColors = {
+  		default: "hover:bg-gray-50 dark:hover:bg-gray-600",
+  		blue: "hover:bg-blue-400",
+  		green: "hover:bg-green-400",
+  		red: "hover:bg-red-400",
+  		yellow: "hover:bg-yellow-400",
+  		purple: "hover:bg-purple-400",
+  		custom: ""
+  	};
+
+  	const stripColors = {
+  		default: "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700",
+  		blue: "odd:bg-blue-800 even:bg-blue-700 odd:dark:bg-blue-800 even:dark:bg-blue-700",
+  		green: "odd:bg-green-800 even:bg-green-700 odd:dark:bg-green-800 even:dark:bg-green-700",
+  		red: "odd:bg-red-800 even:bg-red-700 odd:dark:bg-red-800 even:dark:bg-red-700",
+  		yellow: "odd:bg-yellow-800 even:bg-yellow-700 odd:dark:bg-yellow-800 even:dark:bg-yellow-700",
+  		purple: "odd:bg-purple-800 even:bg-purple-700 odd:dark:bg-purple-800 even:dark:bg-purple-700",
+  		custom: ""
+  	};
+
+  	let trClass;
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function contextmenu_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function dblclick_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(11, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(1, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('color' in $$new_props) $$invalidate(2, color = $$new_props.color);
+  		if ('$$scope' in $$new_props) $$invalidate(3, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(0, trClass = twMerge([
+  			!getContext("noborder") && "border-b last:border-b-0",
+  			colors[color],
+  			getContext("hoverable") && hoverColors[color],
+  			getContext("striped") && stripColors[color],
+  			$$props.class
+  		]));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		trClass,
+  		$$restProps,
+  		color,
+  		$$scope,
+  		slots,
+  		click_handler,
+  		contextmenu_handler,
+  		dblclick_handler
+  	];
+  }
+
+  class TableBodyRow extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$m, create_fragment$m, safe_not_equal, { color: 2 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\TableHead.svelte generated by Svelte v4.2.19 */
+
+  function create_else_block$1(ctx) {
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[6].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
+
+  	return {
+  		c() {
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			if (default_slot) {
+  				default_slot.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[5],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[5])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[5], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  // (25:2) {#if defaultRow}
+  function create_if_block$h(ctx) {
+  	let tr;
+  	let current;
+  	const default_slot_template = /*#slots*/ ctx[6].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
+
+  	return {
+  		c() {
+  			tr = element("tr");
+  			if (default_slot) default_slot.c();
+  		},
+  		m(target, anchor) {
+  			insert$1(target, tr, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(tr, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 32)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[5],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[5])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[5], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(tr);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$l(ctx) {
+  	let thead;
+  	let current_block_type_index;
+  	let if_block;
+  	let current;
+  	const if_block_creators = [create_if_block$h, create_else_block$1];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*defaultRow*/ ctx[0]) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  	let thead_levels = [/*$$restProps*/ ctx[2], { class: /*theadClassfinal*/ ctx[1] }];
+  	let thead_data = {};
+
+  	for (let i = 0; i < thead_levels.length; i += 1) {
+  		thead_data = assign(thead_data, thead_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			thead = element("thead");
+  			if_block.c();
+  			set_attributes(thead, thead_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, thead, anchor);
+  			if_blocks[current_block_type_index].m(thead, null);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block = if_blocks[current_block_type_index];
+
+  				if (!if_block) {
+  					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block.c();
+  				} else {
+  					if_block.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block, 1);
+  				if_block.m(thead, null);
+  			}
+
+  			set_attributes(thead, thead_data = get_spread_update(thead_levels, [
+  				dirty & /*$$restProps*/ 4 && /*$$restProps*/ ctx[2],
+  				(!current || dirty & /*theadClassfinal*/ 2) && { class: /*theadClassfinal*/ ctx[1] }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(thead);
+  			}
+
+  			if_blocks[current_block_type_index].d();
+  		}
+  	};
+  }
+
+  function instance$l($$self, $$props, $$invalidate) {
+  	let theadClassfinal;
+  	const omit_props_names = ["theadClass","defaultRow"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { theadClass = "text-xs uppercase" } = $$props;
+  	let { defaultRow = true } = $$props;
+  	let color;
+  	color = getContext("color");
+  	let noborder = getContext("noborder");
+  	let striped = getContext("striped");
+  	let defaultBgColor = noborder || striped ? "" : "bg-gray-50 dark:bg-gray-700";
+
+  	const bgColors = {
+  		default: defaultBgColor,
+  		blue: "bg-blue-600",
+  		green: "bg-green-600",
+  		red: "bg-red-600",
+  		yellow: "bg-yellow-600",
+  		purple: "bg-purple-600",
+  		custom: ""
+  	};
+
+  	let textColor = color === "default"
+  	? "text-gray-700 dark:text-gray-400"
+  	: color === "custom" ? "" : "text-white  dark:text-white";
+
+  	let borderColors = striped
+  	? ""
+  	: color === "default"
+  		? "border-gray-700"
+  		: color === "custom" ? "" : `border-${color}-400`;
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(13, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(2, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('theadClass' in $$new_props) $$invalidate(3, theadClass = $$new_props.theadClass);
+  		if ('defaultRow' in $$new_props) $$invalidate(0, defaultRow = $$new_props.defaultRow);
+  		if ('$$scope' in $$new_props) $$invalidate(5, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		$$invalidate(1, theadClassfinal = twMerge(theadClass, textColor, striped && borderColors, bgColors[color], $$props.class));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+  	return [defaultRow, theadClassfinal, $$restProps, theadClass, color, $$scope, slots];
+  }
+
+  class TableHead extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$l, create_fragment$l, safe_not_equal, { theadClass: 3, defaultRow: 0 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\table\TableHeadCell.svelte generated by Svelte v4.2.19 */
+
+  function create_fragment$k(ctx) {
+  	let th;
+  	let th_class_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[4].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[3], null);
+
+  	let th_levels = [
+  		/*$$restProps*/ ctx[1],
+  		{
+  			class: th_class_value = twMerge(/*padding*/ ctx[0], /*$$props*/ ctx[2].class)
+  		}
+  	];
+
+  	let th_data = {};
+
+  	for (let i = 0; i < th_levels.length; i += 1) {
+  		th_data = assign(th_data, th_levels[i]);
+  	}
+
+  	return {
+  		c() {
+  			th = element("th");
+  			if (default_slot) default_slot.c();
+  			set_attributes(th, th_data);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, th, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(th, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(th, "click", /*click_handler*/ ctx[5]),
+  					listen(th, "focus", /*focus_handler*/ ctx[6]),
+  					listen(th, "keydown", /*keydown_handler*/ ctx[7]),
+  					listen(th, "keypress", /*keypress_handler*/ ctx[8]),
+  					listen(th, "keyup", /*keyup_handler*/ ctx[9]),
+  					listen(th, "mouseenter", /*mouseenter_handler*/ ctx[10]),
+  					listen(th, "mouseleave", /*mouseleave_handler*/ ctx[11]),
+  					listen(th, "mouseover", /*mouseover_handler*/ ctx[12])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 8)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[3],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[3])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[3], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			set_attributes(th, th_data = get_spread_update(th_levels, [
+  				dirty & /*$$restProps*/ 2 && /*$$restProps*/ ctx[1],
+  				(!current || dirty & /*padding, $$props*/ 5 && th_class_value !== (th_class_value = twMerge(/*padding*/ ctx[0], /*$$props*/ ctx[2].class))) && { class: th_class_value }
+  			]));
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(th);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function instance$k($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["padding"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { padding = "px-6 py-3" } = $$props;
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focus_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keypress_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keyup_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseover_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(2, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(1, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('padding' in $$new_props) $$invalidate(0, padding = $$new_props.padding);
+  		if ('$$scope' in $$new_props) $$invalidate(3, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		padding,
+  		$$restProps,
+  		$$props,
+  		$$scope,
+  		slots,
+  		click_handler,
+  		focus_handler,
+  		keydown_handler,
+  		keypress_handler,
+  		keyup_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		mouseover_handler
+  	];
+  }
+
+  class TableHeadCell extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$k, create_fragment$k, safe_not_equal, { padding: 0 });
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\tabs\TabItem.svelte generated by Svelte v4.2.19 */
+  const get_title_slot_changes = dirty => ({});
+  const get_title_slot_context = ctx => ({});
+
+  // (31:23) {title}
+  function fallback_block$1(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(/*title*/ ctx[1]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 2) set_data(t, /*title*/ ctx[1]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (34:2) {#if open}
+  function create_if_block$g(ctx) {
+  	let div1;
+  	let div0;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[10].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[9], null);
+
+  	return {
+  		c() {
+  			div1 = element("div");
+  			div0 = element("div");
+  			if (default_slot) default_slot.c();
+  			attr(div1, "class", "hidden tab_content_placeholder");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div1, anchor);
+  			append(div1, div0);
+
+  			if (default_slot) {
+  				default_slot.m(div0, null);
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = action_destroyer(/*init*/ ctx[3].call(null, div0));
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 512)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[9],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[9])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[9], dirty, null),
+  						null
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div1);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  function create_fragment$j(ctx) {
+  	let li;
+  	let button;
+  	let t;
+  	let li_class_value;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const title_slot_template = /*#slots*/ ctx[10].title;
+  	const title_slot = create_slot(title_slot_template, ctx, /*$$scope*/ ctx[9], get_title_slot_context);
+  	const title_slot_or_fallback = title_slot || fallback_block$1(ctx);
+
+  	let button_levels = [
+  		{ type: "button" },
+  		{ role: "tab" },
+  		/*$$restProps*/ ctx[5],
+  		{ class: /*buttonClass*/ ctx[2] }
+  	];
+
+  	let button_data = {};
+
+  	for (let i = 0; i < button_levels.length; i += 1) {
+  		button_data = assign(button_data, button_levels[i]);
+  	}
+
+  	let if_block = /*open*/ ctx[0] && create_if_block$g(ctx);
+
+  	return {
+  		c() {
+  			li = element("li");
+  			button = element("button");
+  			if (title_slot_or_fallback) title_slot_or_fallback.c();
+  			t = space$1();
+  			if (if_block) if_block.c();
+  			set_attributes(button, button_data);
+  			attr(li, "class", li_class_value = twMerge('group', /*$$props*/ ctx[4].class));
+  			attr(li, "role", "presentation");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, li, anchor);
+  			append(li, button);
+
+  			if (title_slot_or_fallback) {
+  				title_slot_or_fallback.m(button, null);
+  			}
+
+  			if (button.autofocus) button.focus();
+  			append(li, t);
+  			if (if_block) if_block.m(li, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button, "click", /*click_handler_1*/ ctx[21]),
+  					listen(button, "blur", /*blur_handler*/ ctx[11]),
+  					listen(button, "click", /*click_handler*/ ctx[12]),
+  					listen(button, "contextmenu", /*contextmenu_handler*/ ctx[13]),
+  					listen(button, "focus", /*focus_handler*/ ctx[14]),
+  					listen(button, "keydown", /*keydown_handler*/ ctx[15]),
+  					listen(button, "keypress", /*keypress_handler*/ ctx[16]),
+  					listen(button, "keyup", /*keyup_handler*/ ctx[17]),
+  					listen(button, "mouseenter", /*mouseenter_handler*/ ctx[18]),
+  					listen(button, "mouseleave", /*mouseleave_handler*/ ctx[19]),
+  					listen(button, "mouseover", /*mouseover_handler*/ ctx[20])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			if (title_slot) {
+  				if (title_slot.p && (!current || dirty & /*$$scope*/ 512)) {
+  					update_slot_base(
+  						title_slot,
+  						title_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[9],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[9])
+  						: get_slot_changes(title_slot_template, /*$$scope*/ ctx[9], dirty, get_title_slot_changes),
+  						get_title_slot_context
+  					);
+  				}
+  			} else {
+  				if (title_slot_or_fallback && title_slot_or_fallback.p && (!current || dirty & /*title*/ 2)) {
+  					title_slot_or_fallback.p(ctx, !current ? -1 : dirty);
+  				}
+  			}
+
+  			set_attributes(button, button_data = get_spread_update(button_levels, [
+  				{ type: "button" },
+  				{ role: "tab" },
+  				dirty & /*$$restProps*/ 32 && /*$$restProps*/ ctx[5],
+  				(!current || dirty & /*buttonClass*/ 4) && { class: /*buttonClass*/ ctx[2] }
+  			]));
+
+  			if (/*open*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*open*/ 1) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block$g(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(li, null);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (!current || dirty & /*$$props*/ 16 && li_class_value !== (li_class_value = twMerge('group', /*$$props*/ ctx[4].class))) {
+  				attr(li, "class", li_class_value);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(title_slot_or_fallback, local);
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(title_slot_or_fallback, local);
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(li);
+  			}
+
+  			if (title_slot_or_fallback) title_slot_or_fallback.d(detaching);
+  			if (if_block) if_block.d();
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function instance$j($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["open","title","activeClasses","inactiveClasses","defaultClass"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { open = false } = $$props;
+  	let { title = "Tab title" } = $$props;
+  	let { activeClasses = void 0 } = $$props;
+  	let { inactiveClasses = void 0 } = $$props;
+  	let { defaultClass = "inline-block text-sm font-medium text-center disabled:cursor-not-allowed" } = $$props;
+  	const ctx = getContext("ctx") ?? {};
+  	const selected = ctx.selected ?? writable();
+
+  	function init(node) {
+  		selected.set(node);
+
+  		const destroy = selected.subscribe(x => {
+  			if (x !== node) {
+  				$$invalidate(0, open = false);
+  			}
+  		});
+
+  		return { destroy };
+  	}
+
+  	let buttonClass;
+
+  	function blur_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function click_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function contextmenu_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function focus_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keydown_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keypress_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function keyup_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseenter_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseleave_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	function mouseover_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	const click_handler_1 = () => $$invalidate(0, open = true);
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(4, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(5, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('open' in $$new_props) $$invalidate(0, open = $$new_props.open);
+  		if ('title' in $$new_props) $$invalidate(1, title = $$new_props.title);
+  		if ('activeClasses' in $$new_props) $$invalidate(6, activeClasses = $$new_props.activeClasses);
+  		if ('inactiveClasses' in $$new_props) $$invalidate(7, inactiveClasses = $$new_props.inactiveClasses);
+  		if ('defaultClass' in $$new_props) $$invalidate(8, defaultClass = $$new_props.defaultClass);
+  		if ('$$scope' in $$new_props) $$invalidate(9, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*defaultClass, open, activeClasses, inactiveClasses*/ 449) {
+  			$$invalidate(2, buttonClass = twMerge(
+  				defaultClass,
+  				open
+  				? activeClasses ?? ctx.activeClasses
+  				: inactiveClasses ?? ctx.inactiveClasses,
+  				open && "active"
+  			)); // $$restProps.disabled && 'cursor-not-allowed pointer-events-none'
+  		}
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		open,
+  		title,
+  		buttonClass,
+  		init,
+  		$$props,
+  		$$restProps,
+  		activeClasses,
+  		inactiveClasses,
+  		defaultClass,
+  		$$scope,
+  		slots,
+  		blur_handler,
+  		click_handler,
+  		contextmenu_handler,
+  		focus_handler,
+  		keydown_handler,
+  		keypress_handler,
+  		keyup_handler,
+  		mouseenter_handler,
+  		mouseleave_handler,
+  		mouseover_handler,
+  		click_handler_1
+  	];
+  }
+
+  class TabItem extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$j, create_fragment$j, safe_not_equal, {
+  			open: 0,
+  			title: 1,
+  			activeClasses: 6,
+  			inactiveClasses: 7,
+  			defaultClass: 8
+  		});
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\tabs\Tabs.svelte generated by Svelte v4.2.19 */
+  const get_divider_slot_changes = dirty => ({});
+  const get_divider_slot_context = ctx => ({});
+  const get_default_slot_changes = dirty => ({ tabStyle: dirty & /*tabStyle*/ 2 });
+  const get_default_slot_context = ctx => ({ tabStyle: /*tabStyle*/ ctx[1] });
+
+  // (43:0) {#if divider}
+  function create_if_block$f(ctx) {
+  	let current;
+  	const divider_slot_template = /*#slots*/ ctx[9].divider;
+  	const divider_slot = create_slot(divider_slot_template, ctx, /*$$scope*/ ctx[8], get_divider_slot_context);
+  	const divider_slot_or_fallback = divider_slot || fallback_block();
+
+  	return {
+  		c() {
+  			if (divider_slot_or_fallback) divider_slot_or_fallback.c();
+  		},
+  		m(target, anchor) {
+  			if (divider_slot_or_fallback) {
+  				divider_slot_or_fallback.m(target, anchor);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (divider_slot) {
+  				if (divider_slot.p && (!current || dirty & /*$$scope*/ 256)) {
+  					update_slot_base(
+  						divider_slot,
+  						divider_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[8],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
+  						: get_slot_changes(divider_slot_template, /*$$scope*/ ctx[8], dirty, get_divider_slot_changes),
+  						get_divider_slot_context
+  					);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(divider_slot_or_fallback, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(divider_slot_or_fallback, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (divider_slot_or_fallback) divider_slot_or_fallback.d(detaching);
+  		}
+  	};
+  }
+
+  // (44:23)      
+  function fallback_block(ctx) {
+  	let div;
+
+  	return {
+  		c() {
+  			div = element("div");
+  			attr(div, "class", "h-px bg-gray-200 dark:bg-gray-700");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  		},
+  		p: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$i(ctx) {
+  	let ul;
+  	let t0;
+  	let t1;
+  	let div;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	const default_slot_template = /*#slots*/ ctx[9].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context);
+  	let if_block = /*divider*/ ctx[0] && create_if_block$f(ctx);
+
+  	return {
+  		c() {
+  			ul = element("ul");
+  			if (default_slot) default_slot.c();
+  			t0 = space$1();
+  			if (if_block) if_block.c();
+  			t1 = space$1();
+  			div = element("div");
+  			attr(ul, "class", /*ulClass*/ ctx[3]);
+  			attr(div, "class", /*contentClass*/ ctx[2]);
+  			attr(div, "role", "tabpanel");
+  			attr(div, "aria-labelledby", "id-tab");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, ul, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(ul, null);
+  			}
+
+  			insert$1(target, t0, anchor);
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, t1, anchor);
+  			insert$1(target, div, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = action_destroyer(/*init*/ ctx[4].call(null, div));
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope, tabStyle*/ 258)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[8],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[8], dirty, get_default_slot_changes),
+  						get_default_slot_context
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*ulClass*/ 8) {
+  				attr(ul, "class", /*ulClass*/ ctx[3]);
+  			}
+
+  			if (/*divider*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*divider*/ 1) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block$f(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(t1.parentNode, t1);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (!current || dirty & /*contentClass*/ 4) {
+  				attr(div, "class", /*contentClass*/ ctx[2]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(default_slot, local);
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(default_slot, local);
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(ul);
+  				detach(t0);
+  				detach(t1);
+  				detach(div);
+  			}
+
+  			if (default_slot) default_slot.d(detaching);
+  			if (if_block) if_block.d(detaching);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  function instance$i($$self, $$props, $$invalidate) {
+  	let ulClass;
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	let { tabStyle = "none" } = $$props;
+  	let { defaultClass = "flex flex-wrap space-x-2 rtl:space-x-reverse" } = $$props;
+  	let { contentClass = "p-4 bg-gray-50 rounded-lg dark:bg-gray-800 mt-4" } = $$props;
+  	let { divider = true } = $$props;
+  	let { activeClasses = "p-4 text-primary-600 bg-gray-100 rounded-t-lg dark:bg-gray-800 dark:text-primary-500" } = $$props;
+  	let { inactiveClasses = "p-4 text-gray-500 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300" } = $$props;
+
+  	const styledActiveClasses = {
+  		full: "p-4 w-full group-first:rounded-s-lg group-last:rounded-e-lg text-gray-900 bg-gray-100 focus:ring-4 focus:ring-primary-300 focus:outline-none dark:bg-gray-700 dark:text-white",
+  		pill: "py-3 px-4 text-white bg-primary-600 rounded-lg",
+  		underline: "p-4 text-primary-600 border-b-2 border-primary-600 dark:text-primary-500 dark:border-primary-500",
+  		none: ""
+  	};
+
+  	const styledInactiveClasses = {
+  		full: "p-4 w-full group-first:rounded-s-lg group-last:rounded-e-lg text-gray-500 dark:text-gray-400 bg-white hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-primary-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700",
+  		pill: "py-3 px-4 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
+  		underline: "p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400",
+  		none: ""
+  	};
+
+  	const ctx = {
+  		activeClasses: styledActiveClasses[tabStyle] || activeClasses,
+  		inactiveClasses: styledInactiveClasses[tabStyle] || inactiveClasses,
+  		selected: writable()
+  	};
+
+  	setContext("ctx", ctx);
+
+  	function init(node) {
+  		const destroy = ctx.selected.subscribe(x => {
+  			if (x) node.replaceChildren(x);
+  		});
+
+  		return { destroy };
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(13, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		if ('tabStyle' in $$new_props) $$invalidate(1, tabStyle = $$new_props.tabStyle);
+  		if ('defaultClass' in $$new_props) $$invalidate(5, defaultClass = $$new_props.defaultClass);
+  		if ('contentClass' in $$new_props) $$invalidate(2, contentClass = $$new_props.contentClass);
+  		if ('divider' in $$new_props) $$invalidate(0, divider = $$new_props.divider);
+  		if ('activeClasses' in $$new_props) $$invalidate(6, activeClasses = $$new_props.activeClasses);
+  		if ('inactiveClasses' in $$new_props) $$invalidate(7, inactiveClasses = $$new_props.inactiveClasses);
+  		if ('$$scope' in $$new_props) $$invalidate(8, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*tabStyle, divider*/ 3) {
+  			$$invalidate(0, divider = ["full", "pill"].includes(tabStyle) ? false : divider);
+  		}
+
+  		$$invalidate(3, ulClass = twMerge(defaultClass, tabStyle === "underline" && "-mb-px", $$props.class));
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		divider,
+  		tabStyle,
+  		contentClass,
+  		ulClass,
+  		init,
+  		defaultClass,
+  		activeClasses,
+  		inactiveClasses,
+  		$$scope,
+  		slots
+  	];
+  }
+
+  class Tabs extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$i, create_fragment$i, safe_not_equal, {
+  			tabStyle: 1,
+  			defaultClass: 5,
+  			contentClass: 2,
+  			divider: 0,
+  			activeClasses: 6,
+  			inactiveClasses: 7
+  		});
+  	}
+  }
+
+  /* src\ui\ErrorModal.svelte generated by Svelte v4.2.19 */
+
+  function create_default_slot$5(ctx) {
+  	let pre;
+  	let t;
+
+  	return {
+  		c() {
+  			pre = element("pre");
+  			t = text(/*msg*/ ctx[1]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, pre, anchor);
+  			append(pre, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*msg*/ 2) set_data(t, /*msg*/ ctx[1]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(pre);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$h(ctx) {
+  	let modal;
+  	let current;
+
+  	modal = new Modal({
+  			props: {
+  				class: "preflight",
+  				title: /*title*/ ctx[0],
+  				open: true,
+  				outsideclose: true,
+  				$$slots: { default: [create_default_slot$5] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	modal.$on("close", function () {
+  		if (is_function(/*onClose*/ ctx[2])) /*onClose*/ ctx[2].apply(this, arguments);
+  	});
+
+  	return {
+  		c() {
+  			create_component(modal.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(modal, target, anchor);
+  			current = true;
+  		},
+  		p(new_ctx, [dirty]) {
+  			ctx = new_ctx;
+  			const modal_changes = {};
+  			if (dirty & /*title*/ 1) modal_changes.title = /*title*/ ctx[0];
+
+  			if (dirty & /*$$scope, msg*/ 10) {
+  				modal_changes.$$scope = { dirty, ctx };
+  			}
+
+  			modal.$set(modal_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(modal.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(modal.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(modal, detaching);
+  		}
+  	};
+  }
+
+  function instance$h($$self, $$props, $$invalidate) {
+  	let { title } = $$props;
+  	let { msg } = $$props;
+  	let { onClose } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('title' in $$props) $$invalidate(0, title = $$props.title);
+  		if ('msg' in $$props) $$invalidate(1, msg = $$props.msg);
+  		if ('onClose' in $$props) $$invalidate(2, onClose = $$props.onClose);
+  	};
+
+  	return [title, msg, onClose];
+  }
+
+  class ErrorModal extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$h, create_fragment$h, safe_not_equal, { title: 0, msg: 1, onClose: 2 });
+  	}
+  }
+
+  function showErrorMessage(msg, title = "Error") {
+      let component = new ErrorModal({
+          target: document.body,
+          props: {
+              title,
+              msg,
+              onClose: () => component.$destroy()
+          }
+      });
+  }
+
+  async function downloadLibraries(needsLibs, confirmName) {
+      let missing = [];
+      for (let lib of needsLibs) {
+          let parts = lib.split('|');
+          let libName = parts[0].trim();
+          let libUrl = parts[1]?.trim();
+          if (!GL.lib.getLib(libName)) {
+              missing.push({ libName, libUrl });
+          }
+      }
+      if (missing.length === 0)
+          return true;
+      let downloadable = missing.filter(m => m.libUrl);
+      // wait for user confirmation
+      if (confirmName) {
+          let single = missing.length === 1;
+          let msgStart = `The plugin ${confirmName} is missing ${missing.length} ${single ? 'library' : 'libraries'}.`;
+          if (downloadable.length === 0) {
+              alert(`${msgStart} You will need to manually download and install ${single ? 'it' : 'them'}.`);
+              return false;
+          }
+          let conf = false;
+          if (downloadable.length === missing.length) {
+              conf = confirm(`${msgStart} Would you like to download ${single ? 'it' : 'them'}?`);
+          }
+          else {
+              conf = confirm(msgStart +
+                  ` ${downloadable.length} ${single ? 'is' : 'are'} able to be automatically downloaded. Would you like to do so?` +
+                  " The rest will need to be manually downloaded and installed.");
+          }
+          if (!conf)
+              return false;
+      }
+      let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
+          return new Promise((res, rej) => {
+              GL.net.corsRequest({ url: libUrl })
+                  .then((resp) => {
+                  if (resp.status !== 200) {
+                      rej(`Failed to download library ${libName} from ${libUrl}\nRecieved response status of ${resp.status}`);
+                      return;
+                  }
+                  res(resp.responseText);
+              })
+                  .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
+          });
+      }));
+      let successes = results.filter(r => r.status === 'fulfilled');
+      let libs = successes.map(s => GL.lib.createLib(s.value)).filter(l => l);
+      await Promise.all(libs.map(l => l.enable()));
+      GL.lib.save();
+      GL.lib.libs.update();
+      let failed = results.filter(r => r.status === 'rejected');
+      if (failed.length > 0) {
+          let msg = failed.map(f => f.reason).join('\n');
+          showErrorMessage(msg, `Failed to download ${failed.length} libraries`);
+          return false;
+      }
+      return missing.length === downloadable.length;
+  }
+  async function downloadLibrary(url) {
+      return new Promise((res, rej) => {
+          GL.net.corsRequest({ url })
+              .then((resp) => {
+              if (resp.status !== 200) {
+                  rej(`Failed to download library from ${url}\nRecieved response status of ${resp.status}`);
+                  return;
+              }
+              GL.lib.createLib(resp.responseText);
+              res();
+          })
+              .catch(() => rej(`Failed to download library from ${url}`));
+      });
+  }
+
+  function getDefaultExportFromCjs (x) {
+  	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+  }
+
+  var debounce$2 = {exports: {}};
+
+  function debounce(function_, wait = 100, options = {}) {
+  	if (typeof function_ !== 'function') {
+  		throw new TypeError(`Expected the first parameter to be a function, got \`${typeof function_}\`.`);
+  	}
+
+  	if (wait < 0) {
+  		throw new RangeError('`wait` must not be negative.');
+  	}
+
+  	// TODO: Deprecate the boolean parameter at some point.
+  	const {immediate} = typeof options === 'boolean' ? {immediate: options} : options;
+
+  	let storedContext;
+  	let storedArguments;
+  	let timeoutId;
+  	let timestamp;
+  	let result;
+
+  	function run() {
+  		const callContext = storedContext;
+  		const callArguments = storedArguments;
+  		storedContext = undefined;
+  		storedArguments = undefined;
+  		result = function_.apply(callContext, callArguments);
+  		return result;
+  	}
+
+  	function later() {
+  		const last = Date.now() - timestamp;
+
+  		if (last < wait && last >= 0) {
+  			timeoutId = setTimeout(later, wait - last);
+  		} else {
+  			timeoutId = undefined;
+
+  			if (!immediate) {
+  				result = run();
+  			}
+  		}
+  	}
+
+  	const debounced = function (...arguments_) {
+  		if (storedContext && this !== storedContext) {
+  			throw new Error('Debounced method called with different contexts.');
+  		}
+
+  		storedContext = this; // eslint-disable-line unicorn/no-this-assignment
+  		storedArguments = arguments_;
+  		timestamp = Date.now();
+
+  		const callNow = immediate && !timeoutId;
+
+  		if (!timeoutId) {
+  			timeoutId = setTimeout(later, wait);
+  		}
+
+  		if (callNow) {
+  			result = run();
+  		}
+
+  		return result;
+  	};
+
+  	debounced.clear = () => {
+  		if (!timeoutId) {
+  			return;
+  		}
+
+  		clearTimeout(timeoutId);
+  		timeoutId = undefined;
+  	};
+
+  	debounced.flush = () => {
+  		if (!timeoutId) {
+  			return;
+  		}
+
+  		debounced.trigger();
+  	};
+
+  	debounced.trigger = () => {
+  		result = run();
+
+  		debounced.clear();
+  	};
+
+  	return debounced;
+  }
+
+  // Adds compatibility for ES modules
+  debounce$2.exports.debounce = debounce;
+
+  debounce$2.exports = debounce;
+
+  var debounceExports = debounce$2.exports;
+  var debounce$1 = /*@__PURE__*/getDefaultExportFromCjs(debounceExports);
+
+  class Plugin {
+      id = Math.random().toString(36).substring(2);
+      gimloader;
+      script;
+      enabled;
+      headers;
+      return;
+      constructor(gimloader, script, enabled = true) {
+          this.gimloader = gimloader;
+          this.script = script;
+          this.enabled = enabled;
+          this.headers = parsePluginHeader(script);
+      }
+      async enable(initial = false) {
+          return new Promise(async (res, rej) => {
+              let libObjs = [];
+              let optionalLibObjs = [];
+              // load required libs
+              for (let lib of this.headers.needsLib) {
+                  let libName = lib.split('|')[0].trim();
+                  let libObj = this.gimloader.lib.getLib(libName);
+                  if (!libObj) {
+                      this.enabled = false;
+                      this.gimloader.pluginManager.plugins.update();
+                      rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
+                      return;
+                  }
+                  libObjs.push(libObj);
+              }
+              // load optional libs
+              for (let lib of this.headers.optionalLib) {
+                  let libName = lib.split('|')[0].trim();
+                  let libObj = this.gimloader.lib.getLib(libName);
+                  if (!libObj)
+                      continue;
+                  optionalLibObjs.push(libObj);
+              }
+              let [results, optionalResults] = await Promise.all([
+                  Promise.allSettled(libObjs.map(lib => lib.enable())),
+                  Promise.allSettled(optionalLibObjs.map(lib => lib.enable()))
+              ]);
+              // log errors with optional libs, but don't fail the plugin
+              for (let result of optionalResults) {
+                  if (result.status === 'rejected') {
+                      log(`Failed to enable optional library for plugin ${this.headers.name}:`, result.reason);
+                  }
+              }
+              let failed = results.filter(r => r.status === 'rejected');
+              if (failed.length > 0) {
+                  let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
+                  this.enabled = false;
+                  rej(err);
+                  this.gimloader.pluginManager.plugins.update();
+                  return;
+              }
+              if (!this.gimloader.pluginManager.runPlugins)
+                  return;
+              // create a blob from the script and import it
+              let blob = new Blob([this.script], { type: 'application/javascript' });
+              let url = URL.createObjectURL(blob);
+              import(url)
+                  .then((returnVal) => {
+                  this.return = returnVal;
+                  this.enabled = true;
+                  this.gimloader.pluginManager.plugins.update();
+                  log(`Loaded plugin: ${this.headers.name}`);
+                  if (!initial) {
+                      if (this.headers.reloadRequired === 'true' ||
+                          this.headers.reloadRequired === '' ||
+                          (this.headers.reloadRequired === 'ingame' && this.gimloader.net.type !== "Unknown")) {
+                          let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
+                          if (reload) {
+                              location.reload();
+                          }
+                      }
+                  }
+                  for (let lib of this.headers.needsLib) {
+                      let libName = lib.split('|')[0].trim();
+                      let libObj = this.gimloader.lib.getLib(libName);
+                      libObj.addUsed(this.headers.name);
+                  }
+                  res();
+              })
+                  .catch((e) => {
+                  console.error(e);
+                  this.enabled = false;
+                  this.gimloader.pluginManager.plugins.update();
+                  let stack = e.stack.replaceAll(url, `blob:${this.headers.name}.js`);
+                  let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${stack}`);
+                  rej(err);
+              })
+                  .finally(() => {
+                  URL.revokeObjectURL(url);
+              });
+          });
+      }
+      disable() {
+          this.enabled = false;
+          this.gimloader.pluginManager.plugins.update();
+          if (!this.gimloader.pluginManager.runPlugins)
+              return;
+          if (this.return) {
+              try {
+                  this.return?.onStop?.();
+              }
+              catch (e) {
+                  console.error(`Error stopping plugin ${this.headers.name}:`, e);
+              }
+          }
+          for (let lib of this.headers.needsLib) {
+              let libName = lib.split('|')[0].trim();
+              let libObj = this.gimloader.lib.getLib(libName);
+              if (libObj)
+                  libObj.removeUsed(this.headers.name);
+          }
+          this.return = null;
+      }
+      edit(script, headers) {
+          let enabled = this.enabled;
+          this.disable();
+          this.script = script;
+          this.headers = headers;
+          this.gimloader.pluginManager.save();
+          if (!enabled)
+              return;
+          this.enable()
+              .then(() => this.gimloader.pluginManager.save())
+              .catch((e) => {
+              showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
+          });
+      }
+  }
+
+  class PluginManager {
+      gimloader;
+      plugins = easyAccessWritable([]);
+      runPlugins;
+      constructor(gimloader, runPlugins = true) {
+          this.gimloader = gimloader;
+          this.runPlugins = runPlugins;
+          // load plugins from storage
+          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
+          for (let plugin of pluginScripts) {
+              let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled);
+              this.plugins.value.push(pluginObj);
+          }
+      }
+      async init() {
+          let results = await Promise.allSettled(this.plugins.value.map(p => p.enabled && p.enable(true)));
+          let fails = results.filter(r => r.status === 'rejected');
+          if (fails.length > 0) {
+              let msg = fails.map(f => f.reason).join('\n');
+              showErrorMessage(msg, `Failed to enable ${fails.length} plugins`);
+              this.save(this.plugins.value);
+          }
+          log('All plugins loaded');
+          // when a plugin is remotely deleted, installed or enabled/disabled reflect that here
+          GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
+              if (!remote)
+                  return;
+              let newPluginInfos = JSON.parse(newVal);
+              let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled));
+              // check for scripts that were added
+              for (let newPlugin of newPlugins) {
+                  if (!this.getPlugin(newPlugin.headers.name)) {
+                      newPlugin.enable()
+                          .then(() => this.save())
+                          .catch((e) => {
+                          showErrorMessage(e.message, `Failed to enable plugin ${newPlugin.headers.name}`);
+                      });
+                      this.plugins.value.push(newPlugin);
+                  }
+              }
+              // check for plugins that were removed
+              for (let plugin of this.plugins.value) {
+                  if (!newPlugins.find(p => p.headers.name === plugin.headers.name)) {
+                      this.deletePlugin(plugin);
+                  }
+              }
+              // check if any scripts were updated
+              for (let plugin of newPlugins) {
+                  let oldPlugin = this.getPlugin(plugin.headers.name);
+                  if (!oldPlugin)
+                      continue;
+                  if (oldPlugin.script !== plugin.script) {
+                      oldPlugin.edit(plugin.script, plugin.headers);
+                      log(`Updated plugin: ${plugin.headers.name}`);
+                  }
+              }
+              // check if any plugins were enabled/disabled
+              for (let plugin of newPlugins) {
+                  let oldPlugin = this.getPlugin(plugin.headers.name);
+                  if (!oldPlugin)
+                      continue;
+                  if (oldPlugin.enabled !== plugin.enabled) {
+                      if (plugin.enabled) {
+                          oldPlugin.enable()
+                              .catch((e) => {
+                              showErrorMessage(e.message, `Failed to enable plugin ${oldPlugin.headers.name}`);
+                          });
+                      }
+                      else
+                          oldPlugin.disable();
+                  }
+              }
+              // move the plugins into the correct order
+              let newOrder = [];
+              for (let newPlugin of newPlugins) {
+                  let plugin = this.getPlugin(newPlugin.headers.name);
+                  if (plugin)
+                      newOrder.push(plugin);
+              }
+              this.plugins.set(newOrder);
+          });
+      }
+      saveFn() {
+          let pluginObjs = this.plugins.value.map(p => ({ script: p.script, enabled: p.enabled }));
+          GM_setValue('plugins', JSON.stringify(pluginObjs));
+      }
+      saveDebounced = debounce$1(this.saveFn, 100);
+      save(newPlugins) {
+          if (newPlugins)
+              this.plugins.set(newPlugins);
+          this.saveDebounced();
+      }
+      getPlugin(name) {
+          return this.plugins.value.find(p => p.headers.name === name) ?? null;
+      }
+      isEnabled(name) {
+          let plugin = this.getPlugin(name);
+          return plugin?.enabled ?? false;
+      }
+      async createPlugin(script) {
+          let headers = parsePluginHeader(script);
+          let existing = this.getPlugin(headers.name);
+          if (existing) {
+              let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
+              if (!conf)
+                  return;
+              this.deletePlugin(existing);
+          }
+          let plugin = new Plugin(this.gimloader, script, false);
+          this.plugins.value.unshift(plugin);
+          this.save();
+          this.plugins.update();
+          if (plugin.headers.needsLib.length > 0) {
+              let success = await downloadLibraries(plugin.headers.needsLib, plugin.headers.name);
+              if (success)
+                  await plugin.enable();
+          }
+          else {
+              await plugin.enable()
+                  .catch((e) => {
+                  showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
+              });
+          }
+          this.save();
+          this.plugins.update();
+      }
+      deletePlugin(plugin) {
+          if (plugin.enabled)
+              plugin.disable();
+          let newPlugins = this.plugins.value.filter(p => p !== plugin);
+          if (window.GL) {
+              GL.storage.removeAllValues(plugin.headers.name);
+          }
+          this.save(newPlugins);
+          this.plugins.update();
+          log(`Deleted plugin: ${plugin.headers.name}`);
+      }
+      enableAll() {
+          Promise.allSettled(this.plugins.value.filter(p => !p.enabled).map(p => p.enable()))
+              .then(results => {
+              let fails = results.filter(r => r.status === 'rejected');
+              if (fails.length > 0) {
+                  let msg = fails.map(f => f.reason).join('\n');
+                  showErrorMessage(msg, `Failed to enable ${results.length} plugins`);
+              }
+          });
+          this.save();
+          this.plugins.update();
+      }
+      disableAll() {
+          for (let plugin of this.plugins.value) {
+              if (plugin.enabled)
+                  plugin.disable();
+          }
+          this.save();
+      }
+  }
+
+  class Lib {
+      script;
+      library;
+      headers = {};
+      enabling = false;
+      enableError;
+      enableSuccessCallbacks = [];
+      enableFailCallbacks = [];
+      usedBy = new Set();
+      constructor(script, headers) {
+          this.script = script;
+          if (headers) {
+              this.headers = headers;
+          }
+          else {
+              this.headers = parseLibHeader(script);
+          }
+      }
+      async enable() {
+          if (this.enableError)
+              return Promise.reject(this.enableError);
+          if (this.library)
+              return Promise.resolve();
+          if (!this.enabling) {
+              this.enabling = true;
+              let blob = new Blob([this.script], { type: 'application/javascript' });
+              let url = URL.createObjectURL(blob);
+              import(url)
+                  .then((returnVal) => {
+                  if (returnVal.default) {
+                      returnVal = returnVal.default;
+                  }
+                  this.library = returnVal;
+                  this.enableSuccessCallbacks.forEach(cb => cb());
+              })
+                  .catch((e) => {
+                  let error = new Error(`Failed to enable library ${this.headers.name}:\n${e}`);
+                  this.enableError = error;
+                  this.enableFailCallbacks.forEach(cb => cb(error));
+              })
+                  .finally(() => {
+                  URL.revokeObjectURL(url);
+              });
+          }
+          return new Promise((res, rej) => {
+              this.enableSuccessCallbacks.push(res);
+              this.enableFailCallbacks.push(rej);
+          });
+      }
+      addUsed(pluginName) {
+          this.usedBy.add(pluginName);
+      }
+      removeUsed(pluginName) {
+          this.usedBy.delete(pluginName);
+          if (this.usedBy.size === 0) {
+              this.disable();
+          }
+      }
+      disable() {
+          // call onStop if it exists
+          try {
+              this.library?.onStop?.();
+          }
+          catch (e) {
+              log(`Error stopping library ${this.headers.name}:`, e);
+          }
+          // reset the library
+          this.library = null;
+          this.enableError = undefined;
+          this.enabling = false;
+          this.enableSuccessCallbacks = [];
+          this.enableFailCallbacks = [];
+      }
+  }
 
   /**
   The default maximum length of a `TreeBuffer` node.
@@ -27383,7 +44862,7 @@
                       let code = editor.state.doc.toString();
                       let headers = parsePluginHeader(code);
                       let canceled = false;
-                      for (let otherPlugin of pluginManager.plugins) {
+                      for (let otherPlugin of pluginManager.plugins.value) {
                           if (otherPlugin === plugin)
                               continue;
                           if (otherPlugin.headers.name === headers.name) {
@@ -27399,7 +44878,7 @@
                           pluginManager.deletePlugin(otherPlugin);
                       }
                       plugin.edit(code, headers);
-                      pluginManager.updatePlugins();
+                      pluginManager.plugins.update();
                   }
               }
           ]
@@ -27535,7 +45014,7 @@
       }
       if (conf) {
           plugin.edit(res.responseText, incomingHeaders);
-          GL.pluginManager.updatePlugins();
+          GL.pluginManager.plugins.update();
       }
   }
   async function checkLibUpdate(lib) {
@@ -27588,444 +45067,6945 @@
       return 'same';
   }
 
-  function LibManagerUI() {
-      const { React, lib: libManager } = GL;
-      const [libs, setLibs] = React.useState(libManager.libs);
-      libManager.reactSetLibs = setLibs;
-      function importFile() {
-          let filePickerInput = document.createElement("input");
-          filePickerInput.accept = ".js";
-          filePickerInput.type = "file";
-          filePickerInput.click();
-          filePickerInput.addEventListener("change", async () => {
-              let file = filePickerInput.files?.[0];
-              if (!file)
-                  return;
-              // read the file
-              let reader = new FileReader();
-              reader.addEventListener("load", () => {
-                  let code = reader.result;
-                  code = code.replaceAll("\r\n", "\n");
-                  libManager.createLib(code);
-              });
-              reader.readAsText(file);
-          });
-      }
-      function deleteLib(lib) {
-          let conf = confirm(`Are you sure you want to delete ${lib.headers.name}?`);
-          if (!conf)
-              return;
-          libManager.deleteLib(lib);
-      }
-      return (React.createElement("div", { className: "gl-listWrap" },
-          React.createElement("div", { className: "header" },
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createLib(libManager) })),
-          React.createElement("div", { className: "scriptList" },
-              Object.values(libs).map((lib) => {
-                  return (React.createElement("div", { key: lib.headers.name, className: "scriptItem" },
-                      React.createElement("div", { className: "info" },
-                          React.createElement("div", { className: "top" },
-                              React.createElement("div", { className: "name" },
-                                  lib.headers.name,
-                                  lib.headers.version ?
-                                      React.createElement("span", { className: "version" },
-                                          "v",
-                                          lib.headers.version) : null)),
-                          React.createElement("div", { className: "author" },
-                              "by ",
-                              lib.headers.author),
-                          React.createElement("div", { className: "description" }, lib.headers.description)),
-                      React.createElement("div", { className: "buttons" },
-                          lib.headers.downloadUrl ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: () => checkLibUpdate(lib) })) : null,
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showLibCodeEditor(lib, libManager) }),
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deleteLib(lib) }))));
-              }),
-              Object.keys(libs).length === 0 ?
-                  React.createElement("div", { className: "empty" }, "You have no libraries installed. These are used to store code that is shared between plugins.")
-                  : null)));
+  /* src\ui\menu\libraries\LibraryCard.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$c(ctx) {
+  	let span;
+  	let t0;
+  	let t1_value = /*library*/ ctx[2]?.headers.version + "";
+  	let t1;
+
+  	return {
+  		c() {
+  			span = element("span");
+  			t0 = text("v");
+  			t1 = text(t1_value);
+  			attr(span, "class", "text-sm");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, span, anchor);
+  			append(span, t0);
+  			append(span, t1);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*library*/ 4 && t1_value !== (t1_value = /*library*/ ctx[2]?.headers.version + "")) set_data(t1, t1_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(span);
+  			}
+  		}
+  	};
   }
 
-  var checkBold = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z\" /></svg>";
+  // (20:4) <svelte:fragment slot="header">
+  function create_header_slot$1(ctx) {
+  	let h2;
+  	let t0_value = /*library*/ ctx[2]?.headers.name + "";
+  	let t0;
+  	let t1;
+  	let if_block = /*library*/ ctx[2]?.headers.version && create_if_block_1$c(ctx);
 
-  var closeThick = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z\" /></svg>";
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			t0 = text(t0_value);
+  			t1 = space$1();
+  			if (if_block) if_block.c();
+  			attr(h2, "class", "overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  			append(h2, t0);
+  			append(h2, t1);
+  			if (if_block) if_block.m(h2, null);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*library*/ 4 && t0_value !== (t0_value = /*library*/ ctx[2]?.headers.name + "")) set_data(t0, t0_value);
 
-  let reactListenerSet = false;
-  let queuedMessages = [];
-  function showErrorMessage(msg, title = "Error") {
-      // if react hasn't loaded yet queue up messages
-      if (!GL.React) {
-          queuedMessages.push({ msg, title });
-          if (!reactListenerSet) {
-              reactListenerSet = true;
-              GL.addEventListener('reactLoaded', () => {
-                  for (let message of queuedMessages) {
-                      showErrorMessage(message.msg, message.title);
-                  }
-              });
-          }
-      }
-      const React = GL.React;
-      GL.UI.showModal(React.createElement("pre", { className: "gl-errorMsg" }, msg), {
-          title,
-          buttons: [
-              { text: "Ok", style: "primary" }
-          ]
-      });
+  			if (/*library*/ ctx[2]?.headers.version) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+  				} else {
+  					if_block = create_if_block_1$c(ctx);
+  					if_block.c();
+  					if_block.m(h2, null);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+
+  			if (if_block) if_block.d();
+  		}
+  	};
   }
 
-  var download = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z\" /></svg>";
+  // (28:4) <svelte:fragment slot="description">
+  function create_description_slot$1(ctx) {
+  	let t_value = /*library*/ ctx[2]?.headers.description + "";
+  	let t;
 
-  async function downloadLibraries(needsLibs, confirmName) {
-      let missing = [];
-      for (let lib of needsLibs) {
-          let parts = lib.split('|');
-          let libName = parts[0].trim();
-          let libUrl = parts[1]?.trim();
-          if (!GL.lib.getLib(libName)) {
-              missing.push({ libName, libUrl });
-          }
-      }
-      if (missing.length === 0)
-          return true;
-      let downloadable = missing.filter(m => m.libUrl);
-      // wait for user confirmation
-      if (confirmName) {
-          let single = missing.length === 1;
-          let msgStart = `The plugin ${confirmName} is missing ${missing.length} ${single ? 'library' : 'libraries'}.`;
-          if (downloadable.length === 0) {
-              alert(`${msgStart} You will need to manually download and install ${single ? 'it' : 'them'}.`);
-              return false;
-          }
-          let conf = false;
-          if (downloadable.length === missing.length) {
-              conf = confirm(`${msgStart} Would you like to download ${single ? 'it' : 'them'}?`);
-          }
-          else {
-              conf = confirm(msgStart +
-                  ` ${downloadable.length} ${single ? 'is' : 'are'} able to be automatically downloaded. Would you like to do so?` +
-                  " The rest will need to be manually downloaded and installed.");
-          }
-          if (!conf)
-              return false;
-      }
-      let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
-          return new Promise((res, rej) => {
-              GL.net.corsRequest({ url: libUrl })
-                  .then((resp) => {
-                  if (resp.status !== 200) {
-                      rej(`Failed to download library ${libName} from ${libUrl}\nRecieved response status of ${resp.status}`);
-                      return;
-                  }
-                  res(resp.responseText);
-              })
-                  .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
-          });
-      }));
-      let successes = results.filter(r => r.status === 'fulfilled');
-      let libs = successes.map(s => GL.lib.createLib(s.value)).filter(l => l);
-      await Promise.all(libs.map(l => l.enable()));
-      GL.lib.save();
-      GL.lib.updateReact();
-      let failed = results.filter(r => r.status === 'rejected');
-      if (failed.length > 0) {
-          let msg = failed.map(f => f.reason).join('\n');
-          showErrorMessage(msg, `Failed to download ${failed.length} libraries`);
-          return false;
-      }
-      return missing.length === downloadable.length;
-  }
-  async function downloadLibrary(url) {
-      return new Promise((res, rej) => {
-          GL.net.corsRequest({ url })
-              .then((resp) => {
-              if (resp.status !== 200) {
-                  rej(`Failed to download library from ${url}\nRecieved response status of ${resp.status}`);
-                  return;
-              }
-              GL.lib.createLib(resp.responseText);
-              res();
-          })
-              .catch(() => rej(`Failed to download library from ${url}`));
-      });
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*library*/ 4 && t_value !== (t_value = /*library*/ ctx[2]?.headers.description + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
   }
 
-  function LibraryInfo({ plugin }) {
-      const React = GL.React;
-      let mandatoryLibs = plugin.headers.needsLib.map((lib) => {
-          let parts = lib.split('|');
-          return [parts[0].trim(), parts[1]?.trim(), true];
-      });
-      let optionalLibs = plugin.headers.optionalLib.map((lib) => {
-          let parts = lib.split('|');
-          return [parts[0].trim(), parts[1]?.trim(), false];
-      });
-      let [libs, setLibs] = React.useState(mandatoryLibs.concat(optionalLibs));
-      return (React.createElement("table", { className: "gl-libraryInfo" },
-          React.createElement("tr", null,
-              React.createElement("th", null, "Installed?"),
-              React.createElement("th", null, "Name"),
-              React.createElement("th", null, "URL"),
-              React.createElement("th", null, "Required?"),
-              React.createElement("th", null)),
-          libs.map(lib => {
-              return (React.createElement("tr", null,
-                  React.createElement("td", null, GL.lib.getLib(lib[0]) ? "Yes" : "No"),
-                  React.createElement("td", null, lib[0]),
-                  React.createElement("td", { className: "url" }, lib[1] ?? ''),
-                  React.createElement("td", null, lib[2] ? "Yes" : "No"),
-                  React.createElement("td", null,
-                      lib[1] && !GL.lib.getLib(lib[0]) && (React.createElement("div", { className: "updateBtn", dangerouslySetInnerHTML: { __html: download }, onClick: () => {
-                              downloadLibrary(lib[1])
-                                  .then(() => {
-                                  setLibs([...libs]);
-                                  GL.notification?.open({ message: `Downloaded library ${lib[0]}` });
-                              })
-                                  .catch((err) => {
-                                  console.log(err);
-                                  showErrorMessage(err, `Failed to download library ${lib[0]}`);
-                              });
-                          } })),
-                      lib[1] && GL.lib.getLib(lib[0]) && (React.createElement("div", { className: "updateBtn", dangerouslySetInnerHTML: { __html: update }, onClick: () => checkLibUpdate(GL.lib.getLib(lib[0])) })))));
-          })));
+  // (38:8) {#if library?.headers.downloadUrl}
+  function create_if_block$e(ctx) {
+  	let button;
+  	let update;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update = new Update({ props: { size: 28 } });
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(update.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(update, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*click_handler_1*/ ctx[6]);
+  				mounted = true;
+  			}
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(update);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
   }
 
-  function PluginManagerUI() {
-      const { React, pluginManager } = GL;
-      const [plugins, setPlugins] = React.useState(pluginManager.plugins);
-      pluginManager.reactSetPlugins = setPlugins;
-      function importFile() {
-          let filePickerInput = document.createElement("input");
-          filePickerInput.accept = ".js";
-          filePickerInput.type = "file";
-          filePickerInput.click();
-          filePickerInput.addEventListener("change", async () => {
-              let file = filePickerInput.files?.[0];
-              if (!file)
-                  return;
-              // read the file
-              let reader = new FileReader();
-              reader.addEventListener("load", async () => {
-                  let code = reader.result;
-                  code = code.replaceAll("\r\n", "\n");
-                  pluginManager.createPlugin(code);
-              });
-              reader.readAsText(file);
-          });
-      }
-      function deletePlugin(plugin) {
-          let conf = confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
-          if (!conf)
-              return;
-          pluginManager.deletePlugin(plugin);
-      }
-      function showLibraries(plugin) {
-          GL.UI.showModal(React.createElement(LibraryInfo, { plugin: plugin }), {
-              title: "Libraries Required by " + plugin.headers.name,
-              id: "core-libInfo",
-              buttons: [{
-                      text: "Close",
-                      style: "primary"
-                  }]
-          });
-      }
-      return (React.createElement("div", { className: "gl-listWrap" },
-          React.createElement("div", { className: "header" },
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: importSvg }, onClick: importFile }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: plusBoxOutline }, onClick: () => createPlugin(pluginManager) }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: checkBold }, title: "Enable All", onClick: () => pluginManager.enableAll() }),
-              React.createElement("button", { dangerouslySetInnerHTML: { __html: closeThick }, title: "Disable All", onClick: () => pluginManager.disableAll() })),
-          React.createElement("div", { className: "scriptList" },
-              plugins.map((plugin) => {
-                  return (React.createElement("div", { key: plugin.headers.name, className: "scriptItem" },
-                      React.createElement("div", { className: "info" },
-                          React.createElement("div", { className: "top" },
-                              React.createElement("div", { className: "name" },
-                                  plugin.headers.name,
-                                  plugin.headers.version ?
-                                      React.createElement("span", { className: "version" },
-                                          "v",
-                                          plugin.headers.version) : null),
-                              React.createElement("input", { type: "checkbox", checked: plugin.enabled, onInput: async (e) => {
-                                      if (!e.currentTarget.checked) {
-                                          await plugin.enable()
-                                              .catch((e) => showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`));
-                                      }
-                                      else
-                                          plugin.disable();
-                                      pluginManager.save();
-                                  } })),
-                          React.createElement("div", { className: "author" },
-                              "by ",
-                              plugin.headers.author),
-                          React.createElement("div", { className: "description" }, plugin.headers.description)),
-                      React.createElement("div", { className: "buttons" },
-                          plugin.headers.downloadUrl ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: update }, onClick: () => checkPluginUpdate(plugin) })) : null,
-                          plugin.headers.needsLib.length > 0 || plugin.headers.optionalLib.length > 0 ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: solidBook }, onClick: () => showLibraries(plugin) })) : null,
-                          plugin.return?.openSettingsMenu ? (React.createElement("button", { dangerouslySetInnerHTML: { __html: cogOutline }, onClick: () => plugin.return.openSettingsMenu() })) : null,
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: pencilOutline }, onClick: () => showPluginCodeEditor(plugins, plugin, pluginManager) }),
-                          React.createElement("button", { dangerouslySetInnerHTML: { __html: deleteSvg }, onClick: () => deletePlugin(plugin) }))));
-              }),
-              plugins.length === 0 ?
-                  React.createElement("div", { className: "empty" }, "No plugins! Create or import one to get started.")
-                  : null)));
+  // (31:4) <svelte:fragment slot="buttons">
+  function create_buttons_slot$1(ctx) {
+  	let button0;
+  	let delete_1;
+  	let t0;
+  	let button1;
+  	let pencil;
+  	let t1;
+  	let if_block_anchor;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	delete_1 = new Delete({ props: { size: 28 } });
+  	pencil = new Pencil({ props: { size: 28 } });
+  	let if_block = /*library*/ ctx[2]?.headers.downloadUrl && create_if_block$e(ctx);
+
+  	return {
+  		c() {
+  			button0 = element("button");
+  			create_component(delete_1.$$.fragment);
+  			t0 = space$1();
+  			button1 = element("button");
+  			create_component(pencil.$$.fragment);
+  			t1 = space$1();
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button0, anchor);
+  			mount_component(delete_1, button0, null);
+  			insert$1(target, t0, anchor);
+  			insert$1(target, button1, anchor);
+  			mount_component(pencil, button1, null);
+  			insert$1(target, t1, anchor);
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*deleteLib*/ ctx[4]),
+  					listen(button1, "click", /*click_handler*/ ctx[5])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (/*library*/ ctx[2]?.headers.downloadUrl) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*library*/ 4) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block$e(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(delete_1.$$.fragment, local);
+  			transition_in(pencil.$$.fragment, local);
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(delete_1.$$.fragment, local);
+  			transition_out(pencil.$$.fragment, local);
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button0);
+  				detach(t0);
+  				detach(button1);
+  				detach(t1);
+  				detach(if_block_anchor);
+  			}
+
+  			destroy_component(delete_1);
+  			destroy_component(pencil);
+  			if (if_block) if_block.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
   }
 
-  function SettingsSection() {
-      const React = GL.React;
-      const [pollerEnabled, setPollerEnabled] = React.useState(GL.poller.enabled);
-      return (React.createElement("div", null,
-          React.createElement("input", { type: "checkbox", checked: pollerEnabled, onChange: (e) => {
-                  GL.poller.setEnabled(e.target.checked);
-                  setPollerEnabled(e.target.checked);
-              } }),
-          "Poll for plugins/libraries being served locally"));
+  function create_fragment$g(ctx) {
+  	let card;
+  	let current;
+
+  	card = new Card({
+  			props: {
+  				dragDisabled: /*dragDisabled*/ ctx[1],
+  				startDrag: /*startDrag*/ ctx[0],
+  				$$slots: {
+  					buttons: [create_buttons_slot$1],
+  					description: [create_description_slot$1],
+  					header: [create_header_slot$1]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(card.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(card, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const card_changes = {};
+  			if (dirty & /*dragDisabled*/ 2) card_changes.dragDisabled = /*dragDisabled*/ ctx[1];
+  			if (dirty & /*startDrag*/ 1) card_changes.startDrag = /*startDrag*/ ctx[0];
+
+  			if (dirty & /*$$scope, library, libManager*/ 140) {
+  				card_changes.$$scope = { dirty, ctx };
+  			}
+
+  			card.$set(card_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(card.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(card.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(card, detaching);
+  		}
+  	};
   }
 
-  function UpdateScreen() {
-      const React = GL.React;
-      let [plugins, setPlugins] = React.useState(GL.pluginManager.plugins);
-      let [libs, setLibs] = React.useState(Object.values(GL.lib.libs));
-      let [showingCompleted, setShowingCompleted] = React.useState(false);
-      let [completed, setCompleted] = React.useState(0);
-      let [total, setTotal] = React.useState(0);
-      async function checkAll() {
-          if (!confirm("Do you want to try to update Gimloader, all plugins, and all libraries?"))
-              return;
-          setShowingCompleted(true);
-          let promises = [];
-          for (let plugin of GL.pluginManager.plugins) {
-              if (!plugin.headers.downloadUrl)
-                  continue;
-              promises.push(new Promise(async (res, rej) => {
-                  let resp = await GL.net.corsRequest({ url: plugin.headers.downloadUrl })
-                      .catch(() => rej(`Failed to update ${plugin.headers.name} from ${plugin.headers.downloadUrl}`));
-                  if (!resp)
-                      return rej();
-                  setCompleted(completed + 1);
-                  let headers = parsePluginHeader(resp.responseText);
-                  let comparison = compareVersions(plugin.headers.version ?? '', headers.version ?? '');
-                  if (comparison !== 'older')
-                      return res();
-                  plugin.edit(resp.responseText, headers);
-              }));
-          }
-          for (let lib of Object.values(GL.lib.libs)) {
-              if (!lib.headers.downloadUrl)
-                  continue;
-              promises.push(new Promise(async (res, rej) => {
-                  let resp = await GL.net.corsRequest({ url: lib.headers.downloadUrl })
-                      .catch(() => rej(`Failed to update ${lib.headers.name} from ${lib.headers.downloadUrl}`));
-                  if (!resp)
-                      return rej();
-                  setCompleted(completed + 1);
-                  let headers = parseLibHeader(resp.responseText);
-                  let comparison = compareVersions(lib.headers.version ?? '', headers.version ?? '');
-                  if (comparison !== 'older')
-                      return res();
-                  GL.lib.editLib(lib, resp.responseText, headers);
-              }));
-          }
-          promises.push(new Promise(async (res, rej) => {
-              let resp = await GL.net.corsRequest({ url: scriptUrl })
-                  .catch(() => rej(`Failed to update Gimloader from ${scriptUrl}`));
-              if (!resp)
-                  return rej();
-              setCompleted(completed + 1);
-              const versionPrefix = '// @version';
-              let index = resp.responseText.indexOf(versionPrefix) + versionPrefix.length;
-              let incomingVersion = resp.responseText.slice(index, resp.responseText.indexOf('\n', index)).trim();
-              let comparison = compareVersions(GL.version, incomingVersion);
-              if (comparison !== 'older')
-                  return res();
-              location.href = scriptUrl;
-              res();
-          }));
-          setTotal(promises.length);
-          let results = await Promise.allSettled(promises);
-          let failed = results.filter((r) => r.status === 'rejected');
-          if (failed.length > 0) {
-              let msg = `Failed to update ${failed.length} items:\n`
-                  + failed.map((f) => f.reason).join('\n')
-                  + '\nDid you allow Gimloader to make Cross-Origin requests?';
-              showErrorMessage(msg, "Some Updates Failed");
-          }
-          setShowingCompleted(false);
-      }
-      return (React.createElement("div", { className: "gl-infoList" },
-          React.createElement("div", { className: "checkAll" },
-              React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => checkAll() }),
-              "Check updates for all"),
-          showingCompleted && React.createElement("progress", { value: completed, max: total }),
-          React.createElement("h1", null, "Gimloader"),
-          React.createElement("div", null,
-              React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => checkScriptUpdate() }),
-              "Gimloader v",
-              GL.version),
-          React.createElement("h1", null, "Plugins"),
-          plugins.length === 0 && React.createElement("div", null, "No plugins loaded"),
-          plugins.map((plugin) => {
-              return (React.createElement("div", { key: plugin.headers.name },
-                  plugin.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => {
-                          checkPluginUpdate(plugin)
-                              .then(() => setPlugins([...plugins]));
-                      } }),
-                  plugin.headers.name,
-                  plugin.headers.version ? ` v${plugin.headers.version}` : ''));
-          }),
-          React.createElement("h1", null, "Libraries"),
-          Object.keys(libs).length === 0 && React.createElement("div", null, "No plugins loaded"),
-          Object.values(libs).map((lib) => {
-              return (React.createElement("div", { key: lib.headers.name },
-                  lib.headers.downloadUrl && React.createElement("div", { dangerouslySetInnerHTML: { __html: update }, className: "updateBtn", onClick: () => {
-                          checkLibUpdate(lib)
-                              .then(() => setLibs(Object.values(GL.lib.libs)));
-                      } }),
-                  lib.headers.name,
-                  lib.headers.version ? ` v${lib.headers.version}` : ''));
-          }),
-          React.createElement("hr", null),
-          React.createElement("div", null, navigator.userAgent),
-          React.createElement("h1", null, "Dev Settings"),
-          React.createElement("hr", null),
-          React.createElement(SettingsSection, null)));
+  function instance$g($$self, $$props, $$invalidate) {
+  	let { startDrag } = $$props;
+  	let { dragDisabled } = $$props;
+  	let { library } = $$props;
+  	let { libManager } = $$props;
+
+  	function deleteLib() {
+  		let conf = confirm(`Are you sure you want to delete ${library.headers.name}?`);
+  		if (!conf) return;
+  		libManager.deleteLib(library);
+  	}
+
+  	const click_handler = () => showLibCodeEditor(library, libManager);
+  	const click_handler_1 = () => checkLibUpdate(library);
+
+  	$$self.$$set = $$props => {
+  		if ('startDrag' in $$props) $$invalidate(0, startDrag = $$props.startDrag);
+  		if ('dragDisabled' in $$props) $$invalidate(1, dragDisabled = $$props.dragDisabled);
+  		if ('library' in $$props) $$invalidate(2, library = $$props.library);
+  		if ('libManager' in $$props) $$invalidate(3, libManager = $$props.libManager);
+  	};
+
+  	return [
+  		startDrag,
+  		dragDisabled,
+  		library,
+  		libManager,
+  		deleteLib,
+  		click_handler,
+  		click_handler_1
+  	];
   }
 
-  function MenuUI() {
-      const React = GL.React;
-      const tabs = [
-          ["Plugins", wrench],
-          ["Libraries", solidBook],
-          ["Settings / Updates", cogOutline]
-      ];
-      const [tab, setTab] = React.useState(0);
-      return (React.createElement("div", { className: "gl-menu" },
-          React.createElement("div", { className: "tabs" }, tabs.map((t, i) => {
-              return (React.createElement("div", { onClick: () => {
-                      setTab(i);
-                  }, className: `tab ${tab === i ? 'selected' : ''}` },
-                  React.createElement("div", { dangerouslySetInnerHTML: { __html: t[1] }, className: 'icon' }),
-                  React.createElement("div", { className: "label" }, t[0])));
-          })),
-          React.createElement("div", { className: "content" },
-              tab === 0 && React.createElement(PluginManagerUI, null),
-              tab === 1 && React.createElement(LibManagerUI, null),
-              tab === 2 && React.createElement(UpdateScreen, null))));
+  class LibraryCard extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$g, create_fragment$g, safe_not_equal, {
+  			startDrag: 0,
+  			dragDisabled: 1,
+  			library: 2,
+  			libManager: 3
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\PlusBoxOutline.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$b(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$d(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$f(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$b(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$d(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$b(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$d(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$f($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class PlusBoxOutline extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$f, create_fragment$f, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Import.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$a(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$c(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$e(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$a(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$c(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$a(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$c(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$e($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Import extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$e, create_fragment$e, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\ChevronDown.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$9(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$b(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$d(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$9(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$b(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$9(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$b(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$d($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class ChevronDown extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$d, create_fragment$d, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\libraries\LibraryCardsList.svelte generated by Svelte v4.2.19 */
+
+  function add_css$2(target) {
+  	append_styles(target, "svelte-9bfahn", ".libs.svelte-9bfahn{grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}");
+  }
+
+  function get_each_context$3(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[13] = list[i];
+  	const constants_0 = /*libManager*/ child_ctx[0].getLib(/*item*/ child_ctx[13].id);
+  	child_ctx[14] = constants_0;
+  	return child_ctx;
+  }
+
+  // (66:8) <Button class="h-7 mr-2">
+  function create_default_slot_2$3(ctx) {
+  	let t;
+  	let chevrondown;
+  	let current;
+  	chevrondown = new ChevronDown({ props: { class: "ml-1", size: 20 } });
+
+  	return {
+  		c() {
+  			t = text("Bulk actions");
+  			create_component(chevrondown.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  			mount_component(chevrondown, target, anchor);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(chevrondown.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(chevrondown.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(chevrondown, detaching);
+  		}
+  	};
+  }
+
+  // (68:12) <DropdownItem on:click={deleteAll}>
+  function create_default_slot_1$3(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Delete all");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (67:8) <Dropdown bind:open={bulkOpen}>
+  function create_default_slot$4(ctx) {
+  	let dropdownitem;
+  	let current;
+
+  	dropdownitem = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_1$3] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem.$on("click", /*deleteAll*/ ctx[9]);
+
+  	return {
+  		c() {
+  			create_component(dropdownitem.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(dropdownitem, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const dropdownitem_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				dropdownitem_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem.$set(dropdownitem_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(dropdownitem.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(dropdownitem.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(dropdownitem, detaching);
+  		}
+  	};
+  }
+
+  // (71:4) {#if $libs.length === 0}
+  function create_if_block$a(ctx) {
+  	let h2;
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			h2.textContent = "No libraries installed!";
+  			attr(h2, "class", "text-xl");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (77:8) {#each items as item (item.id)}
+  function create_each_block$3(key_1, ctx) {
+  	let div;
+  	let librarycard;
+  	let t;
+  	let rect;
+  	let stop_animation = noop;
+  	let current;
+
+  	librarycard = new LibraryCard({
+  			props: {
+  				library: /*library*/ ctx[14],
+  				startDrag: /*startDrag*/ ctx[8],
+  				dragDisabled: /*dragDisabled*/ ctx[3],
+  				libManager: /*libManager*/ ctx[0]
+  			}
+  		});
+
+  	return {
+  		key: key_1,
+  		first: null,
+  		c() {
+  			div = element("div");
+  			create_component(librarycard.$$.fragment);
+  			t = space$1();
+  			this.first = div;
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(librarycard, div, null);
+  			append(div, t);
+  			current = true;
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  			const librarycard_changes = {};
+  			if (dirty & /*libManager, items*/ 5) librarycard_changes.library = /*library*/ ctx[14];
+  			if (dirty & /*dragDisabled*/ 8) librarycard_changes.dragDisabled = /*dragDisabled*/ ctx[3];
+  			if (dirty & /*libManager*/ 1) librarycard_changes.libManager = /*libManager*/ ctx[0];
+  			librarycard.$set(librarycard_changes);
+  		},
+  		r() {
+  			rect = div.getBoundingClientRect();
+  		},
+  		f() {
+  			fix_position(div);
+  			stop_animation();
+  		},
+  		a() {
+  			stop_animation();
+  			stop_animation = create_animation(div, rect, flip$2, { duration: flipDurationMs$1 });
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(librarycard.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(librarycard.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(librarycard);
+  		}
+  	};
+  }
+
+  function create_fragment$c(ctx) {
+  	let div2;
+  	let div0;
+  	let button0;
+  	let plusboxoutline;
+  	let t0;
+  	let button1;
+  	let import_1;
+  	let t1;
+  	let button2;
+  	let t2;
+  	let dropdown;
+  	let updating_open;
+  	let t3;
+  	let t4;
+  	let div1;
+  	let each_blocks = [];
+  	let each_1_lookup = new Map();
+  	let dndzone_action;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	plusboxoutline = new PlusBoxOutline({ props: { size: 32 } });
+  	import_1 = new Import({ props: { size: 32 } });
+
+  	button2 = new Button({
+  			props: {
+  				class: "h-7 mr-2",
+  				$$slots: { default: [create_default_slot_2$3] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	function dropdown_open_binding(value) {
+  		/*dropdown_open_binding*/ ctx[12](value);
+  	}
+
+  	let dropdown_props = {
+  		$$slots: { default: [create_default_slot$4] },
+  		$$scope: { ctx }
+  	};
+
+  	if (/*bulkOpen*/ ctx[4] !== void 0) {
+  		dropdown_props.open = /*bulkOpen*/ ctx[4];
+  	}
+
+  	dropdown = new Dropdown({ props: dropdown_props });
+  	binding_callbacks.push(() => bind(dropdown, 'open', dropdown_open_binding));
+  	let if_block = /*$libs*/ ctx[1].length === 0 && create_if_block$a();
+  	let each_value = ensure_array_like(/*items*/ ctx[2]);
+  	const get_key = ctx => /*item*/ ctx[13].id;
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		let child_ctx = get_each_context$3(ctx, each_value, i);
+  		let key = get_key(child_ctx);
+  		each_1_lookup.set(key, each_blocks[i] = create_each_block$3(key, child_ctx));
+  	}
+
+  	return {
+  		c() {
+  			div2 = element("div");
+  			div0 = element("div");
+  			button0 = element("button");
+  			create_component(plusboxoutline.$$.fragment);
+  			t0 = space$1();
+  			button1 = element("button");
+  			create_component(import_1.$$.fragment);
+  			t1 = space$1();
+  			create_component(button2.$$.fragment);
+  			t2 = space$1();
+  			create_component(dropdown.$$.fragment);
+  			t3 = space$1();
+  			if (if_block) if_block.c();
+  			t4 = space$1();
+  			div1 = element("div");
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			attr(div0, "class", "flex items-center mb-[3px]");
+  			attr(div1, "class", "max-h-full overflow-y-auto grid gap-4 libs pb-1 flex-grow svelte-9bfahn");
+  			attr(div2, "class", "flex flex-col");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div2, anchor);
+  			append(div2, div0);
+  			append(div0, button0);
+  			mount_component(plusboxoutline, button0, null);
+  			append(div0, t0);
+  			append(div0, button1);
+  			mount_component(import_1, button1, null);
+  			append(div0, t1);
+  			mount_component(button2, div0, null);
+  			append(div0, t2);
+  			mount_component(dropdown, div0, null);
+  			append(div2, t3);
+  			if (if_block) if_block.m(div2, null);
+  			append(div2, t4);
+  			append(div2, div1);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(div1, null);
+  				}
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*click_handler*/ ctx[11]),
+  					listen(button1, "click", /*importLib*/ ctx[10]),
+  					action_destroyer(dndzone_action = dndzone.call(null, div1, {
+  						items: /*items*/ ctx[2],
+  						flipDurationMs: flipDurationMs$1,
+  						dragDisabled: /*dragDisabled*/ ctx[3],
+  						dropTargetStyle: {}
+  					})),
+  					listen(div1, "consider", /*handleDndConsider*/ ctx[6]),
+  					listen(div1, "finalize", /*handleDndFinalize*/ ctx[7])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			const button2_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				button2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button2.$set(button2_changes);
+  			const dropdown_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				dropdown_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open && dirty & /*bulkOpen*/ 16) {
+  				updating_open = true;
+  				dropdown_changes.open = /*bulkOpen*/ ctx[4];
+  				add_flush_callback(() => updating_open = false);
+  			}
+
+  			dropdown.$set(dropdown_changes);
+
+  			if (/*$libs*/ ctx[1].length === 0) {
+  				if (if_block) ; else {
+  					if_block = create_if_block$a();
+  					if_block.c();
+  					if_block.m(div2, t4);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			if (dirty & /*libManager, items, startDrag, dragDisabled*/ 269) {
+  				each_value = ensure_array_like(/*items*/ ctx[2]);
+  				group_outros();
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].r();
+  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$3, null, get_each_context$3);
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].a();
+  				check_outros();
+  			}
+
+  			if (dndzone_action && is_function(dndzone_action.update) && dirty & /*items, dragDisabled*/ 12) dndzone_action.update.call(null, {
+  				items: /*items*/ ctx[2],
+  				flipDurationMs: flipDurationMs$1,
+  				dragDisabled: /*dragDisabled*/ ctx[3],
+  				dropTargetStyle: {}
+  			});
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(plusboxoutline.$$.fragment, local);
+  			transition_in(import_1.$$.fragment, local);
+  			transition_in(button2.$$.fragment, local);
+  			transition_in(dropdown.$$.fragment, local);
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(plusboxoutline.$$.fragment, local);
+  			transition_out(import_1.$$.fragment, local);
+  			transition_out(button2.$$.fragment, local);
+  			transition_out(dropdown.$$.fragment, local);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div2);
+  			}
+
+  			destroy_component(plusboxoutline);
+  			destroy_component(import_1);
+  			destroy_component(button2);
+  			destroy_component(dropdown);
+  			if (if_block) if_block.d();
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].d();
+  			}
+
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  const flipDurationMs$1 = 300;
+
+  function instance$c($$self, $$props, $$invalidate) {
+  	let $libs;
+  	let { libManager } = $$props;
+  	let { libs } = libManager;
+  	component_subscribe($$self, libs, value => $$invalidate(1, $libs = value));
+  	let items = $libs.map(lib => ({ id: lib.headers.name }));
+  	let dragDisabled = true;
+
+  	function handleDndConsider(e) {
+  		$$invalidate(2, items = e.detail.items);
+  	}
+
+  	function handleDndFinalize(e) {
+  		$$invalidate(2, items = e.detail.items);
+  		$$invalidate(3, dragDisabled = true);
+
+  		// Update the order of the libraries
+  		let newOrder = [];
+
+  		for (let item of items) {
+  			let lib = $libs.find(l => l.headers.name === item.id);
+  			if (lib) newOrder.push(lib);
+  		}
+
+  		libManager.libs.set(newOrder);
+  		libManager.save();
+  	}
+
+  	function startDrag() {
+  		$$invalidate(3, dragDisabled = false);
+  	}
+
+  	let bulkOpen = false;
+
+  	function deleteAll() {
+  		$$invalidate(4, bulkOpen = false);
+  		if ($libs.length === 0) return;
+  		const conf = confirm(`Are you sure you want to delete all libraries?`);
+  		if (!conf) return;
+
+  		for (let i = $libs.length - 1; i >= 0; i--) {
+  			let lib = $libs[i];
+  			libManager.deleteLib(lib);
+  		}
+  	}
+
+  	function importLib() {
+  		readUserFile(".js").then(code => {
+  			code = code.replaceAll("\r\n", "\n");
+  			libManager.createLib(code);
+  		}).catch(() => {
+  			
+  		});
+  	}
+
+  	const click_handler = () => createLib(libManager);
+
+  	function dropdown_open_binding(value) {
+  		bulkOpen = value;
+  		$$invalidate(4, bulkOpen);
+  	}
+
+  	$$self.$$set = $$props => {
+  		if ('libManager' in $$props) $$invalidate(0, libManager = $$props.libManager);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*$libs*/ 2) {
+  			$$invalidate(2, items = $libs.map(lib => ({ id: lib.headers.name })));
+  		}
+  	};
+
+  	return [
+  		libManager,
+  		$libs,
+  		items,
+  		dragDisabled,
+  		bulkOpen,
+  		libs,
+  		handleDndConsider,
+  		handleDndFinalize,
+  		startDrag,
+  		deleteAll,
+  		importLib,
+  		click_handler,
+  		dropdown_open_binding
+  	];
+  }
+
+  class LibraryCardsList extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$c, create_fragment$c, safe_not_equal, { libManager: 0 }, add_css$2);
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\BookSettings.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$8(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$9(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$b(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$8(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$9(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M20 2V18C20 19.11 19.11 20 18 20H6C4.89 20 4 19.11 4 18V2C4 .895 4.89 0 6 0H7V7L9.5 5.5L12 7V0H18C19.1 0 20 .89 20 2M7 24H9V22H7V24M15 24H17V22H15V24M11 24H13V22H11V24Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$8(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$9(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$b($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class BookSettings extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$b, create_fragment$b, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Cog.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$7(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$8(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$a(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$7(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$8(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$7(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$8(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$a($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Cog extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$a, create_fragment$a, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\OpenInNew.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$6(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$7(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$9(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$6(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$7(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$6(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$7(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$9($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class OpenInNew extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$9, create_fragment$9, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Download.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$5(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$6(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$8(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$5(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$6(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$5(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$6(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$8($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Download extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$8, create_fragment$8, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\plugins\PluginLibrariesInfo.svelte generated by Svelte v4.2.19 */
+
+  function get_each_context$2(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[6] = list[i];
+  	const constants_0 = /*libManager*/ child_ctx[0].getLib(/*libInfo*/ child_ctx[6].name);
+  	child_ctx[7] = constants_0;
+  	return child_ctx;
+  }
+
+  // (28:8) <TableHeadCell>
+  function create_default_slot_12(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Installed?");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (29:8) <TableHeadCell>
+  function create_default_slot_11(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Name");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (30:8) <TableHeadCell>
+  function create_default_slot_10(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("URL");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (31:8) <TableHeadCell>
+  function create_default_slot_9(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Required?");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (27:4) <TableHead>
+  function create_default_slot_8$1(ctx) {
+  	let tableheadcell0;
+  	let t0;
+  	let tableheadcell1;
+  	let t1;
+  	let tableheadcell2;
+  	let t2;
+  	let tableheadcell3;
+  	let t3;
+  	let tableheadcell4;
+  	let current;
+
+  	tableheadcell0 = new TableHeadCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_12] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tableheadcell1 = new TableHeadCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_11] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tableheadcell2 = new TableHeadCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_10] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tableheadcell3 = new TableHeadCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_9] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tableheadcell4 = new TableHeadCell({});
+
+  	return {
+  		c() {
+  			create_component(tableheadcell0.$$.fragment);
+  			t0 = space$1();
+  			create_component(tableheadcell1.$$.fragment);
+  			t1 = space$1();
+  			create_component(tableheadcell2.$$.fragment);
+  			t2 = space$1();
+  			create_component(tableheadcell3.$$.fragment);
+  			t3 = space$1();
+  			create_component(tableheadcell4.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(tableheadcell0, target, anchor);
+  			insert$1(target, t0, anchor);
+  			mount_component(tableheadcell1, target, anchor);
+  			insert$1(target, t1, anchor);
+  			mount_component(tableheadcell2, target, anchor);
+  			insert$1(target, t2, anchor);
+  			mount_component(tableheadcell3, target, anchor);
+  			insert$1(target, t3, anchor);
+  			mount_component(tableheadcell4, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tableheadcell0_changes = {};
+
+  			if (dirty & /*$$scope*/ 1024) {
+  				tableheadcell0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tableheadcell0.$set(tableheadcell0_changes);
+  			const tableheadcell1_changes = {};
+
+  			if (dirty & /*$$scope*/ 1024) {
+  				tableheadcell1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tableheadcell1.$set(tableheadcell1_changes);
+  			const tableheadcell2_changes = {};
+
+  			if (dirty & /*$$scope*/ 1024) {
+  				tableheadcell2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tableheadcell2.$set(tableheadcell2_changes);
+  			const tableheadcell3_changes = {};
+
+  			if (dirty & /*$$scope*/ 1024) {
+  				tableheadcell3_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tableheadcell3.$set(tableheadcell3_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tableheadcell0.$$.fragment, local);
+  			transition_in(tableheadcell1.$$.fragment, local);
+  			transition_in(tableheadcell2.$$.fragment, local);
+  			transition_in(tableheadcell3.$$.fragment, local);
+  			transition_in(tableheadcell4.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tableheadcell0.$$.fragment, local);
+  			transition_out(tableheadcell1.$$.fragment, local);
+  			transition_out(tableheadcell2.$$.fragment, local);
+  			transition_out(tableheadcell3.$$.fragment, local);
+  			transition_out(tableheadcell4.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(t1);
+  				detach(t2);
+  				detach(t3);
+  			}
+
+  			destroy_component(tableheadcell0, detaching);
+  			destroy_component(tableheadcell1, detaching);
+  			destroy_component(tableheadcell2, detaching);
+  			destroy_component(tableheadcell3, detaching);
+  			destroy_component(tableheadcell4, detaching);
+  		}
+  	};
+  }
+
+  // (38:16) <TableBodyCell>
+  function create_default_slot_7$1(ctx) {
+  	let t_value = (/*lib*/ ctx[7] ? 'Yes' : 'No') + "";
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*libManager, libsInfo*/ 3 && t_value !== (t_value = (/*lib*/ ctx[7] ? 'Yes' : 'No') + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (39:16) <TableBodyCell>
+  function create_default_slot_6$1(ctx) {
+  	let t_value = /*libInfo*/ ctx[6].name + "";
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*libsInfo*/ 2 && t_value !== (t_value = /*libInfo*/ ctx[6].name + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (40:16) <TableBodyCell class="max-w-80 text-wrap">
+  function create_default_slot_5$2(ctx) {
+  	let a;
+  	let t0_value = /*libInfo*/ ctx[6].url + "";
+  	let t0;
+  	let t1;
+  	let openinnew;
+  	let a_href_value;
+  	let current;
+
+  	openinnew = new OpenInNew({
+  			props: { class: "inline-block", size: 16 }
+  		});
+
+  	return {
+  		c() {
+  			a = element("a");
+  			t0 = text(t0_value);
+  			t1 = space$1();
+  			create_component(openinnew.$$.fragment);
+  			attr(a, "class", "hover:underline");
+  			attr(a, "href", a_href_value = /*libInfo*/ ctx[6].url);
+  			attr(a, "target", "_blank");
+  			attr(a, "rel", "noopener noreferrer");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, a, anchor);
+  			append(a, t0);
+  			append(a, t1);
+  			mount_component(openinnew, a, null);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if ((!current || dirty & /*libsInfo*/ 2) && t0_value !== (t0_value = /*libInfo*/ ctx[6].url + "")) set_data(t0, t0_value);
+
+  			if (!current || dirty & /*libsInfo*/ 2 && a_href_value !== (a_href_value = /*libInfo*/ ctx[6].url)) {
+  				attr(a, "href", a_href_value);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(openinnew.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(openinnew.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(a);
+  			}
+
+  			destroy_component(openinnew);
+  		}
+  	};
+  }
+
+  // (46:16) <TableBodyCell>
+  function create_default_slot_4$2(ctx) {
+  	let t_value = (/*libInfo*/ ctx[6].required ? 'Yes' : 'No') + "";
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*libsInfo*/ 2 && t_value !== (t_value = (/*libInfo*/ ctx[6].required ? 'Yes' : 'No') + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (52:42) 
+  function create_if_block_1$4(ctx) {
+  	let button;
+  	let download;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	download = new Download({ props: { size: 25 } });
+
+  	function click_handler_1() {
+  		return /*click_handler_1*/ ctx[5](/*libInfo*/ ctx[6]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(download.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(download, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", click_handler_1);
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(download.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(download.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(download);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (48:20) {#if lib && lib.headers.downloadUrl}
+  function create_if_block$5(ctx) {
+  	let button;
+  	let update;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update = new Update({ props: { size: 25 } });
+
+  	function click_handler() {
+  		return /*click_handler*/ ctx[4](/*lib*/ ctx[7]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(update.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(update, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", click_handler);
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(update);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (47:16) <TableBodyCell>
+  function create_default_slot_3$2(ctx) {
+  	let current_block_type_index;
+  	let if_block;
+  	let if_block_anchor;
+  	let current;
+  	const if_block_creators = [create_if_block$5, create_if_block_1$4];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*lib*/ ctx[7] && /*lib*/ ctx[7].headers.downloadUrl) return 0;
+  		if (/*libInfo*/ ctx[6].url) return 1;
+  		return -1;
+  	}
+
+  	if (~(current_block_type_index = select_block_type(ctx))) {
+  		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  	}
+
+  	return {
+  		c() {
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if (~current_block_type_index) {
+  				if_blocks[current_block_type_index].m(target, anchor);
+  			}
+
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if (~current_block_type_index) {
+  					if_blocks[current_block_type_index].p(ctx, dirty);
+  				}
+  			} else {
+  				if (if_block) {
+  					group_outros();
+
+  					transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  						if_blocks[previous_block_index] = null;
+  					});
+
+  					check_outros();
+  				}
+
+  				if (~current_block_type_index) {
+  					if_block = if_blocks[current_block_type_index];
+
+  					if (!if_block) {
+  						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  						if_block.c();
+  					} else {
+  						if_block.p(ctx, dirty);
+  					}
+
+  					transition_in(if_block, 1);
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				} else {
+  					if_block = null;
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if (~current_block_type_index) {
+  				if_blocks[current_block_type_index].d(detaching);
+  			}
+  		}
+  	};
+  }
+
+  // (37:12) <TableBodyRow>
+  function create_default_slot_2$2(ctx) {
+  	let tablebodycell0;
+  	let t0;
+  	let tablebodycell1;
+  	let t1;
+  	let tablebodycell2;
+  	let t2;
+  	let tablebodycell3;
+  	let t3;
+  	let tablebodycell4;
+  	let t4;
+  	let current;
+
+  	tablebodycell0 = new TableBodyCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_7$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tablebodycell1 = new TableBodyCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_6$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tablebodycell2 = new TableBodyCell({
+  			props: {
+  				class: "max-w-80 text-wrap",
+  				$$slots: { default: [create_default_slot_5$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tablebodycell3 = new TableBodyCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_4$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tablebodycell4 = new TableBodyCell({
+  			props: {
+  				$$slots: { default: [create_default_slot_3$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(tablebodycell0.$$.fragment);
+  			t0 = space$1();
+  			create_component(tablebodycell1.$$.fragment);
+  			t1 = space$1();
+  			create_component(tablebodycell2.$$.fragment);
+  			t2 = space$1();
+  			create_component(tablebodycell3.$$.fragment);
+  			t3 = space$1();
+  			create_component(tablebodycell4.$$.fragment);
+  			t4 = space$1();
+  		},
+  		m(target, anchor) {
+  			mount_component(tablebodycell0, target, anchor);
+  			insert$1(target, t0, anchor);
+  			mount_component(tablebodycell1, target, anchor);
+  			insert$1(target, t1, anchor);
+  			mount_component(tablebodycell2, target, anchor);
+  			insert$1(target, t2, anchor);
+  			mount_component(tablebodycell3, target, anchor);
+  			insert$1(target, t3, anchor);
+  			mount_component(tablebodycell4, target, anchor);
+  			insert$1(target, t4, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tablebodycell0_changes = {};
+
+  			if (dirty & /*$$scope, libManager, libsInfo*/ 1027) {
+  				tablebodycell0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodycell0.$set(tablebodycell0_changes);
+  			const tablebodycell1_changes = {};
+
+  			if (dirty & /*$$scope, libsInfo*/ 1026) {
+  				tablebodycell1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodycell1.$set(tablebodycell1_changes);
+  			const tablebodycell2_changes = {};
+
+  			if (dirty & /*$$scope, libsInfo*/ 1026) {
+  				tablebodycell2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodycell2.$set(tablebodycell2_changes);
+  			const tablebodycell3_changes = {};
+
+  			if (dirty & /*$$scope, libsInfo*/ 1026) {
+  				tablebodycell3_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodycell3.$set(tablebodycell3_changes);
+  			const tablebodycell4_changes = {};
+
+  			if (dirty & /*$$scope, libManager, libsInfo*/ 1027) {
+  				tablebodycell4_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodycell4.$set(tablebodycell4_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tablebodycell0.$$.fragment, local);
+  			transition_in(tablebodycell1.$$.fragment, local);
+  			transition_in(tablebodycell2.$$.fragment, local);
+  			transition_in(tablebodycell3.$$.fragment, local);
+  			transition_in(tablebodycell4.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tablebodycell0.$$.fragment, local);
+  			transition_out(tablebodycell1.$$.fragment, local);
+  			transition_out(tablebodycell2.$$.fragment, local);
+  			transition_out(tablebodycell3.$$.fragment, local);
+  			transition_out(tablebodycell4.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(t1);
+  				detach(t2);
+  				detach(t3);
+  				detach(t4);
+  			}
+
+  			destroy_component(tablebodycell0, detaching);
+  			destroy_component(tablebodycell1, detaching);
+  			destroy_component(tablebodycell2, detaching);
+  			destroy_component(tablebodycell3, detaching);
+  			destroy_component(tablebodycell4, detaching);
+  		}
+  	};
+  }
+
+  // (35:8) {#each libsInfo as libInfo}
+  function create_each_block$2(ctx) {
+  	let tablebodyrow;
+  	let current;
+
+  	tablebodyrow = new TableBodyRow({
+  			props: {
+  				$$slots: { default: [create_default_slot_2$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(tablebodyrow.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(tablebodyrow, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tablebodyrow_changes = {};
+
+  			if (dirty & /*$$scope, libManager, libsInfo*/ 1027) {
+  				tablebodyrow_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebodyrow.$set(tablebodyrow_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tablebodyrow.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tablebodyrow.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(tablebodyrow, detaching);
+  		}
+  	};
+  }
+
+  // (34:4) <TableBody>
+  function create_default_slot_1$2(ctx) {
+  	let each_1_anchor;
+  	let current;
+  	let each_value = ensure_array_like(/*libsInfo*/ ctx[1]);
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	return {
+  		c() {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			each_1_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(target, anchor);
+  				}
+  			}
+
+  			insert$1(target, each_1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*libManager, libsInfo, downloadLib*/ 7) {
+  				each_value = ensure_array_like(/*libsInfo*/ ctx[1]);
+  				let i;
+
+  				for (i = 0; i < each_value.length; i += 1) {
+  					const child_ctx = get_each_context$2(ctx, each_value, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block$2(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(each_1_anchor);
+  			}
+
+  			destroy_each(each_blocks, detaching);
+  		}
+  	};
+  }
+
+  // (26:0) <Table>
+  function create_default_slot$3(ctx) {
+  	let tablehead;
+  	let t;
+  	let tablebody;
+  	let current;
+
+  	tablehead = new TableHead({
+  			props: {
+  				$$slots: { default: [create_default_slot_8$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tablebody = new TableBody({
+  			props: {
+  				$$slots: { default: [create_default_slot_1$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(tablehead.$$.fragment);
+  			t = space$1();
+  			create_component(tablebody.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(tablehead, target, anchor);
+  			insert$1(target, t, anchor);
+  			mount_component(tablebody, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tablehead_changes = {};
+
+  			if (dirty & /*$$scope*/ 1024) {
+  				tablehead_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablehead.$set(tablehead_changes);
+  			const tablebody_changes = {};
+
+  			if (dirty & /*$$scope, libsInfo, libManager*/ 1027) {
+  				tablebody_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tablebody.$set(tablebody_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tablehead.$$.fragment, local);
+  			transition_in(tablebody.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tablehead.$$.fragment, local);
+  			transition_out(tablebody.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(tablehead, detaching);
+  			destroy_component(tablebody, detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$7(ctx) {
+  	let table;
+  	let current;
+
+  	table = new Table({
+  			props: {
+  				$$slots: { default: [create_default_slot$3] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(table.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(table, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const table_changes = {};
+
+  			if (dirty & /*$$scope, libsInfo, libManager*/ 1027) {
+  				table_changes.$$scope = { dirty, ctx };
+  			}
+
+  			table.$set(table_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(table.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(table.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(table, detaching);
+  		}
+  	};
+  }
+
+  function instance$7($$self, $$props, $$invalidate) {
+  	let { plugin } = $$props;
+  	let { libManager } = $$props;
+  	let libsInfo = [];
+
+  	for (let lib of plugin.headers.needsLib) {
+  		let parts = lib.split('|').map(p => p.trim());
+
+  		libsInfo.push({
+  			name: parts[0],
+  			url: parts[1],
+  			required: true
+  		});
+  	}
+
+  	for (let lib of plugin.headers.optionalLib) {
+  		let parts = lib.split('|').map(p => p.trim());
+
+  		libsInfo.push({
+  			name: parts[0],
+  			url: parts[1],
+  			required: false
+  		});
+  	}
+
+  	function downloadLib(name, url) {
+  		downloadLibrary(url).then(() => $$invalidate(1, libsInfo)).catch(err => showErrorMessage(err, `Failed to download library ${name}`));
+  	}
+
+  	const click_handler = lib => checkLibUpdate(lib);
+  	const click_handler_1 = libInfo => downloadLib(libInfo.name, libInfo.url);
+
+  	$$self.$$set = $$props => {
+  		if ('plugin' in $$props) $$invalidate(3, plugin = $$props.plugin);
+  		if ('libManager' in $$props) $$invalidate(0, libManager = $$props.libManager);
+  	};
+
+  	return [libManager, libsInfo, downloadLib, plugin, click_handler, click_handler_1];
+  }
+
+  class PluginLibrariesInfo extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$7, create_fragment$7, safe_not_equal, { plugin: 3, libManager: 0 });
+  	}
+  }
+
+  /* src\ui\menu\plugins\PluginCard.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_4$1(ctx) {
+  	let modal;
+  	let current;
+
+  	modal = new Modal({
+  			props: {
+  				size: "lg",
+  				open: true,
+  				outsideclose: true,
+  				title: `Libraries used by ${/*plugin*/ ctx[4].headers.name}`,
+  				$$slots: { default: [create_default_slot$2] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	modal.$on("close", /*close_handler*/ ctx[11]);
+
+  	return {
+  		c() {
+  			create_component(modal.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(modal, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const modal_changes = {};
+  			if (dirty & /*plugin*/ 16) modal_changes.title = `Libraries used by ${/*plugin*/ ctx[4].headers.name}`;
+
+  			if (dirty & /*$$scope, plugin, libManager*/ 262168) {
+  				modal_changes.$$scope = { dirty, ctx };
+  			}
+
+  			modal.$set(modal_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(modal.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(modal.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(modal, detaching);
+  		}
+  	};
+  }
+
+  // (40:4) <Modal size="lg" open outsideclose on:close={() => libInfoOpen = false}          title={`Libraries used by ${plugin.headers.name}`}>
+  function create_default_slot$2(ctx) {
+  	let pluginlibrariesinfo;
+  	let current;
+
+  	pluginlibrariesinfo = new PluginLibrariesInfo({
+  			props: {
+  				plugin: /*plugin*/ ctx[4],
+  				libManager: /*libManager*/ ctx[3]
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(pluginlibrariesinfo.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(pluginlibrariesinfo, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const pluginlibrariesinfo_changes = {};
+  			if (dirty & /*plugin*/ 16) pluginlibrariesinfo_changes.plugin = /*plugin*/ ctx[4];
+  			if (dirty & /*libManager*/ 8) pluginlibrariesinfo_changes.libManager = /*libManager*/ ctx[3];
+  			pluginlibrariesinfo.$set(pluginlibrariesinfo_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(pluginlibrariesinfo.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(pluginlibrariesinfo.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(pluginlibrariesinfo, detaching);
+  		}
+  	};
+  }
+
+  // (50:12) {#if plugin?.headers.version}
+  function create_if_block_3$1(ctx) {
+  	let span;
+  	let t0;
+  	let t1_value = /*plugin*/ ctx[4]?.headers.version + "";
+  	let t1;
+
+  	return {
+  		c() {
+  			span = element("span");
+  			t0 = text("v");
+  			t1 = text(t1_value);
+  			attr(span, "class", "text-sm");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, span, anchor);
+  			append(span, t0);
+  			append(span, t1);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*plugin*/ 16 && t1_value !== (t1_value = /*plugin*/ ctx[4]?.headers.version + "")) set_data(t1, t1_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(span);
+  			}
+  		}
+  	};
+  }
+
+  // (47:4) <svelte:fragment slot="header">
+  function create_header_slot(ctx) {
+  	let h2;
+  	let t0_value = /*plugin*/ ctx[4]?.headers.name + "";
+  	let t0;
+  	let t1;
+  	let t2;
+  	let button;
+  	let toggle;
+  	let updating_checked;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	let if_block = /*plugin*/ ctx[4]?.headers.version && create_if_block_3$1(ctx);
+
+  	function toggle_checked_binding(value) {
+  		/*toggle_checked_binding*/ ctx[17](value);
+  	}
+
+  	let toggle_props = { class: "*:me-0", disabled: true };
+
+  	if (/*enabled*/ ctx[6] !== void 0) {
+  		toggle_props.checked = /*enabled*/ ctx[6];
+  	}
+
+  	toggle = new Toggle({ props: toggle_props });
+  	binding_callbacks.push(() => bind(toggle, 'checked', toggle_checked_binding));
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			t0 = text(t0_value);
+  			t1 = space$1();
+  			if (if_block) if_block.c();
+  			t2 = space$1();
+  			button = element("button");
+  			create_component(toggle.$$.fragment);
+  			attr(h2, "class", "overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  			append(h2, t0);
+  			append(h2, t1);
+  			if (if_block) if_block.m(h2, null);
+  			insert$1(target, t2, anchor);
+  			insert$1(target, button, anchor);
+  			mount_component(toggle, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*onClick*/ ctx[10]);
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if ((!current || dirty & /*plugin*/ 16) && t0_value !== (t0_value = /*plugin*/ ctx[4]?.headers.name + "")) set_data(t0, t0_value);
+
+  			if (/*plugin*/ ctx[4]?.headers.version) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+  				} else {
+  					if_block = create_if_block_3$1(ctx);
+  					if_block.c();
+  					if_block.m(h2, null);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			const toggle_changes = {};
+
+  			if (!updating_checked && dirty & /*enabled*/ 64) {
+  				updating_checked = true;
+  				toggle_changes.checked = /*enabled*/ ctx[6];
+  				add_flush_callback(() => updating_checked = false);
+  			}
+
+  			toggle.$set(toggle_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(toggle.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(toggle.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  				detach(t2);
+  				detach(button);
+  			}
+
+  			if (if_block) if_block.d();
+  			destroy_component(toggle);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (58:4) <svelte:fragment slot="description">
+  function create_description_slot(ctx) {
+  	let t_value = /*plugin*/ ctx[4]?.headers.description + "";
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*plugin*/ 16 && t_value !== (t_value = /*plugin*/ ctx[4]?.headers.description + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (68:8) {#if plugin?.return?.openSettingsMenu}
+  function create_if_block_2$1(ctx) {
+  	let button;
+  	let cog;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	cog = new Cog({ props: { size: 28 } });
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(cog.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(cog, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*click_handler_2*/ ctx[14]);
+  				mounted = true;
+  			}
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(cog.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(cog.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(cog);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (73:8) {#if plugin?.headers.downloadUrl}
+  function create_if_block_1$3(ctx) {
+  	let button;
+  	let update;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update = new Update({ props: { size: 28 } });
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(update.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(update, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*click_handler_3*/ ctx[15]);
+  				mounted = true;
+  			}
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(update);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (78:8) {#if plugin?.headers.needsLib || plugin?.headers.optionalLib}
+  function create_if_block$4(ctx) {
+  	let button;
+  	let booksettings;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	booksettings = new BookSettings({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(booksettings.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(booksettings, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", /*click_handler_4*/ ctx[16]);
+  				mounted = true;
+  			}
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(booksettings.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(booksettings.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(booksettings);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (61:4) <svelte:fragment slot="buttons">
+  function create_buttons_slot(ctx) {
+  	let button0;
+  	let delete_1;
+  	let t0;
+  	let button1;
+  	let pencil;
+  	let t1;
+  	let t2;
+  	let t3;
+  	let if_block2_anchor;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	delete_1 = new Delete({ props: { size: 28 } });
+  	pencil = new Pencil({ props: { size: 28 } });
+  	let if_block0 = /*plugin*/ ctx[4]?.return?.openSettingsMenu && create_if_block_2$1(ctx);
+  	let if_block1 = /*plugin*/ ctx[4]?.headers.downloadUrl && create_if_block_1$3(ctx);
+  	let if_block2 = (/*plugin*/ ctx[4]?.headers.needsLib || /*plugin*/ ctx[4]?.headers.optionalLib) && create_if_block$4(ctx);
+
+  	return {
+  		c() {
+  			button0 = element("button");
+  			create_component(delete_1.$$.fragment);
+  			t0 = space$1();
+  			button1 = element("button");
+  			create_component(pencil.$$.fragment);
+  			t1 = space$1();
+  			if (if_block0) if_block0.c();
+  			t2 = space$1();
+  			if (if_block1) if_block1.c();
+  			t3 = space$1();
+  			if (if_block2) if_block2.c();
+  			if_block2_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button0, anchor);
+  			mount_component(delete_1, button0, null);
+  			insert$1(target, t0, anchor);
+  			insert$1(target, button1, anchor);
+  			mount_component(pencil, button1, null);
+  			insert$1(target, t1, anchor);
+  			if (if_block0) if_block0.m(target, anchor);
+  			insert$1(target, t2, anchor);
+  			if (if_block1) if_block1.m(target, anchor);
+  			insert$1(target, t3, anchor);
+  			if (if_block2) if_block2.m(target, anchor);
+  			insert$1(target, if_block2_anchor, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*click_handler*/ ctx[12]),
+  					listen(button1, "click", /*click_handler_1*/ ctx[13])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, dirty) {
+  			if (/*plugin*/ ctx[4]?.return?.openSettingsMenu) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+
+  					if (dirty & /*plugin*/ 16) {
+  						transition_in(if_block0, 1);
+  					}
+  				} else {
+  					if_block0 = create_if_block_2$1(ctx);
+  					if_block0.c();
+  					transition_in(if_block0, 1);
+  					if_block0.m(t2.parentNode, t2);
+  				}
+  			} else if (if_block0) {
+  				group_outros();
+
+  				transition_out(if_block0, 1, 1, () => {
+  					if_block0 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (/*plugin*/ ctx[4]?.headers.downloadUrl) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+
+  					if (dirty & /*plugin*/ 16) {
+  						transition_in(if_block1, 1);
+  					}
+  				} else {
+  					if_block1 = create_if_block_1$3(ctx);
+  					if_block1.c();
+  					transition_in(if_block1, 1);
+  					if_block1.m(t3.parentNode, t3);
+  				}
+  			} else if (if_block1) {
+  				group_outros();
+
+  				transition_out(if_block1, 1, 1, () => {
+  					if_block1 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (/*plugin*/ ctx[4]?.headers.needsLib || /*plugin*/ ctx[4]?.headers.optionalLib) {
+  				if (if_block2) {
+  					if_block2.p(ctx, dirty);
+
+  					if (dirty & /*plugin*/ 16) {
+  						transition_in(if_block2, 1);
+  					}
+  				} else {
+  					if_block2 = create_if_block$4(ctx);
+  					if_block2.c();
+  					transition_in(if_block2, 1);
+  					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
+  				}
+  			} else if (if_block2) {
+  				group_outros();
+
+  				transition_out(if_block2, 1, 1, () => {
+  					if_block2 = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(delete_1.$$.fragment, local);
+  			transition_in(pencil.$$.fragment, local);
+  			transition_in(if_block0);
+  			transition_in(if_block1);
+  			transition_in(if_block2);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(delete_1.$$.fragment, local);
+  			transition_out(pencil.$$.fragment, local);
+  			transition_out(if_block0);
+  			transition_out(if_block1);
+  			transition_out(if_block2);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button0);
+  				detach(t0);
+  				detach(button1);
+  				detach(t1);
+  				detach(t2);
+  				detach(t3);
+  				detach(if_block2_anchor);
+  			}
+
+  			destroy_component(delete_1);
+  			destroy_component(pencil);
+  			if (if_block0) if_block0.d(detaching);
+  			if (if_block1) if_block1.d(detaching);
+  			if (if_block2) if_block2.d(detaching);
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function create_fragment$6(ctx) {
+  	let t;
+  	let card;
+  	let current;
+  	let if_block = /*libInfoOpen*/ ctx[5] && create_if_block_4$1(ctx);
+
+  	card = new Card({
+  			props: {
+  				dragDisabled: /*dragDisabled*/ ctx[1],
+  				startDrag: /*startDrag*/ ctx[0],
+  				$$slots: {
+  					buttons: [create_buttons_slot],
+  					description: [create_description_slot],
+  					header: [create_header_slot]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			if (if_block) if_block.c();
+  			t = space$1();
+  			create_component(card.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, t, anchor);
+  			mount_component(card, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*libInfoOpen*/ ctx[5]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*libInfoOpen*/ 32) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block_4$1(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(t.parentNode, t);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			const card_changes = {};
+  			if (dirty & /*dragDisabled*/ 2) card_changes.dragDisabled = /*dragDisabled*/ ctx[1];
+  			if (dirty & /*startDrag*/ 1) card_changes.startDrag = /*startDrag*/ ctx[0];
+
+  			if (dirty & /*$$scope, libInfoOpen, plugin, $pluginsStore, pluginManager, enabled*/ 262388) {
+  				card_changes.$$scope = { dirty, ctx };
+  			}
+
+  			card.$set(card_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			transition_in(card.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			transition_out(card.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			if (if_block) if_block.d(detaching);
+  			destroy_component(card, detaching);
+  		}
+  	};
+  }
+
+  function instance$6($$self, $$props, $$invalidate) {
+  	let enabled;
+  	let $pluginsStore;
+  	let { startDrag } = $$props;
+  	let { dragDisabled } = $$props;
+  	let { pluginManager } = $$props;
+  	let { libManager } = $$props;
+  	let { plugin } = $$props;
+  	let { plugins: pluginsStore } = pluginManager;
+  	component_subscribe($$self, pluginsStore, value => $$invalidate(7, $pluginsStore = value));
+
+  	function deletePlugin(plugin) {
+  		let conf = confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
+  		if (!conf) return;
+  		pluginManager.deletePlugin(plugin);
+  	}
+
+  	async function onClick() {
+  		if (enabled) {
+  			plugin.disable();
+  			pluginManager.save();
+  		} else {
+  			plugin.enable().then(() => pluginManager.save()).catch(e => showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`));
+  		}
+  	}
+
+  	let libInfoOpen = false;
+  	const close_handler = () => $$invalidate(5, libInfoOpen = false);
+  	const click_handler = () => deletePlugin(plugin);
+  	const click_handler_1 = () => showPluginCodeEditor($pluginsStore, plugin, pluginManager);
+  	const click_handler_2 = () => plugin.return.openSettingsMenu();
+  	const click_handler_3 = () => checkPluginUpdate(plugin);
+  	const click_handler_4 = () => $$invalidate(5, libInfoOpen = true);
+
+  	function toggle_checked_binding(value) {
+  		enabled = value;
+  		($$invalidate(6, enabled), $$invalidate(4, plugin));
+  	}
+
+  	$$self.$$set = $$props => {
+  		if ('startDrag' in $$props) $$invalidate(0, startDrag = $$props.startDrag);
+  		if ('dragDisabled' in $$props) $$invalidate(1, dragDisabled = $$props.dragDisabled);
+  		if ('pluginManager' in $$props) $$invalidate(2, pluginManager = $$props.pluginManager);
+  		if ('libManager' in $$props) $$invalidate(3, libManager = $$props.libManager);
+  		if ('plugin' in $$props) $$invalidate(4, plugin = $$props.plugin);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*plugin*/ 16) {
+  			$$invalidate(6, enabled = plugin?.enabled);
+  		}
+  	};
+
+  	return [
+  		startDrag,
+  		dragDisabled,
+  		pluginManager,
+  		libManager,
+  		plugin,
+  		libInfoOpen,
+  		enabled,
+  		$pluginsStore,
+  		pluginsStore,
+  		deletePlugin,
+  		onClick,
+  		close_handler,
+  		click_handler,
+  		click_handler_1,
+  		click_handler_2,
+  		click_handler_3,
+  		click_handler_4,
+  		toggle_checked_binding
+  	];
+  }
+
+  class PluginCard extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$6, create_fragment$6, safe_not_equal, {
+  			startDrag: 0,
+  			dragDisabled: 1,
+  			pluginManager: 2,
+  			libManager: 3,
+  			plugin: 4
+  		});
+  	}
+  }
+
+  /* src\ui\menu\plugins\PluginCardsList.svelte generated by Svelte v4.2.19 */
+
+  function add_css$1(target) {
+  	append_styles(target, "svelte-7mk8z1", ".plugins.svelte-7mk8z1{grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}");
+  }
+
+  function get_each_context$1(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[21] = list[i];
+  	const constants_0 = /*pluginManager*/ child_ctx[0].getPlugin(/*item*/ child_ctx[21].id);
+  	child_ctx[22] = constants_0;
+  	return child_ctx;
+  }
+
+  // (100:8) <Button class="h-7 mr-2">
+  function create_default_slot_8(ctx) {
+  	let t;
+  	let chevrondown;
+  	let current;
+  	chevrondown = new ChevronDown({ props: { class: "ml-1", size: 20 } });
+
+  	return {
+  		c() {
+  			t = text("Bulk actions");
+  			create_component(chevrondown.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  			mount_component(chevrondown, target, anchor);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(chevrondown.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(chevrondown.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(chevrondown, detaching);
+  		}
+  	};
+  }
+
+  // (102:12) <DropdownItem on:click={deleteAll}>
+  function create_default_slot_7(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Delete all");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (103:12) <DropdownItem on:click={() => setAll(true)}>
+  function create_default_slot_6(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Enable all");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (104:12) <DropdownItem on:click={() => setAll(false)}>
+  function create_default_slot_5$1(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Disable all");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (101:8) <Dropdown bind:open={bulkOpen}>
+  function create_default_slot_4$1(ctx) {
+  	let dropdownitem0;
+  	let t0;
+  	let dropdownitem1;
+  	let t1;
+  	let dropdownitem2;
+  	let current;
+
+  	dropdownitem0 = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_7] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem0.$on("click", /*deleteAll*/ ctx[14]);
+
+  	dropdownitem1 = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_6] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem1.$on("click", /*click_handler_1*/ ctx[17]);
+
+  	dropdownitem2 = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_5$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem2.$on("click", /*click_handler_2*/ ctx[18]);
+
+  	return {
+  		c() {
+  			create_component(dropdownitem0.$$.fragment);
+  			t0 = space$1();
+  			create_component(dropdownitem1.$$.fragment);
+  			t1 = space$1();
+  			create_component(dropdownitem2.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(dropdownitem0, target, anchor);
+  			insert$1(target, t0, anchor);
+  			mount_component(dropdownitem1, target, anchor);
+  			insert$1(target, t1, anchor);
+  			mount_component(dropdownitem2, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const dropdownitem0_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdownitem0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem0.$set(dropdownitem0_changes);
+  			const dropdownitem1_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdownitem1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem1.$set(dropdownitem1_changes);
+  			const dropdownitem2_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdownitem2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem2.$set(dropdownitem2_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(dropdownitem0.$$.fragment, local);
+  			transition_in(dropdownitem1.$$.fragment, local);
+  			transition_in(dropdownitem2.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(dropdownitem0.$$.fragment, local);
+  			transition_out(dropdownitem1.$$.fragment, local);
+  			transition_out(dropdownitem2.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(t1);
+  			}
+
+  			destroy_component(dropdownitem0, detaching);
+  			destroy_component(dropdownitem1, detaching);
+  			destroy_component(dropdownitem2, detaching);
+  		}
+  	};
+  }
+
+  // (106:8) <Button class="h-7">
+  function create_default_slot_3$1(ctx) {
+  	let t;
+  	let chevrondown;
+  	let current;
+  	chevrondown = new ChevronDown({ props: { class: "ml-1", size: 20 } });
+
+  	return {
+  		c() {
+  			t = text("Sort by...");
+  			create_component(chevrondown.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  			mount_component(chevrondown, target, anchor);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(chevrondown.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(chevrondown.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(chevrondown, detaching);
+  		}
+  	};
+  }
+
+  // (108:12) <DropdownItem on:click={sortEnabled}>
+  function create_default_slot_2$1(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Enabled");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (109:12) <DropdownItem on:click={sortAlphabetical}>
+  function create_default_slot_1$1(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Alphabetical");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (107:8) <Dropdown bind:open={sortOpen}>
+  function create_default_slot$1(ctx) {
+  	let dropdownitem0;
+  	let t;
+  	let dropdownitem1;
+  	let current;
+
+  	dropdownitem0 = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_2$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem0.$on("click", /*sortEnabled*/ ctx[12]);
+
+  	dropdownitem1 = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_1$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem1.$on("click", /*sortAlphabetical*/ ctx[13]);
+
+  	return {
+  		c() {
+  			create_component(dropdownitem0.$$.fragment);
+  			t = space$1();
+  			create_component(dropdownitem1.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(dropdownitem0, target, anchor);
+  			insert$1(target, t, anchor);
+  			mount_component(dropdownitem1, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const dropdownitem0_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdownitem0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem0.$set(dropdownitem0_changes);
+  			const dropdownitem1_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdownitem1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem1.$set(dropdownitem1_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(dropdownitem0.$$.fragment, local);
+  			transition_in(dropdownitem1.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(dropdownitem0.$$.fragment, local);
+  			transition_out(dropdownitem1.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(dropdownitem0, detaching);
+  			destroy_component(dropdownitem1, detaching);
+  		}
+  	};
+  }
+
+  // (112:4) {#if $pluginsStore.length === 0}
+  function create_if_block$3(ctx) {
+  	let h2;
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			h2.textContent = "No plugins installed! Import or create one to get started.";
+  			attr(h2, "class", "text-xl");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (118:8) {#each items as item (item.id)}
+  function create_each_block$1(key_1, ctx) {
+  	let div;
+  	let plugincard;
+  	let t;
+  	let rect;
+  	let stop_animation = noop;
+  	let current;
+
+  	plugincard = new PluginCard({
+  			props: {
+  				plugin: /*plugin*/ ctx[22],
+  				startDrag: /*startDrag*/ ctx[10],
+  				dragDisabled: /*dragDisabled*/ ctx[4],
+  				pluginManager: /*pluginManager*/ ctx[0],
+  				libManager: /*libManager*/ ctx[1]
+  			}
+  		});
+
+  	return {
+  		key: key_1,
+  		first: null,
+  		c() {
+  			div = element("div");
+  			create_component(plugincard.$$.fragment);
+  			t = space$1();
+  			this.first = div;
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(plugincard, div, null);
+  			append(div, t);
+  			current = true;
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  			const plugincard_changes = {};
+  			if (dirty & /*pluginManager, items*/ 9) plugincard_changes.plugin = /*plugin*/ ctx[22];
+  			if (dirty & /*dragDisabled*/ 16) plugincard_changes.dragDisabled = /*dragDisabled*/ ctx[4];
+  			if (dirty & /*pluginManager*/ 1) plugincard_changes.pluginManager = /*pluginManager*/ ctx[0];
+  			if (dirty & /*libManager*/ 2) plugincard_changes.libManager = /*libManager*/ ctx[1];
+  			plugincard.$set(plugincard_changes);
+  		},
+  		r() {
+  			rect = div.getBoundingClientRect();
+  		},
+  		f() {
+  			fix_position(div);
+  			stop_animation();
+  		},
+  		a() {
+  			stop_animation();
+  			stop_animation = create_animation(div, rect, flip$2, { duration: flipDurationMs });
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(plugincard.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(plugincard.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(plugincard);
+  		}
+  	};
+  }
+
+  function create_fragment$5(ctx) {
+  	let div2;
+  	let div0;
+  	let button0;
+  	let plusboxoutline;
+  	let t0;
+  	let button1;
+  	let import_1;
+  	let t1;
+  	let button2;
+  	let t2;
+  	let dropdown0;
+  	let updating_open;
+  	let t3;
+  	let button3;
+  	let t4;
+  	let dropdown1;
+  	let updating_open_1;
+  	let t5;
+  	let t6;
+  	let div1;
+  	let each_blocks = [];
+  	let each_1_lookup = new Map();
+  	let dndzone_action;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	plusboxoutline = new PlusBoxOutline({ props: { size: 32 } });
+  	import_1 = new Import({ props: { size: 32 } });
+
+  	button2 = new Button({
+  			props: {
+  				class: "h-7 mr-2",
+  				$$slots: { default: [create_default_slot_8] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	function dropdown0_open_binding(value) {
+  		/*dropdown0_open_binding*/ ctx[19](value);
+  	}
+
+  	let dropdown0_props = {
+  		$$slots: { default: [create_default_slot_4$1] },
+  		$$scope: { ctx }
+  	};
+
+  	if (/*bulkOpen*/ ctx[6] !== void 0) {
+  		dropdown0_props.open = /*bulkOpen*/ ctx[6];
+  	}
+
+  	dropdown0 = new Dropdown({ props: dropdown0_props });
+  	binding_callbacks.push(() => bind(dropdown0, 'open', dropdown0_open_binding));
+
+  	button3 = new Button({
+  			props: {
+  				class: "h-7",
+  				$$slots: { default: [create_default_slot_3$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	function dropdown1_open_binding(value) {
+  		/*dropdown1_open_binding*/ ctx[20](value);
+  	}
+
+  	let dropdown1_props = {
+  		$$slots: { default: [create_default_slot$1] },
+  		$$scope: { ctx }
+  	};
+
+  	if (/*sortOpen*/ ctx[5] !== void 0) {
+  		dropdown1_props.open = /*sortOpen*/ ctx[5];
+  	}
+
+  	dropdown1 = new Dropdown({ props: dropdown1_props });
+  	binding_callbacks.push(() => bind(dropdown1, 'open', dropdown1_open_binding));
+  	let if_block = /*$pluginsStore*/ ctx[2].length === 0 && create_if_block$3();
+  	let each_value = ensure_array_like(/*items*/ ctx[3]);
+  	const get_key = ctx => /*item*/ ctx[21].id;
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		let child_ctx = get_each_context$1(ctx, each_value, i);
+  		let key = get_key(child_ctx);
+  		each_1_lookup.set(key, each_blocks[i] = create_each_block$1(key, child_ctx));
+  	}
+
+  	return {
+  		c() {
+  			div2 = element("div");
+  			div0 = element("div");
+  			button0 = element("button");
+  			create_component(plusboxoutline.$$.fragment);
+  			t0 = space$1();
+  			button1 = element("button");
+  			create_component(import_1.$$.fragment);
+  			t1 = space$1();
+  			create_component(button2.$$.fragment);
+  			t2 = space$1();
+  			create_component(dropdown0.$$.fragment);
+  			t3 = space$1();
+  			create_component(button3.$$.fragment);
+  			t4 = space$1();
+  			create_component(dropdown1.$$.fragment);
+  			t5 = space$1();
+  			if (if_block) if_block.c();
+  			t6 = space$1();
+  			div1 = element("div");
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			attr(div0, "class", "flex items-center mb-[3px]");
+  			attr(div1, "class", "max-h-full overflow-y-auto grid gap-4 plugins pb-1 flex-grow svelte-7mk8z1");
+  			attr(div2, "class", "flex flex-col");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div2, anchor);
+  			append(div2, div0);
+  			append(div0, button0);
+  			mount_component(plusboxoutline, button0, null);
+  			append(div0, t0);
+  			append(div0, button1);
+  			mount_component(import_1, button1, null);
+  			append(div0, t1);
+  			mount_component(button2, div0, null);
+  			append(div0, t2);
+  			mount_component(dropdown0, div0, null);
+  			append(div0, t3);
+  			mount_component(button3, div0, null);
+  			append(div0, t4);
+  			mount_component(dropdown1, div0, null);
+  			append(div2, t5);
+  			if (if_block) if_block.m(div2, null);
+  			append(div2, t6);
+  			append(div2, div1);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(div1, null);
+  				}
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*click_handler*/ ctx[16]),
+  					listen(button1, "click", /*importPlugin*/ ctx[11]),
+  					action_destroyer(dndzone_action = dndzone.call(null, div1, {
+  						items: /*items*/ ctx[3],
+  						flipDurationMs,
+  						dragDisabled: /*dragDisabled*/ ctx[4],
+  						dropTargetStyle: {}
+  					})),
+  					listen(div1, "consider", /*handleDndConsider*/ ctx[8]),
+  					listen(div1, "finalize", /*handleDndFinalize*/ ctx[9])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			const button2_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				button2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button2.$set(button2_changes);
+  			const dropdown0_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdown0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open && dirty & /*bulkOpen*/ 64) {
+  				updating_open = true;
+  				dropdown0_changes.open = /*bulkOpen*/ ctx[6];
+  				add_flush_callback(() => updating_open = false);
+  			}
+
+  			dropdown0.$set(dropdown0_changes);
+  			const button3_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				button3_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button3.$set(button3_changes);
+  			const dropdown1_changes = {};
+
+  			if (dirty & /*$$scope*/ 33554432) {
+  				dropdown1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open_1 && dirty & /*sortOpen*/ 32) {
+  				updating_open_1 = true;
+  				dropdown1_changes.open = /*sortOpen*/ ctx[5];
+  				add_flush_callback(() => updating_open_1 = false);
+  			}
+
+  			dropdown1.$set(dropdown1_changes);
+
+  			if (/*$pluginsStore*/ ctx[2].length === 0) {
+  				if (if_block) ; else {
+  					if_block = create_if_block$3();
+  					if_block.c();
+  					if_block.m(div2, t6);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			if (dirty & /*pluginManager, items, startDrag, dragDisabled, libManager*/ 1051) {
+  				each_value = ensure_array_like(/*items*/ ctx[3]);
+  				group_outros();
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].r();
+  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$1, null, get_each_context$1);
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].a();
+  				check_outros();
+  			}
+
+  			if (dndzone_action && is_function(dndzone_action.update) && dirty & /*items, dragDisabled*/ 24) dndzone_action.update.call(null, {
+  				items: /*items*/ ctx[3],
+  				flipDurationMs,
+  				dragDisabled: /*dragDisabled*/ ctx[4],
+  				dropTargetStyle: {}
+  			});
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(plusboxoutline.$$.fragment, local);
+  			transition_in(import_1.$$.fragment, local);
+  			transition_in(button2.$$.fragment, local);
+  			transition_in(dropdown0.$$.fragment, local);
+  			transition_in(button3.$$.fragment, local);
+  			transition_in(dropdown1.$$.fragment, local);
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(plusboxoutline.$$.fragment, local);
+  			transition_out(import_1.$$.fragment, local);
+  			transition_out(button2.$$.fragment, local);
+  			transition_out(dropdown0.$$.fragment, local);
+  			transition_out(button3.$$.fragment, local);
+  			transition_out(dropdown1.$$.fragment, local);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div2);
+  			}
+
+  			destroy_component(plusboxoutline);
+  			destroy_component(import_1);
+  			destroy_component(button2);
+  			destroy_component(dropdown0);
+  			destroy_component(button3);
+  			destroy_component(dropdown1);
+  			if (if_block) if_block.d();
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].d();
+  			}
+
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  const flipDurationMs = 300;
+
+  function instance$5($$self, $$props, $$invalidate) {
+  	let $pluginsStore;
+  	let { pluginManager } = $$props;
+  	let { libManager } = $$props;
+  	let { plugins: pluginsStore } = pluginManager;
+  	component_subscribe($$self, pluginsStore, value => $$invalidate(2, $pluginsStore = value));
+  	let items = $pluginsStore.map(plugin => ({ id: plugin.headers.name }));
+  	let dragDisabled = true;
+
+  	function handleDndConsider(e) {
+  		$$invalidate(3, items = e.detail.items);
+  	}
+
+  	function handleDndFinalize(e) {
+  		$$invalidate(3, items = e.detail.items);
+  		$$invalidate(4, dragDisabled = true);
+
+  		// Update the order of the plugins
+  		let newOrder = [];
+
+  		for (let item of items) {
+  			let plugin = $pluginsStore.find(p => p.headers.name === item.id);
+  			if (plugin) newOrder.push(plugin);
+  		}
+
+  		pluginManager.plugins.set(newOrder);
+  		pluginManager.save();
+  	}
+
+  	function startDrag() {
+  		$$invalidate(4, dragDisabled = false);
+  	}
+
+  	function importPlugin() {
+  		readUserFile(".js").then(code => {
+  			code = code.replaceAll("\r\n", "\n");
+  			pluginManager.createPlugin(code);
+  		}).catch(() => {
+  			
+  		});
+  	}
+
+  	let sortOpen = false;
+
+  	function sortEnabled() {
+  		$$invalidate(5, sortOpen = false);
+  		let enabled = $pluginsStore.filter(p => p.enabled);
+  		let disabled = $pluginsStore.filter(p => !p.enabled);
+  		pluginManager.plugins.set(enabled.concat(disabled));
+  		pluginManager.save();
+  	}
+
+  	function sortAlphabetical() {
+  		$$invalidate(5, sortOpen = false);
+  		let sorted = $pluginsStore.sort((a, b) => a.headers.name.localeCompare(b.headers.name));
+  		pluginManager.plugins.set(sorted);
+  		pluginManager.save();
+  	}
+
+  	let bulkOpen = false;
+
+  	function deleteAll() {
+  		$$invalidate(6, bulkOpen = false);
+  		if ($pluginsStore.length === 0) return;
+  		const conf = confirm("Are you sure you want to delete all plugins?");
+  		if (!conf) return;
+
+  		for (let plugin of $pluginsStore) {
+  			pluginManager.deletePlugin(plugin);
+  		}
+  	}
+
+  	async function setAll(enabled) {
+  		$$invalidate(6, bulkOpen = false);
+
+  		if (!enabled) {
+  			for (let plugin of $pluginsStore) {
+  				if (plugin.enabled) plugin.disable();
+  			}
+  		} else {
+  			let toEnable = $pluginsStore.filter(p => !p.enabled);
+  			let res = await Promise.allSettled(toEnable.map(p => p.enable()));
+  			let errors = res.filter(r => r.status === "rejected");
+  			if (errors.length === 0) return;
+  			let msg = errors.map(r => r.reason.message).join("\n\n");
+  			showErrorMessage(msg, "Failed to enable some plugins");
+  		}
+  	}
+
+  	const click_handler = () => createPlugin(pluginManager);
+  	const click_handler_1 = () => setAll(true);
+  	const click_handler_2 = () => setAll(false);
+
+  	function dropdown0_open_binding(value) {
+  		bulkOpen = value;
+  		$$invalidate(6, bulkOpen);
+  	}
+
+  	function dropdown1_open_binding(value) {
+  		sortOpen = value;
+  		$$invalidate(5, sortOpen);
+  	}
+
+  	$$self.$$set = $$props => {
+  		if ('pluginManager' in $$props) $$invalidate(0, pluginManager = $$props.pluginManager);
+  		if ('libManager' in $$props) $$invalidate(1, libManager = $$props.libManager);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*$pluginsStore*/ 4) {
+  			$$invalidate(3, items = $pluginsStore.map(plugin => ({ id: plugin.headers.name })));
+  		}
+  	};
+
+  	return [
+  		pluginManager,
+  		libManager,
+  		$pluginsStore,
+  		items,
+  		dragDisabled,
+  		sortOpen,
+  		bulkOpen,
+  		pluginsStore,
+  		handleDndConsider,
+  		handleDndFinalize,
+  		startDrag,
+  		importPlugin,
+  		sortEnabled,
+  		sortAlphabetical,
+  		deleteAll,
+  		setAll,
+  		click_handler,
+  		click_handler_1,
+  		click_handler_2,
+  		dropdown0_open_binding,
+  		dropdown1_open_binding
+  	];
+  }
+
+  class PluginCardsList extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$5, create_fragment$5, safe_not_equal, { pluginManager: 0, libManager: 1 }, add_css$1);
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Wrench.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$2(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$2(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$4(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$2(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$2(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$2(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$2(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$4($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Wrench extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Book.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$1(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$1(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$3(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$1(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$1(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$1(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$1(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$3($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Book extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\Updates.svelte generated by Svelte v4.2.19 */
+
+  function get_each_context(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[11] = list[i];
+  	return child_ctx;
+  }
+
+  function get_each_context_1(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[14] = list[i];
+  	return child_ctx;
+  }
+
+  // (85:4) {#if showingProgress}
+  function create_if_block_4(ctx) {
+  	let progressbar;
+  	let current;
+
+  	progressbar = new Progressbar({
+  			props: {
+  				progress: /*completed*/ ctx[2] / /*total*/ ctx[3] * 100,
+  				labelInside: true
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(progressbar.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(progressbar, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const progressbar_changes = {};
+  			if (dirty & /*completed, total*/ 12) progressbar_changes.progress = /*completed*/ ctx[2] / /*total*/ ctx[3] * 100;
+  			progressbar.$set(progressbar_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(progressbar.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(progressbar.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(progressbar, detaching);
+  		}
+  	};
+  }
+
+  // (98:4) {:else}
+  function create_else_block_1(ctx) {
+  	let each_1_anchor;
+  	let current;
+  	let each_value_1 = ensure_array_like(/*$plugins*/ ctx[5]);
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value_1.length; i += 1) {
+  		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	return {
+  		c() {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			each_1_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(target, anchor);
+  				}
+  			}
+
+  			insert$1(target, each_1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*$plugins, plugins*/ 96) {
+  				each_value_1 = ensure_array_like(/*$plugins*/ ctx[5]);
+  				let i;
+
+  				for (i = 0; i < each_value_1.length; i += 1) {
+  					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block_1(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value_1.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value_1.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(each_1_anchor);
+  			}
+
+  			destroy_each(each_blocks, detaching);
+  		}
+  	};
+  }
+
+  // (96:4) {#if $plugins.length === 0}
+  function create_if_block_2(ctx) {
+  	let h2;
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			h2.textContent = "No plugins installed";
+  			attr(h2, "class", "text-lg");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  		},
+  		p: noop,
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (101:16) {#if plugin.headers.downloadUrl}
+  function create_if_block_3(ctx) {
+  	let button;
+  	let update;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update = new Update({ props: { size: 25 } });
+
+  	function click_handler() {
+  		return /*click_handler*/ ctx[9](/*plugin*/ ctx[14]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(update.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(update, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", click_handler);
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(update);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (99:8) {#each $plugins as plugin}
+  function create_each_block_1(ctx) {
+  	let div;
+  	let t0;
+  	let t1_value = /*plugin*/ ctx[14].headers.name + "";
+  	let t1;
+  	let t2;
+
+  	let t3_value = (/*plugin*/ ctx[14].headers.version
+  	? `v${/*plugin*/ ctx[14].headers.version}`
+  	: '') + "";
+
+  	let t3;
+  	let t4;
+  	let current;
+  	let if_block = /*plugin*/ ctx[14].headers.downloadUrl && create_if_block_3(ctx);
+
+  	return {
+  		c() {
+  			div = element("div");
+  			if (if_block) if_block.c();
+  			t0 = space$1();
+  			t1 = text(t1_value);
+  			t2 = space$1();
+  			t3 = text(t3_value);
+  			t4 = space$1();
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			if (if_block) if_block.m(div, null);
+  			append(div, t0);
+  			append(div, t1);
+  			append(div, t2);
+  			append(div, t3);
+  			append(div, t4);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*plugin*/ ctx[14].headers.downloadUrl) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*$plugins*/ 32) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block_3(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(div, t0);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if ((!current || dirty & /*$plugins*/ 32) && t1_value !== (t1_value = /*plugin*/ ctx[14].headers.name + "")) set_data(t1, t1_value);
+
+  			if ((!current || dirty & /*$plugins*/ 32) && t3_value !== (t3_value = (/*plugin*/ ctx[14].headers.version
+  			? `v${/*plugin*/ ctx[14].headers.version}`
+  			: '') + "")) set_data(t3, t3_value);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (if_block) if_block.d();
+  		}
+  	};
+  }
+
+  // (113:4) {:else}
+  function create_else_block(ctx) {
+  	let each_1_anchor;
+  	let current;
+  	let each_value = ensure_array_like(/*$libs*/ ctx[4]);
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	return {
+  		c() {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			each_1_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(target, anchor);
+  				}
+  			}
+
+  			insert$1(target, each_1_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*$libs, libs*/ 144) {
+  				each_value = ensure_array_like(/*$libs*/ ctx[4]);
+  				let i;
+
+  				for (i = 0; i < each_value.length; i += 1) {
+  					const child_ctx = get_each_context(ctx, each_value, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(each_1_anchor);
+  			}
+
+  			destroy_each(each_blocks, detaching);
+  		}
+  	};
+  }
+
+  // (111:4) {#if $libs.length === 0}
+  function create_if_block(ctx) {
+  	let h2;
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			h2.textContent = "No libraries installed";
+  			attr(h2, "class", "text-lg");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  		},
+  		p: noop,
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (116:16) {#if lib.headers.downloadUrl}
+  function create_if_block_1(ctx) {
+  	let button;
+  	let update;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update = new Update({ props: { size: 25 } });
+
+  	function click_handler_1() {
+  		return /*click_handler_1*/ ctx[10](/*lib*/ ctx[11]);
+  	}
+
+  	return {
+  		c() {
+  			button = element("button");
+  			create_component(update.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, button, anchor);
+  			mount_component(update, button, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button, "click", click_handler_1);
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(button);
+  			}
+
+  			destroy_component(update);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (114:8) {#each $libs as lib}
+  function create_each_block(ctx) {
+  	let div;
+  	let t0;
+  	let t1_value = /*lib*/ ctx[11].headers.name + "";
+  	let t1;
+  	let t2;
+
+  	let t3_value = (/*lib*/ ctx[11].headers.version
+  	? `v${/*lib*/ ctx[11].headers.version}`
+  	: '') + "";
+
+  	let t3;
+  	let t4;
+  	let current;
+  	let if_block = /*lib*/ ctx[11].headers.downloadUrl && create_if_block_1(ctx);
+
+  	return {
+  		c() {
+  			div = element("div");
+  			if (if_block) if_block.c();
+  			t0 = space$1();
+  			t1 = text(t1_value);
+  			t2 = space$1();
+  			t3 = text(t3_value);
+  			t4 = space$1();
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			if (if_block) if_block.m(div, null);
+  			append(div, t0);
+  			append(div, t1);
+  			append(div, t2);
+  			append(div, t3);
+  			append(div, t4);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*lib*/ ctx[11].headers.downloadUrl) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*$libs*/ 16) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block_1(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(div, t0);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if ((!current || dirty & /*$libs*/ 16) && t1_value !== (t1_value = /*lib*/ ctx[11].headers.name + "")) set_data(t1, t1_value);
+
+  			if ((!current || dirty & /*$libs*/ 16) && t3_value !== (t3_value = (/*lib*/ ctx[11].headers.version
+  			? `v${/*lib*/ ctx[11].headers.version}`
+  			: '') + "")) set_data(t3, t3_value);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (if_block) if_block.d();
+  		}
+  	};
+  }
+
+  function create_fragment$2(ctx) {
+  	let div2;
+  	let div0;
+  	let button0;
+  	let update0;
+  	let t0;
+  	let t1;
+  	let t2;
+  	let h10;
+  	let t4;
+  	let div1;
+  	let button1;
+  	let update1;
+  	let t5;
+  	let t6_value = /*gimloader*/ ctx[0].version + "";
+  	let t6;
+  	let t7;
+  	let h11;
+  	let t9;
+  	let current_block_type_index;
+  	let if_block1;
+  	let t10;
+  	let h12;
+  	let t12;
+  	let current_block_type_index_1;
+  	let if_block2;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	update0 = new Update({ props: { size: 25 } });
+  	let if_block0 = /*showingProgress*/ ctx[1] && create_if_block_4(ctx);
+  	update1 = new Update({ props: { size: 25 } });
+  	const if_block_creators = [create_if_block_2, create_else_block_1];
+  	const if_blocks = [];
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*$plugins*/ ctx[5].length === 0) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index = select_block_type(ctx);
+  	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  	const if_block_creators_1 = [create_if_block, create_else_block];
+  	const if_blocks_1 = [];
+
+  	function select_block_type_1(ctx, dirty) {
+  		if (/*$libs*/ ctx[4].length === 0) return 0;
+  		return 1;
+  	}
+
+  	current_block_type_index_1 = select_block_type_1(ctx);
+  	if_block2 = if_blocks_1[current_block_type_index_1] = if_block_creators_1[current_block_type_index_1](ctx);
+
+  	return {
+  		c() {
+  			div2 = element("div");
+  			div0 = element("div");
+  			button0 = element("button");
+  			create_component(update0.$$.fragment);
+  			t0 = text("\r\n        Check all updates");
+  			t1 = space$1();
+  			if (if_block0) if_block0.c();
+  			t2 = space$1();
+  			h10 = element("h1");
+  			h10.textContent = "Gimloader";
+  			t4 = space$1();
+  			div1 = element("div");
+  			button1 = element("button");
+  			create_component(update1.$$.fragment);
+  			t5 = text("\r\n        Gimloader v");
+  			t6 = text(t6_value);
+  			t7 = space$1();
+  			h11 = element("h1");
+  			h11.textContent = "Plugins";
+  			t9 = space$1();
+  			if_block1.c();
+  			t10 = space$1();
+  			h12 = element("h1");
+  			h12.textContent = "Libraries";
+  			t12 = space$1();
+  			if_block2.c();
+  			attr(div0, "class", "flex items-center");
+  			attr(h10, "class", "font-bold text-xl");
+  			attr(div1, "class", "flex items-center");
+  			attr(h11, "class", "font-bold text-xl");
+  			attr(h12, "class", "font-bold text-xl");
+  			attr(div2, "class", "h-full overflow-y-auto");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div2, anchor);
+  			append(div2, div0);
+  			append(div0, button0);
+  			mount_component(update0, button0, null);
+  			append(div0, t0);
+  			append(div2, t1);
+  			if (if_block0) if_block0.m(div2, null);
+  			append(div2, t2);
+  			append(div2, h10);
+  			append(div2, t4);
+  			append(div2, div1);
+  			append(div1, button1);
+  			mount_component(update1, button1, null);
+  			append(div1, t5);
+  			append(div1, t6);
+  			append(div2, t7);
+  			append(div2, h11);
+  			append(div2, t9);
+  			if_blocks[current_block_type_index].m(div2, null);
+  			append(div2, t10);
+  			append(div2, h12);
+  			append(div2, t12);
+  			if_blocks_1[current_block_type_index_1].m(div2, null);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*checkAll*/ ctx[8]),
+  					listen(button1, "click", checkScriptUpdate)
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*showingProgress*/ ctx[1]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+
+  					if (dirty & /*showingProgress*/ 2) {
+  						transition_in(if_block0, 1);
+  					}
+  				} else {
+  					if_block0 = create_if_block_4(ctx);
+  					if_block0.c();
+  					transition_in(if_block0, 1);
+  					if_block0.m(div2, t2);
+  				}
+  			} else if (if_block0) {
+  				group_outros();
+
+  				transition_out(if_block0, 1, 1, () => {
+  					if_block0 = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if ((!current || dirty & /*gimloader*/ 1) && t6_value !== (t6_value = /*gimloader*/ ctx[0].version + "")) set_data(t6, t6_value);
+  			let previous_block_index = current_block_type_index;
+  			current_block_type_index = select_block_type(ctx);
+
+  			if (current_block_type_index === previous_block_index) {
+  				if_blocks[current_block_type_index].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+  					if_blocks[previous_block_index] = null;
+  				});
+
+  				check_outros();
+  				if_block1 = if_blocks[current_block_type_index];
+
+  				if (!if_block1) {
+  					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  					if_block1.c();
+  				} else {
+  					if_block1.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block1, 1);
+  				if_block1.m(div2, t10);
+  			}
+
+  			let previous_block_index_1 = current_block_type_index_1;
+  			current_block_type_index_1 = select_block_type_1(ctx);
+
+  			if (current_block_type_index_1 === previous_block_index_1) {
+  				if_blocks_1[current_block_type_index_1].p(ctx, dirty);
+  			} else {
+  				group_outros();
+
+  				transition_out(if_blocks_1[previous_block_index_1], 1, 1, () => {
+  					if_blocks_1[previous_block_index_1] = null;
+  				});
+
+  				check_outros();
+  				if_block2 = if_blocks_1[current_block_type_index_1];
+
+  				if (!if_block2) {
+  					if_block2 = if_blocks_1[current_block_type_index_1] = if_block_creators_1[current_block_type_index_1](ctx);
+  					if_block2.c();
+  				} else {
+  					if_block2.p(ctx, dirty);
+  				}
+
+  				transition_in(if_block2, 1);
+  				if_block2.m(div2, null);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(update0.$$.fragment, local);
+  			transition_in(if_block0);
+  			transition_in(update1.$$.fragment, local);
+  			transition_in(if_block1);
+  			transition_in(if_block2);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update0.$$.fragment, local);
+  			transition_out(if_block0);
+  			transition_out(update1.$$.fragment, local);
+  			transition_out(if_block1);
+  			transition_out(if_block2);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div2);
+  			}
+
+  			destroy_component(update0);
+  			if (if_block0) if_block0.d();
+  			destroy_component(update1);
+  			if_blocks[current_block_type_index].d();
+  			if_blocks_1[current_block_type_index_1].d();
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  function instance$2($$self, $$props, $$invalidate) {
+  	let $libs;
+  	let $plugins;
+  	let { gimloader } = $$props;
+  	let { plugins } = gimloader.pluginManager;
+  	component_subscribe($$self, plugins, value => $$invalidate(5, $plugins = value));
+  	let { libs } = gimloader.lib;
+  	component_subscribe($$self, libs, value => $$invalidate(4, $libs = value));
+  	let showingProgress = false;
+  	let completed = 0;
+  	let total = 0;
+
+  	async function checkAll() {
+  		if (!confirm("Do you want to try to update Gimloader, all plugins, and all libraries?")) return;
+  		$$invalidate(1, showingProgress = true);
+  		let promises = [];
+
+  		for (let plugin of $plugins) {
+  			if (!plugin.headers.downloadUrl) continue;
+
+  			promises.push(new Promise(async (res, rej) => {
+  					let resp = await gimloader.net.corsRequest({ url: plugin.headers.downloadUrl }).catch(() => rej(`Failed to update ${plugin.headers.name} from ${plugin.headers.downloadUrl}`));
+  					if (!resp) return rej();
+  					$$invalidate(2, completed = completed + 1);
+  					let headers = parsePluginHeader(resp.responseText);
+  					let comparison = compareVersions(plugin.headers.version ?? '', headers.version ?? '');
+  					if (comparison !== 'older') return res();
+  					plugin.edit(resp.responseText, headers);
+  				}));
+  		}
+
+  		for (let lib of $libs) {
+  			if (!lib.headers.downloadUrl) continue;
+
+  			promises.push(new Promise(async (res, rej) => {
+  					let resp = await gimloader.net.corsRequest({ url: lib.headers.downloadUrl }).catch(() => rej(`Failed to update ${lib.headers.name} from ${lib.headers.downloadUrl}`));
+  					if (!resp) return rej();
+  					$$invalidate(2, completed = completed + 1);
+  					let headers = parseLibHeader(resp.responseText);
+  					let comparison = compareVersions(lib.headers.version ?? '', headers.version ?? '');
+  					if (comparison !== 'older') return res();
+  					gimloader.lib.editLib(lib, resp.responseText, headers);
+  				}));
+  		}
+
+  		promises.push(new Promise(async (res, rej) => {
+  				let resp = await gimloader.net.corsRequest({ url: scriptUrl }).catch(() => rej(`Failed to update Gimloader from ${scriptUrl}`));
+  				if (!resp) return rej();
+  				$$invalidate(2, completed = completed + 1);
+  				const versionPrefix = '// @version';
+  				let index = resp.responseText.indexOf(versionPrefix) + versionPrefix.length;
+  				let incomingVersion = resp.responseText.slice(index, resp.responseText.indexOf('\n', index)).trim();
+  				let comparison = compareVersions(gimloader.version, incomingVersion);
+  				if (comparison !== 'older') return res();
+  				location.href = scriptUrl;
+  				res();
+  			}));
+
+  		$$invalidate(3, total = promises.length);
+  		let results = await Promise.allSettled(promises);
+  		let failed = results.filter(r => r.status === 'rejected');
+
+  		if (failed.length > 0) {
+  			let msg = `Failed to update ${failed.length} items:\n` + failed.map(f => f.reason).join('\n') + '\nDid you allow Gimloader to make Cross-Origin requests?';
+  			showErrorMessage(msg, "Some Updates Failed");
+  		}
+
+  		$$invalidate(1, showingProgress = false);
+  	}
+
+  	const click_handler = plugin => checkPluginUpdate(plugin).then(plugins.update);
+  	const click_handler_1 = lib => checkLibUpdate(lib).then(libs.update);
+
+  	$$self.$$set = $$props => {
+  		if ('gimloader' in $$props) $$invalidate(0, gimloader = $$props.gimloader);
+  	};
+
+  	return [
+  		gimloader,
+  		showingProgress,
+  		completed,
+  		total,
+  		$libs,
+  		$plugins,
+  		plugins,
+  		libs,
+  		checkAll,
+  		click_handler,
+  		click_handler_1
+  	];
+  }
+
+  class Updates extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$2, create_fragment$2, safe_not_equal, { gimloader: 0 });
+  	}
+  }
+
+  /* src\ui\menu\Settings.svelte generated by Svelte v4.2.19 */
+
+  function create_fragment$1(ctx) {
+  	let h1;
+  	let t1;
+  	let div;
+  	let toggle;
+  	let updating_checked;
+  	let t2;
+  	let current;
+
+  	function toggle_checked_binding(value) {
+  		/*toggle_checked_binding*/ ctx[2](value);
+  	}
+
+  	let toggle_props = {};
+
+  	if (/*enabled*/ ctx[1] !== void 0) {
+  		toggle_props.checked = /*enabled*/ ctx[1];
+  	}
+
+  	toggle = new Toggle({ props: toggle_props });
+  	binding_callbacks.push(() => bind(toggle, 'checked', toggle_checked_binding));
+  	toggle.$on("change", /*change_handler*/ ctx[3]);
+
+  	return {
+  		c() {
+  			h1 = element("h1");
+  			h1.textContent = "Developer Settings";
+  			t1 = space$1();
+  			div = element("div");
+  			create_component(toggle.$$.fragment);
+  			t2 = text("\r\n    Poll for plugins/libraries being served locally");
+  			attr(h1, "class", "text-xl font-bold");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h1, anchor);
+  			insert$1(target, t1, anchor);
+  			insert$1(target, div, anchor);
+  			mount_component(toggle, div, null);
+  			append(div, t2);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const toggle_changes = {};
+
+  			if (!updating_checked && dirty & /*enabled*/ 2) {
+  				updating_checked = true;
+  				toggle_changes.checked = /*enabled*/ ctx[1];
+  				add_flush_callback(() => updating_checked = false);
+  			}
+
+  			toggle.$set(toggle_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(toggle.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(toggle.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h1);
+  				detach(t1);
+  				detach(div);
+  			}
+
+  			destroy_component(toggle);
+  		}
+  	};
+  }
+
+  function instance$1($$self, $$props, $$invalidate) {
+  	let { gimloader } = $$props;
+  	let enabled = gimloader.poller.enabled;
+
+  	function toggle_checked_binding(value) {
+  		enabled = value;
+  		$$invalidate(1, enabled);
+  	}
+
+  	const change_handler = () => {
+  		gimloader.poller.setEnabled(enabled);
+  	};
+
+  	$$self.$$set = $$props => {
+  		if ('gimloader' in $$props) $$invalidate(0, gimloader = $$props.gimloader);
+  	};
+
+  	return [gimloader, enabled, toggle_checked_binding, change_handler];
+  }
+
+  class Settings extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$1, create_fragment$1, safe_not_equal, { gimloader: 0 });
+  	}
+  }
+
+  /* src\ui\menu\MenuUI.svelte generated by Svelte v4.2.19 */
+
+  function add_css(target) {
+  	append_styles(target, "svelte-1ahnqqw", ".fadeBg>div:first-child{animation:fadeIn 0.3s}.zoomIn{animation:zoomIn ease-out 0.15s}.fixMargin .h-px{margin-top:0 !important}.fixMargin div:has(> div[role=\"tabpanel\"]){display:flex;flex-direction:column}.fixMargin div[role=\"tabpanel\"]{margin-top:2px !important;flex-grow:1;min-width:0;min-height:0}.fixMargin div[role=\"tabpanel\"]>div{height:100%}");
+  }
+
+  // (20:16) <TabItem open>
+  function create_default_slot_5(ctx) {
+  	let plugincardslist;
+  	let current;
+
+  	plugincardslist = new PluginCardsList({
+  			props: {
+  				pluginManager: /*gimloader*/ ctx[0].pluginManager,
+  				libManager: /*gimloader*/ ctx[0].lib
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(plugincardslist.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(plugincardslist, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const plugincardslist_changes = {};
+  			if (dirty & /*gimloader*/ 1) plugincardslist_changes.pluginManager = /*gimloader*/ ctx[0].pluginManager;
+  			if (dirty & /*gimloader*/ 1) plugincardslist_changes.libManager = /*gimloader*/ ctx[0].lib;
+  			plugincardslist.$set(plugincardslist_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(plugincardslist.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(plugincardslist.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(plugincardslist, detaching);
+  		}
+  	};
+  }
+
+  // (21:20) 
+  function create_title_slot_3(ctx) {
+  	let div;
+  	let wrench;
+  	let t0;
+  	let span;
+  	let current;
+  	wrench = new Wrench({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			div = element("div");
+  			create_component(wrench.$$.fragment);
+  			t0 = space$1();
+  			span = element("span");
+  			span.textContent = "Plugins";
+  			attr(span, "class", "ml-2");
+  			attr(div, "slot", "title");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(wrench, div, null);
+  			append(div, t0);
+  			append(div, span);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(wrench.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(wrench.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(wrench);
+  		}
+  	};
+  }
+
+  // (28:16) <TabItem>
+  function create_default_slot_4(ctx) {
+  	let librarycardslist;
+  	let current;
+
+  	librarycardslist = new LibraryCardsList({
+  			props: { libManager: /*gimloader*/ ctx[0].lib }
+  		});
+
+  	return {
+  		c() {
+  			create_component(librarycardslist.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(librarycardslist, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const librarycardslist_changes = {};
+  			if (dirty & /*gimloader*/ 1) librarycardslist_changes.libManager = /*gimloader*/ ctx[0].lib;
+  			librarycardslist.$set(librarycardslist_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(librarycardslist.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(librarycardslist.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(librarycardslist, detaching);
+  		}
+  	};
+  }
+
+  // (29:20) 
+  function create_title_slot_2(ctx) {
+  	let div;
+  	let book;
+  	let t0;
+  	let span;
+  	let current;
+  	book = new Book({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			div = element("div");
+  			create_component(book.$$.fragment);
+  			t0 = space$1();
+  			span = element("span");
+  			span.textContent = "Libraries";
+  			attr(span, "class", "ml-2");
+  			attr(div, "slot", "title");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(book, div, null);
+  			append(div, t0);
+  			append(div, span);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(book.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(book.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(book);
+  		}
+  	};
+  }
+
+  // (35:16) <TabItem>
+  function create_default_slot_3(ctx) {
+  	let updates;
+  	let current;
+
+  	updates = new Updates({
+  			props: { gimloader: /*gimloader*/ ctx[0] }
+  		});
+
+  	return {
+  		c() {
+  			create_component(updates.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(updates, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const updates_changes = {};
+  			if (dirty & /*gimloader*/ 1) updates_changes.gimloader = /*gimloader*/ ctx[0];
+  			updates.$set(updates_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(updates.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(updates.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(updates, detaching);
+  		}
+  	};
+  }
+
+  // (36:20) 
+  function create_title_slot_1(ctx) {
+  	let div;
+  	let update;
+  	let t0;
+  	let span;
+  	let current;
+  	update = new Update({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			div = element("div");
+  			create_component(update.$$.fragment);
+  			t0 = space$1();
+  			span = element("span");
+  			span.textContent = "Updates";
+  			attr(span, "class", "ml-2");
+  			attr(div, "slot", "title");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(update, div, null);
+  			append(div, t0);
+  			append(div, span);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(update.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(update.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(update);
+  		}
+  	};
+  }
+
+  // (42:16) <TabItem>
+  function create_default_slot_2(ctx) {
+  	let settings;
+  	let current;
+
+  	settings = new Settings({
+  			props: { gimloader: /*gimloader*/ ctx[0] }
+  		});
+
+  	return {
+  		c() {
+  			create_component(settings.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(settings, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const settings_changes = {};
+  			if (dirty & /*gimloader*/ 1) settings_changes.gimloader = /*gimloader*/ ctx[0];
+  			settings.$set(settings_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(settings.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(settings.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(settings, detaching);
+  		}
+  	};
+  }
+
+  // (43:20) 
+  function create_title_slot(ctx) {
+  	let div;
+  	let cog;
+  	let t0;
+  	let span;
+  	let current;
+  	cog = new Cog({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			div = element("div");
+  			create_component(cog.$$.fragment);
+  			t0 = space$1();
+  			span = element("span");
+  			span.textContent = "Settings";
+  			attr(span, "class", "ml-2");
+  			attr(div, "slot", "title");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(cog, div, null);
+  			append(div, t0);
+  			append(div, span);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(cog.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(cog.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(cog);
+  		}
+  	};
+  }
+
+  // (19:12) <Tabs contentClass="bg-white">
+  function create_default_slot_1(ctx) {
+  	let tabitem0;
+  	let t0;
+  	let tabitem1;
+  	let t1;
+  	let tabitem2;
+  	let t2;
+  	let tabitem3;
+  	let current;
+
+  	tabitem0 = new TabItem({
+  			props: {
+  				open: true,
+  				$$slots: {
+  					title: [create_title_slot_3],
+  					default: [create_default_slot_5]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tabitem1 = new TabItem({
+  			props: {
+  				$$slots: {
+  					title: [create_title_slot_2],
+  					default: [create_default_slot_4]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tabitem2 = new TabItem({
+  			props: {
+  				$$slots: {
+  					title: [create_title_slot_1],
+  					default: [create_default_slot_3]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tabitem3 = new TabItem({
+  			props: {
+  				$$slots: {
+  					title: [create_title_slot],
+  					default: [create_default_slot_2]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(tabitem0.$$.fragment);
+  			t0 = space$1();
+  			create_component(tabitem1.$$.fragment);
+  			t1 = space$1();
+  			create_component(tabitem2.$$.fragment);
+  			t2 = space$1();
+  			create_component(tabitem3.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(tabitem0, target, anchor);
+  			insert$1(target, t0, anchor);
+  			mount_component(tabitem1, target, anchor);
+  			insert$1(target, t1, anchor);
+  			mount_component(tabitem2, target, anchor);
+  			insert$1(target, t2, anchor);
+  			mount_component(tabitem3, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tabitem0_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabitem0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabitem0.$set(tabitem0_changes);
+  			const tabitem1_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabitem1_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabitem1.$set(tabitem1_changes);
+  			const tabitem2_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabitem2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabitem2.$set(tabitem2_changes);
+  			const tabitem3_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabitem3_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabitem3.$set(tabitem3_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tabitem0.$$.fragment, local);
+  			transition_in(tabitem1.$$.fragment, local);
+  			transition_in(tabitem2.$$.fragment, local);
+  			transition_in(tabitem3.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tabitem0.$$.fragment, local);
+  			transition_out(tabitem1.$$.fragment, local);
+  			transition_out(tabitem2.$$.fragment, local);
+  			transition_out(tabitem3.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t0);
+  				detach(t1);
+  				detach(t2);
+  			}
+
+  			destroy_component(tabitem0, detaching);
+  			destroy_component(tabitem1, detaching);
+  			destroy_component(tabitem2, detaching);
+  			destroy_component(tabitem3, detaching);
+  		}
+  	};
+  }
+
+  // (17:8) <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"              size="xl" on:close={onClose} open outsideclose>
+  function create_default_slot(ctx) {
+  	let tabs;
+  	let current;
+
+  	tabs = new Tabs({
+  			props: {
+  				contentClass: "bg-white",
+  				$$slots: { default: [create_default_slot_1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(tabs.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(tabs, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const tabs_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabs_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabs.$set(tabs_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(tabs.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(tabs.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(tabs, detaching);
+  		}
+  	};
+  }
+
+  function create_fragment(ctx) {
+  	let div1;
+  	let div0;
+  	let modal;
+  	let current;
+
+  	modal = new Modal({
+  			props: {
+  				class: "zoomIn space-y-0 text-gray-600 min-h-[65vh]",
+  				size: "xl",
+  				open: true,
+  				outsideclose: true,
+  				$$slots: { default: [create_default_slot] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	modal.$on("close", function () {
+  		if (is_function(/*onClose*/ ctx[1])) /*onClose*/ ctx[1].apply(this, arguments);
+  	});
+
+  	return {
+  		c() {
+  			div1 = element("div");
+  			div0 = element("div");
+  			create_component(modal.$$.fragment);
+  			attr(div0, "class", "preflight fadeBg fixMargin");
+  			attr(div1, "class", "h-full");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div1, anchor);
+  			append(div1, div0);
+  			mount_component(modal, div0, null);
+  			current = true;
+  		},
+  		p(new_ctx, [dirty]) {
+  			ctx = new_ctx;
+  			const modal_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				modal_changes.$$scope = { dirty, ctx };
+  			}
+
+  			modal.$set(modal_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(modal.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(modal.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div1);
+  			}
+
+  			destroy_component(modal);
+  		}
+  	};
+  }
+
+  function instance($$self, $$props, $$invalidate) {
+  	let { gimloader } = $$props;
+  	let { onClose } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('gimloader' in $$props) $$invalidate(0, gimloader = $$props.gimloader);
+  		if ('onClose' in $$props) $$invalidate(1, onClose = $$props.onClose);
+  	};
+
+  	return [gimloader, onClose];
+  }
+
+  class MenuUI extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance, create_fragment, safe_not_equal, { gimloader: 0, onClose: 1 }, add_css);
+  	}
   }
 
   function openPluginManager() {
-      const React = GL.React;
-      showModal(React.createElement(MenuUI, null), {
-          id: 'core-PluginManager',
-          title: 'Manage Plugins',
-          style: "width: clamp(600px, 50%, 90%); height: 80%",
-          closeOnBackgroundClick: true,
-          buttons: [
-              {
-                  text: "close",
-                  style: "primary"
-              }
-          ]
+      let component = new MenuUI({
+          target: document.body,
+          props: {
+              gimloader: GL,
+              onClose: () => component.$destroy()
+          }
       });
   }
   function addPluginButtons(loader) {
@@ -28216,7 +52196,7 @@
   /*
       This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
   */
-  // the code below is copied from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/parcel.ts,
+  // the code below is copied from https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/modloader/src/parcel.ts,
   // who in turn copied it from the parcel source code.
   const scriptSelector = 'script[src*="index"]:not([nomodule])';
   const redirectedPages = ['/host', '/settings'];
@@ -28466,7 +52446,7 @@
       constructor(loader, net) {
           super();
           let me = this;
-          // somewhat taken from https://codeberg.org/gimhook/gimhook/src/branch/master/modloader/src/game.ts
+          // somewhat taken from https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/modloader/src/game.ts
           loader.parcel.interceptRequire(null, exports => exports?.OnJoinedRoom, exports => {
               let nativeOnJoined = exports.OnJoinedRoom;
               delete exports.OnJoinedRoom;
@@ -28724,7 +52704,7 @@
       }
   }
 
-  // spec: https://codeberg.org/gimhook/gimhook/src/branch/master/docs/sdk/api.md
+  // spec: https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/docs/sdk/api.md
   // Several features were recently removed from gimhook which this polyfill actually adds back
   // This means that more gimhook mods are compatible with gimloader than gimhook lol
   function gimhookPolyfill(gimloader) {
@@ -28860,292 +52840,6 @@
       }
   }
 
-  class Plugin {
-      gimloader;
-      script;
-      enabled;
-      headers;
-      return;
-      constructor(gimloader, script, enabled = true) {
-          this.gimloader = gimloader;
-          this.script = script;
-          this.enabled = enabled;
-          this.headers = parsePluginHeader(script);
-      }
-      async enable(initial = false) {
-          return new Promise(async (res, rej) => {
-              let libObjs = [];
-              let optionalLibObjs = [];
-              // load required libs
-              for (let lib of this.headers.needsLib) {
-                  let libName = lib.split('|')[0].trim();
-                  let libObj = this.gimloader.lib.getLib(libName);
-                  if (!libObj) {
-                      this.enabled = false;
-                      this.gimloader.pluginManager.updatePlugins();
-                      rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
-                      return;
-                  }
-                  libObjs.push(libObj);
-              }
-              // load optional libs
-              for (let lib of this.headers.optionalLib) {
-                  let libName = lib.split('|')[0].trim();
-                  let libObj = this.gimloader.lib.getLib(libName);
-                  if (!libObj)
-                      continue;
-                  optionalLibObjs.push(libObj);
-              }
-              let [results, optionalResults] = await Promise.all([
-                  Promise.allSettled(libObjs.map(lib => lib.enable())),
-                  Promise.allSettled(optionalLibObjs.map(lib => lib.enable()))
-              ]);
-              // log errors with optional libs, but don't fail the plugin
-              for (let result of optionalResults) {
-                  if (result.status === 'rejected') {
-                      log(`Failed to enable optional library for plugin ${this.headers.name}:`, result.reason);
-                  }
-              }
-              let failed = results.filter(r => r.status === 'rejected');
-              if (failed.length > 0) {
-                  let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
-                  this.enabled = false;
-                  rej(err);
-                  this.gimloader.pluginManager.updatePlugins();
-                  return;
-              }
-              if (!this.gimloader.pluginManager.runPlugins)
-                  return;
-              // create a blob from the script and import it
-              let blob = new Blob([this.script], { type: 'application/javascript' });
-              let url = URL.createObjectURL(blob);
-              import(url)
-                  .then((returnVal) => {
-                  this.return = returnVal;
-                  this.enabled = true;
-                  this.gimloader.pluginManager.updatePlugins();
-                  log(`Loaded plugin: ${this.headers.name}`);
-                  if (!initial) {
-                      if (this.headers.reloadRequired === 'true' ||
-                          this.headers.reloadRequired === '' ||
-                          (this.headers.reloadRequired === 'ingame' && this.gimloader.net.type !== "Unknown")) {
-                          let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
-                          if (reload) {
-                              location.reload();
-                          }
-                      }
-                  }
-                  for (let lib of this.headers.needsLib) {
-                      let libName = lib.split('|')[0].trim();
-                      let libObj = this.gimloader.lib.getLib(libName);
-                      libObj.addUsed(this.headers.name);
-                  }
-                  res();
-              })
-                  .catch((e) => {
-                  console.error(e);
-                  this.enabled = false;
-                  this.gimloader.pluginManager.updatePlugins();
-                  let stack = e.stack.replaceAll(url, `blob:${this.headers.name}.js`);
-                  let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${stack}`);
-                  rej(err);
-              })
-                  .finally(() => {
-                  URL.revokeObjectURL(url);
-              });
-          });
-      }
-      disable() {
-          this.enabled = false;
-          this.gimloader.pluginManager.updatePlugins();
-          if (!this.gimloader.pluginManager.runPlugins)
-              return;
-          if (this.return) {
-              try {
-                  this.return?.onStop?.();
-              }
-              catch (e) {
-                  log(`Error stopping plugin ${this.headers.name}:`, e);
-              }
-          }
-          for (let lib of this.headers.needsLib) {
-              let libName = lib.split('|')[0].trim();
-              let libObj = this.gimloader.lib.getLib(libName);
-              if (libObj)
-                  libObj.removeUsed(this.headers.name);
-          }
-          this.return = null;
-      }
-      edit(script, headers) {
-          let enabled = this.enabled;
-          this.disable();
-          this.script = script;
-          this.headers = headers;
-          if (enabled) {
-              this.enable()
-                  .then(() => this.gimloader.pluginManager.save())
-                  .catch((e) => {
-                  showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
-              });
-          }
-          else {
-              this.gimloader.pluginManager.save();
-          }
-      }
-  }
-
-  class PluginManager {
-      gimloader;
-      plugins = [];
-      runPlugins;
-      reactSetPlugins;
-      updatePluginTimeout;
-      constructor(gimloader, runPlugins = true) {
-          this.gimloader = gimloader;
-          this.runPlugins = runPlugins;
-          // load plugins from storage
-          let pluginScripts = JSON.parse(GM_getValue('plugins', '[]'));
-          for (let plugin of pluginScripts) {
-              let pluginObj = new Plugin(this.gimloader, plugin.script, plugin.enabled);
-              this.plugins.push(pluginObj);
-          }
-      }
-      updatePlugins() {
-          if (this.updatePluginTimeout)
-              clearTimeout(this.updatePluginTimeout);
-          // update next tick
-          this.updatePluginTimeout = setTimeout(() => {
-              this.reactSetPlugins?.([...this.plugins]);
-          });
-      }
-      async init() {
-          let results = await Promise.allSettled(this.plugins.map(p => p.enabled && p.enable(true)));
-          let fails = results.filter(r => r.status === 'rejected');
-          if (fails.length > 0) {
-              let msg = fails.map(f => f.reason).join('\n');
-              showErrorMessage(msg, `Failed to enable ${fails.length} plugins`);
-              this.save(this.plugins);
-          }
-          log('All plugins loaded');
-          // when a plugin is remotely deleted, installed or enabled/disabled reflect that here
-          GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
-              if (!remote)
-                  return;
-              let newPluginInfos = JSON.parse(newVal);
-              let newPlugins = newPluginInfos.map(p => new Plugin(this.gimloader, p.script, p.enabled));
-              // check for scripts that were added
-              for (let newPlugin of newPlugins) {
-                  if (!this.getPlugin(newPlugin.headers.name)) {
-                      newPlugin.enable()
-                          .catch((e) => {
-                          showErrorMessage(e.message, `Failed to enable plugin ${newPlugin.headers.name}`);
-                      });
-                      this.plugins.push(newPlugin);
-                  }
-              }
-              // check for plugins that were removed
-              for (let plugin of this.plugins) {
-                  if (!newPlugins.find(p => p.headers.name === plugin.headers.name)) {
-                      this.deletePlugin(plugin);
-                  }
-              }
-              // check if any scripts were updated
-              for (let plugin of newPlugins) {
-                  let oldPlugin = this.getPlugin(plugin.headers.name);
-                  if (!oldPlugin)
-                      continue;
-                  if (oldPlugin.script !== plugin.script) {
-                      oldPlugin.edit(plugin.script, plugin.headers);
-                      log(`Updated plugin: ${plugin.headers.name}`);
-                  }
-              }
-              // check if any plugins were enabled/disabled
-              for (let plugin of newPlugins) {
-                  let oldPlugin = this.getPlugin(plugin.headers.name);
-                  if (!oldPlugin)
-                      continue;
-                  if (oldPlugin.enabled !== plugin.enabled) {
-                      if (plugin.enabled) {
-                          oldPlugin.enable()
-                              .catch((e) => {
-                              showErrorMessage(e.message, `Failed to enable plugin ${oldPlugin.headers.name}`);
-                          });
-                      }
-                      else
-                          oldPlugin.disable();
-                  }
-              }
-              this.updatePlugins();
-          });
-      }
-      save(newPlugins) {
-          if (newPlugins)
-              this.plugins = newPlugins;
-          let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
-          GM_setValue('plugins', JSON.stringify(pluginObjs));
-      }
-      getPlugin(name) {
-          return this.plugins.find(p => p.headers.name === name) ?? null;
-      }
-      isEnabled(name) {
-          let plugin = this.getPlugin(name);
-          return plugin?.enabled ?? false;
-      }
-      async createPlugin(script) {
-          let headers = parsePluginHeader(script);
-          let existing = this.getPlugin(headers.name);
-          if (existing) {
-              let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
-              if (!conf)
-                  return;
-              this.deletePlugin(existing);
-          }
-          let plugin = new Plugin(this.gimloader, script, false);
-          plugin.enable()
-              .catch((e) => {
-              showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
-          });
-          this.plugins.push(plugin);
-          this.save();
-          this.updatePlugins();
-          let success = await downloadLibraries(plugin.headers.needsLib, plugin.headers.name);
-          if (success)
-              await plugin.enable();
-          this.save();
-          this.updatePlugins();
-      }
-      deletePlugin(plugin) {
-          if (plugin.enabled)
-              plugin.disable();
-          let newPlugins = this.plugins.filter(p => p !== plugin);
-          if (window.GL) {
-              GL.storage.removeAllValues(plugin.headers.name);
-          }
-          this.save(newPlugins);
-          this.updatePlugins();
-          log(`Deleted plugin: ${plugin.headers.name}`);
-      }
-      enableAll() {
-          Promise.allSettled(this.plugins.filter(p => !p.enabled).map(p => p.enable()))
-              .then(results => {
-              let fails = results.filter(r => r.status === 'rejected');
-              if (fails.length > 0) {
-                  let msg = fails.map(f => f.reason).join('\n');
-                  showErrorMessage(msg, `Failed to enable ${results.length} plugins`);
-              }
-          });
-          this.save();
-          this.updatePlugins();
-      }
-      disableAll() {
-          for (let plugin of this.plugins) {
-              if (plugin.enabled)
-                  plugin.disable();
-          }
-          this.save();
-      }
-  }
-
   class Storage {
       addNameAndKey(pluginName, key) {
           return `${pluginName}-${key}`;
@@ -29175,102 +52869,25 @@
       }
   }
 
-  class Lib {
-      script;
-      library;
-      headers = {};
-      enabling = false;
-      enableError;
-      enableSuccessCallbacks = [];
-      enableFailCallbacks = [];
-      usedBy = new Set();
-      constructor(script, headers) {
-          this.script = script;
-          if (headers) {
-              this.headers = headers;
-          }
-          else {
-              this.headers = parseLibHeader(script);
-          }
-      }
-      async enable() {
-          if (this.enableError)
-              return Promise.reject(this.enableError);
-          if (this.library)
-              return Promise.resolve();
-          if (!this.enabling) {
-              this.enabling = true;
-              let blob = new Blob([this.script], { type: 'application/javascript' });
-              let url = URL.createObjectURL(blob);
-              import(url)
-                  .then((returnVal) => {
-                  if (returnVal.default) {
-                      returnVal = returnVal.default;
-                  }
-                  this.library = returnVal;
-                  this.enableSuccessCallbacks.forEach(cb => cb());
-              })
-                  .catch((e) => {
-                  let error = new Error(`Failed to enable library ${this.headers.name}:\n${e}`);
-                  this.enableError = error;
-                  this.enableFailCallbacks.forEach(cb => cb(error));
-              })
-                  .finally(() => {
-                  URL.revokeObjectURL(url);
-              });
-          }
-          return new Promise((res, rej) => {
-              this.enableSuccessCallbacks.push(res);
-              this.enableFailCallbacks.push(rej);
-          });
-      }
-      addUsed(pluginName) {
-          this.usedBy.add(pluginName);
-      }
-      removeUsed(pluginName) {
-          this.usedBy.delete(pluginName);
-          if (this.usedBy.size === 0) {
-              this.disable();
-          }
-      }
-      disable() {
-          // call onStop if it exists
-          try {
-              this.library?.onStop?.();
-          }
-          catch (e) {
-              log(`Error stopping library ${this.headers.name}:`, e);
-          }
-          // reset the library
-          this.library = null;
-          this.enableError = undefined;
-          this.enabling = false;
-          this.enableSuccessCallbacks = [];
-          this.enableFailCallbacks = [];
-      }
-  }
-
   // The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
   // If there is a better way to do this please let me know
   const libManagerMethods = {
       getLib(libName) {
-          return this.libs[libName];
+          return this.libs.value.find((lib) => lib.headers.name === libName);
       },
-      updateReact() {
-          if (this.updateLibTimeout)
-              clearTimeout(this.updateLibTimeout);
-          this.updateLibTimeout = setTimeout(() => {
-              this.reactSetLibs?.({ ...this.libs });
-          });
+      saveFn() {
+          let libStrs = [];
+          for (let lib of this.libs.value) {
+              libStrs.push(lib.script);
+          }
+          GM_setValue('libs', libStrs);
       },
       save(libs) {
           if (libs)
-              this.libs = libs;
-          let libObjs = {};
-          for (let name in this.libs) {
-              libObjs[name] = this.libs[name].script;
-          }
-          GM_setValue('libs', libObjs);
+              this.libs.value = libs;
+          if (!this.saveDebounced)
+              this.saveDebounced = debounce$1(this.saveFn, 100);
+          this.saveDebounced();
       },
       createLib(script, headers, ignoreDuplicates) {
           headers = headers ?? parseLibHeader(script);
@@ -29288,16 +52905,16 @@
               existing.disable();
           }
           let lib = new Lib(script, headers);
-          this.libs[lib.headers.name] = lib;
+          this.libs.value.unshift(lib);
           this.save();
-          this.updateReact();
+          this.libs.update();
           return lib;
       },
       deleteLib(lib) {
           lib.disable();
-          delete this.libs[lib.headers.name];
+          this.libs.value.splice(this.libs.value.indexOf(lib), 1);
           this.save();
-          this.updateReact();
+          this.libs.update();
       },
       editLib(lib, code, headers) {
           headers = headers ?? parseLibHeader(code);
@@ -29318,15 +52935,19 @@
       }
   };
   function makeLibManager() {
-      let libScripts = GM_getValue('libs', {});
-      let libs = {};
-      for (let name in libScripts) {
-          let script = libScripts[name];
-          let lib = new Lib(script);
-          libs[name] = lib;
+      let libScripts = GM_getValue('libs', []);
+      // convert from the old, unordered version
+      if (!Array.isArray(libScripts)) {
+          libScripts = Object.values(libScripts);
       }
+      let libs = easyAccessWritable([]);
+      for (let script of libScripts) {
+          let lib = new Lib(script);
+          libs.value.push(lib);
+      }
+      libs.update();
       const get = function (libName) {
-          let lib = libs[libName];
+          let lib = libs.value.find(lib => lib.headers.name === libName);
           return lib?.library ?? null;
       };
       const lib = get;
@@ -29337,31 +52958,39 @@
       GM_addValueChangeListener('libs', (_, __, value, remote) => {
           if (!remote)
               return;
-          let newLibs = {};
-          for (let name in value) {
-              let script = value[name];
+          let newLibs = [];
+          for (let script of value) {
               let lib = new Lib(script);
-              newLibs[name] = lib;
+              newLibs.push(lib);
           }
-          // check if any plugins were removed
-          for (let name in libs) {
-              if (!newLibs[name]) {
-                  lib.deleteLib(libs[name]);
+          console.log(newLibs);
+          // check if any libraries were removed
+          for (let checkLib of libs.value) {
+              if (!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
+                  lib.deleteLib(checkLib);
               }
           }
-          // check if any scripts were added
-          for (let name in newLibs) {
-              if (!libs[name]) {
-                  lib.createLib(newLibs[name].script, newLibs[name].headers, true);
+          // check if any libraries were added
+          for (let newLib of newLibs) {
+              if (!libs.value.some(lib => lib.headers.name === newLib.headers.name)) {
+                  lib.createLib(newLib.script, newLib.headers, true);
               }
           }
-          // check if any scripts were updated
-          for (let name in newLibs) {
-              if (libs[name].script !== newLibs[name].script) {
-                  lib.editLib(libs[name], newLibs[name].script, newLibs[name].headers);
+          // check if any libraries were updated
+          for (let newLib of newLibs) {
+              let existing = libs.value.find(lib => lib.headers.name === newLib.headers.name);
+              if (existing.script !== newLib.script) {
+                  lib.editLib(existing, newLib.script, newLib.headers);
               }
           }
-          lib.updateReact();
+          // move the libraries into the correct order
+          let newOrder = [];
+          for (let newLib of newLibs) {
+              let setLib = lib.getLib(newLib.headers.name);
+              if (setLib)
+                  newOrder.push(setLib);
+          }
+          lib.libs.set(newOrder);
       });
       return lib;
   }
@@ -29436,7 +53065,6 @@
       React;
       ReactDOM;
       notification;
-      modules = {};
       stores;
       platformerPhysics;
       lib = makeLibManager();
@@ -29464,7 +53092,7 @@
           gimhookPolyfill(this);
       }
       addStyleSheets() {
-          this.UI.addStyles(null, styles$1);
+          this.UI.addStyles(null, css_248z);
       }
       exposeValues() {
           // window.stores

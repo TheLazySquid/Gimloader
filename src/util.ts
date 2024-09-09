@@ -1,6 +1,70 @@
+import type { ComponentType, SvelteComponent } from "svelte";
+import type { EasyAccessWritable } from "./types";
+
 // gotta have pretty console.logs
 export function log(...args: any[]) {
     console.log('%c[GL]', 'color:#5030f2', ...args);
+}
+
+export function easyAccessWritable<T>(initial: T): EasyAccessWritable<T> {
+    let callbacks = new Set<(value: T) => void>();
+
+    return {
+        value: initial,
+        set(value: T) {
+            this.value = value;
+            for(let callback of callbacks) {
+                callback(value);
+            }
+        },
+        update() {
+            for(let callback of callbacks) {
+                callback(this.value);
+            }
+        },
+        subscribe(callback: (value: T) => void) {
+            callbacks.add(callback);
+            callback(this.value);
+
+            return () => {
+                callbacks.delete(callback);
+            }
+        }
+    }
+}
+
+export function renderSvelteComponent(Component: ComponentType, props: Record<string, any> = {}): [HTMLDivElement, SvelteComponent] {
+    let div = document.createElement('div');
+    div.style.display = "contents";
+
+    let component = new Component({
+        target: div,
+        props
+    });
+
+    return [div, component];
+}
+
+export function readUserFile(accept: string) {
+    return new Promise<string>((res, rej) => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = accept;
+    
+        input.addEventListener('change', () => {
+            let file = input.files?.[0];
+            if(!file) return rej('No file selected');
+
+            let reader = new FileReader();
+            reader.onload = () => {
+                res(reader.result as string);
+            }
+    
+            reader.readAsText(file);
+        });
+    
+        input.click();
+    })
 }
 
 export const onGimkit = location.host === "www.gimkit.com";

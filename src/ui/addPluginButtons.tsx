@@ -1,22 +1,15 @@
 import type { Gimloader } from "../gimloader";
 import wrench from '../../assets/wrench.svg';
 import showModal from "./modal";
-import MenuUI from "./menu/MenuUI";
+import MenuUI from "$src/ui/menu/MenuUI.svelte";
 
 function openPluginManager() {
-    const React = GL.React;
-
-    showModal(<MenuUI />, {
-        id: 'core-PluginManager',
-        title: 'Manage Plugins',
-        style: "width: clamp(600px, 50%, 90%); height: 80%",
-        closeOnBackgroundClick: true,
-        buttons: [
-            {
-                text: "close",
-                style: "primary"
-            }
-        ]
+    let component = new MenuUI({
+        target: document.body,
+        props: {
+            gimloader: GL,
+            onClose: () => component.$destroy()
+        }
     })
 }
 

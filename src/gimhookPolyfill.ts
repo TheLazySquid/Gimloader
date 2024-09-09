@@ -1,6 +1,6 @@
 import type { Gimloader } from './gimloader'
 
-// spec: https://codeberg.org/gimhook/gimhook/src/branch/master/docs/sdk/api.md
+// spec: https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/docs/sdk/api.md
 // Several features were recently removed from gimhook which this polyfill actually adds back
 // This means that more gimhook mods are compatible with gimloader than gimhook lol
 

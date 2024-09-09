@@ -2,7 +2,7 @@ import showModal from "./modal";
 import PluginManager from "../pluginManager/pluginManager"
 import Plugin from "../pluginManager/plugin";
 import { parsePluginHeader } from "../util";
-import { LibManagerType } from "$src/lib/libManager";
+import type { LibManagerType } from "$src/lib/libManager";
 import Lib from "$src/lib/lib";
 import { javascript } from "@codemirror/lang-javascript";
 import { basicSetup } from "codemirror";
@@ -52,7 +52,7 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
                     let headers = parsePluginHeader(code);
 
                     let canceled = false;
-                    for(let otherPlugin of pluginManager.plugins) {
+                    for(let otherPlugin of pluginManager.plugins.value) {
                         if(otherPlugin === plugin) continue;
 
                         if(otherPlugin.headers.name === headers.name) {
@@ -70,7 +70,7 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
                     }
 
                     plugin.edit(code, headers);
-                    pluginManager.updatePlugins();
+                    pluginManager.plugins.update();
                 }
             }
         ]

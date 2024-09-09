@@ -3,6 +3,8 @@ import showErrorMessage from "$src/ui/showErrorMessage";
 import { log, parsePluginHeader } from "../util";
 
 export default class Plugin {
+    id = Math.random().toString(36).substring(2);
+    
     gimloader: Gimloader;
     script: string;
     enabled: boolean;
@@ -29,7 +31,7 @@ export default class Plugin {
 
                 if(!libObj) {
                     this.enabled = false;
-                    this.gimloader.pluginManager.updatePlugins();
+                    this.gimloader.pluginManager.plugins.update();
                     rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
                     return;
                 }
@@ -63,7 +65,7 @@ export default class Plugin {
                 let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
                 this.enabled = false;
                 rej(err);
-                this.gimloader.pluginManager.updatePlugins();
+                this.gimloader.pluginManager.plugins.update();
                 return;
             }
     
@@ -77,7 +79,7 @@ export default class Plugin {
                 .then((returnVal) => {
                     this.return = returnVal;
                     this.enabled = true;
-                    this.gimloader.pluginManager.updatePlugins();
+                    this.gimloader.pluginManager.plugins.update();
             
                     log(`Loaded plugin: ${this.headers.name}`);
                     
@@ -105,7 +107,7 @@ export default class Plugin {
                 .catch((e: Error) => {
                     console.error(e);
                     this.enabled = false;
-                    this.gimloader.pluginManager.updatePlugins();
+                    this.gimloader.pluginManager.plugins.update();
                     let stack = e.stack.replaceAll(url, `blob:${this.headers.name}.js`);
                     let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${stack}`);
                     rej(err);
@@ -118,14 +120,14 @@ export default class Plugin {
 
     disable() {
         this.enabled = false;
-        this.gimloader.pluginManager.updatePlugins();
+        this.gimloader.pluginManager.plugins.update();
         if(!this.gimloader.pluginManager.runPlugins) return;
 
         if(this.return) {
             try {
                 this.return?.onStop?.();
             } catch (e) {
-                log(`Error stopping plugin ${this.headers.name}:`, e);
+                console.error(`Error stopping plugin ${this.headers.name}:`, e);
             }
         }
 
@@ -143,14 +145,13 @@ export default class Plugin {
         this.disable();
         this.script = script;
         this.headers = headers;
-        if(enabled) {
-            this.enable()
-                .then(() => this.gimloader.pluginManager.save())
-                .catch((e) => {
-                    showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
-                })
-        } else {
-            this.gimloader.pluginManager.save();
-        }
+        this.gimloader.pluginManager.save();
+
+        if(!enabled) return;
+        this.enable()
+            .then(() => this.gimloader.pluginManager.save())
+            .catch((e) => {
+                showErrorMessage(e.message, `Failed to enable plugin ${this.headers.name}`);
+            })
     }
 }

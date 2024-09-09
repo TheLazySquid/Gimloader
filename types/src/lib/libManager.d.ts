@@ -1,7 +1,8 @@
 import Lib from './lib';
+import type { EasyAccessWritable } from '$src/types';
 declare const libManagerMethods: {
     getLib(libName: string): Lib;
-    updateReact(): void;
+    saveFn(): void;
     save(libs?: Record<string, string>): void;
     createLib(script: string, headers?: Record<string, any>, ignoreDuplicates?: boolean): Lib;
     deleteLib(lib: Lib): void;
@@ -10,9 +11,7 @@ declare const libManagerMethods: {
 export type GetLibType = (lib: string) => any;
 export interface LibManagerBase extends GetLibType {
     get: GetLibType;
-    libs: Record<string, Lib>;
-    reactSetLibs?: (libs: Record<string, Lib>) => void;
-    updateLibTimeout: any;
+    libs: EasyAccessWritable<Lib[]>;
 }
 type additionalValuesType = typeof libManagerMethods;
 export interface LibManagerType extends LibManagerBase, additionalValuesType {
