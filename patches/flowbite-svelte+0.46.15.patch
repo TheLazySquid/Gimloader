@@ -1,0 +1,18 @@
+diff --git a/node_modules/flowbite-svelte/dist/utils/focusTrap.js b/node_modules/flowbite-svelte/dist/utils/focusTrap.js
+index 576138c..447d317 100644
+--- a/node_modules/flowbite-svelte/dist/utils/focusTrap.js
++++ b/node_modules/flowbite-svelte/dist/utils/focusTrap.js
+@@ -32,11 +32,11 @@ export default function focusTrap(node) {
+     e.preventDefault();
+   }
+ 
+-  document.addEventListener('keydown', handleFocusTrap, true);
++  document.addEventListener('keydown', handleFocusTrap);
+ 
+   return {
+     destroy() {
+-      document.removeEventListener('keydown', handleFocusTrap, true);
++      document.removeEventListener('keydown', handleFocusTrap);
+     }
+   };
+ }

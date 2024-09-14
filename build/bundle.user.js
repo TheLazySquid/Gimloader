@@ -9,7 +9,7 @@
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     0.9.2
+// @version     0.9.3
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
@@ -22,9 +22,9 @@
 (function () {
   'use strict';
 
-  var version = "0.9.2";
+  var version = "0.9.3";
 
-  var css_248z = ".gl-row{display:flex;gap:8px}*>.gl-wrench{padding:8px 12px}.gl-wrench,.gl-wrench svg{height:20px;width:20px}.gl-wrench svg{fill:#fff;transform:translate(-50%,-50%)}.gl-join{gap:8px;width:100%}.gl-join,.gl-join .openPlugins{align-items:center;display:flex}.gl-join .openPlugins{background-color:#1e076b;border:none;border-radius:4px;cursor:pointer;height:36px;justify-content:center;width:40px}.gl-join .openPlugins:hover{background-color:#2b0a9b}.gl-join .openPlugins svg{fill:#fff}.gl-homeWrench{align-items:center;display:flex;gap:.5rem}.gl-homeWrench .icon{height:30px;width:30px}.gl-homeWrench.light .text,.gl-homeWrench.light .text:hover{color:#fff}.gl-homeWrench.light svg{fill:#fff}.gl-homeWrench .text{color:#1677ff;cursor:pointer;font-size:18px;font-weight:700}.gl-homeWrench .text:hover{color:#69b1ff}div:has(>*>*>.gl-hostWrench){margin-right:8px}.gl-hostWrench{display:flex}.gl-1dHostPluginBtn{background-color:#838383;border:none;border-radius:4px;box-shadow:0 4px 33px -6px rgba(0,0,0,.46);color:#fff;font-size:24px;font-weight:900;margin-right:8px;padding:6px 14px;transition:transform .23s ease 0s}.gl-1dHostPluginBtn:hover{transform:scale(1.04)}.gl-1dHostGameWrench{height:25px;width:25px}.gl-1dHostGameWrench svg{fill:#fff;transform:translate(6px,-1px)}.gl-1dGameWrench{height:23px;width:23px}.gl-1dGameWrench svg{fill:#fff}.gl-1dGameWrenchJoin{height:32px;margin-left:8px;width:32px}.gl-1dGameWrenchJoin svg{fill:#fff}.noPluginButtons .ant-space-item:has(.gl-homeWrench)+.ant-space-item-split,.noPluginButtons .gl-1dGameWrench,.noPluginButtons .gl-1dGameWrenchJoin,.noPluginButtons .gl-1dHostGameWrench,.noPluginButtons .gl-1dHostPluginBtn,.noPluginButtons .gl-homeWrench,.noPluginButtons .gl-hostWrench,.noPluginButtons .gl-wrench,.noPluginButtons .openPlugins,.noPluginButtons button:has(>.gl-1dHostGameWrench),.noPluginButtons div:has(>*>*>.gl-hostWrench),.noPluginButtons div:has(>*>*>.gl-wrench){display:none}.gl-modalBG{align-items:center;animation:fadeIn .15s;backdrop-filter:blur(5px);background-color:rgba(0,0,0,.2);display:flex;height:100vh;justify-content:center;left:0;position:fixed;top:0;width:100vw;z-index:100}.gl-modal{animation:zoomIn .15s ease-out;background-color:var(--bg-primary);border-radius:1rem;color:var(--text);display:flex;flex-direction:column;max-height:80%;max-width:80%;min-height:200px;min-width:25%;padding:1rem}.gl-modal .title{font-size:1rem;font-weight:600;margin-bottom:.5rem}.gl-modal .content{flex:1;overflow-y:auto}.gl-modal>.buttons{display:flex;gap:1rem;justify-content:flex-end;padding-top:1rem}.gl-modal>.buttons button{border:none;border-radius:.5rem;cursor:pointer;padding:.5rem 1rem}.gl-modal>.buttons button.close{background-color:transparent;text-decoration:underline}.gl-modal>.buttons button.primary{background-color:#178635;color:#fff}.gl-modal>.buttons button.danger{background-color:#ff4d4f;color:#fff}.gl-errorMsg{background-color:#d3d3d3;border:1px solid #000;border-radius:3px;padding:5px;white-space:pre-line}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes zoomIn{0%{transform:scale(.3)}to{transform:scale(1)}}:where(:has(>.preflight)) *,:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{border:0 solid #e5e7eb;box-sizing:border-box}:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{--tw-content:\"\"}:where(:has(>.preflight)) :host,:where(:has(>.preflight)) html{-webkit-text-size-adjust:100%;font-feature-settings:normal;-webkit-tap-highlight-color:transparent;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-variation-settings:normal;line-height:1.5;-moz-tab-size:4;tab-size:4}:where(:has(>.preflight)) body{line-height:inherit;margin:0}:where(:has(>.preflight)) hr{border-top-width:1px;color:inherit;height:0}:where(:has(>.preflight)) abbr:where([title]){text-decoration:underline dotted}:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6{font-size:inherit;font-weight:inherit}:where(:has(>.preflight)) a{color:inherit;text-decoration:inherit}:where(:has(>.preflight)) b,:where(:has(>.preflight)) strong{font-weight:bolder}:where(:has(>.preflight)) code,:where(:has(>.preflight)) kbd,:where(:has(>.preflight)) pre,:where(:has(>.preflight)) samp{font-feature-settings:normal;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em;font-variation-settings:normal}:where(:has(>.preflight)) small{font-size:80%}:where(:has(>.preflight)) sub,:where(:has(>.preflight)) sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}:where(:has(>.preflight)) sub{bottom:-.25em}:where(:has(>.preflight)) sup{top:-.5em}:where(:has(>.preflight)) table{border-collapse:collapse;border-color:inherit;text-indent:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input,:where(:has(>.preflight)) optgroup,:where(:has(>.preflight)) select,:where(:has(>.preflight)) textarea{font-feature-settings:inherit;color:inherit;font-family:inherit;font-size:100%;font-variation-settings:inherit;font-weight:inherit;letter-spacing:inherit;line-height:inherit;margin:0;padding:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) select{text-transform:none}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input:where([type=button]),:where(:has(>.preflight)) input:where([type=reset]),:where(:has(>.preflight)) input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:where(:has(>.preflight)) :-moz-focusring{outline:auto}:where(:has(>.preflight)) :-moz-ui-invalid{box-shadow:none}:where(:has(>.preflight)) progress{vertical-align:baseline}:where(:has(>.preflight)) ::-webkit-inner-spin-button,:where(:has(>.preflight)) ::-webkit-outer-spin-button{height:auto}:where(:has(>.preflight)) [type=search]{-webkit-appearance:textfield;outline-offset:-2px}:where(:has(>.preflight)) ::-webkit-search-decoration{-webkit-appearance:none}:where(:has(>.preflight)) ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}:where(:has(>.preflight)) summary{display:list-item}:where(:has(>.preflight)) blockquote,:where(:has(>.preflight)) dd,:where(:has(>.preflight)) dl,:where(:has(>.preflight)) figure,:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6,:where(:has(>.preflight)) hr,:where(:has(>.preflight)) p,:where(:has(>.preflight)) pre{margin:0}:where(:has(>.preflight)) fieldset{margin:0;padding:0}:where(:has(>.preflight)) legend{padding:0}:where(:has(>.preflight)) menu,:where(:has(>.preflight)) ol,:where(:has(>.preflight)) ul{list-style:none;margin:0;padding:0}:where(:has(>.preflight)) dialog{padding:0}:where(:has(>.preflight)) textarea{resize:vertical}:where(:has(>.preflight)) input::placeholder,:where(:has(>.preflight)) textarea::placeholder{color:#9ca3af;opacity:1}:where(:has(>.preflight)) [role=button],:where(:has(>.preflight)) button{cursor:pointer}:where(:has(>.preflight)) :disabled{cursor:default}:where(:has(>.preflight)) audio,:where(:has(>.preflight)) canvas,:where(:has(>.preflight)) embed,:where(:has(>.preflight)) iframe,:where(:has(>.preflight)) img,:where(:has(>.preflight)) object,:where(:has(>.preflight)) svg,:where(:has(>.preflight)) video{display:block;vertical-align:middle}:where(:has(>.preflight)) img,:where(:has(>.preflight)) video{height:auto;max-width:100%}:where(:has(>.preflight)) [hidden]{display:none}[data-tooltip-style^=light]+.tooltip>.tooltip-arrow:before{border-color:#e5e7eb;border-style:solid}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=top]>.tooltip-arrow:before{border-bottom-width:1px;border-right-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=right]>.tooltip-arrow:before{border-bottom-width:1px;border-left-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=bottom]>.tooltip-arrow:before{border-left-width:1px;border-top-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=left]>.tooltip-arrow:before{border-right-width:1px;border-top-width:1px}.tooltip[data-popper-placement^=top]>.tooltip-arrow{bottom:-4px}.tooltip[data-popper-placement^=bottom]>.tooltip-arrow{top:-4px}.tooltip[data-popper-placement^=left]>.tooltip-arrow{right:-4px}.tooltip[data-popper-placement^=right]>.tooltip-arrow{left:-4px}.tooltip.invisible>.tooltip-arrow:before{visibility:hidden}[data-popper-arrow],[data-popper-arrow]:before{background:inherit;height:8px;position:absolute;width:8px}[data-popper-arrow]{visibility:hidden}[data-popper-arrow]:after,[data-popper-arrow]:before{content:\"\";transform:rotate(45deg);visibility:visible}[data-popper-arrow]:after{background:inherit;height:9px;position:absolute;width:9px}[role=tooltip]>[data-popper-arrow]:before{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:before{border-color:#4b5563;border-style:solid}[role=tooltip]>[data-popper-arrow]:after{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:after{border-color:#4b5563;border-style:solid}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:before{border-bottom-width:1px;border-right-width:1px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:before{border-bottom-width:1px;border-left-width:1px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:before{border-left-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:before{border-right-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]{bottom:-5px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]{top:-5px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]{right:-5px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]{left:-5px}[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;border-color:#6b7280;border-radius:0;border-width:1px;font-size:1rem;line-height:1.5rem;padding:.5rem .75rem}[multiple]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=email]:focus,[type=month]:focus,[type=number]:focus,[type=password]:focus,[type=search]:focus,[type=tel]:focus,[type=text]:focus,[type=time]:focus,[type=url]:focus,[type=week]:focus,select:focus,textarea:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);border-color:#1c64f2;box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}input[type=time]::-webkit-calendar-picker-indicator{background:none}select:not([size]){background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E\");background-position:right .75rem center;background-repeat:no-repeat;background-size:.75em .75em;padding-right:2.5rem;print-color-adjust:exact}:is([dir=rtl]) select:not([size]){background-position:left .75rem center;padding-left:0;padding-right:.75rem}[multiple]{background-image:none;background-position:0 0;background-repeat:unset;background-size:initial;padding-right:.75rem;print-color-adjust:unset}[type=checkbox],[type=radio]{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;background-origin:border-box;border-color:#6b7280;border-width:1px;color:#1c64f2;display:inline-block;flex-shrink:0;height:1rem;padding:0;print-color-adjust:exact;user-select:none;vertical-align:middle;width:1rem}[type=checkbox]{border-radius:0}[type=radio]{border-radius:100%}[type=checkbox]:focus,[type=radio]:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}.dark [type=checkbox]:checked,.dark [type=radio]:checked,[type=checkbox]:checked,[type=radio]:checked{background-color:currentColor;background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent}[type=checkbox]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-size:.55em .55em;print-color-adjust:exact}.dark [type=radio]:checked,[type=radio]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E\");background-size:1em 1em}[type=checkbox]:indeterminate{background-color:currentColor;background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M.5 6h14'/%3E%3C/svg%3E\");background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent;print-color-adjust:exact}[type=checkbox]:indeterminate:focus,[type=checkbox]:indeterminate:hover{background-color:currentColor;border-color:transparent}[type=file]{background:unset;border-color:inherit;border-radius:0;border-width:0;font-size:unset;line-height:inherit;padding:0}[type=file]:focus{outline:1px auto inherit}input[type=file]::file-selector-button{background:#1f2937;border:0;color:#fff;cursor:pointer;font-size:.875rem;font-weight:500;margin-inline-end:1rem;margin-inline-start:-1rem;padding:.625rem 1rem .625rem 2rem}input[type=file]::file-selector-button:hover{background:#374151}:is([dir=rtl]) input[type=file]::file-selector-button{padding-left:1rem;padding-right:2rem}.dark input[type=file]::file-selector-button{background:#4b5563;color:#fff}.dark input[type=file]::file-selector-button:hover{background:#6b7280}input[type=range]::-webkit-slider-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-webkit-slider-thumb{background:#9ca3af}.dark input[type=range]:disabled::-webkit-slider-thumb{background:#6b7280}input[type=range]:focus::-webkit-slider-thumb{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);--tw-ring-opacity:1px;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity));box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);outline:2px solid transparent;outline-offset:2px}input[type=range]::-moz-range-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-moz-range-thumb{background:#9ca3af}.dark input[type=range]:disabled::-moz-range-thumb{background:#6b7280}input[type=range]::-moz-range-progress{background:#3f83f8}input[type=range]::-ms-fill-lower{background:#3f83f8}input[type=range].range-sm::-webkit-slider-thumb{height:1rem;width:1rem}input[type=range].range-lg::-webkit-slider-thumb{height:1.5rem;width:1.5rem}input[type=range].range-sm::-moz-range-thumb{height:1rem;width:1rem}input[type=range].range-lg::-moz-range-thumb{height:1.5rem;width:1.5rem}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.sr-only{clip:rect(0,0,0,0);border-width:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.pointer-events-none{pointer-events:none}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.-inset-1{inset:-.25rem}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{bottom:0;top:0}.-left-\\[17px\\]{left:-17px}.-right-\\[16px\\]{right:-16px}.-right-\\[17px\\]{right:-17px}.-start-1\\.5{inset-inline-start:-.375rem}.-start-14{inset-inline-start:-3.5rem}.-start-3{inset-inline-start:-.75rem}.bottom-0{bottom:0}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.bottom-6{bottom:1.5rem}.end-0{inset-inline-end:0}.end-2\\.5{inset-inline-end:.625rem}.end-5{inset-inline-end:1.25rem}.end-6{inset-inline-end:1.5rem}.left-1\\/2{left:50%}.right-3{right:.75rem}.start-0{inset-inline-start:0}.start-1{inset-inline-start:.25rem}.start-1\\/2{inset-inline-start:50%}.start-2\\.5{inset-inline-start:.625rem}.start-5{inset-inline-start:1.25rem}.top-0{top:0}.top-1{top:.25rem}.top-1\\/2{top:50%}.top-2{top:.5rem}.top-3{top:.75rem}.top-4{top:1rem}.top-5{top:1.25rem}.top-6{top:1.5rem}.top-\\[124px\\]{top:124px}.top-\\[142px\\]{top:142px}.top-\\[178px\\]{top:178px}.top-\\[40px\\]{top:40px}.top-\\[72px\\]{top:72px}.top-\\[88px\\]{top:88px}.top-\\[calc\\(100\\%\\+1rem\\)\\]{top:calc(100% + 1rem)}.-z-10{z-index:-10}.z-0{z-index:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.m-0\\.5{margin:.125rem}.-mx-1\\.5{margin-left:-.375rem;margin-right:-.375rem}.-my-1\\.5{margin-bottom:-.375rem;margin-top:-.375rem}.mx-2{margin-left:.5rem;margin-right:.5rem}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-bottom:.25rem;margin-top:.25rem}.my-2{margin-bottom:.5rem;margin-top:.5rem}.my-8{margin-bottom:2rem;margin-top:2rem}.-mb-px{margin-bottom:-1px}.-me-1\\.5{margin-inline-end:-.375rem}.-ms-4{margin-inline-start:-1rem}.-mt-px{margin-top:-1px}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-\\[3px\\]{margin-bottom:3px}.mb-px{margin-bottom:1px}.me-1{margin-inline-end:.25rem}.me-2{margin-inline-end:.5rem}.me-3{margin-inline-end:.75rem}.me-4{margin-inline-end:1rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mr-2{margin-right:.5rem}.ms-1{margin-inline-start:.25rem}.ms-1\\.5{margin-inline-start:.375rem}.ms-2{margin-inline-start:.5rem}.ms-3{margin-inline-start:.75rem}.ms-4{margin-inline-start:1rem}.ms-6{margin-inline-start:1.5rem}.ms-auto{margin-inline-start:auto}.mt-1{margin-top:.25rem}.mt-1\\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.line-clamp-6{-webkit-box-orient:vertical;-webkit-line-clamp:6;display:-webkit-box;overflow:hidden}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.\\!hidden{display:none!important}.hidden{display:none}.h-1{height:.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-2\\.5{height:.625rem}.h-20{height:5rem}.h-24{height:6rem}.h-3{height:.75rem}.h-3\\.5{height:.875rem}.h-36{height:9rem}.h-4{height:1rem}.h-48{height:12rem}.h-5{height:1.25rem}.h-56{height:14rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-7{height:1.75rem}.h-72{height:18rem}.h-8{height:2rem}.h-80{height:20rem}.h-9{height:2.25rem}.h-96{height:24rem}.h-\\[10px\\]{height:10px}.h-\\[140px\\]{height:140px}.h-\\[156px\\]{height:156px}.h-\\[172px\\]{height:172px}.h-\\[17px\\]{height:17px}.h-\\[18px\\]{height:18px}.h-\\[193px\\]{height:193px}.h-\\[213px\\]{height:213px}.h-\\[24px\\]{height:24px}.h-\\[32px\\]{height:32px}.h-\\[41px\\]{height:41px}.h-\\[426px\\]{height:426px}.h-\\[454px\\]{height:454px}.h-\\[46px\\]{height:46px}.h-\\[52px\\]{height:52px}.h-\\[55px\\]{height:55px}.h-\\[572px\\]{height:572px}.h-\\[5px\\]{height:5px}.h-\\[600px\\]{height:600px}.h-\\[63px\\]{height:63px}.h-\\[64px\\]{height:64px}.h-auto{height:auto}.h-fit{height:fit-content}.h-full{height:100%}.h-modal{height:calc(100% - 2rem)}.h-px{height:1px}.max-h-64{max-height:16rem}.max-h-full{max-height:100%}.min-h-\\[150px\\]{min-height:150px}.min-h-\\[2\\.4rem\\]{min-height:2.4rem}.min-h-\\[2\\.7rem\\]{min-height:2.7rem}.min-h-\\[3\\.2rem\\]{min-height:3.2rem}.min-h-\\[65vh\\]{min-height:65vh}.\\!w-full{width:100%!important}.w-1{width:.25rem}.w-1\\/2{width:50%}.w-10{width:2.5rem}.w-10\\/12{width:83.333333%}.w-11{width:2.75rem}.w-11\\/12{width:91.666667%}.w-12{width:3rem}.w-14{width:3.5rem}.w-2{width:.5rem}.w-2\\.5{width:.625rem}.w-2\\/4{width:50%}.w-20{width:5rem}.w-24{width:6rem}.w-3{width:.75rem}.w-3\\.5{width:.875rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-8{width:2rem}.w-8\\/12{width:66.666667%}.w-80{width:20rem}.w-9{width:2.25rem}.w-9\\/12{width:75%}.w-\\[10px\\]{width:10px}.w-\\[148px\\]{width:148px}.w-\\[188px\\]{width:188px}.w-\\[1px\\]{width:1px}.w-\\[208px\\]{width:208px}.w-\\[272px\\]{width:272px}.w-\\[300px\\]{width:300px}.w-\\[3px\\]{width:3px}.w-\\[52px\\]{width:52px}.w-\\[56px\\]{width:56px}.w-\\[6px\\]{width:6px}.w-\\[calc\\(100\\%-2rem\\)\\]{width:calc(100% - 2rem)}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-60{max-width:15rem}.max-w-7xl{max-width:80rem}.max-w-80{max-width:20rem}.max-w-\\[133px\\]{max-width:133px}.max-w-\\[301px\\]{max-width:301px}.max-w-\\[341px\\]{max-width:341px}.max-w-\\[351px\\]{max-width:351px}.max-w-\\[540px\\]{max-width:540px}.max-w-\\[640px\\]{max-width:640px}.max-w-\\[83px\\]{max-width:83px}.max-w-full{max-width:100%}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-screen-md{max-width:768px}.max-w-screen-xl{max-width:1280px}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.origin-left{transform-origin:left}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-x-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-x-1\\/3{--tw-translate-x:-33.333333%}.-translate-y-1\\/2{--tw-translate-y:-50%}.-translate-y-1\\/2,.-translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/3{--tw-translate-y:-33.333333%}.-translate-y-4{--tw-translate-y:-1rem}.-translate-y-4,.-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-6{--tw-translate-y:-1.5rem}.translate-x-1\\/3{--tw-translate-x:33.333333%}.translate-x-1\\/3,.translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-1\\/3{--tw-translate-y:33.333333%}.rotate-45{--tw-rotate:45deg}.rotate-45,.scale-75{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-75{--tw-scale-x:.75;--tw-scale-y:.75}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.list-inside{list-style-position:inside}.list-outside{list-style-position:outside}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.list-none{list-style-type:none}.appearance-none{appearance:none}.grid-flow-row{grid-auto-flow:row}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-row{flex-direction:row}.flex-row-reverse{flex-direction:row-reverse}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-start{justify-content:flex-start}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.gap-y-4{row-gap:1rem}.-space-x-px>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(-1px*(1 - var(--tw-space-x-reverse)));margin-right:calc(-1px*var(--tw-space-x-reverse))}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.25rem*var(--tw-space-x-reverse))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.5rem*var(--tw-space-x-reverse))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.space-x-4>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1rem*var(--tw-space-x-reverse))}.space-x-6>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1.5rem*var(--tw-space-x-reverse))}.space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.25rem*var(--tw-space-y-reverse));margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.5rem*var(--tw-space-y-reverse));margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)))}.space-y-2\\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.625rem*var(--tw-space-y-reverse));margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(1rem*var(--tw-space-y-reverse));margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(2rem*var(--tw-space-y-reverse));margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)))}.divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(1px*var(--tw-divide-y-reverse));border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)))}.divide-blue-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(164 202 254/var(--tw-divide-opacity))}.divide-gray-100>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(243 244 246/var(--tw-divide-opacity))}.divide-gray-200>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235/var(--tw-divide-opacity))}.divide-gray-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(209 213 219/var(--tw-divide-opacity))}.divide-gray-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(107 114 128/var(--tw-divide-opacity))}.divide-gray-700>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.divide-green-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(132 225 188/var(--tw-divide-opacity))}.divide-indigo-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(180 198 252/var(--tw-divide-opacity))}.divide-orange-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(253 186 140/var(--tw-divide-opacity))}.divide-pink-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 217/var(--tw-divide-opacity))}.divide-primary-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(146 93 254/var(--tw-divide-opacity))}.divide-purple-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(202 191 253/var(--tw-divide-opacity))}.divide-red-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 180/var(--tw-divide-opacity))}.divide-yellow-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(250 202 21/var(--tw-divide-opacity))}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overflow-y-scroll{overflow-y:scroll}.overscroll-contain{overscroll-behavior:contain}.overflow-ellipsis{text-overflow:ellipsis}.whitespace-normal{white-space:normal}.whitespace-nowrap{white-space:nowrap}.whitespace-pre{white-space:pre}.whitespace-pre-line{white-space:pre-line}.whitespace-pre-wrap{white-space:pre-wrap}.text-wrap{text-wrap:wrap}.\\!rounded-md{border-radius:.375rem!important}.rounded{border-radius:.25rem}.rounded-\\[2\\.5rem\\]{border-radius:2.5rem}.rounded-\\[2rem\\]{border-radius:2rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-sm{border-radius:.125rem}.rounded-xl{border-radius:.75rem}.rounded-b-\\[1rem\\]{border-bottom-left-radius:1rem;border-bottom-right-radius:1rem}.rounded-b-\\[2\\.5rem\\]{border-bottom-left-radius:2.5rem;border-bottom-right-radius:2.5rem}.rounded-b-lg{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.rounded-b-xl{border-bottom-left-radius:.75rem;border-bottom-right-radius:.75rem}.rounded-e-full{border-end-end-radius:9999px;border-start-end-radius:9999px}.rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.rounded-l{border-bottom-left-radius:.25rem;border-top-left-radius:.25rem}.rounded-l-lg{border-bottom-left-radius:.5rem;border-top-left-radius:.5rem}.rounded-r{border-bottom-right-radius:.25rem;border-top-right-radius:.25rem}.rounded-r-lg{border-bottom-right-radius:.5rem;border-top-right-radius:.5rem}.rounded-s-full{border-end-start-radius:9999px;border-start-start-radius:9999px}.rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.rounded-t-\\[2\\.5rem\\]{border-top-left-radius:2.5rem;border-top-right-radius:2.5rem}.rounded-t-lg{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.rounded-t-md{border-top-left-radius:.375rem;border-top-right-radius:.375rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.\\!border-0{border-width:0!important}.border{border-width:1px}.border-0{border-width:0}.border-2{border-width:2px}.border-\\[10px\\]{border-width:10px}.border-\\[14px\\]{border-width:14px}.border-\\[16px\\]{border-width:16px}.border-\\[8px\\]{border-width:8px}.border-x{border-left-width:1px;border-right-width:1px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-e{border-inline-end-width:1px}.border-s{border-inline-start-width:1px}.border-s-4{border-inline-start-width:4px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-300{--tw-border-opacity:1;border-color:rgb(164 202 254/var(--tw-border-opacity))}.border-blue-400{--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.border-blue-700{--tw-border-opacity:1;border-color:rgb(26 86 219/var(--tw-border-opacity))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246/var(--tw-border-opacity))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.border-gray-400{--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.border-gray-900{--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.border-green-300{--tw-border-opacity:1;border-color:rgb(132 225 188/var(--tw-border-opacity))}.border-green-400{--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.border-green-500{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.border-green-600{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.border-green-700{--tw-border-opacity:1;border-color:rgb(4 108 78/var(--tw-border-opacity))}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(180 198 252/var(--tw-border-opacity))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.border-inherit{border-color:inherit}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 140/var(--tw-border-opacity))}.border-pink-300{--tw-border-opacity:1;border-color:rgb(248 180 217/var(--tw-border-opacity))}.border-pink-400{--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.border-primary-400{--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.border-primary-500{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.border-primary-600{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.border-primary-700{--tw-border-opacity:1;border-color:rgb(105 40 235/var(--tw-border-opacity))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(202 191 253/var(--tw-border-opacity))}.border-purple-400{--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.border-purple-700{--tw-border-opacity:1;border-color:rgb(108 43 217/var(--tw-border-opacity))}.border-red-300{--tw-border-opacity:1;border-color:rgb(248 180 180/var(--tw-border-opacity))}.border-red-400{--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.border-red-500{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.border-red-600{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.border-red-700{--tw-border-opacity:1;border-color:rgb(200 30 30/var(--tw-border-opacity))}.border-transparent{border-color:transparent}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.border-yellow-300{--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(227 160 8/var(--tw-border-opacity))}.\\!bg-gray-50{--tw-bg-opacity:1!important;background-color:rgb(249 250 251/var(--tw-bg-opacity))!important}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.bg-blue-400{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(235 245 255/var(--tw-bg-opacity))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.bg-gray-400{--tw-bg-opacity:1;background-color:rgb(156 163 175/var(--tw-bg-opacity))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(222 247 236/var(--tw-bg-opacity))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(243 250 247/var(--tw-bg-opacity))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.bg-green-700{--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.bg-green-800{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(229 237 255/var(--tw-bg-opacity))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(240 245 255/var(--tw-bg-opacity))}.bg-indigo-500{--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(88 80 236/var(--tw-bg-opacity))}.bg-indigo-800{--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.bg-inherit{background-color:inherit}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 248 241/var(--tw-bg-opacity))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(208 56 1/var(--tw-bg-opacity))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 232 243/var(--tw-bg-opacity))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248/var(--tw-bg-opacity))}.bg-pink-500{--tw-bg-opacity:1;background-color:rgb(231 70 148/var(--tw-bg-opacity))}.bg-pink-800{--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.bg-primary-100{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-200{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.bg-primary-400{--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.bg-primary-50{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-500{--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.bg-primary-700{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.bg-primary-800{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(237 235 254/var(--tw-bg-opacity))}.bg-purple-400{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(246 245 255/var(--tw-bg-opacity))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.bg-purple-800{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(253 232 232/var(--tw-bg-opacity))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(253 242 242/var(--tw-bg-opacity))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.bg-red-700{--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.bg-teal-500{--tw-bg-opacity:1;background-color:rgb(6 148 162/var(--tw-bg-opacity))}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.bg-white\\/30{background-color:hsla(0,0%,100%,.3)}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(253 246 178/var(--tw-bg-opacity))}.bg-yellow-300{--tw-bg-opacity:1;background-color:rgb(250 202 21/var(--tw-bg-opacity))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(253 253 234/var(--tw-bg-opacity))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.bg-yellow-600{--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-75{--tw-bg-opacity:0.75}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3f83f8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(63,131,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgba(34,211,238,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-green-400{--tw-gradient-from:#31c48d var(--tw-gradient-from-position);--tw-gradient-to:rgba(49,196,141,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-lime-200{--tw-gradient-from:#d9f99d var(--tw-gradient-from-position);--tw-gradient-to:hsla(81,88%,80%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-400{--tw-gradient-from:#f17eb8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(241,126,184,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-500{--tw-gradient-from:#e74694 var(--tw-gradient-from-position);--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#9061f9 var(--tw-gradient-from-position);--tw-gradient-to:rgba(144,97,249,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#7e3af2 var(--tw-gradient-from-position);--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-200{--tw-gradient-from:#fbd5d5 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,83%,91%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-400{--tw-gradient-from:#f98080 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,91%,74%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-sky-400{--tw-gradient-from:#38bdf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(56,189,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-200{--tw-gradient-from:#afecef var(--tw-gradient-from-position);--tw-gradient-to:rgba(175,236,239,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-400{--tw-gradient-from:#16bdca var(--tw-gradient-from-position);--tw-gradient-to:rgba(22,189,202,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-blue-600{--tw-gradient-to:rgba(28,100,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#1c64f2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-cyan-500{--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#06b6d4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-green-500{--tw-gradient-to:rgba(14,159,110,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0e9f6e var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-lime-400{--tw-gradient-to:rgba(163,230,53,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#a3e635 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-pink-500{--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#e74694 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-purple-600{--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#7e3af2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-300{--tw-gradient-to:hsla(0,83%,84%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f8b4b4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-500{--tw-gradient-to:rgba(240,82,82,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f05252 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-teal-500{--tw-gradient-to:rgba(6,148,162,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0694a2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3f83f8 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#1c64f2 var(--tw-gradient-to-position)}.to-blue-700{--tw-gradient-to:#1a56db var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-green-600{--tw-gradient-to:#057a55 var(--tw-gradient-to-position)}.to-lime-200{--tw-gradient-to:#d9f99d var(--tw-gradient-to-position)}.to-lime-500{--tw-gradient-to:#84cc16 var(--tw-gradient-to-position)}.to-orange-400{--tw-gradient-to:#ff8a4c var(--tw-gradient-to-position)}.to-pink-500{--tw-gradient-to:#e74694 var(--tw-gradient-to-position)}.to-pink-600{--tw-gradient-to:#d61f69 var(--tw-gradient-to-position)}.to-purple-700{--tw-gradient-to:#6c2bd9 var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#e02424 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#047481 var(--tw-gradient-to-position)}.to-yellow-200{--tw-gradient-to:#fce96a var(--tw-gradient-to-position)}.bg-clip-text{background-clip:text}.fill-blue-600{fill:#1c64f2}.fill-gray-600{fill:#4b5563}.fill-green-500{fill:#0e9f6e}.fill-pink-600{fill:#d61f69}.fill-primary-600{fill:#6e2eef}.fill-purple-600{fill:#7e3af2}.fill-red-600{fill:#e02424}.fill-white{fill:#fff}.fill-yellow-400{fill:#e3a008}.object-cover{object-fit:cover}.\\!p-0{padding:0!important}.\\!p-2{padding:.5rem!important}.\\!p-3{padding:.75rem!important}.p-0{padding:0}.p-0\\.5{padding:.125rem}.p-1{padding:.25rem}.p-1\\.5{padding:.375rem}.p-2{padding:.5rem}.p-2\\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.\\!px-0{padding-left:0!important;padding-right:0!important}.px-0{padding-left:0;padding-right:0}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0\\.5{padding-bottom:.125rem;padding-top:.125rem}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-1\\.5{padding-bottom:.375rem;padding-top:.375rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.py-2\\.5{padding-bottom:.625rem;padding-top:.625rem}.py-3{padding-bottom:.75rem;padding-top:.75rem}.py-3\\.5{padding-bottom:.875rem;padding-top:.875rem}.py-4{padding-bottom:1rem;padding-top:1rem}.py-5{padding-bottom:1.25rem;padding-top:1.25rem}.pb-1{padding-bottom:.25rem}.pb-1\\.5{padding-bottom:.375rem}.pb-2\\.5{padding-bottom:.625rem}.pe-10{padding-inline-end:2.5rem}.pe-11{padding-inline-end:2.75rem}.pe-2\\.5{padding-inline-end:.625rem}.pe-4{padding-inline-end:1rem}.pe-9{padding-inline-end:2.25rem}.pr-7{padding-right:1.75rem}.ps-10{padding-inline-start:2.5rem}.ps-11{padding-inline-start:2.75rem}.ps-2\\.5{padding-inline-start:.625rem}.ps-3{padding-inline-start:.75rem}.ps-4{padding-inline-start:1rem}.ps-9{padding-inline-start:2.25rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-justify{text-align:justify}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-8xl{font-size:6rem;line-height:1}.text-9xl{font-size:8rem;line-height:1}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-extralight{font-weight:200}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.font-thin{font-weight:100}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-6{line-height:1.5rem}.leading-9{line-height:2.25rem}.leading-loose{line-height:2}.leading-none{line-height:1}.leading-normal{line-height:1.5}.leading-relaxed{line-height:1.625}.tracking-normal{letter-spacing:0}.tracking-tight{letter-spacing:-.025em}.tracking-tighter{letter-spacing:-.05em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}.\\!text-gray-900{--tw-text-opacity:1!important;color:rgb(17 24 39/var(--tw-text-opacity))!important}.text-black{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.text-blue-100{--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.text-blue-50{--tw-text-opacity:1;color:rgb(235 245 255/var(--tw-text-opacity))}.text-blue-500{--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.text-blue-600{--tw-text-opacity:1;color:rgb(28 100 242/var(--tw-text-opacity))}.text-blue-700{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 66 159/var(--tw-text-opacity))}.text-blue-900{--tw-text-opacity:1;color:rgb(35 56 118/var(--tw-text-opacity))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.text-green-100{--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.text-green-500{--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.text-green-600{--tw-text-opacity:1;color:rgb(5 122 85/var(--tw-text-opacity))}.text-green-700{--tw-text-opacity:1;color:rgb(4 108 78/var(--tw-text-opacity))}.text-green-800{--tw-text-opacity:1;color:rgb(3 84 63/var(--tw-text-opacity))}.text-green-900{--tw-text-opacity:1;color:rgb(1 71 55/var(--tw-text-opacity))}.text-indigo-100{--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.text-indigo-500{--tw-text-opacity:1;color:rgb(104 117 245/var(--tw-text-opacity))}.text-indigo-800{--tw-text-opacity:1;color:rgb(66 56 157/var(--tw-text-opacity))}.text-orange-500{--tw-text-opacity:1;color:rgb(255 90 31/var(--tw-text-opacity))}.text-orange-800{--tw-text-opacity:1;color:rgb(138 44 13/var(--tw-text-opacity))}.text-pink-100{--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.text-pink-500{--tw-text-opacity:1;color:rgb(231 70 148/var(--tw-text-opacity))}.text-pink-800{--tw-text-opacity:1;color:rgb(153 21 75/var(--tw-text-opacity))}.text-primary-100{--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.text-primary-500{--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.text-primary-800{--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.text-primary-900{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.text-purple-100{--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.text-purple-500{--tw-text-opacity:1;color:rgb(144 97 249/var(--tw-text-opacity))}.text-purple-600{--tw-text-opacity:1;color:rgb(126 58 242/var(--tw-text-opacity))}.text-purple-700{--tw-text-opacity:1;color:rgb(108 43 217/var(--tw-text-opacity))}.text-purple-800{--tw-text-opacity:1;color:rgb(85 33 181/var(--tw-text-opacity))}.text-purple-900{--tw-text-opacity:1;color:rgb(74 29 150/var(--tw-text-opacity))}.text-red-100{--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.text-red-500{--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(224 36 36/var(--tw-text-opacity))}.text-red-700{--tw-text-opacity:1;color:rgb(200 30 30/var(--tw-text-opacity))}.text-red-800{--tw-text-opacity:1;color:rgb(155 28 28/var(--tw-text-opacity))}.text-red-900{--tw-text-opacity:1;color:rgb(119 29 29/var(--tw-text-opacity))}.text-teal-600{--tw-text-opacity:1;color:rgb(4 116 129/var(--tw-text-opacity))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.text-yellow-100{--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.text-yellow-400{--tw-text-opacity:1;color:rgb(227 160 8/var(--tw-text-opacity))}.text-yellow-500{--tw-text-opacity:1;color:rgb(194 120 3/var(--tw-text-opacity))}.text-yellow-800{--tw-text-opacity:1;color:rgb(114 59 19/var(--tw-text-opacity))}.text-yellow-900{--tw-text-opacity:1;color:rgb(99 49 18/var(--tw-text-opacity))}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-blue-400{text-decoration-color:#76a9fa}.decoration-2{text-decoration-thickness:2px}.placeholder-green-700::placeholder{--tw-placeholder-opacity:1;color:rgb(4 108 78/var(--tw-placeholder-opacity))}.placeholder-red-700::placeholder{--tw-placeholder-opacity:1;color:rgb(200 30 30/var(--tw-placeholder-opacity))}.opacity-100{opacity:1}.opacity-30{opacity:.3}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-inner{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgba(0,0,0,.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-md{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.shadow-blue-500\\/50{--tw-shadow-color:rgba(63,131,248,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-700{--tw-shadow-color:#1a56db;--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-500\\/50{--tw-shadow-color:rgba(6,182,212,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-300{--tw-shadow-color:#d1d5db;--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-500\\/50{--tw-shadow-color:hsla(220,9%,46%,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-800{--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.shadow-green-500\\/50{--tw-shadow-color:rgba(14,159,110,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-green-700{--tw-shadow-color:#046c4e;--tw-shadow:var(--tw-shadow-colored)}.shadow-lime-500\\/50{--tw-shadow-color:rgba(132,204,22,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-pink-500\\/50{--tw-shadow-color:rgba(231,70,148,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-500\\/50{--tw-shadow-color:rgba(146,93,254,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-700{--tw-shadow-color:#6928eb;--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\\/50{--tw-shadow-color:rgba(144,97,249,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-700{--tw-shadow-color:#6c2bd9;--tw-shadow:var(--tw-shadow-colored)}.shadow-red-500\\/50{--tw-shadow-color:rgba(240,82,82,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-red-700{--tw-shadow-color:#c81e1e;--tw-shadow:var(--tw-shadow-colored)}.shadow-teal-500\\/50{--tw-shadow-color:rgba(6,148,162,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500{--tw-shadow-color:#c27803;--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500\\/50{--tw-shadow-color:rgba(194,120,3,.5);--tw-shadow:var(--tw-shadow-colored)}.\\!outline{outline-style:solid!important}.outline{outline-style:solid}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-2,.ring-8{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-8{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(8px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-gray-300{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.ring-primary-500{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-transform{transition-duration:.15s;transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1)}.duration-300{transition-duration:.3s}.duration-75{transition-duration:75ms}.ease-in{transition-timing-function:cubic-bezier(.4,0,1,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}:root{--text:#000;--bg-primary:#fff;--bg-secondary:#fff}.\\*\\:me-0>*{margin-inline-end:0}.first-letter\\:float-left:first-letter{float:left}.first-letter\\:me-3:first-letter{margin-inline-end:.75rem}.first-letter\\:text-7xl:first-letter{font-size:4.5rem;line-height:1}.first-letter\\:font-bold:first-letter{font-weight:700}.first-letter\\:text-gray-900:first-letter{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.first-line\\:uppercase:first-line{text-transform:uppercase}.first-line\\:tracking-widest:first-line{letter-spacing:.1em}.before\\:absolute:before{content:var(--tw-content);position:absolute}.before\\:end-0:before{content:var(--tw-content);inset-inline-end:0}.before\\:z-10:before{content:var(--tw-content);z-index:10}.before\\:block:before{content:var(--tw-content);display:block}.before\\:h-full:before{content:var(--tw-content);height:100%}.before\\:shadow-\\[-10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:before{--tw-shadow:-10px 0 50px 65px #fff;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.before\\:content-\\[\\'\\'\\]:before{--tw-content:\"\";content:var(--tw-content)}.after\\:absolute:after{content:var(--tw-content);position:absolute}.after\\:start-\\[2px\\]:after{content:var(--tw-content);inset-inline-start:2px}.after\\:start-\\[4px\\]:after{content:var(--tw-content);inset-inline-start:4px}.after\\:top-0\\.5:after{content:var(--tw-content);top:.125rem}.after\\:top-\\[2px\\]:after{content:var(--tw-content);top:2px}.after\\:z-10:after{content:var(--tw-content);z-index:10}.after\\:block:after{content:var(--tw-content);display:block}.after\\:h-4:after{content:var(--tw-content);height:1rem}.after\\:h-5:after{content:var(--tw-content);height:1.25rem}.after\\:h-6:after{content:var(--tw-content);height:1.5rem}.after\\:h-full:after{content:var(--tw-content);height:100%}.after\\:w-4:after{content:var(--tw-content);width:1rem}.after\\:w-5:after{content:var(--tw-content);width:1.25rem}.after\\:w-6:after{content:var(--tw-content);width:1.5rem}.after\\:rounded-full:after{border-radius:9999px;content:var(--tw-content)}.after\\:border:after{border-width:1px;content:var(--tw-content)}.after\\:border-gray-300:after{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity));content:var(--tw-content)}.after\\:bg-white:after{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity));content:var(--tw-content)}.after\\:shadow-\\[10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:after{--tw-shadow:10px 0 50px 65px #fff;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.after\\:transition-all:after{content:var(--tw-content);transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.after\\:content-\\[\\'\\'\\]:after{--tw-content:\"\";content:var(--tw-content)}.first\\:rounded-s-full:first-child{border-end-start-radius:9999px;border-start-start-radius:9999px}.first\\:rounded-s-lg:first-child{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.first\\:rounded-t-lg:first-child{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.last\\:me-0:last-child{margin-inline-end:0}.last\\:rounded-b-lg:last-child{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.last\\:rounded-e-full:last-child{border-end-end-radius:9999px;border-start-end-radius:9999px}.last\\:rounded-e-lg:last-child{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.last\\:border-b-0:last-child{border-bottom-width:0}.odd\\:bg-blue-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:bg-green-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:bg-purple-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:bg-red-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:bg-white:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.odd\\:bg-yellow-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:bg-blue-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:bg-gray-50:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.even\\:bg-green-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:bg-purple-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:bg-red-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:bg-yellow-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.focus-within\\:z-10:focus-within{z-index:10}.focus-within\\:border-primary-500:focus-within{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus-within\\:bg-gray-900:focus-within{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.focus-within\\:text-primary-700:focus-within{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus-within\\:text-white:focus-within{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.focus-within\\:outline-none:focus-within{outline:2px solid transparent;outline-offset:2px}.focus-within\\:ring-1:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-2:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-4:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-blue-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus-within\\:ring-gray-200:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus-within\\:ring-gray-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus-within\\:ring-green-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus-within\\:ring-primary-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus-within\\:ring-purple-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus-within\\:ring-red-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus-within\\:ring-yellow-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.hover\\:border-gray-300:hover{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.hover\\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.hover\\:bg-blue-200:hover{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.hover\\:bg-blue-400:hover{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.hover\\:bg-blue-800:hover{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.hover\\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.hover\\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.hover\\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.hover\\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.hover\\:bg-gray-900:hover{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.hover\\:bg-green-200:hover{--tw-bg-opacity:1;background-color:rgb(188 240 218/var(--tw-bg-opacity))}.hover\\:bg-green-400:hover{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.hover\\:bg-green-800:hover{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.hover\\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(205 219 254/var(--tw-bg-opacity))}.hover\\:bg-pink-200:hover{--tw-bg-opacity:1;background-color:rgb(250 209 232/var(--tw-bg-opacity))}.hover\\:bg-primary-100:hover{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.hover\\:bg-primary-200:hover{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.hover\\:bg-primary-700:hover{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.hover\\:bg-primary-800:hover{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.hover\\:bg-purple-200:hover{--tw-bg-opacity:1;background-color:rgb(220 215 254/var(--tw-bg-opacity))}.hover\\:bg-purple-400:hover{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.hover\\:bg-purple-800:hover{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.hover\\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(251 213 213/var(--tw-bg-opacity))}.hover\\:bg-red-400:hover{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.hover\\:bg-red-800:hover{--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.hover\\:bg-transparent:hover{background-color:transparent}.hover\\:bg-yellow-200:hover{--tw-bg-opacity:1;background-color:rgb(252 233 106/var(--tw-bg-opacity))}.hover\\:bg-yellow-400:hover{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.hover\\:bg-yellow-500:hover{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.hover\\:bg-gradient-to-bl:hover{background-image:linear-gradient(to bottom left,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-br:hover{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-l:hover{background-image:linear-gradient(to left,var(--tw-gradient-stops))}.hover\\:\\!text-inherit:hover{color:inherit!important}.hover\\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.hover\\:text-blue-700:hover{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.hover\\:text-gray-600:hover{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.hover\\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.hover\\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.hover\\:text-primary-600:hover{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.hover\\:text-primary-900:hover{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.hover\\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.hover\\:underline:hover{text-decoration-line:underline}.focus\\:z-40:focus{z-index:40}.focus\\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.focus\\:border-gray-200:focus{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.focus\\:border-green-500:focus{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.focus\\:border-green-600:focus{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.focus\\:border-primary-500:focus{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus\\:border-primary-600:focus{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.focus\\:border-red-500:focus{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.focus\\:border-red-600:focus{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.focus\\:text-primary-700:focus{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ring-0:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-0:focus,.focus\\:ring-1:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus,.focus\\:ring-4:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-4:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-blue-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus\\:ring-blue-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(118 169 250/var(--tw-ring-opacity))}.focus\\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.focus\\:ring-cyan-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(103 232 249/var(--tw-ring-opacity))}.focus\\:ring-gray-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus\\:ring-gray-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus\\:ring-gray-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(156 163 175/var(--tw-ring-opacity))}.focus\\:ring-green-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(188 240 218/var(--tw-ring-opacity))}.focus\\:ring-green-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus\\:ring-green-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(49 196 141/var(--tw-ring-opacity))}.focus\\:ring-green-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.focus\\:ring-indigo-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(141 162 251/var(--tw-ring-opacity))}.focus\\:ring-lime-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(217 249 157/var(--tw-ring-opacity))}.focus\\:ring-lime-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(190 242 100/var(--tw-ring-opacity))}.focus\\:ring-orange-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(255 90 31/var(--tw-ring-opacity))}.focus\\:ring-pink-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(250 209 232/var(--tw-ring-opacity))}.focus\\:ring-pink-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 217/var(--tw-ring-opacity))}.focus\\:ring-pink-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(241 126 184/var(--tw-ring-opacity))}.focus\\:ring-primary-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus\\:ring-primary-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(201 173 255/var(--tw-ring-opacity))}.focus\\:ring-primary-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.focus\\:ring-primary-700:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(105 40 235/var(--tw-ring-opacity))}.focus\\:ring-purple-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(220 215 254/var(--tw-ring-opacity))}.focus\\:ring-purple-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus\\:ring-purple-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(172 148 250/var(--tw-ring-opacity))}.focus\\:ring-purple-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(144 97 249/var(--tw-ring-opacity))}.focus\\:ring-red-100:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(253 232 232/var(--tw-ring-opacity))}.focus\\:ring-red-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus\\:ring-red-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.focus\\:ring-red-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.focus\\:ring-teal-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.focus\\:ring-teal-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(6 148 162/var(--tw-ring-opacity))}.focus\\:ring-yellow-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(227 160 8/var(--tw-ring-opacity))}.focus\\:ring-yellow-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(194 120 3/var(--tw-ring-opacity))}.focus-visible\\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.disabled\\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:text-gray-400:disabled{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.disabled\\:opacity-50:disabled{opacity:.5}.group:first-child .group-first\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.group:first-child .group-first\\:rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.group:first-child .group-first\\:border-t{border-top-width:1px}.group:last-child .group-last\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.group:hover .group-hover\\:rotate-45{--tw-rotate:45deg;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\\:bg-white\\/50{background-color:hsla(0,0%,100%,.5)}.group:hover .group-hover\\:\\!bg-opacity-0{--tw-bg-opacity:0!important}.group:hover .group-hover\\:\\!text-inherit{color:inherit!important}.group:hover .group-hover\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.group:focus .group-focus\\:outline-none{outline:2px solid transparent;outline-offset:2px}.group:focus .group-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.group:focus .group-focus\\:ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.peer:checked~.peer-checked\\:bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-orange-500{--tw-bg-opacity:1;background-color:rgb(255 90 31/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-teal-600{--tw-bg-opacity:1;background-color:rgb(4 116 129/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:after\\:translate-x-full:after{--tw-translate-x:100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:checked~.peer-checked\\:after\\:border-white:after{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity));content:var(--tw-content)}.peer:placeholder-shown~.peer-placeholder-shown\\:top-1\\/2{top:50%}.peer:placeholder-shown~.peer-placeholder-shown\\:-translate-y-1\\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:start-0{inset-inline-start:0}.peer:focus~.peer-focus\\:top-2{top:.5rem}.peer:focus~.peer-focus\\:-translate-y-4{--tw-translate-y:-1rem}.peer:focus~.peer-focus\\:-translate-y-4,.peer:focus~.peer-focus\\:-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:-translate-y-6{--tw-translate-y:-1.5rem}.peer:focus~.peer-focus\\:scale-75{--tw-scale-x:.75;--tw-scale-y:.75;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:px-2{padding-left:.5rem;padding-right:.5rem}.peer:focus~.peer-focus\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.peer:focus~.peer-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.peer:focus~.peer-focus\\:ring-blue-300{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-green-300{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-orange-300{--tw-ring-opacity:1;--tw-ring-color:rgb(253 186 140/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-primary-300{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-purple-300{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-red-300{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-teal-300{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-yellow-300{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.dark\\:block:is(.dark *){display:block}.dark\\:hidden:is(.dark *){display:none}.dark\\:divide-blue-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(30 66 159/var(--tw-divide-opacity))}.dark\\:divide-gray-600:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(75 85 99/var(--tw-divide-opacity))}.dark\\:divide-gray-700:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.dark\\:divide-gray-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(31 41 55/var(--tw-divide-opacity))}.dark\\:divide-green-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(3 84 63/var(--tw-divide-opacity))}.dark\\:divide-indigo-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(66 56 157/var(--tw-divide-opacity))}.dark\\:divide-orange-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(138 44 13/var(--tw-divide-opacity))}.dark\\:divide-pink-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(153 21 75/var(--tw-divide-opacity))}.dark\\:divide-primary-200:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(235 224 255/var(--tw-divide-opacity))}.dark\\:divide-purple-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(85 33 181/var(--tw-divide-opacity))}.dark\\:divide-red-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(155 28 28/var(--tw-divide-opacity))}.dark\\:divide-yellow-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(114 59 19/var(--tw-divide-opacity))}.dark\\:\\!border-gray-600:is(.dark *){--tw-border-opacity:1!important;border-color:rgb(75 85 99/var(--tw-border-opacity))!important}.dark\\:border-blue-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.dark\\:border-blue-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:border-blue-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 66 159/var(--tw-border-opacity))}.dark\\:border-gray-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.dark\\:border-gray-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:border-gray-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-gray-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:border-gray-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.dark\\:border-gray-900:is(.dark *){--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.dark\\:border-green-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.dark\\:border-green-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:border-green-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(3 84 63/var(--tw-border-opacity))}.dark\\:border-indigo-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.dark\\:border-indigo-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(66 56 157/var(--tw-border-opacity))}.dark\\:border-orange-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(138 44 13/var(--tw-border-opacity))}.dark\\:border-pink-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.dark\\:border-pink-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(153 21 75/var(--tw-border-opacity))}.dark\\:border-primary-200:is(.dark *){--tw-border-opacity:1;border-color:rgb(235 224 255/var(--tw-border-opacity))}.dark\\:border-primary-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.dark\\:border-primary-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:border-purple-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.dark\\:border-purple-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(85 33 181/var(--tw-border-opacity))}.dark\\:border-red-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.dark\\:border-red-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:border-red-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(155 28 28/var(--tw-border-opacity))}.dark\\:border-white:is(.dark *){--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.dark\\:border-yellow-300:is(.dark *){--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.dark\\:border-yellow-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(114 59 19/var(--tw-border-opacity))}.dark\\:border-e-gray-600:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-e-gray-700:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:\\!bg-gray-700:is(.dark *){--tw-bg-opacity:1!important;background-color:rgb(55 65 81/var(--tw-bg-opacity))!important}.dark\\:bg-blue-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.dark\\:bg-blue-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.dark\\:bg-blue-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:bg-blue-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:bg-blue-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(35 56 118/var(--tw-bg-opacity))}.dark\\:bg-gray-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.dark\\:bg-gray-300:is(.dark *){--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.dark\\:bg-gray-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.dark\\:bg-gray-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:bg-gray-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:bg-gray-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:bg-gray-800\\/30:is(.dark *){background-color:rgba(31,41,55,.3)}.dark\\:bg-gray-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.dark\\:bg-green-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.dark\\:bg-green-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.dark\\:bg-green-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:bg-green-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:bg-green-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(1 71 55/var(--tw-bg-opacity))}.dark\\:bg-indigo-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(141 162 251/var(--tw-bg-opacity))}.dark\\:bg-indigo-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.dark\\:bg-indigo-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:bg-indigo-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(54 47 120/var(--tw-bg-opacity))}.dark\\:bg-inherit:is(.dark *){background-color:inherit}.dark\\:bg-orange-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(138 44 13/var(--tw-bg-opacity))}.dark\\:bg-pink-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(241 126 184/var(--tw-bg-opacity))}.dark\\:bg-pink-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(191 18 93/var(--tw-bg-opacity))}.dark\\:bg-pink-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(117 26 61/var(--tw-bg-opacity))}.dark\\:bg-primary-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.dark\\:bg-primary-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.dark\\:bg-primary-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:bg-primary-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:bg-primary-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:bg-primary-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(73 27 165/var(--tw-bg-opacity))}.dark\\:bg-purple-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.dark\\:bg-purple-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:bg-purple-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.dark\\:bg-purple-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:bg-purple-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(74 29 150/var(--tw-bg-opacity))}.dark\\:bg-red-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.dark\\:bg-red-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:bg-red-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:bg-red-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.dark\\:bg-transparent:is(.dark *){background-color:transparent}.dark\\:bg-yellow-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:bg-yellow-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.dark\\:bg-yellow-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.dark\\:bg-yellow-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(99 49 18/var(--tw-bg-opacity))}.dark\\:bg-opacity-80:is(.dark *){--tw-bg-opacity:0.8}.dark\\:fill-gray-300:is(.dark *){fill:#d1d5db}.dark\\:\\!text-white:is(.dark *){--tw-text-opacity:1!important;color:rgb(255 255 255/var(--tw-text-opacity))!important}.dark\\:text-blue-100:is(.dark *){--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.dark\\:text-blue-200:is(.dark *){--tw-text-opacity:1;color:rgb(195 221 253/var(--tw-text-opacity))}.dark\\:text-blue-300:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:text-blue-400:is(.dark *){--tw-text-opacity:1;color:rgb(118 169 250/var(--tw-text-opacity))}.dark\\:text-blue-500:is(.dark *){--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.dark\\:text-gray-100:is(.dark *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:text-gray-200:is(.dark *){--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.dark\\:text-gray-300:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:text-gray-400:is(.dark *){--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.dark\\:text-gray-500:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.dark\\:text-gray-600:is(.dark *){--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.dark\\:text-gray-700:is(.dark *){--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.dark\\:text-gray-900:is(.dark *){--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.dark\\:text-green-100:is(.dark *){--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.dark\\:text-green-200:is(.dark *){--tw-text-opacity:1;color:rgb(188 240 218/var(--tw-text-opacity))}.dark\\:text-green-300:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:text-green-400:is(.dark *){--tw-text-opacity:1;color:rgb(49 196 141/var(--tw-text-opacity))}.dark\\:text-green-500:is(.dark *){--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.dark\\:text-indigo-100:is(.dark *){--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.dark\\:text-indigo-200:is(.dark *){--tw-text-opacity:1;color:rgb(205 219 254/var(--tw-text-opacity))}.dark\\:text-indigo-300:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:text-indigo-400:is(.dark *){--tw-text-opacity:1;color:rgb(141 162 251/var(--tw-text-opacity))}.dark\\:text-orange-400:is(.dark *){--tw-text-opacity:1;color:rgb(255 138 76/var(--tw-text-opacity))}.dark\\:text-pink-100:is(.dark *){--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.dark\\:text-pink-200:is(.dark *){--tw-text-opacity:1;color:rgb(250 209 232/var(--tw-text-opacity))}.dark\\:text-pink-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:text-pink-400:is(.dark *){--tw-text-opacity:1;color:rgb(241 126 184/var(--tw-text-opacity))}.dark\\:text-primary-100:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:text-primary-200:is(.dark *){--tw-text-opacity:1;color:rgb(235 224 255/var(--tw-text-opacity))}.dark\\:text-primary-300:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:text-primary-400:is(.dark *){--tw-text-opacity:1;color:rgb(201 173 255/var(--tw-text-opacity))}.dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.dark\\:text-primary-700:is(.dark *){--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.dark\\:text-primary-800:is(.dark *){--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.dark\\:text-primary-900:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:text-purple-100:is(.dark *){--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.dark\\:text-purple-200:is(.dark *){--tw-text-opacity:1;color:rgb(220 215 254/var(--tw-text-opacity))}.dark\\:text-purple-300:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(172 148 250/var(--tw-text-opacity))}.dark\\:text-red-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.dark\\:text-red-200:is(.dark *){--tw-text-opacity:1;color:rgb(251 213 213/var(--tw-text-opacity))}.dark\\:text-red-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:text-red-400:is(.dark *){--tw-text-opacity:1;color:rgb(249 128 128/var(--tw-text-opacity))}.dark\\:text-red-500:is(.dark *){--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:text-yellow-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.dark\\:text-yellow-200:is(.dark *){--tw-text-opacity:1;color:rgb(252 233 106/var(--tw-text-opacity))}.dark\\:text-yellow-300:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:decoration-blue-600:is(.dark *){text-decoration-color:#1c64f2}.dark\\:placeholder-gray-400:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(156 163 175/var(--tw-placeholder-opacity))}.dark\\:placeholder-green-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(14 159 110/var(--tw-placeholder-opacity))}.dark\\:placeholder-red-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(240 82 82/var(--tw-placeholder-opacity))}.dark\\:opacity-25:is(.dark *){opacity:.25}.dark\\:shadow-blue-800:is(.dark *){--tw-shadow-color:#1e429f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-blue-800\\/80:is(.dark *){--tw-shadow-color:rgba(30,66,159,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-cyan-800\\/80:is(.dark *){--tw-shadow-color:rgba(21,94,117,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-700:is(.dark *){--tw-shadow-color:#374151;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800:is(.dark *){--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800\\/80:is(.dark *){--tw-shadow-color:rgba(31,41,55,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-900:is(.dark *){--tw-shadow-color:#111827;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800:is(.dark *){--tw-shadow-color:#03543f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800\\/80:is(.dark *){--tw-shadow-color:rgba(3,84,63,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-lime-800\\/80:is(.dark *){--tw-shadow-color:rgba(63,98,18,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-pink-800\\/80:is(.dark *){--tw-shadow-color:rgba(153,21,75,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800:is(.dark *){--tw-shadow-color:#5c23cd;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800\\/80:is(.dark *){--tw-shadow-color:rgba(92,35,205,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800:is(.dark *){--tw-shadow-color:#5521b5;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800\\/80:is(.dark *){--tw-shadow-color:rgba(85,33,181,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800:is(.dark *){--tw-shadow-color:#9b1c1c;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800\\/80:is(.dark *){--tw-shadow-color:rgba(155,28,28,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-teal-800\\/80:is(.dark *){--tw-shadow-color:rgba(5,80,92,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-700:is(.dark *){--tw-shadow-color:#8e4b10;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-800\\/80:is(.dark *){--tw-shadow-color:rgba(114,59,19,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:ring-gray-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:ring-gray-900:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(17 24 39/var(--tw-ring-opacity))}.dark\\:ring-primary-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:ring-offset-gray-800:is(.dark *){--tw-ring-offset-color:#1f2937}.dark\\:first-letter\\:text-gray-100:is(.dark *):first-letter{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:before\\:shadow-\\[-10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):before{--tw-shadow:-10px 0 50px 65px #101827;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:after\\:shadow-\\[10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):after{--tw-shadow:10px 0 50px 65px #101827;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:last\\:border-e-gray-500:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:last\\:border-e-gray-600:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.odd\\:dark\\:bg-blue-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:dark\\:bg-gray-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.odd\\:dark\\:bg-green-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:dark\\:bg-purple-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:dark\\:bg-red-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:dark\\:bg-yellow-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:dark\\:bg-blue-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:dark\\:bg-gray-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.even\\:dark\\:bg-green-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:dark\\:bg-purple-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:dark\\:bg-red-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:dark\\:bg-yellow-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.dark\\:focus-within\\:border-primary-500:focus-within:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus-within\\:text-white:focus-within:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus-within\\:ring-blue-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-700:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(55 65 81/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-green-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-primary-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-purple-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(74 29 150/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-red-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(119 29 29/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-yellow-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(99 49 18/var(--tw-ring-opacity))}.dark\\:hover\\:border-gray-500:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:hover\\:border-gray-600:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:hover\\:bg-blue-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:hover\\:bg-indigo-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:hover\\:bg-pink-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-400:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.hover\\:dark\\:bg-gray-800:is(.dark *):hover{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:text-blue-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:hover\\:text-gray-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:hover\\:text-green-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:hover\\:text-indigo-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:hover\\:text-pink-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-100:hover:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-900:hover:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:hover\\:text-purple-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:hover\\:text-red-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:hover\\:text-yellow-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:focus\\:border-blue-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:focus\\:border-green-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:focus\\:border-primary-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus\\:border-red-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:focus\\:text-white:focus:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus\\:ring-blue-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(28 100 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus\\:ring-cyan-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(21 94 117/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 122 85/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus\\:ring-lime-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 98 18/var(--tw-ring-opacity))}.dark\\:focus\\:ring-orange-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(208 56 1/var(--tw-ring-opacity))}.dark\\:focus\\:ring-pink-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(153 21 75/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(110 46 239/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(126 58 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-400:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(224 36 36/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(4 116 129/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-700:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 102 114/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.dark\\:focus\\:ring-yellow-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(159 88 10/var(--tw-ring-opacity))}.dark\\:disabled\\:text-gray-500:disabled:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.group:hover .dark\\:group-hover\\:bg-gray-800\\/60:is(.dark *){background-color:rgba(31,41,55,.6)}.group:hover .dark\\:group-hover\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.group:focus .dark\\:group-focus\\:ring-gray-800\\/70:is(.dark *){--tw-ring-color:rgba(31,41,55,.7)}.peer:focus~.peer-focus\\:dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-blue-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-green-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-orange-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(138 44 13/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-primary-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-purple-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-red-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-teal-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-yellow-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(114 59 19/var(--tw-ring-opacity))}@media (min-width:640px){.sm\\:order-last{order:9999}.sm\\:mb-0{margin-bottom:0}.sm\\:flex{display:flex}.sm\\:grid{display:grid}.sm\\:h-10{height:2.5rem}.sm\\:h-6{height:1.5rem}.sm\\:h-64{height:16rem}.sm\\:h-7{height:1.75rem}.sm\\:w-10{width:2.5rem}.sm\\:w-6{width:1.5rem}.sm\\:w-96{width:24rem}.sm\\:w-auto{width:auto}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\\:divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.sm\\:rounded-lg{border-radius:.5rem}.sm\\:p-5{padding:1.25rem}.sm\\:p-6{padding:1.5rem}.sm\\:p-8{padding:2rem}.sm\\:px-4{padding-left:1rem;padding-right:1rem}.sm\\:pe-4{padding-inline-end:1rem}.sm\\:ps-4{padding-inline-start:1rem}.sm\\:text-center{text-align:center}.sm\\:text-base{font-size:1rem;line-height:1.5rem}.sm\\:text-sm{font-size:.875rem;line-height:1.25rem}.sm\\:text-xs{font-size:.75rem;line-height:1rem}.first\\:sm\\:ps-0:first-child{padding-inline-start:0}.last\\:sm\\:pe-0:last-child{padding-inline-end:0}}@media (min-width:768px){.md\\:inset-0{inset:0}.md\\:mb-0{margin-bottom:0}.md\\:me-6{margin-inline-end:1.5rem}.md\\:ms-2{margin-inline-start:.5rem}.md\\:mt-0{margin-top:0}.md\\:block{display:block}.md\\:flex{display:flex}.md\\:grid{display:grid}.md\\:hidden{display:none}.md\\:h-\\[21px\\]{height:21px}.md\\:h-\\[262px\\]{height:262px}.md\\:h-\\[278px\\]{height:278px}.md\\:h-\\[294px\\]{height:294px}.md\\:h-\\[42px\\]{height:42px}.md\\:h-\\[654px\\]{height:654px}.md\\:h-\\[682px\\]{height:682px}.md\\:h-\\[8px\\]{height:8px}.md\\:h-\\[95px\\]{height:95px}.md\\:h-auto{height:auto}.md\\:h-full{height:100%}.md\\:w-1\\/3{width:33.333333%}.md\\:w-2\\/3{width:66.666667%}.md\\:w-48{width:12rem}.md\\:w-\\[96px\\]{width:96px}.md\\:w-auto{width:auto}.md\\:max-w-\\[142px\\]{max-width:142px}.md\\:max-w-\\[512px\\]{max-width:512px}.md\\:max-w-\\[597px\\]{max-width:597px}.md\\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\\:flex-row{flex-direction:row}.md\\:flex-row-reverse{flex-direction:row-reverse}.md\\:items-center{align-items:center}.md\\:justify-between{justify-content:space-between}.md\\:gap-8{gap:2rem}.md\\:gap-x-0{column-gap:0}.md\\:space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.md\\:space-x-8>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(2rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(2rem*var(--tw-space-x-reverse))}.md\\:space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.md\\:divide-y-0>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(0px*var(--tw-divide-y-reverse));border-top-width:calc(0px*(1 - var(--tw-divide-y-reverse)))}.md\\:rounded-none{border-radius:0}.md\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.md\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.md\\:border-0{border-width:0}.md\\:bg-transparent{background-color:transparent}.md\\:p-0{padding:0}.md\\:p-5{padding:1.25rem}.md\\:p-6{padding:1.5rem}.md\\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\\:py-8{padding-bottom:2rem;padding-top:2rem}.md\\:text-lg{font-size:1.125rem;line-height:1.75rem}.md\\:text-sm{font-size:.875rem;line-height:1.25rem}.md\\:font-medium{font-weight:500}.md\\:text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:hover\\:bg-transparent:hover{background-color:transparent}.md\\:hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:dark\\:bg-transparent:is(.dark *){background-color:transparent}.md\\:dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.md\\:dark\\:hover\\:bg-transparent:hover:is(.dark *){background-color:transparent}.md\\:dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}}@media (min-width:1024px){.lg\\:max-w-7xl{max-width:80rem}}@media (min-width:1280px){.xl\\:h-80{height:20rem}}@media (min-width:1536px){.\\32xl\\:h-96{height:24rem}}.rtl\\:origin-right:where([dir=rtl],[dir=rtl] *){transform-origin:right}.rtl\\:-translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:-33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/2:where([dir=rtl],[dir=rtl] *){--tw-translate-x:50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:-scale-x-100:where([dir=rtl],[dir=rtl] *){--tw-scale-x:-1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:space-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-space-x-reverse:1}.rtl\\:divide-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:1}.rtl\\:text-right:where([dir=rtl],[dir=rtl] *){text-align:right}.peer:checked~.rtl\\:peer-checked\\:after\\:-translate-x-full:where([dir=rtl],[dir=rtl] *):after{--tw-translate-x:-100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.\\[\\&\\:not\\(\\:first-child\\)\\]\\:-ms-px:not(:first-child){margin-inline-start:-1px}";
+  var css_248z = ".gl-row{display:flex;gap:8px}*>.gl-wrench{padding:8px 12px}.gl-wrench,.gl-wrench svg{height:20px;width:20px}.gl-wrench svg{fill:#fff;transform:translate(-50%,-50%)}.gl-join{gap:8px;width:100%}.gl-join,.gl-join .openPlugins{align-items:center;display:flex}.gl-join .openPlugins{background-color:#1e076b;border:none;border-radius:4px;cursor:pointer;height:36px;justify-content:center;width:40px}.gl-join .openPlugins:hover{background-color:#2b0a9b}.gl-join .openPlugins svg{fill:#fff}.gl-homeWrench{align-items:center;display:flex;gap:.5rem}.gl-homeWrench .icon{height:30px;width:30px}.gl-homeWrench.light .text,.gl-homeWrench.light .text:hover{color:#fff}.gl-homeWrench.light svg{fill:#fff}.gl-homeWrench .text{color:#1677ff;cursor:pointer;font-size:18px;font-weight:700}.gl-homeWrench .text:hover{color:#69b1ff}div:has(>*>*>.gl-hostWrench){margin-right:8px}.gl-hostWrench{display:flex}.gl-1dHostPluginBtn{background-color:#838383;border:none;border-radius:4px;box-shadow:0 4px 33px -6px rgba(0,0,0,.46);color:#fff;font-size:24px;font-weight:900;margin-right:8px;padding:6px 14px;transition:transform .23s ease 0s}.gl-1dHostPluginBtn:hover{transform:scale(1.04)}.gl-1dHostGameWrench{height:25px;width:25px}.gl-1dHostGameWrench svg{fill:#fff;transform:translate(6px,-1px)}.gl-1dGameWrench{height:23px;width:23px}.gl-1dGameWrench svg{fill:#fff}.gl-1dGameWrenchJoin{height:32px;margin-left:8px;width:32px}.gl-1dGameWrenchJoin svg{fill:#fff}.noPluginButtons .ant-space-item:has(.gl-homeWrench)+.ant-space-item-split,.noPluginButtons .gl-1dGameWrench,.noPluginButtons .gl-1dGameWrenchJoin,.noPluginButtons .gl-1dHostGameWrench,.noPluginButtons .gl-1dHostPluginBtn,.noPluginButtons .gl-homeWrench,.noPluginButtons .gl-hostWrench,.noPluginButtons .gl-wrench,.noPluginButtons .openPlugins,.noPluginButtons button:has(>.gl-1dHostGameWrench),.noPluginButtons div:has(>*>*>.gl-hostWrench),.noPluginButtons div:has(>*>*>.gl-wrench){display:none}.gl-modalBG{align-items:center;animation:fadeIn .15s;backdrop-filter:blur(5px);background-color:rgba(0,0,0,.2);display:flex;height:100vh;justify-content:center;left:0;position:fixed;top:0;width:100vw;z-index:100}.gl-modal{animation:zoomIn .15s ease-out;background-color:var(--bg-primary);border-radius:1rem;color:var(--text);display:flex;flex-direction:column;max-height:80%;max-width:80%;min-height:200px;min-width:25%;padding:1rem}.gl-modal .title{font-size:1rem;font-weight:600;margin-bottom:.5rem}.gl-modal .content{flex:1;overflow-y:auto}.gl-modal>.buttons{display:flex;gap:1rem;justify-content:flex-end;padding-top:1rem}.gl-modal>.buttons button{border:none;border-radius:.5rem;cursor:pointer;padding:.5rem 1rem}.gl-modal>.buttons button.close{background-color:transparent;text-decoration:underline}.gl-modal>.buttons button.primary{background-color:#178635;color:#fff}.gl-modal>.buttons button.danger{background-color:#ff4d4f;color:#fff}.gl-errorMsg{background-color:#d3d3d3;border:1px solid #000;border-radius:3px;padding:5px;white-space:pre-line}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes zoomIn{0%{transform:scale(.3)}to{transform:scale(1)}}:where(:has(>.preflight)) *,:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{border:0 solid #e5e7eb;box-sizing:border-box}:where(:has(>.preflight)) :after,:where(:has(>.preflight)) :before{--tw-content:\"\"}:where(:has(>.preflight)) :host,:where(:has(>.preflight)) html{-webkit-text-size-adjust:100%;font-feature-settings:normal;-webkit-tap-highlight-color:transparent;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-variation-settings:normal;line-height:1.5;-moz-tab-size:4;tab-size:4}:where(:has(>.preflight)) body{line-height:inherit;margin:0}:where(:has(>.preflight)) hr{border-top-width:1px;color:inherit;height:0}:where(:has(>.preflight)) abbr:where([title]){text-decoration:underline dotted}:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6{font-size:inherit;font-weight:inherit}:where(:has(>.preflight)) a{color:inherit;text-decoration:inherit}:where(:has(>.preflight)) b,:where(:has(>.preflight)) strong{font-weight:bolder}:where(:has(>.preflight)) code,:where(:has(>.preflight)) kbd,:where(:has(>.preflight)) pre,:where(:has(>.preflight)) samp{font-feature-settings:normal;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em;font-variation-settings:normal}:where(:has(>.preflight)) small{font-size:80%}:where(:has(>.preflight)) sub,:where(:has(>.preflight)) sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}:where(:has(>.preflight)) sub{bottom:-.25em}:where(:has(>.preflight)) sup{top:-.5em}:where(:has(>.preflight)) table{border-collapse:collapse;border-color:inherit;text-indent:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input,:where(:has(>.preflight)) optgroup,:where(:has(>.preflight)) select,:where(:has(>.preflight)) textarea{font-feature-settings:inherit;color:inherit;font-family:inherit;font-size:100%;font-variation-settings:inherit;font-weight:inherit;letter-spacing:inherit;line-height:inherit;margin:0;padding:0}:where(:has(>.preflight)) button,:where(:has(>.preflight)) select{text-transform:none}:where(:has(>.preflight)) button,:where(:has(>.preflight)) input:where([type=button]),:where(:has(>.preflight)) input:where([type=reset]),:where(:has(>.preflight)) input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:where(:has(>.preflight)) :-moz-focusring{outline:auto}:where(:has(>.preflight)) :-moz-ui-invalid{box-shadow:none}:where(:has(>.preflight)) progress{vertical-align:baseline}:where(:has(>.preflight)) ::-webkit-inner-spin-button,:where(:has(>.preflight)) ::-webkit-outer-spin-button{height:auto}:where(:has(>.preflight)) [type=search]{-webkit-appearance:textfield;outline-offset:-2px}:where(:has(>.preflight)) ::-webkit-search-decoration{-webkit-appearance:none}:where(:has(>.preflight)) ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}:where(:has(>.preflight)) summary{display:list-item}:where(:has(>.preflight)) blockquote,:where(:has(>.preflight)) dd,:where(:has(>.preflight)) dl,:where(:has(>.preflight)) figure,:where(:has(>.preflight)) h1,:where(:has(>.preflight)) h2,:where(:has(>.preflight)) h3,:where(:has(>.preflight)) h4,:where(:has(>.preflight)) h5,:where(:has(>.preflight)) h6,:where(:has(>.preflight)) hr,:where(:has(>.preflight)) p,:where(:has(>.preflight)) pre{margin:0}:where(:has(>.preflight)) fieldset{margin:0;padding:0}:where(:has(>.preflight)) legend{padding:0}:where(:has(>.preflight)) menu,:where(:has(>.preflight)) ol,:where(:has(>.preflight)) ul{list-style:none;margin:0;padding:0}:where(:has(>.preflight)) dialog{padding:0}:where(:has(>.preflight)) textarea{resize:vertical}:where(:has(>.preflight)) input::placeholder,:where(:has(>.preflight)) textarea::placeholder{color:#9ca3af;opacity:1}:where(:has(>.preflight)) [role=button],:where(:has(>.preflight)) button{cursor:pointer}:where(:has(>.preflight)) :disabled{cursor:default}:where(:has(>.preflight)) audio,:where(:has(>.preflight)) canvas,:where(:has(>.preflight)) embed,:where(:has(>.preflight)) iframe,:where(:has(>.preflight)) img,:where(:has(>.preflight)) object,:where(:has(>.preflight)) svg,:where(:has(>.preflight)) video{display:block;vertical-align:middle}:where(:has(>.preflight)) img,:where(:has(>.preflight)) video{height:auto;max-width:100%}:where(:has(>.preflight)) [hidden]{display:none}[data-tooltip-style^=light]+.tooltip>.tooltip-arrow:before{border-color:#e5e7eb;border-style:solid}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=top]>.tooltip-arrow:before{border-bottom-width:1px;border-right-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=right]>.tooltip-arrow:before{border-bottom-width:1px;border-left-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=bottom]>.tooltip-arrow:before{border-left-width:1px;border-top-width:1px}[data-tooltip-style^=light]+.tooltip[data-popper-placement^=left]>.tooltip-arrow:before{border-right-width:1px;border-top-width:1px}.tooltip[data-popper-placement^=top]>.tooltip-arrow{bottom:-4px}.tooltip[data-popper-placement^=bottom]>.tooltip-arrow{top:-4px}.tooltip[data-popper-placement^=left]>.tooltip-arrow{right:-4px}.tooltip[data-popper-placement^=right]>.tooltip-arrow{left:-4px}.tooltip.invisible>.tooltip-arrow:before{visibility:hidden}[data-popper-arrow],[data-popper-arrow]:before{background:inherit;height:8px;position:absolute;width:8px}[data-popper-arrow]{visibility:hidden}[data-popper-arrow]:after,[data-popper-arrow]:before{content:\"\";transform:rotate(45deg);visibility:visible}[data-popper-arrow]:after{background:inherit;height:9px;position:absolute;width:9px}[role=tooltip]>[data-popper-arrow]:before{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:before{border-color:#4b5563;border-style:solid}[role=tooltip]>[data-popper-arrow]:after{border-color:#e5e7eb;border-style:solid}.dark [role=tooltip]>[data-popper-arrow]:after{border-color:#4b5563;border-style:solid}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]:before{border-bottom-width:1px;border-right-width:1px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]:before{border-bottom-width:1px;border-left-width:1px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]:before{border-left-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:after,[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]:before{border-right-width:1px;border-top-width:1px}[data-popover][role=tooltip][data-popper-placement^=top]>[data-popper-arrow]{bottom:-5px}[data-popover][role=tooltip][data-popper-placement^=bottom]>[data-popper-arrow]{top:-5px}[data-popover][role=tooltip][data-popper-placement^=left]>[data-popper-arrow]{right:-5px}[data-popover][role=tooltip][data-popper-placement^=right]>[data-popper-arrow]{left:-5px}[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;border-color:#6b7280;border-radius:0;border-width:1px;font-size:1rem;line-height:1.5rem;padding:.5rem .75rem}[multiple]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=email]:focus,[type=month]:focus,[type=number]:focus,[type=password]:focus,[type=search]:focus,[type=tel]:focus,[type=text]:focus,[type=time]:focus,[type=url]:focus,[type=week]:focus,select:focus,textarea:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);border-color:#1c64f2;box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}input[type=time]::-webkit-calendar-picker-indicator{background:none}select:not([size]){background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E\");background-position:right .75rem center;background-repeat:no-repeat;background-size:.75em .75em;padding-right:2.5rem;print-color-adjust:exact}:is([dir=rtl]) select:not([size]){background-position:left .75rem center;padding-left:0;padding-right:.75rem}[multiple]{background-image:none;background-position:0 0;background-repeat:unset;background-size:initial;padding-right:.75rem;print-color-adjust:unset}[type=checkbox],[type=radio]{--tw-shadow:0 0 #0000;appearance:none;background-color:#fff;background-origin:border-box;border-color:#6b7280;border-width:1px;color:#1c64f2;display:inline-block;flex-shrink:0;height:1rem;padding:0;print-color-adjust:exact;user-select:none;vertical-align:middle;width:1rem}[type=checkbox]{border-radius:0}[type=radio]{border-radius:100%}[type=checkbox]:focus,[type=radio]:focus{--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#1c64f2;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);outline:2px solid transparent;outline-offset:2px}.dark [type=checkbox]:checked,.dark [type=radio]:checked,[type=checkbox]:checked,[type=radio]:checked{background-color:currentColor;background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent}[type=checkbox]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-size:.55em .55em;print-color-adjust:exact}.dark [type=radio]:checked,[type=radio]:checked{background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E\");background-size:1em 1em}[type=checkbox]:indeterminate{background-color:currentColor;background-image:url(\"data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M.5 6h14'/%3E%3C/svg%3E\");background-position:50%;background-repeat:no-repeat;background-size:.55em .55em;border-color:transparent;print-color-adjust:exact}[type=checkbox]:indeterminate:focus,[type=checkbox]:indeterminate:hover{background-color:currentColor;border-color:transparent}[type=file]{background:unset;border-color:inherit;border-radius:0;border-width:0;font-size:unset;line-height:inherit;padding:0}[type=file]:focus{outline:1px auto inherit}input[type=file]::file-selector-button{background:#1f2937;border:0;color:#fff;cursor:pointer;font-size:.875rem;font-weight:500;margin-inline-end:1rem;margin-inline-start:-1rem;padding:.625rem 1rem .625rem 2rem}input[type=file]::file-selector-button:hover{background:#374151}:is([dir=rtl]) input[type=file]::file-selector-button{padding-left:1rem;padding-right:2rem}.dark input[type=file]::file-selector-button{background:#4b5563;color:#fff}.dark input[type=file]::file-selector-button:hover{background:#6b7280}input[type=range]::-webkit-slider-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-webkit-slider-thumb{background:#9ca3af}.dark input[type=range]:disabled::-webkit-slider-thumb{background:#6b7280}input[type=range]:focus::-webkit-slider-thumb{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);--tw-ring-opacity:1px;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity));box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);outline:2px solid transparent;outline-offset:2px}input[type=range]::-moz-range-thumb{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:#1c64f2;border:0;border-radius:9999px;cursor:pointer;height:1.25rem;width:1.25rem}input[type=range]:disabled::-moz-range-thumb{background:#9ca3af}.dark input[type=range]:disabled::-moz-range-thumb{background:#6b7280}input[type=range]::-moz-range-progress{background:#3f83f8}input[type=range]::-ms-fill-lower{background:#3f83f8}input[type=range].range-sm::-webkit-slider-thumb{height:1rem;width:1rem}input[type=range].range-lg::-webkit-slider-thumb{height:1.5rem;width:1.5rem}input[type=range].range-sm::-moz-range-thumb{height:1rem;width:1rem}input[type=range].range-lg::-moz-range-thumb{height:1.5rem;width:1.5rem}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(63,131,248,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.sr-only{clip:rect(0,0,0,0);border-width:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.pointer-events-none{pointer-events:none}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.-inset-1{inset:-.25rem}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{bottom:0;top:0}.-left-\\[17px\\]{left:-17px}.-right-\\[16px\\]{right:-16px}.-right-\\[17px\\]{right:-17px}.-start-1\\.5{inset-inline-start:-.375rem}.-start-14{inset-inline-start:-3.5rem}.-start-3{inset-inline-start:-.75rem}.bottom-0{bottom:0}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.bottom-6{bottom:1.5rem}.end-0{inset-inline-end:0}.end-2\\.5{inset-inline-end:.625rem}.end-5{inset-inline-end:1.25rem}.end-6{inset-inline-end:1.5rem}.left-1\\/2{left:50%}.right-3{right:.75rem}.start-0{inset-inline-start:0}.start-1{inset-inline-start:.25rem}.start-1\\/2{inset-inline-start:50%}.start-2\\.5{inset-inline-start:.625rem}.start-5{inset-inline-start:1.25rem}.top-0{top:0}.top-1{top:.25rem}.top-1\\/2{top:50%}.top-2{top:.5rem}.top-3{top:.75rem}.top-4{top:1rem}.top-5{top:1.25rem}.top-6{top:1.5rem}.top-\\[124px\\]{top:124px}.top-\\[142px\\]{top:142px}.top-\\[178px\\]{top:178px}.top-\\[40px\\]{top:40px}.top-\\[72px\\]{top:72px}.top-\\[88px\\]{top:88px}.top-\\[calc\\(100\\%\\+1rem\\)\\]{top:calc(100% + 1rem)}.-z-10{z-index:-10}.z-0{z-index:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.col-span-3{grid-column:span 3/span 3}.col-span-4{grid-column:span 4/span 4}.m-0\\.5{margin:.125rem}.-mx-1\\.5{margin-left:-.375rem;margin-right:-.375rem}.-my-1\\.5{margin-bottom:-.375rem;margin-top:-.375rem}.mx-2{margin-left:.5rem;margin-right:.5rem}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-bottom:.25rem;margin-top:.25rem}.my-2{margin-bottom:.5rem;margin-top:.5rem}.my-8{margin-bottom:2rem;margin-top:2rem}.-mb-px{margin-bottom:-1px}.-me-1\\.5{margin-inline-end:-.375rem}.-ms-4{margin-inline-start:-1rem}.-mt-px{margin-top:-1px}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-\\[3px\\]{margin-bottom:3px}.mb-px{margin-bottom:1px}.me-1{margin-inline-end:.25rem}.me-2{margin-inline-end:.5rem}.me-3{margin-inline-end:.75rem}.me-4{margin-inline-end:1rem}.ml-1{margin-left:.25rem}.ml-2{margin-left:.5rem}.mr-2{margin-right:.5rem}.ms-1{margin-inline-start:.25rem}.ms-1\\.5{margin-inline-start:.375rem}.ms-2{margin-inline-start:.5rem}.ms-3{margin-inline-start:.75rem}.ms-4{margin-inline-start:1rem}.ms-6{margin-inline-start:1.5rem}.ms-auto{margin-inline-start:auto}.mt-1{margin-top:.25rem}.mt-1\\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mr-1{margin-right:.25rem}.line-clamp-6{-webkit-box-orient:vertical;-webkit-line-clamp:6;display:-webkit-box;overflow:hidden}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.\\!hidden{display:none!important}.hidden{display:none}.h-1{height:.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-2\\.5{height:.625rem}.h-20{height:5rem}.h-24{height:6rem}.h-3{height:.75rem}.h-3\\.5{height:.875rem}.h-36{height:9rem}.h-4{height:1rem}.h-48{height:12rem}.h-5{height:1.25rem}.h-56{height:14rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-7{height:1.75rem}.h-72{height:18rem}.h-8{height:2rem}.h-80{height:20rem}.h-9{height:2.25rem}.h-96{height:24rem}.h-\\[10px\\]{height:10px}.h-\\[140px\\]{height:140px}.h-\\[156px\\]{height:156px}.h-\\[172px\\]{height:172px}.h-\\[17px\\]{height:17px}.h-\\[18px\\]{height:18px}.h-\\[193px\\]{height:193px}.h-\\[213px\\]{height:213px}.h-\\[24px\\]{height:24px}.h-\\[32px\\]{height:32px}.h-\\[41px\\]{height:41px}.h-\\[426px\\]{height:426px}.h-\\[454px\\]{height:454px}.h-\\[46px\\]{height:46px}.h-\\[52px\\]{height:52px}.h-\\[55px\\]{height:55px}.h-\\[572px\\]{height:572px}.h-\\[5px\\]{height:5px}.h-\\[600px\\]{height:600px}.h-\\[63px\\]{height:63px}.h-\\[64px\\]{height:64px}.h-auto{height:auto}.h-fit{height:fit-content}.h-full{height:100%}.h-modal{height:calc(100% - 2rem)}.h-px{height:1px}.max-h-64{max-height:16rem}.max-h-full{max-height:100%}.min-h-\\[150px\\]{min-height:150px}.min-h-\\[2\\.4rem\\]{min-height:2.4rem}.min-h-\\[2\\.7rem\\]{min-height:2.7rem}.min-h-\\[3\\.2rem\\]{min-height:3.2rem}.min-h-\\[65vh\\]{min-height:65vh}.\\!w-full{width:100%!important}.w-1{width:.25rem}.w-1\\/2{width:50%}.w-10{width:2.5rem}.w-10\\/12{width:83.333333%}.w-11{width:2.75rem}.w-11\\/12{width:91.666667%}.w-12{width:3rem}.w-14{width:3.5rem}.w-2{width:.5rem}.w-2\\.5{width:.625rem}.w-2\\/4{width:50%}.w-20{width:5rem}.w-24{width:6rem}.w-3{width:.75rem}.w-3\\.5{width:.875rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-8{width:2rem}.w-8\\/12{width:66.666667%}.w-80{width:20rem}.w-9{width:2.25rem}.w-9\\/12{width:75%}.w-\\[10px\\]{width:10px}.w-\\[148px\\]{width:148px}.w-\\[188px\\]{width:188px}.w-\\[1px\\]{width:1px}.w-\\[208px\\]{width:208px}.w-\\[272px\\]{width:272px}.w-\\[300px\\]{width:300px}.w-\\[3px\\]{width:3px}.w-\\[52px\\]{width:52px}.w-\\[56px\\]{width:56px}.w-\\[6px\\]{width:6px}.w-\\[calc\\(100\\%-2rem\\)\\]{width:calc(100% - 2rem)}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-60{max-width:15rem}.max-w-7xl{max-width:80rem}.max-w-80{max-width:20rem}.max-w-\\[133px\\]{max-width:133px}.max-w-\\[301px\\]{max-width:301px}.max-w-\\[341px\\]{max-width:341px}.max-w-\\[351px\\]{max-width:351px}.max-w-\\[540px\\]{max-width:540px}.max-w-\\[640px\\]{max-width:640px}.max-w-\\[83px\\]{max-width:83px}.max-w-full{max-width:100%}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-screen-md{max-width:768px}.max-w-screen-xl{max-width:1280px}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.origin-left{transform-origin:left}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-x-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-x-1\\/3{--tw-translate-x:-33.333333%}.-translate-y-1\\/2{--tw-translate-y:-50%}.-translate-y-1\\/2,.-translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/3{--tw-translate-y:-33.333333%}.-translate-y-4{--tw-translate-y:-1rem}.-translate-y-4,.-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-6{--tw-translate-y:-1.5rem}.translate-x-1\\/3{--tw-translate-x:33.333333%}.translate-x-1\\/3,.translate-y-1\\/3{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-1\\/3{--tw-translate-y:33.333333%}.rotate-45{--tw-rotate:45deg}.rotate-45,.scale-75{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-75{--tw-scale-x:.75;--tw-scale-y:.75}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-not-allowed{cursor:not-allowed}.cursor-pointer{cursor:pointer}.list-inside{list-style-position:inside}.list-outside{list-style-position:outside}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.list-none{list-style-type:none}.appearance-none{appearance:none}.grid-flow-row{grid-auto-flow:row}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-row{flex-direction:row}.flex-row-reverse{flex-direction:row-reverse}.flex-col{flex-direction:column}.flex-col-reverse{flex-direction:column-reverse}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-start{justify-content:flex-start}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.gap-x-5{column-gap:1.25rem}.gap-y-1{row-gap:.25rem}.gap-y-4{row-gap:1rem}.-space-x-px>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(-1px*(1 - var(--tw-space-x-reverse)));margin-right:calc(-1px*var(--tw-space-x-reverse))}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.25rem*var(--tw-space-x-reverse))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.5rem*var(--tw-space-x-reverse))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.space-x-4>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1rem*var(--tw-space-x-reverse))}.space-x-6>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(1.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(1.5rem*var(--tw-space-x-reverse))}.space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.25rem*var(--tw-space-y-reverse));margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.5rem*var(--tw-space-y-reverse));margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)))}.space-y-2\\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.625rem*var(--tw-space-y-reverse));margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(1rem*var(--tw-space-y-reverse));margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(2rem*var(--tw-space-y-reverse));margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)))}.divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(1px*var(--tw-divide-y-reverse));border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)))}.divide-blue-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(164 202 254/var(--tw-divide-opacity))}.divide-gray-100>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(243 244 246/var(--tw-divide-opacity))}.divide-gray-200>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235/var(--tw-divide-opacity))}.divide-gray-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(209 213 219/var(--tw-divide-opacity))}.divide-gray-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(107 114 128/var(--tw-divide-opacity))}.divide-gray-700>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.divide-green-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(132 225 188/var(--tw-divide-opacity))}.divide-indigo-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(180 198 252/var(--tw-divide-opacity))}.divide-orange-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(253 186 140/var(--tw-divide-opacity))}.divide-pink-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 217/var(--tw-divide-opacity))}.divide-primary-500>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(146 93 254/var(--tw-divide-opacity))}.divide-purple-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(202 191 253/var(--tw-divide-opacity))}.divide-red-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(248 180 180/var(--tw-divide-opacity))}.divide-yellow-300>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(250 202 21/var(--tw-divide-opacity))}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overflow-y-scroll{overflow-y:scroll}.overscroll-contain{overscroll-behavior:contain}.overflow-ellipsis{text-overflow:ellipsis}.whitespace-normal{white-space:normal}.whitespace-nowrap{white-space:nowrap}.whitespace-pre{white-space:pre}.whitespace-pre-line{white-space:pre-line}.whitespace-pre-wrap{white-space:pre-wrap}.text-wrap{text-wrap:wrap}.\\!rounded-md{border-radius:.375rem!important}.rounded{border-radius:.25rem}.rounded-\\[2\\.5rem\\]{border-radius:2.5rem}.rounded-\\[2rem\\]{border-radius:2rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-sm{border-radius:.125rem}.rounded-xl{border-radius:.75rem}.rounded-b-\\[1rem\\]{border-bottom-left-radius:1rem;border-bottom-right-radius:1rem}.rounded-b-\\[2\\.5rem\\]{border-bottom-left-radius:2.5rem;border-bottom-right-radius:2.5rem}.rounded-b-lg{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.rounded-b-xl{border-bottom-left-radius:.75rem;border-bottom-right-radius:.75rem}.rounded-e-full{border-end-end-radius:9999px;border-start-end-radius:9999px}.rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.rounded-l{border-bottom-left-radius:.25rem;border-top-left-radius:.25rem}.rounded-l-lg{border-bottom-left-radius:.5rem;border-top-left-radius:.5rem}.rounded-r{border-bottom-right-radius:.25rem;border-top-right-radius:.25rem}.rounded-r-lg{border-bottom-right-radius:.5rem;border-top-right-radius:.5rem}.rounded-s-full{border-end-start-radius:9999px;border-start-start-radius:9999px}.rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.rounded-t-\\[2\\.5rem\\]{border-top-left-radius:2.5rem;border-top-right-radius:2.5rem}.rounded-t-lg{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.rounded-t-md{border-top-left-radius:.375rem;border-top-right-radius:.375rem}.rounded-t-sm{border-top-left-radius:.125rem;border-top-right-radius:.125rem}.rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.\\!border-0{border-width:0!important}.border{border-width:1px}.border-0{border-width:0}.border-2{border-width:2px}.border-\\[10px\\]{border-width:10px}.border-\\[14px\\]{border-width:14px}.border-\\[16px\\]{border-width:16px}.border-\\[8px\\]{border-width:8px}.border-x{border-left-width:1px;border-right-width:1px}.border-y{border-top-width:1px}.border-b,.border-y{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-e{border-inline-end-width:1px}.border-s{border-inline-start-width:1px}.border-s-4{border-inline-start-width:4px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-blue-300{--tw-border-opacity:1;border-color:rgb(164 202 254/var(--tw-border-opacity))}.border-blue-400{--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.border-blue-700{--tw-border-opacity:1;border-color:rgb(26 86 219/var(--tw-border-opacity))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246/var(--tw-border-opacity))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.border-gray-400{--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.border-gray-900{--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.border-green-300{--tw-border-opacity:1;border-color:rgb(132 225 188/var(--tw-border-opacity))}.border-green-400{--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.border-green-500{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.border-green-600{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.border-green-700{--tw-border-opacity:1;border-color:rgb(4 108 78/var(--tw-border-opacity))}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(180 198 252/var(--tw-border-opacity))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.border-inherit{border-color:inherit}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 140/var(--tw-border-opacity))}.border-pink-300{--tw-border-opacity:1;border-color:rgb(248 180 217/var(--tw-border-opacity))}.border-pink-400{--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.border-primary-400{--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.border-primary-500{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.border-primary-600{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.border-primary-700{--tw-border-opacity:1;border-color:rgb(105 40 235/var(--tw-border-opacity))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(202 191 253/var(--tw-border-opacity))}.border-purple-400{--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.border-purple-700{--tw-border-opacity:1;border-color:rgb(108 43 217/var(--tw-border-opacity))}.border-red-300{--tw-border-opacity:1;border-color:rgb(248 180 180/var(--tw-border-opacity))}.border-red-400{--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.border-red-500{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.border-red-600{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.border-red-700{--tw-border-opacity:1;border-color:rgb(200 30 30/var(--tw-border-opacity))}.border-transparent{border-color:transparent}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.border-yellow-300{--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(227 160 8/var(--tw-border-opacity))}.\\!bg-gray-50{--tw-bg-opacity:1!important;background-color:rgb(249 250 251/var(--tw-bg-opacity))!important}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.bg-blue-400{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(235 245 255/var(--tw-bg-opacity))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.bg-gray-400{--tw-bg-opacity:1;background-color:rgb(156 163 175/var(--tw-bg-opacity))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(222 247 236/var(--tw-bg-opacity))}.bg-green-400{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(243 250 247/var(--tw-bg-opacity))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.bg-green-700{--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.bg-green-800{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(229 237 255/var(--tw-bg-opacity))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(240 245 255/var(--tw-bg-opacity))}.bg-indigo-500{--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(88 80 236/var(--tw-bg-opacity))}.bg-indigo-800{--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.bg-inherit{background-color:inherit}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 248 241/var(--tw-bg-opacity))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(208 56 1/var(--tw-bg-opacity))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 232 243/var(--tw-bg-opacity))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248/var(--tw-bg-opacity))}.bg-pink-500{--tw-bg-opacity:1;background-color:rgb(231 70 148/var(--tw-bg-opacity))}.bg-pink-800{--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.bg-primary-100{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-200{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.bg-primary-400{--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.bg-primary-50{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.bg-primary-500{--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.bg-primary-700{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.bg-primary-800{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(237 235 254/var(--tw-bg-opacity))}.bg-purple-400{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(246 245 255/var(--tw-bg-opacity))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.bg-purple-800{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(253 232 232/var(--tw-bg-opacity))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(253 242 242/var(--tw-bg-opacity))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.bg-red-700{--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.bg-teal-500{--tw-bg-opacity:1;background-color:rgb(6 148 162/var(--tw-bg-opacity))}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.bg-white\\/30{background-color:hsla(0,0%,100%,.3)}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(253 246 178/var(--tw-bg-opacity))}.bg-yellow-300{--tw-bg-opacity:1;background-color:rgb(250 202 21/var(--tw-bg-opacity))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(253 253 234/var(--tw-bg-opacity))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.bg-yellow-600{--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-75{--tw-bg-opacity:0.75}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3f83f8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(63,131,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgba(34,211,238,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-green-400{--tw-gradient-from:#31c48d var(--tw-gradient-from-position);--tw-gradient-to:rgba(49,196,141,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-lime-200{--tw-gradient-from:#d9f99d var(--tw-gradient-from-position);--tw-gradient-to:hsla(81,88%,80%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-400{--tw-gradient-from:#f17eb8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(241,126,184,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-pink-500{--tw-gradient-from:#e74694 var(--tw-gradient-from-position);--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#9061f9 var(--tw-gradient-from-position);--tw-gradient-to:rgba(144,97,249,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#7e3af2 var(--tw-gradient-from-position);--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-200{--tw-gradient-from:#fbd5d5 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,83%,91%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-red-400{--tw-gradient-from:#f98080 var(--tw-gradient-from-position);--tw-gradient-to:hsla(0,91%,74%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-sky-400{--tw-gradient-from:#38bdf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(56,189,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-200{--tw-gradient-from:#afecef var(--tw-gradient-from-position);--tw-gradient-to:rgba(175,236,239,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-400{--tw-gradient-from:#16bdca var(--tw-gradient-from-position);--tw-gradient-to:rgba(22,189,202,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-blue-600{--tw-gradient-to:rgba(28,100,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#1c64f2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-cyan-500{--tw-gradient-to:rgba(6,182,212,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#06b6d4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-green-500{--tw-gradient-to:rgba(14,159,110,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0e9f6e var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-lime-400{--tw-gradient-to:rgba(163,230,53,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#a3e635 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-pink-500{--tw-gradient-to:rgba(231,70,148,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#e74694 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-purple-600{--tw-gradient-to:rgba(126,58,242,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#7e3af2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-300{--tw-gradient-to:hsla(0,83%,84%,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f8b4b4 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-red-500{--tw-gradient-to:rgba(240,82,82,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#f05252 var(--tw-gradient-via-position),var(--tw-gradient-to)}.via-teal-500{--tw-gradient-to:rgba(6,148,162,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#0694a2 var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3f83f8 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#1c64f2 var(--tw-gradient-to-position)}.to-blue-700{--tw-gradient-to:#1a56db var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-green-600{--tw-gradient-to:#057a55 var(--tw-gradient-to-position)}.to-lime-200{--tw-gradient-to:#d9f99d var(--tw-gradient-to-position)}.to-lime-500{--tw-gradient-to:#84cc16 var(--tw-gradient-to-position)}.to-orange-400{--tw-gradient-to:#ff8a4c var(--tw-gradient-to-position)}.to-pink-500{--tw-gradient-to:#e74694 var(--tw-gradient-to-position)}.to-pink-600{--tw-gradient-to:#d61f69 var(--tw-gradient-to-position)}.to-purple-700{--tw-gradient-to:#6c2bd9 var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#e02424 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#047481 var(--tw-gradient-to-position)}.to-yellow-200{--tw-gradient-to:#fce96a var(--tw-gradient-to-position)}.bg-clip-text{background-clip:text}.fill-blue-600{fill:#1c64f2}.fill-gray-600{fill:#4b5563}.fill-green-500{fill:#0e9f6e}.fill-pink-600{fill:#d61f69}.fill-primary-600{fill:#6e2eef}.fill-purple-600{fill:#7e3af2}.fill-red-600{fill:#e02424}.fill-white{fill:#fff}.fill-yellow-400{fill:#e3a008}.object-cover{object-fit:cover}.\\!p-0{padding:0!important}.\\!p-2{padding:.5rem!important}.\\!p-3{padding:.75rem!important}.p-0{padding:0}.p-0\\.5{padding:.125rem}.p-1{padding:.25rem}.p-1\\.5{padding:.375rem}.p-2{padding:.5rem}.p-2\\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.\\!px-0{padding-left:0!important;padding-right:0!important}.px-0{padding-left:0;padding-right:0}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0\\.5{padding-bottom:.125rem;padding-top:.125rem}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-1\\.5{padding-bottom:.375rem;padding-top:.375rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.py-2\\.5{padding-bottom:.625rem;padding-top:.625rem}.py-3{padding-bottom:.75rem;padding-top:.75rem}.py-3\\.5{padding-bottom:.875rem;padding-top:.875rem}.py-4{padding-bottom:1rem;padding-top:1rem}.py-5{padding-bottom:1.25rem;padding-top:1.25rem}.pb-1{padding-bottom:.25rem}.pb-1\\.5{padding-bottom:.375rem}.pb-2\\.5{padding-bottom:.625rem}.pe-10{padding-inline-end:2.5rem}.pe-11{padding-inline-end:2.75rem}.pe-2\\.5{padding-inline-end:.625rem}.pe-4{padding-inline-end:1rem}.pe-9{padding-inline-end:2.25rem}.pr-7{padding-right:1.75rem}.ps-10{padding-inline-start:2.5rem}.ps-11{padding-inline-start:2.75rem}.ps-2\\.5{padding-inline-start:.625rem}.ps-3{padding-inline-start:.75rem}.ps-4{padding-inline-start:1rem}.ps-9{padding-inline-start:2.25rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pb-3{padding-bottom:.75rem}.pb-2{padding-bottom:.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-justify{text-align:justify}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-8xl{font-size:6rem;line-height:1}.text-9xl{font-size:8rem;line-height:1}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-extralight{font-weight:200}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.font-thin{font-weight:100}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-6{line-height:1.5rem}.leading-9{line-height:2.25rem}.leading-loose{line-height:2}.leading-none{line-height:1}.leading-normal{line-height:1.5}.leading-relaxed{line-height:1.625}.tracking-normal{letter-spacing:0}.tracking-tight{letter-spacing:-.025em}.tracking-tighter{letter-spacing:-.05em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}.\\!text-gray-900{--tw-text-opacity:1!important;color:rgb(17 24 39/var(--tw-text-opacity))!important}.text-black{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.text-blue-100{--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.text-blue-50{--tw-text-opacity:1;color:rgb(235 245 255/var(--tw-text-opacity))}.text-blue-500{--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.text-blue-600{--tw-text-opacity:1;color:rgb(28 100 242/var(--tw-text-opacity))}.text-blue-700{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 66 159/var(--tw-text-opacity))}.text-blue-900{--tw-text-opacity:1;color:rgb(35 56 118/var(--tw-text-opacity))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.text-green-100{--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.text-green-500{--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.text-green-600{--tw-text-opacity:1;color:rgb(5 122 85/var(--tw-text-opacity))}.text-green-700{--tw-text-opacity:1;color:rgb(4 108 78/var(--tw-text-opacity))}.text-green-800{--tw-text-opacity:1;color:rgb(3 84 63/var(--tw-text-opacity))}.text-green-900{--tw-text-opacity:1;color:rgb(1 71 55/var(--tw-text-opacity))}.text-indigo-100{--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.text-indigo-500{--tw-text-opacity:1;color:rgb(104 117 245/var(--tw-text-opacity))}.text-indigo-800{--tw-text-opacity:1;color:rgb(66 56 157/var(--tw-text-opacity))}.text-orange-500{--tw-text-opacity:1;color:rgb(255 90 31/var(--tw-text-opacity))}.text-orange-800{--tw-text-opacity:1;color:rgb(138 44 13/var(--tw-text-opacity))}.text-pink-100{--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.text-pink-500{--tw-text-opacity:1;color:rgb(231 70 148/var(--tw-text-opacity))}.text-pink-800{--tw-text-opacity:1;color:rgb(153 21 75/var(--tw-text-opacity))}.text-primary-100{--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.text-primary-500{--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.text-primary-800{--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.text-primary-900{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.text-purple-100{--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.text-purple-500{--tw-text-opacity:1;color:rgb(144 97 249/var(--tw-text-opacity))}.text-purple-600{--tw-text-opacity:1;color:rgb(126 58 242/var(--tw-text-opacity))}.text-purple-700{--tw-text-opacity:1;color:rgb(108 43 217/var(--tw-text-opacity))}.text-purple-800{--tw-text-opacity:1;color:rgb(85 33 181/var(--tw-text-opacity))}.text-purple-900{--tw-text-opacity:1;color:rgb(74 29 150/var(--tw-text-opacity))}.text-red-100{--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.text-red-500{--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(224 36 36/var(--tw-text-opacity))}.text-red-700{--tw-text-opacity:1;color:rgb(200 30 30/var(--tw-text-opacity))}.text-red-800{--tw-text-opacity:1;color:rgb(155 28 28/var(--tw-text-opacity))}.text-red-900{--tw-text-opacity:1;color:rgb(119 29 29/var(--tw-text-opacity))}.text-teal-600{--tw-text-opacity:1;color:rgb(4 116 129/var(--tw-text-opacity))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.text-yellow-100{--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.text-yellow-400{--tw-text-opacity:1;color:rgb(227 160 8/var(--tw-text-opacity))}.text-yellow-500{--tw-text-opacity:1;color:rgb(194 120 3/var(--tw-text-opacity))}.text-yellow-800{--tw-text-opacity:1;color:rgb(114 59 19/var(--tw-text-opacity))}.text-yellow-900{--tw-text-opacity:1;color:rgb(99 49 18/var(--tw-text-opacity))}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-blue-400{text-decoration-color:#76a9fa}.decoration-2{text-decoration-thickness:2px}.placeholder-green-700::placeholder{--tw-placeholder-opacity:1;color:rgb(4 108 78/var(--tw-placeholder-opacity))}.placeholder-red-700::placeholder{--tw-placeholder-opacity:1;color:rgb(200 30 30/var(--tw-placeholder-opacity))}.opacity-100{opacity:1}.opacity-30{opacity:.3}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-inner{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgba(0,0,0,.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-md{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.shadow-blue-500\\/50{--tw-shadow-color:rgba(63,131,248,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-blue-700{--tw-shadow-color:#1a56db;--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-500\\/50{--tw-shadow-color:rgba(6,182,212,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-300{--tw-shadow-color:#d1d5db;--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-500\\/50{--tw-shadow-color:hsla(220,9%,46%,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-gray-800{--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.shadow-green-500\\/50{--tw-shadow-color:rgba(14,159,110,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-green-700{--tw-shadow-color:#046c4e;--tw-shadow:var(--tw-shadow-colored)}.shadow-lime-500\\/50{--tw-shadow-color:rgba(132,204,22,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-pink-500\\/50{--tw-shadow-color:rgba(231,70,148,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-500\\/50{--tw-shadow-color:rgba(146,93,254,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-primary-700{--tw-shadow-color:#6928eb;--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\\/50{--tw-shadow-color:rgba(144,97,249,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-700{--tw-shadow-color:#6c2bd9;--tw-shadow:var(--tw-shadow-colored)}.shadow-red-500\\/50{--tw-shadow-color:rgba(240,82,82,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-red-700{--tw-shadow-color:#c81e1e;--tw-shadow:var(--tw-shadow-colored)}.shadow-teal-500\\/50{--tw-shadow-color:rgba(6,148,162,.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500{--tw-shadow-color:#c27803;--tw-shadow:var(--tw-shadow-colored)}.shadow-yellow-500\\/50{--tw-shadow-color:rgba(194,120,3,.5);--tw-shadow:var(--tw-shadow-colored)}.\\!outline{outline-style:solid!important}.outline{outline-style:solid}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-2,.ring-8{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-8{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(8px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-gray-300{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.ring-primary-500{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition-transform{transition-duration:.15s;transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1)}.duration-300{transition-duration:.3s}.duration-75{transition-duration:75ms}.ease-in{transition-timing-function:cubic-bezier(.4,0,1,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}:root{--text:#000;--bg-primary:#fff;--bg-secondary:#fff}.\\*\\:me-0>*{margin-inline-end:0}.first-letter\\:float-left:first-letter{float:left}.first-letter\\:me-3:first-letter{margin-inline-end:.75rem}.first-letter\\:text-7xl:first-letter{font-size:4.5rem;line-height:1}.first-letter\\:font-bold:first-letter{font-weight:700}.first-letter\\:text-gray-900:first-letter{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.first-line\\:uppercase:first-line{text-transform:uppercase}.first-line\\:tracking-widest:first-line{letter-spacing:.1em}.before\\:absolute:before{content:var(--tw-content);position:absolute}.before\\:end-0:before{content:var(--tw-content);inset-inline-end:0}.before\\:z-10:before{content:var(--tw-content);z-index:10}.before\\:block:before{content:var(--tw-content);display:block}.before\\:h-full:before{content:var(--tw-content);height:100%}.before\\:shadow-\\[-10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:before{--tw-shadow:-10px 0 50px 65px #fff;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.before\\:content-\\[\\'\\'\\]:before{--tw-content:\"\";content:var(--tw-content)}.after\\:absolute:after{content:var(--tw-content);position:absolute}.after\\:start-\\[2px\\]:after{content:var(--tw-content);inset-inline-start:2px}.after\\:start-\\[4px\\]:after{content:var(--tw-content);inset-inline-start:4px}.after\\:top-0\\.5:after{content:var(--tw-content);top:.125rem}.after\\:top-\\[2px\\]:after{content:var(--tw-content);top:2px}.after\\:z-10:after{content:var(--tw-content);z-index:10}.after\\:block:after{content:var(--tw-content);display:block}.after\\:h-4:after{content:var(--tw-content);height:1rem}.after\\:h-5:after{content:var(--tw-content);height:1.25rem}.after\\:h-6:after{content:var(--tw-content);height:1.5rem}.after\\:h-full:after{content:var(--tw-content);height:100%}.after\\:w-4:after{content:var(--tw-content);width:1rem}.after\\:w-5:after{content:var(--tw-content);width:1.25rem}.after\\:w-6:after{content:var(--tw-content);width:1.5rem}.after\\:rounded-full:after{border-radius:9999px;content:var(--tw-content)}.after\\:border:after{border-width:1px;content:var(--tw-content)}.after\\:border-gray-300:after{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity));content:var(--tw-content)}.after\\:bg-white:after{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity));content:var(--tw-content)}.after\\:shadow-\\[10px_0_50px_65px_rgba\\(256\\2c 256\\2c 256\\2c 1\\)\\]:after{--tw-shadow:10px 0 50px 65px #fff;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.after\\:transition-all:after{content:var(--tw-content);transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.after\\:content-\\[\\'\\'\\]:after{--tw-content:\"\";content:var(--tw-content)}.first\\:rounded-s-full:first-child{border-end-start-radius:9999px;border-start-start-radius:9999px}.first\\:rounded-s-lg:first-child{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.first\\:rounded-t-lg:first-child{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.last\\:me-0:last-child{margin-inline-end:0}.last\\:rounded-b-lg:last-child{border-bottom-left-radius:.5rem;border-bottom-right-radius:.5rem}.last\\:rounded-e-full:last-child{border-end-end-radius:9999px;border-start-end-radius:9999px}.last\\:rounded-e-lg:last-child{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.last\\:border-b-0:last-child{border-bottom-width:0}.odd\\:bg-blue-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:bg-green-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:bg-purple-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:bg-red-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:bg-white:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.odd\\:bg-yellow-800:nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:bg-blue-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:bg-gray-50:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.even\\:bg-green-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:bg-purple-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:bg-red-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:bg-yellow-700:nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.focus-within\\:z-10:focus-within{z-index:10}.focus-within\\:border-primary-500:focus-within{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus-within\\:bg-gray-900:focus-within{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.focus-within\\:text-primary-700:focus-within{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus-within\\:text-white:focus-within{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.focus-within\\:outline-none:focus-within{outline:2px solid transparent;outline-offset:2px}.focus-within\\:ring-1:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-2:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-4:focus-within{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus-within\\:ring-blue-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus-within\\:ring-gray-200:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus-within\\:ring-gray-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus-within\\:ring-green-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus-within\\:ring-primary-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus-within\\:ring-purple-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus-within\\:ring-red-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus-within\\:ring-yellow-300:focus-within{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.hover\\:border-gray-300:hover{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.hover\\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(225 239 254/var(--tw-bg-opacity))}.hover\\:bg-blue-200:hover{--tw-bg-opacity:1;background-color:rgb(195 221 253/var(--tw-bg-opacity))}.hover\\:bg-blue-400:hover{--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.hover\\:bg-blue-800:hover{--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.hover\\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.hover\\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.hover\\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.hover\\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.hover\\:bg-gray-900:hover{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.hover\\:bg-green-200:hover{--tw-bg-opacity:1;background-color:rgb(188 240 218/var(--tw-bg-opacity))}.hover\\:bg-green-400:hover{--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.hover\\:bg-green-800:hover{--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.hover\\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(205 219 254/var(--tw-bg-opacity))}.hover\\:bg-pink-200:hover{--tw-bg-opacity:1;background-color:rgb(250 209 232/var(--tw-bg-opacity))}.hover\\:bg-primary-100:hover{--tw-bg-opacity:1;background-color:rgb(245 240 255/var(--tw-bg-opacity))}.hover\\:bg-primary-200:hover{--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.hover\\:bg-primary-700:hover{--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.hover\\:bg-primary-800:hover{--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.hover\\:bg-purple-200:hover{--tw-bg-opacity:1;background-color:rgb(220 215 254/var(--tw-bg-opacity))}.hover\\:bg-purple-400:hover{--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.hover\\:bg-purple-800:hover{--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.hover\\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(251 213 213/var(--tw-bg-opacity))}.hover\\:bg-red-400:hover{--tw-bg-opacity:1;background-color:rgb(249 128 128/var(--tw-bg-opacity))}.hover\\:bg-red-800:hover{--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.hover\\:bg-transparent:hover{background-color:transparent}.hover\\:bg-yellow-200:hover{--tw-bg-opacity:1;background-color:rgb(252 233 106/var(--tw-bg-opacity))}.hover\\:bg-yellow-400:hover{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.hover\\:bg-yellow-500:hover{--tw-bg-opacity:1;background-color:rgb(194 120 3/var(--tw-bg-opacity))}.hover\\:bg-gradient-to-bl:hover{background-image:linear-gradient(to bottom left,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-br:hover{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.hover\\:bg-gradient-to-l:hover{background-image:linear-gradient(to left,var(--tw-gradient-stops))}.hover\\:\\!text-inherit:hover{color:inherit!important}.hover\\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity))}.hover\\:text-blue-700:hover{--tw-text-opacity:1;color:rgb(26 86 219/var(--tw-text-opacity))}.hover\\:text-gray-600:hover{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.hover\\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.hover\\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.hover\\:text-primary-600:hover{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.hover\\:text-primary-900:hover{--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.hover\\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.hover\\:underline:hover{text-decoration-line:underline}.focus\\:z-40:focus{z-index:40}.focus\\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.focus\\:border-gray-200:focus{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity))}.focus\\:border-green-500:focus{--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.focus\\:border-green-600:focus{--tw-border-opacity:1;border-color:rgb(5 122 85/var(--tw-border-opacity))}.focus\\:border-primary-500:focus{--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.focus\\:border-primary-600:focus{--tw-border-opacity:1;border-color:rgb(110 46 239/var(--tw-border-opacity))}.focus\\:border-red-500:focus{--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.focus\\:border-red-600:focus{--tw-border-opacity:1;border-color:rgb(224 36 36/var(--tw-border-opacity))}.focus\\:text-primary-700:focus{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\\:ring-0:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-0:focus,.focus\\:ring-1:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-2:focus,.focus\\:ring-4:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\\:ring-4:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\\:ring-blue-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.focus\\:ring-blue-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(118 169 250/var(--tw-ring-opacity))}.focus\\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.focus\\:ring-cyan-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(103 232 249/var(--tw-ring-opacity))}.focus\\:ring-gray-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(229 231 235/var(--tw-ring-opacity))}.focus\\:ring-gray-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(209 213 219/var(--tw-ring-opacity))}.focus\\:ring-gray-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(156 163 175/var(--tw-ring-opacity))}.focus\\:ring-green-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(188 240 218/var(--tw-ring-opacity))}.focus\\:ring-green-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.focus\\:ring-green-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(49 196 141/var(--tw-ring-opacity))}.focus\\:ring-green-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.focus\\:ring-indigo-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(141 162 251/var(--tw-ring-opacity))}.focus\\:ring-lime-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(217 249 157/var(--tw-ring-opacity))}.focus\\:ring-lime-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(190 242 100/var(--tw-ring-opacity))}.focus\\:ring-orange-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(255 90 31/var(--tw-ring-opacity))}.focus\\:ring-pink-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(250 209 232/var(--tw-ring-opacity))}.focus\\:ring-pink-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 217/var(--tw-ring-opacity))}.focus\\:ring-pink-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(241 126 184/var(--tw-ring-opacity))}.focus\\:ring-primary-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.focus\\:ring-primary-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(201 173 255/var(--tw-ring-opacity))}.focus\\:ring-primary-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.focus\\:ring-primary-700:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(105 40 235/var(--tw-ring-opacity))}.focus\\:ring-purple-200:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(220 215 254/var(--tw-ring-opacity))}.focus\\:ring-purple-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.focus\\:ring-purple-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(172 148 250/var(--tw-ring-opacity))}.focus\\:ring-purple-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(144 97 249/var(--tw-ring-opacity))}.focus\\:ring-red-100:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(253 232 232/var(--tw-ring-opacity))}.focus\\:ring-red-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.focus\\:ring-red-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.focus\\:ring-red-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.focus\\:ring-teal-300:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.focus\\:ring-teal-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(6 148 162/var(--tw-ring-opacity))}.focus\\:ring-yellow-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(227 160 8/var(--tw-ring-opacity))}.focus\\:ring-yellow-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(194 120 3/var(--tw-ring-opacity))}.focus-visible\\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}.disabled\\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\\:text-gray-400:disabled{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.disabled\\:opacity-50:disabled{opacity:.5}.group:first-child .group-first\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.group:first-child .group-first\\:rounded-t-xl{border-top-left-radius:.75rem;border-top-right-radius:.75rem}.group:first-child .group-first\\:border-t{border-top-width:1px}.group:last-child .group-last\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.group:hover .group-hover\\:rotate-45{--tw-rotate:45deg;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\\:bg-white\\/50{background-color:hsla(0,0%,100%,.5)}.group:hover .group-hover\\:\\!bg-opacity-0{--tw-bg-opacity:0!important}.group:hover .group-hover\\:\\!text-inherit{color:inherit!important}.group:hover .group-hover\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.group:focus .group-focus\\:outline-none{outline:2px solid transparent;outline-offset:2px}.group:focus .group-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.group:focus .group-focus\\:ring-white{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255/var(--tw-ring-opacity))}.peer:checked~.peer-checked\\:bg-blue-600{--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-green-600{--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-orange-500{--tw-bg-opacity:1;background-color:rgb(255 90 31/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-primary-600{--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-purple-600{--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-red-600{--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-teal-600{--tw-bg-opacity:1;background-color:rgb(4 116 129/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.peer:checked~.peer-checked\\:after\\:translate-x-full:after{--tw-translate-x:100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:checked~.peer-checked\\:after\\:border-white:after{--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity));content:var(--tw-content)}.peer:placeholder-shown~.peer-placeholder-shown\\:top-1\\/2{top:50%}.peer:placeholder-shown~.peer-placeholder-shown\\:-translate-y-1\\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:placeholder-shown~.peer-placeholder-shown\\:scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:start-0{inset-inline-start:0}.peer:focus~.peer-focus\\:top-2{top:.5rem}.peer:focus~.peer-focus\\:-translate-y-4{--tw-translate-y:-1rem}.peer:focus~.peer-focus\\:-translate-y-4,.peer:focus~.peer-focus\\:-translate-y-6{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:-translate-y-6{--tw-translate-y:-1.5rem}.peer:focus~.peer-focus\\:scale-75{--tw-scale-x:.75;--tw-scale-y:.75;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.peer:focus~.peer-focus\\:px-2{padding-left:.5rem;padding-right:.5rem}.peer:focus~.peer-focus\\:text-primary-600{--tw-text-opacity:1;color:rgb(110 46 239/var(--tw-text-opacity))}.peer:focus~.peer-focus\\:ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.peer:focus~.peer-focus\\:ring-blue-300{--tw-ring-opacity:1;--tw-ring-color:rgb(164 202 254/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-green-300{--tw-ring-opacity:1;--tw-ring-color:rgb(132 225 188/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-orange-300{--tw-ring-opacity:1;--tw-ring-color:rgb(253 186 140/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-primary-300{--tw-ring-opacity:1;--tw-ring-color:rgb(221 204 255/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-purple-300{--tw-ring-opacity:1;--tw-ring-color:rgb(202 191 253/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-red-300{--tw-ring-opacity:1;--tw-ring-color:rgb(248 180 180/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-teal-300{--tw-ring-opacity:1;--tw-ring-color:rgb(126 220 226/var(--tw-ring-opacity))}.peer:focus~.peer-focus\\:ring-yellow-300{--tw-ring-opacity:1;--tw-ring-color:rgb(250 202 21/var(--tw-ring-opacity))}.dark\\:block:is(.dark *){display:block}.dark\\:hidden:is(.dark *){display:none}.dark\\:divide-blue-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(30 66 159/var(--tw-divide-opacity))}.dark\\:divide-gray-600:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(75 85 99/var(--tw-divide-opacity))}.dark\\:divide-gray-700:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(55 65 81/var(--tw-divide-opacity))}.dark\\:divide-gray-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(31 41 55/var(--tw-divide-opacity))}.dark\\:divide-green-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(3 84 63/var(--tw-divide-opacity))}.dark\\:divide-indigo-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(66 56 157/var(--tw-divide-opacity))}.dark\\:divide-orange-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(138 44 13/var(--tw-divide-opacity))}.dark\\:divide-pink-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(153 21 75/var(--tw-divide-opacity))}.dark\\:divide-primary-200:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(235 224 255/var(--tw-divide-opacity))}.dark\\:divide-purple-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(85 33 181/var(--tw-divide-opacity))}.dark\\:divide-red-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(155 28 28/var(--tw-divide-opacity))}.dark\\:divide-yellow-800:is(.dark *)>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(114 59 19/var(--tw-divide-opacity))}.dark\\:\\!border-gray-600:is(.dark *){--tw-border-opacity:1!important;border-color:rgb(75 85 99/var(--tw-border-opacity))!important}.dark\\:border-blue-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(118 169 250/var(--tw-border-opacity))}.dark\\:border-blue-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:border-blue-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 66 159/var(--tw-border-opacity))}.dark\\:border-gray-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(156 163 175/var(--tw-border-opacity))}.dark\\:border-gray-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:border-gray-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-gray-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:border-gray-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(31 41 55/var(--tw-border-opacity))}.dark\\:border-gray-900:is(.dark *){--tw-border-opacity:1;border-color:rgb(17 24 39/var(--tw-border-opacity))}.dark\\:border-green-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(49 196 141/var(--tw-border-opacity))}.dark\\:border-green-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:border-green-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(3 84 63/var(--tw-border-opacity))}.dark\\:border-indigo-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(141 162 251/var(--tw-border-opacity))}.dark\\:border-indigo-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(66 56 157/var(--tw-border-opacity))}.dark\\:border-orange-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(138 44 13/var(--tw-border-opacity))}.dark\\:border-pink-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(241 126 184/var(--tw-border-opacity))}.dark\\:border-pink-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(153 21 75/var(--tw-border-opacity))}.dark\\:border-primary-200:is(.dark *){--tw-border-opacity:1;border-color:rgb(235 224 255/var(--tw-border-opacity))}.dark\\:border-primary-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(201 173 255/var(--tw-border-opacity))}.dark\\:border-primary-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:border-purple-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(172 148 250/var(--tw-border-opacity))}.dark\\:border-purple-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(85 33 181/var(--tw-border-opacity))}.dark\\:border-red-400:is(.dark *){--tw-border-opacity:1;border-color:rgb(249 128 128/var(--tw-border-opacity))}.dark\\:border-red-500:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:border-red-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(155 28 28/var(--tw-border-opacity))}.dark\\:border-white:is(.dark *){--tw-border-opacity:1;border-color:rgb(255 255 255/var(--tw-border-opacity))}.dark\\:border-yellow-300:is(.dark *){--tw-border-opacity:1;border-color:rgb(250 202 21/var(--tw-border-opacity))}.dark\\:border-yellow-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(114 59 19/var(--tw-border-opacity))}.dark\\:border-e-gray-600:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:border-e-gray-700:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(55 65 81/var(--tw-border-opacity))}.dark\\:\\!bg-gray-700:is(.dark *){--tw-bg-opacity:1!important;background-color:rgb(55 65 81/var(--tw-bg-opacity))!important}.dark\\:bg-blue-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(118 169 250/var(--tw-bg-opacity))}.dark\\:bg-blue-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(63 131 248/var(--tw-bg-opacity))}.dark\\:bg-blue-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:bg-blue-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:bg-blue-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(35 56 118/var(--tw-bg-opacity))}.dark\\:bg-gray-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(229 231 235/var(--tw-bg-opacity))}.dark\\:bg-gray-300:is(.dark *){--tw-bg-opacity:1;background-color:rgb(209 213 219/var(--tw-bg-opacity))}.dark\\:bg-gray-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(107 114 128/var(--tw-bg-opacity))}.dark\\:bg-gray-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:bg-gray-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:bg-gray-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:bg-gray-800\\/30:is(.dark *){background-color:rgba(31,41,55,.3)}.dark\\:bg-gray-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}.dark\\:bg-green-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(49 196 141/var(--tw-bg-opacity))}.dark\\:bg-green-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(14 159 110/var(--tw-bg-opacity))}.dark\\:bg-green-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:bg-green-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:bg-green-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(1 71 55/var(--tw-bg-opacity))}.dark\\:bg-indigo-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(141 162 251/var(--tw-bg-opacity))}.dark\\:bg-indigo-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(104 117 245/var(--tw-bg-opacity))}.dark\\:bg-indigo-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:bg-indigo-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(54 47 120/var(--tw-bg-opacity))}.dark\\:bg-inherit:is(.dark *){background-color:inherit}.dark\\:bg-orange-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(138 44 13/var(--tw-bg-opacity))}.dark\\:bg-pink-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(241 126 184/var(--tw-bg-opacity))}.dark\\:bg-pink-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(191 18 93/var(--tw-bg-opacity))}.dark\\:bg-pink-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(117 26 61/var(--tw-bg-opacity))}.dark\\:bg-primary-200:is(.dark *){--tw-bg-opacity:1;background-color:rgb(235 224 255/var(--tw-bg-opacity))}.dark\\:bg-primary-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(201 173 255/var(--tw-bg-opacity))}.dark\\:bg-primary-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:bg-primary-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:bg-primary-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:bg-primary-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(73 27 165/var(--tw-bg-opacity))}.dark\\:bg-purple-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(172 148 250/var(--tw-bg-opacity))}.dark\\:bg-purple-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:bg-purple-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(126 58 242/var(--tw-bg-opacity))}.dark\\:bg-purple-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:bg-purple-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(74 29 150/var(--tw-bg-opacity))}.dark\\:bg-red-500:is(.dark *){--tw-bg-opacity:1;background-color:rgb(240 82 82/var(--tw-bg-opacity))}.dark\\:bg-red-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:bg-red-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:bg-red-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(119 29 29/var(--tw-bg-opacity))}.dark\\:bg-transparent:is(.dark *){background-color:transparent}.dark\\:bg-yellow-400:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:bg-yellow-600:is(.dark *){--tw-bg-opacity:1;background-color:rgb(159 88 10/var(--tw-bg-opacity))}.dark\\:bg-yellow-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.dark\\:bg-yellow-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(99 49 18/var(--tw-bg-opacity))}.dark\\:bg-opacity-80:is(.dark *){--tw-bg-opacity:0.8}.dark\\:fill-gray-300:is(.dark *){fill:#d1d5db}.dark\\:\\!text-white:is(.dark *){--tw-text-opacity:1!important;color:rgb(255 255 255/var(--tw-text-opacity))!important}.dark\\:text-blue-100:is(.dark *){--tw-text-opacity:1;color:rgb(225 239 254/var(--tw-text-opacity))}.dark\\:text-blue-200:is(.dark *){--tw-text-opacity:1;color:rgb(195 221 253/var(--tw-text-opacity))}.dark\\:text-blue-300:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:text-blue-400:is(.dark *){--tw-text-opacity:1;color:rgb(118 169 250/var(--tw-text-opacity))}.dark\\:text-blue-500:is(.dark *){--tw-text-opacity:1;color:rgb(63 131 248/var(--tw-text-opacity))}.dark\\:text-gray-100:is(.dark *){--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:text-gray-200:is(.dark *){--tw-text-opacity:1;color:rgb(229 231 235/var(--tw-text-opacity))}.dark\\:text-gray-300:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:text-gray-400:is(.dark *){--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity))}.dark\\:text-gray-500:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.dark\\:text-gray-600:is(.dark *){--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity))}.dark\\:text-gray-700:is(.dark *){--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.dark\\:text-gray-900:is(.dark *){--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity))}.dark\\:text-green-100:is(.dark *){--tw-text-opacity:1;color:rgb(222 247 236/var(--tw-text-opacity))}.dark\\:text-green-200:is(.dark *){--tw-text-opacity:1;color:rgb(188 240 218/var(--tw-text-opacity))}.dark\\:text-green-300:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:text-green-400:is(.dark *){--tw-text-opacity:1;color:rgb(49 196 141/var(--tw-text-opacity))}.dark\\:text-green-500:is(.dark *){--tw-text-opacity:1;color:rgb(14 159 110/var(--tw-text-opacity))}.dark\\:text-indigo-100:is(.dark *){--tw-text-opacity:1;color:rgb(229 237 255/var(--tw-text-opacity))}.dark\\:text-indigo-200:is(.dark *){--tw-text-opacity:1;color:rgb(205 219 254/var(--tw-text-opacity))}.dark\\:text-indigo-300:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:text-indigo-400:is(.dark *){--tw-text-opacity:1;color:rgb(141 162 251/var(--tw-text-opacity))}.dark\\:text-orange-400:is(.dark *){--tw-text-opacity:1;color:rgb(255 138 76/var(--tw-text-opacity))}.dark\\:text-pink-100:is(.dark *){--tw-text-opacity:1;color:rgb(252 232 243/var(--tw-text-opacity))}.dark\\:text-pink-200:is(.dark *){--tw-text-opacity:1;color:rgb(250 209 232/var(--tw-text-opacity))}.dark\\:text-pink-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:text-pink-400:is(.dark *){--tw-text-opacity:1;color:rgb(241 126 184/var(--tw-text-opacity))}.dark\\:text-primary-100:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:text-primary-200:is(.dark *){--tw-text-opacity:1;color:rgb(235 224 255/var(--tw-text-opacity))}.dark\\:text-primary-300:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:text-primary-400:is(.dark *){--tw-text-opacity:1;color:rgb(201 173 255/var(--tw-text-opacity))}.dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.dark\\:text-primary-700:is(.dark *){--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.dark\\:text-primary-800:is(.dark *){--tw-text-opacity:1;color:rgb(92 35 205/var(--tw-text-opacity))}.dark\\:text-primary-900:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:text-purple-100:is(.dark *){--tw-text-opacity:1;color:rgb(237 235 254/var(--tw-text-opacity))}.dark\\:text-purple-200:is(.dark *){--tw-text-opacity:1;color:rgb(220 215 254/var(--tw-text-opacity))}.dark\\:text-purple-300:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(172 148 250/var(--tw-text-opacity))}.dark\\:text-red-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 232 232/var(--tw-text-opacity))}.dark\\:text-red-200:is(.dark *){--tw-text-opacity:1;color:rgb(251 213 213/var(--tw-text-opacity))}.dark\\:text-red-300:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:text-red-400:is(.dark *){--tw-text-opacity:1;color:rgb(249 128 128/var(--tw-text-opacity))}.dark\\:text-red-500:is(.dark *){--tw-text-opacity:1;color:rgb(240 82 82/var(--tw-text-opacity))}.dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:text-yellow-100:is(.dark *){--tw-text-opacity:1;color:rgb(253 246 178/var(--tw-text-opacity))}.dark\\:text-yellow-200:is(.dark *){--tw-text-opacity:1;color:rgb(252 233 106/var(--tw-text-opacity))}.dark\\:text-yellow-300:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:decoration-blue-600:is(.dark *){text-decoration-color:#1c64f2}.dark\\:placeholder-gray-400:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(156 163 175/var(--tw-placeholder-opacity))}.dark\\:placeholder-green-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(14 159 110/var(--tw-placeholder-opacity))}.dark\\:placeholder-red-500:is(.dark *)::placeholder{--tw-placeholder-opacity:1;color:rgb(240 82 82/var(--tw-placeholder-opacity))}.dark\\:opacity-25:is(.dark *){opacity:.25}.dark\\:shadow-blue-800:is(.dark *){--tw-shadow-color:#1e429f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-blue-800\\/80:is(.dark *){--tw-shadow-color:rgba(30,66,159,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-cyan-800\\/80:is(.dark *){--tw-shadow-color:rgba(21,94,117,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-700:is(.dark *){--tw-shadow-color:#374151;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800:is(.dark *){--tw-shadow-color:#1f2937;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-800\\/80:is(.dark *){--tw-shadow-color:rgba(31,41,55,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-gray-900:is(.dark *){--tw-shadow-color:#111827;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800:is(.dark *){--tw-shadow-color:#03543f;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-green-800\\/80:is(.dark *){--tw-shadow-color:rgba(3,84,63,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-lime-800\\/80:is(.dark *){--tw-shadow-color:rgba(63,98,18,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-pink-800\\/80:is(.dark *){--tw-shadow-color:rgba(153,21,75,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800:is(.dark *){--tw-shadow-color:#5c23cd;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-primary-800\\/80:is(.dark *){--tw-shadow-color:rgba(92,35,205,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800:is(.dark *){--tw-shadow-color:#5521b5;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-purple-800\\/80:is(.dark *){--tw-shadow-color:rgba(85,33,181,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800:is(.dark *){--tw-shadow-color:#9b1c1c;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-red-800\\/80:is(.dark *){--tw-shadow-color:rgba(155,28,28,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-teal-800\\/80:is(.dark *){--tw-shadow-color:rgba(5,80,92,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-700:is(.dark *){--tw-shadow-color:#8e4b10;--tw-shadow:var(--tw-shadow-colored)}.dark\\:shadow-yellow-800\\/80:is(.dark *){--tw-shadow-color:rgba(114,59,19,.8);--tw-shadow:var(--tw-shadow-colored)}.dark\\:ring-gray-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:ring-gray-900:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(17 24 39/var(--tw-ring-opacity))}.dark\\:ring-primary-500:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:ring-offset-gray-800:is(.dark *){--tw-ring-offset-color:#1f2937}.dark\\:first-letter\\:text-gray-100:is(.dark *):first-letter{--tw-text-opacity:1;color:rgb(243 244 246/var(--tw-text-opacity))}.dark\\:before\\:shadow-\\[-10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):before{--tw-shadow:-10px 0 50px 65px #101827;--tw-shadow-colored:-10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:after\\:shadow-\\[10px_0_50px_65px_rgba\\(16\\2c 24\\2c 39\\2c 1\\)\\]:is(.dark *):after{--tw-shadow:10px 0 50px 65px #101827;--tw-shadow-colored:10px 0 50px 65px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);content:var(--tw-content)}.dark\\:last\\:border-e-gray-500:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:last\\:border-e-gray-600:last-child:is(.dark *){--tw-border-opacity:1;border-inline-end-color:rgb(75 85 99/var(--tw-border-opacity))}.odd\\:dark\\:bg-blue-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.odd\\:dark\\:bg-gray-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.odd\\:dark\\:bg-green-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.odd\\:dark\\:bg-purple-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.odd\\:dark\\:bg-red-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.odd\\:dark\\:bg-yellow-800:is(.dark *):nth-child(odd){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.even\\:dark\\:bg-blue-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.even\\:dark\\:bg-gray-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.even\\:dark\\:bg-green-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.even\\:dark\\:bg-purple-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.even\\:dark\\:bg-red-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.even\\:dark\\:bg-yellow-700:is(.dark *):nth-child(2n){--tw-bg-opacity:1;background-color:rgb(142 75 16/var(--tw-bg-opacity))}.dark\\:focus-within\\:border-primary-500:focus-within:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus-within\\:text-white:focus-within:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus-within\\:ring-blue-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-700:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(55 65 81/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-gray-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-green-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-primary-800:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-purple-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(74 29 150/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-red-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(119 29 29/var(--tw-ring-opacity))}.dark\\:focus-within\\:ring-yellow-900:focus-within:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(99 49 18/var(--tw-ring-opacity))}.dark\\:hover\\:border-gray-500:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(107 114 128/var(--tw-border-opacity))}.dark\\:hover\\:border-gray-600:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(75 85 99/var(--tw-border-opacity))}.dark\\:hover\\:bg-blue-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(28 100 242/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(26 86 219/var(--tw-bg-opacity))}.dark\\:hover\\:bg-blue-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 66 159/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(55 65 81/var(--tw-bg-opacity))}.dark\\:hover\\:bg-gray-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(5 122 85/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(4 108 78/var(--tw-bg-opacity))}.dark\\:hover\\:bg-green-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(3 84 63/var(--tw-bg-opacity))}.dark\\:hover\\:bg-indigo-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(66 56 157/var(--tw-bg-opacity))}.dark\\:hover\\:bg-pink-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(153 21 75/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(146 93 254/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(110 46 239/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(105 40 235/var(--tw-bg-opacity))}.dark\\:hover\\:bg-primary-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(92 35 205/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-500:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(144 97 249/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(108 43 217/var(--tw-bg-opacity))}.dark\\:hover\\:bg-purple-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(85 33 181/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(224 36 36/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(200 30 30/var(--tw-bg-opacity))}.dark\\:hover\\:bg-red-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(155 28 28/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-400:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(227 160 8/var(--tw-bg-opacity))}.dark\\:hover\\:bg-yellow-800:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(114 59 19/var(--tw-bg-opacity))}.hover\\:dark\\:bg-gray-800:is(.dark *):hover{--tw-bg-opacity:1;background-color:rgb(31 41 55/var(--tw-bg-opacity))}.dark\\:hover\\:text-blue-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(164 202 254/var(--tw-text-opacity))}.dark\\:hover\\:text-gray-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.dark\\:hover\\:text-green-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(132 225 188/var(--tw-text-opacity))}.dark\\:hover\\:text-indigo-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(180 198 252/var(--tw-text-opacity))}.dark\\:hover\\:text-pink-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 217/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-100:hover:is(.dark *){--tw-text-opacity:1;color:rgb(245 240 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(221 204 255/var(--tw-text-opacity))}.dark\\:hover\\:text-primary-900:hover:is(.dark *){--tw-text-opacity:1;color:rgb(73 27 165/var(--tw-text-opacity))}.dark\\:hover\\:text-purple-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(202 191 253/var(--tw-text-opacity))}.dark\\:hover\\:text-red-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(248 180 180/var(--tw-text-opacity))}.dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:hover\\:text-yellow-300:hover:is(.dark *){--tw-text-opacity:1;color:rgb(250 202 21/var(--tw-text-opacity))}.dark\\:focus\\:border-blue-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(63 131 248/var(--tw-border-opacity))}.dark\\:focus\\:border-green-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(14 159 110/var(--tw-border-opacity))}.dark\\:focus\\:border-primary-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(146 93 254/var(--tw-border-opacity))}.dark\\:focus\\:border-red-500:focus:is(.dark *){--tw-border-opacity:1;border-color:rgb(240 82 82/var(--tw-border-opacity))}.dark\\:focus\\:text-white:focus:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.dark\\:focus\\:ring-blue-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 131 248/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(28 100 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-blue-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.dark\\:focus\\:ring-cyan-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(21 94 117/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(107 114 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-gray-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(31 41 55/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(14 159 110/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 122 85/var(--tw-ring-opacity))}.dark\\:focus\\:ring-green-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.dark\\:focus\\:ring-lime-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(63 98 18/var(--tw-ring-opacity))}.dark\\:focus\\:ring-orange-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(208 56 1/var(--tw-ring-opacity))}.dark\\:focus\\:ring-pink-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(153 21 75/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(146 93 254/var(--tw-ring-opacity))}.dark\\:focus\\:ring-primary-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(110 46 239/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(126 58 242/var(--tw-ring-opacity))}.dark\\:focus\\:ring-purple-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-400:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(249 128 128/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-500:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(240 82 82/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(224 36 36/var(--tw-ring-opacity))}.dark\\:focus\\:ring-red-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(4 116 129/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-700:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 102 114/var(--tw-ring-opacity))}.dark\\:focus\\:ring-teal-800:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.dark\\:focus\\:ring-yellow-600:focus:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(159 88 10/var(--tw-ring-opacity))}.dark\\:disabled\\:text-gray-500:disabled:is(.dark *){--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity))}.group:hover .dark\\:group-hover\\:bg-gray-800\\/60:is(.dark *){background-color:rgba(31,41,55,.6)}.group:hover .dark\\:group-hover\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.group:focus .dark\\:group-focus\\:ring-gray-800\\/70:is(.dark *){--tw-ring-color:rgba(31,41,55,.7)}.peer:focus~.peer-focus\\:dark\\:text-primary-500:is(.dark *){--tw-text-opacity:1;color:rgb(146 93 254/var(--tw-text-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-blue-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(30 66 159/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-green-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(3 84 63/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-orange-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(138 44 13/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-primary-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(92 35 205/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-purple-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(85 33 181/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-red-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(155 28 28/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-teal-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(5 80 92/var(--tw-ring-opacity))}.peer:focus~.dark\\:peer-focus\\:ring-yellow-800:is(.dark *){--tw-ring-opacity:1;--tw-ring-color:rgb(114 59 19/var(--tw-ring-opacity))}@media (min-width:640px){.sm\\:order-last{order:9999}.sm\\:mb-0{margin-bottom:0}.sm\\:flex{display:flex}.sm\\:grid{display:grid}.sm\\:h-10{height:2.5rem}.sm\\:h-6{height:1.5rem}.sm\\:h-64{height:16rem}.sm\\:h-7{height:1.75rem}.sm\\:w-10{width:2.5rem}.sm\\:w-6{width:1.5rem}.sm\\:w-96{width:24rem}.sm\\:w-auto{width:auto}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\\:divide-x>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:0;border-left-width:calc(1px*(1 - var(--tw-divide-x-reverse)));border-right-width:calc(1px*var(--tw-divide-x-reverse))}.sm\\:rounded-lg{border-radius:.5rem}.sm\\:p-5{padding:1.25rem}.sm\\:p-6{padding:1.5rem}.sm\\:p-8{padding:2rem}.sm\\:px-4{padding-left:1rem;padding-right:1rem}.sm\\:pe-4{padding-inline-end:1rem}.sm\\:ps-4{padding-inline-start:1rem}.sm\\:text-center{text-align:center}.sm\\:text-base{font-size:1rem;line-height:1.5rem}.sm\\:text-sm{font-size:.875rem;line-height:1.25rem}.sm\\:text-xs{font-size:.75rem;line-height:1rem}.first\\:sm\\:ps-0:first-child{padding-inline-start:0}.last\\:sm\\:pe-0:last-child{padding-inline-end:0}}@media (min-width:768px){.md\\:inset-0{inset:0}.md\\:mb-0{margin-bottom:0}.md\\:me-6{margin-inline-end:1.5rem}.md\\:ms-2{margin-inline-start:.5rem}.md\\:mt-0{margin-top:0}.md\\:block{display:block}.md\\:flex{display:flex}.md\\:grid{display:grid}.md\\:hidden{display:none}.md\\:h-\\[21px\\]{height:21px}.md\\:h-\\[262px\\]{height:262px}.md\\:h-\\[278px\\]{height:278px}.md\\:h-\\[294px\\]{height:294px}.md\\:h-\\[42px\\]{height:42px}.md\\:h-\\[654px\\]{height:654px}.md\\:h-\\[682px\\]{height:682px}.md\\:h-\\[8px\\]{height:8px}.md\\:h-\\[95px\\]{height:95px}.md\\:h-auto{height:auto}.md\\:h-full{height:100%}.md\\:w-1\\/3{width:33.333333%}.md\\:w-2\\/3{width:66.666667%}.md\\:w-48{width:12rem}.md\\:w-\\[96px\\]{width:96px}.md\\:w-auto{width:auto}.md\\:max-w-\\[142px\\]{max-width:142px}.md\\:max-w-\\[512px\\]{max-width:512px}.md\\:max-w-\\[597px\\]{max-width:597px}.md\\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\\:flex-row{flex-direction:row}.md\\:flex-row-reverse{flex-direction:row-reverse}.md\\:items-center{align-items:center}.md\\:justify-between{justify-content:space-between}.md\\:gap-8{gap:2rem}.md\\:gap-x-0{column-gap:0}.md\\:space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.md\\:space-x-8>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(2rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(2rem*var(--tw-space-x-reverse))}.md\\:space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.md\\:divide-y-0>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-bottom-width:calc(0px*var(--tw-divide-y-reverse));border-top-width:calc(0px*(1 - var(--tw-divide-y-reverse)))}.md\\:rounded-none{border-radius:0}.md\\:rounded-e-lg{border-end-end-radius:.5rem;border-start-end-radius:.5rem}.md\\:rounded-s-lg{border-end-start-radius:.5rem;border-start-start-radius:.5rem}.md\\:border-0{border-width:0}.md\\:bg-transparent{background-color:transparent}.md\\:p-0{padding:0}.md\\:p-5{padding:1.25rem}.md\\:p-6{padding:1.5rem}.md\\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\\:py-8{padding-bottom:2rem;padding-top:2rem}.md\\:text-lg{font-size:1.125rem;line-height:1.75rem}.md\\:text-sm{font-size:.875rem;line-height:1.25rem}.md\\:font-medium{font-weight:500}.md\\:text-primary-700{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:hover\\:bg-transparent:hover{background-color:transparent}.md\\:hover\\:text-primary-700:hover{--tw-text-opacity:1;color:rgb(105 40 235/var(--tw-text-opacity))}.md\\:dark\\:bg-transparent:is(.dark *){background-color:transparent}.md\\:dark\\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.md\\:dark\\:hover\\:bg-transparent:hover:is(.dark *){background-color:transparent}.md\\:dark\\:hover\\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}}@media (min-width:1024px){.lg\\:max-w-7xl{max-width:80rem}}@media (min-width:1280px){.xl\\:h-80{height:20rem}}@media (min-width:1536px){.\\32xl\\:h-96{height:24rem}}.rtl\\:origin-right:where([dir=rtl],[dir=rtl] *){transform-origin:right}.rtl\\:-translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:-33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/2:where([dir=rtl],[dir=rtl] *){--tw-translate-x:50%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:translate-x-1\\/3:where([dir=rtl],[dir=rtl] *){--tw-translate-x:33.333333%;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:-scale-x-100:where([dir=rtl],[dir=rtl] *){--tw-scale-x:-1;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.rtl\\:space-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-space-x-reverse:1}.rtl\\:divide-x-reverse:where([dir=rtl],[dir=rtl] *)>:not([hidden])~:not([hidden]){--tw-divide-x-reverse:1}.rtl\\:text-right:where([dir=rtl],[dir=rtl] *){text-align:right}.peer:checked~.rtl\\:peer-checked\\:after\\:-translate-x-full:where([dir=rtl],[dir=rtl] *):after{--tw-translate-x:-100%;content:var(--tw-content);transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.\\[\\&\\:not\\(\\:first-child\\)\\]\\:-ms-px:not(:first-child){margin-inline-start:-1px}";
 
   // gotta have pretty console.logs
   function log(...args) {
@@ -3841,7 +3841,7 @@
 
   /* node_modules\svelte-material-icons\DotsGrid.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$n(ctx) {
+  function create_if_block_1$q(ctx) {
   	let desc_1;
   	let t;
 
@@ -3866,7 +3866,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$w(ctx) {
+  function create_if_block$A(ctx) {
   	let title_1;
   	let t;
 
@@ -3890,12 +3890,12 @@
   	};
   }
 
-  function create_fragment$H(ctx) {
+  function create_fragment$L(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$n(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$w(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$q(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$A(ctx);
 
   	return {
   		c() {
@@ -3925,7 +3925,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$n(ctx);
+  					if_block0 = create_if_block_1$q(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -3938,7 +3938,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$w(ctx);
+  					if_block1 = create_if_block$A(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -3988,7 +3988,7 @@
   	};
   }
 
-  function instance$H($$self, $$props, $$invalidate) {
+  function instance$L($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -4031,7 +4031,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$H, create_fragment$H, safe_not_equal, {
+  		init(this, options, instance$L, create_fragment$L, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -4054,7 +4054,7 @@
   const get_header_slot_changes$2 = dirty => ({});
   const get_header_slot_context$2 = ctx => ({});
 
-  function create_fragment$G(ctx) {
+  function create_fragment$K(ctx) {
   	let div4;
   	let div0;
   	let t0;
@@ -4220,7 +4220,7 @@
   	};
   }
 
-  function instance$G($$self, $$props, $$invalidate) {
+  function instance$K($$self, $$props, $$invalidate) {
   	let { $$slots: slots = {}, $$scope } = $$props;
   	let { startDrag } = $$props;
   	let { dragDisabled } = $$props;
@@ -4237,13 +4237,13 @@
   class Card extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$G, create_fragment$G, safe_not_equal, { startDrag: 0, dragDisabled: 1 });
+  		init(this, options, instance$K, create_fragment$K, safe_not_equal, { startDrag: 0, dragDisabled: 1 });
   	}
   }
 
   /* node_modules\svelte-material-icons\Delete.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$m(ctx) {
+  function create_if_block_1$p(ctx) {
   	let desc_1;
   	let t;
 
@@ -4268,7 +4268,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$v(ctx) {
+  function create_if_block$z(ctx) {
   	let title_1;
   	let t;
 
@@ -4292,12 +4292,12 @@
   	};
   }
 
-  function create_fragment$F(ctx) {
+  function create_fragment$J(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$m(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$v(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$p(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$z(ctx);
 
   	return {
   		c() {
@@ -4327,7 +4327,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$m(ctx);
+  					if_block0 = create_if_block_1$p(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -4340,7 +4340,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$v(ctx);
+  					if_block1 = create_if_block$z(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -4390,7 +4390,7 @@
   	};
   }
 
-  function instance$F($$self, $$props, $$invalidate) {
+  function instance$J($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -4433,7 +4433,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$F, create_fragment$F, safe_not_equal, {
+  		init(this, options, instance$J, create_fragment$J, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -4450,7 +4450,7 @@
 
   /* node_modules\svelte-material-icons\Pencil.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$l(ctx) {
+  function create_if_block_1$o(ctx) {
   	let desc_1;
   	let t;
 
@@ -4475,7 +4475,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$u(ctx) {
+  function create_if_block$y(ctx) {
   	let title_1;
   	let t;
 
@@ -4499,12 +4499,12 @@
   	};
   }
 
-  function create_fragment$E(ctx) {
+  function create_fragment$I(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$l(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$u(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$o(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$y(ctx);
 
   	return {
   		c() {
@@ -4534,7 +4534,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$l(ctx);
+  					if_block0 = create_if_block_1$o(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -4547,7 +4547,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$u(ctx);
+  					if_block1 = create_if_block$y(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -4597,7 +4597,7 @@
   	};
   }
 
-  function instance$E($$self, $$props, $$invalidate) {
+  function instance$I($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -4640,7 +4640,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$E, create_fragment$E, safe_not_equal, {
+  		init(this, options, instance$I, create_fragment$I, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -4657,7 +4657,7 @@
 
   /* node_modules\svelte-material-icons\Update.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$k(ctx) {
+  function create_if_block_1$n(ctx) {
   	let desc_1;
   	let t;
 
@@ -4682,7 +4682,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$t(ctx) {
+  function create_if_block$x(ctx) {
   	let title_1;
   	let t;
 
@@ -4706,12 +4706,12 @@
   	};
   }
 
-  function create_fragment$D(ctx) {
+  function create_fragment$H(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$k(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$t(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$n(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$x(ctx);
 
   	return {
   		c() {
@@ -4741,7 +4741,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$k(ctx);
+  					if_block0 = create_if_block_1$n(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -4754,7 +4754,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$t(ctx);
+  					if_block1 = create_if_block$x(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -4804,7 +4804,7 @@
   	};
   }
 
-  function instance$D($$self, $$props, $$invalidate) {
+  function instance$H($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -4847,7 +4847,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$D, create_fragment$D, safe_not_equal, {
+  		init(this, options, instance$H, create_fragment$H, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -7482,7 +7482,7 @@
 
   /* node_modules\flowbite-svelte\dist\utils\Frame.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$j(ctx) {
+  function create_if_block_1$m(ctx) {
   	let previous_tag = /*tag*/ ctx[1];
   	let svelte_element_anchor;
   	let current;
@@ -7540,7 +7540,7 @@
   }
 
   // (90:0) {#if transition && open}
-  function create_if_block$s(ctx) {
+  function create_if_block$w(ctx) {
   	let previous_tag = /*tag*/ ctx[1];
   	let svelte_element_anchor;
   	let tag_will_be_removed = false;
@@ -7830,12 +7830,12 @@
   	};
   }
 
-  function create_fragment$C(ctx) {
+  function create_fragment$G(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$s, create_if_block_1$j];
+  	const if_block_creators = [create_if_block$w, create_if_block_1$m];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -7939,7 +7939,7 @@
   	none: ""
   };
 
-  function instance$C($$self, $$props, $$invalidate) {
+  function instance$G($$self, $$props, $$invalidate) {
   	const omit_props_names = [
   		"tag","color","rounded","border","shadow","node","use","options","role","transition","params","open"
   	];
@@ -8143,8 +8143,8 @@
   		init(
   			this,
   			options,
-  			instance$C,
-  			create_fragment$C,
+  			instance$G,
+  			create_fragment$G,
   			safe_not_equal,
   			{
   				tag: 1,
@@ -8180,14 +8180,14 @@
   });
 
   // (43:0) {:else}
-  function create_else_block$8(ctx) {
+  function create_else_block$9(ctx) {
   	let button;
   	let t;
   	let button_aria_label_value;
   	let current;
   	let mounted;
   	let dispose;
-  	let if_block = /*name*/ ctx[0] && create_if_block_2$4(ctx);
+  	let if_block = /*name*/ ctx[0] && create_if_block_2$5(ctx);
   	const default_slot_template = /*#slots*/ ctx[9].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context_1);
 
@@ -8236,7 +8236,7 @@
   				if (if_block) {
   					if_block.p(ctx, dirty);
   				} else {
-  					if_block = create_if_block_2$4(ctx);
+  					if_block = create_if_block_2$5(ctx);
   					if_block.c();
   					if_block.m(button, t);
   				}
@@ -8290,12 +8290,12 @@
   }
 
   // (38:0) {#if href}
-  function create_if_block$r(ctx) {
+  function create_if_block$v(ctx) {
   	let a;
   	let t;
   	let a_aria_label_value;
   	let current;
-  	let if_block = /*name*/ ctx[0] && create_if_block_1$i(ctx);
+  	let if_block = /*name*/ ctx[0] && create_if_block_1$l(ctx);
   	const default_slot_template = /*#slots*/ ctx[9].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context$1);
 
@@ -8338,7 +8338,7 @@
   				if (if_block) {
   					if_block.p(ctx, dirty);
   				} else {
-  					if_block = create_if_block_1$i(ctx);
+  					if_block = create_if_block_1$l(ctx);
   					if_block.c();
   					if_block.m(a, t);
   				}
@@ -8390,7 +8390,7 @@
   }
 
   // (45:4) {#if name}
-  function create_if_block_2$4(ctx) {
+  function create_if_block_2$5(ctx) {
   	let span;
   	let t;
 
@@ -8416,7 +8416,7 @@
   }
 
   // (40:4) {#if name}
-  function create_if_block_1$i(ctx) {
+  function create_if_block_1$l(ctx) {
   	let span;
   	let t;
 
@@ -8441,12 +8441,12 @@
   	};
   }
 
-  function create_fragment$B(ctx) {
+  function create_fragment$F(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$r, create_else_block$8];
+  	const if_block_creators = [create_if_block$v, create_else_block$9];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -8513,7 +8513,7 @@
   	};
   }
 
-  function instance$B($$self, $$props, $$invalidate) {
+  function instance$F($$self, $$props, $$invalidate) {
   	const omit_props_names = ["color","name","ariaLabel","size","href"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -8602,7 +8602,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$B, create_fragment$B, safe_not_equal, {
+  		init(this, options, instance$F, create_fragment$F, safe_not_equal, {
   			color: 7,
   			name: 0,
   			ariaLabel: 1,
@@ -8614,7 +8614,7 @@
 
   /* node_modules\flowbite-svelte\dist\utils\CloseButton.svelte generated by Svelte v4.2.19 */
 
-  function create_default_slot$c(ctx) {
+  function create_default_slot$e(ctx) {
   	let svg;
   	let path;
   	let svg_class_value;
@@ -8648,7 +8648,7 @@
   	};
   }
 
-  function create_fragment$A(ctx) {
+  function create_fragment$E(ctx) {
   	let toolbarbutton;
   	let current;
 
@@ -8663,7 +8663,7 @@
   	let toolbarbutton_props = {
   		$$slots: {
   			default: [
-  				create_default_slot$c,
+  				create_default_slot$e,
   				({ svgSize }) => ({ 4: svgSize }),
   				({ svgSize }) => svgSize ? 16 : 0
   			]
@@ -8718,7 +8718,7 @@
   	};
   }
 
-  function instance$A($$self, $$props, $$invalidate) {
+  function instance$E($$self, $$props, $$invalidate) {
   	const omit_props_names = ["name"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { name = "Close" } = $$props;
@@ -8740,13 +8740,13 @@
   class CloseButton extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$A, create_fragment$A, safe_not_equal, { name: 0 });
+  		init(this, options, instance$E, create_fragment$E, safe_not_equal, { name: 0 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\buttons\Button.svelte generated by Svelte v4.2.19 */
 
-  function create_else_block$7(ctx) {
+  function create_else_block$8(ctx) {
   	let previous_tag = /*tag*/ ctx[2];
   	let svelte_element_anchor;
   	let current;
@@ -8804,7 +8804,7 @@
   }
 
   // (110:28) 
-  function create_if_block_1$h(ctx) {
+  function create_if_block_1$k(ctx) {
   	let button;
   	let current;
   	let mounted;
@@ -8902,7 +8902,7 @@
   }
 
   // (106:0) {#if href && !disabled}
-  function create_if_block$q(ctx) {
+  function create_if_block$u(ctx) {
   	let a;
   	let current;
   	let mounted;
@@ -9066,12 +9066,12 @@
   	};
   }
 
-  function create_fragment$z(ctx) {
+  function create_fragment$D(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$q, create_if_block_1$h, create_else_block$7];
+  	const if_block_creators = [create_if_block$u, create_if_block_1$k, create_else_block$8];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -9139,7 +9139,7 @@
   	};
   }
 
-  function instance$z($$self, $$props, $$invalidate) {
+  function instance$D($$self, $$props, $$invalidate) {
   	const omit_props_names = [
   		"pill","outline","size","href","type","color","shadow","tag","checked","disabled"
   	];
@@ -9399,8 +9399,8 @@
   		init(
   			this,
   			options,
-  			instance$z,
-  			create_fragment$z,
+  			instance$D,
+  			create_fragment$D,
   			safe_not_equal,
   			{
   				pill: 6,
@@ -10929,7 +10929,7 @@
 
   /* node_modules\flowbite-svelte\dist\utils\Popper.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_2$3(ctx) {
+  function create_if_block_2$4(ctx) {
   	let div;
 
   	return {
@@ -10952,7 +10952,7 @@
   }
 
   // (154:0) {#if referenceEl}
-  function create_if_block$p(ctx) {
+  function create_if_block$t(ctx) {
   	let frame;
   	let updating_open;
   	let current;
@@ -10972,7 +10972,7 @@
   	}
 
   	let frame_props = {
-  		$$slots: { default: [create_default_slot$b] },
+  		$$slots: { default: [create_default_slot$d] },
   		$$scope: { ctx }
   	};
 
@@ -11054,7 +11054,7 @@
   }
 
   // (157:4) {#if arrow}
-  function create_if_block_1$g(ctx) {
+  function create_if_block_1$j(ctx) {
   	let div;
   	let mounted;
   	let dispose;
@@ -11089,13 +11089,13 @@
   }
 
   // (155:2) <Frame use={init} options={referenceEl} bind:open role="tooltip" tabindex={activeContent ? -1 : undefined} on:focusin={optional(activeContent, showHandler)} on:focusout={optional(activeContent, hideHandler)} on:mouseenter={optional(activeContent && hoverable, showHandler)} on:mouseleave={optional(activeContent && hoverable, hideHandler)} {...$$restProps}>
-  function create_default_slot$b(ctx) {
+  function create_default_slot$d(ctx) {
   	let t;
   	let if_block_anchor;
   	let current;
   	const default_slot_template = /*#slots*/ ctx[22].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[25], null);
-  	let if_block = /*arrow*/ ctx[2] && create_if_block_1$g(ctx);
+  	let if_block = /*arrow*/ ctx[2] && create_if_block_1$j(ctx);
 
   	return {
   		c() {
@@ -11134,7 +11134,7 @@
   				if (if_block) {
   					if_block.p(ctx, dirty);
   				} else {
-  					if_block = create_if_block_1$g(ctx);
+  					if_block = create_if_block_1$j(ctx);
   					if_block.c();
   					if_block.m(if_block_anchor.parentNode, if_block_anchor);
   				}
@@ -11164,12 +11164,12 @@
   	};
   }
 
-  function create_fragment$y(ctx) {
+  function create_fragment$C(ctx) {
   	let t;
   	let if_block1_anchor;
   	let current;
-  	let if_block0 = !/*referenceEl*/ ctx[3] && create_if_block_2$3(ctx);
-  	let if_block1 = /*referenceEl*/ ctx[3] && create_if_block$p(ctx);
+  	let if_block0 = !/*referenceEl*/ ctx[3] && create_if_block_2$4(ctx);
+  	let if_block1 = /*referenceEl*/ ctx[3] && create_if_block$t(ctx);
 
   	return {
   		c() {
@@ -11190,7 +11190,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_2$3(ctx);
+  					if_block0 = create_if_block_2$4(ctx);
   					if_block0.c();
   					if_block0.m(t.parentNode, t);
   				}
@@ -11207,7 +11207,7 @@
   						transition_in(if_block1, 1);
   					}
   				} else {
-  					if_block1 = create_if_block$p(ctx);
+  					if_block1 = create_if_block$t(ctx);
   					if_block1.c();
   					transition_in(if_block1, 1);
   					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
@@ -11247,7 +11247,7 @@
   	return pred ? func : () => void 0;
   }
 
-  function instance$y($$self, $$props, $$invalidate) {
+  function instance$C($$self, $$props, $$invalidate) {
   	let middleware;
 
   	const omit_props_names = [
@@ -11519,8 +11519,8 @@
   		init(
   			this,
   			options,
-  			instance$y,
-  			create_fragment$y,
+  			instance$C,
+  			create_fragment$C,
   			safe_not_equal,
   			{
   				activeContent: 1,
@@ -11548,7 +11548,7 @@
   const get_header_slot_context$1 = ctx => ({});
 
   // (35:2) {#if $$slots.header}
-  function create_if_block_1$f(ctx) {
+  function create_if_block_1$i(ctx) {
   	let div;
   	let current;
   	const header_slot_template = /*#slots*/ ctx[22].header;
@@ -11609,7 +11609,7 @@
   }
 
   // (43:2) {#if $$slots.footer}
-  function create_if_block$o(ctx) {
+  function create_if_block$s(ctx) {
   	let div;
   	let current;
   	const footer_slot_template = /*#slots*/ ctx[22].footer;
@@ -11670,16 +11670,16 @@
   }
 
   // (34:0) <Popper activeContent {...$$restProps} {trigger} {arrow} {placement} {shadow} {rounded} {color} class={containerCls} on:show bind:open>
-  function create_default_slot$a(ctx) {
+  function create_default_slot$c(ctx) {
   	let t0;
   	let ul;
   	let t1;
   	let if_block1_anchor;
   	let current;
-  	let if_block0 = /*$$slots*/ ctx[12].header && create_if_block_1$f(ctx);
+  	let if_block0 = /*$$slots*/ ctx[12].header && create_if_block_1$i(ctx);
   	const default_slot_template = /*#slots*/ ctx[22].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[25], null);
-  	let if_block1 = /*$$slots*/ ctx[12].footer && create_if_block$o(ctx);
+  	let if_block1 = /*$$slots*/ ctx[12].footer && create_if_block$s(ctx);
 
   	return {
   		c() {
@@ -11715,7 +11715,7 @@
   						transition_in(if_block0, 1);
   					}
   				} else {
-  					if_block0 = create_if_block_1$f(ctx);
+  					if_block0 = create_if_block_1$i(ctx);
   					if_block0.c();
   					transition_in(if_block0, 1);
   					if_block0.m(t0.parentNode, t0);
@@ -11757,7 +11757,7 @@
   						transition_in(if_block1, 1);
   					}
   				} else {
-  					if_block1 = create_if_block$o(ctx);
+  					if_block1 = create_if_block$s(ctx);
   					if_block1.c();
   					transition_in(if_block1, 1);
   					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
@@ -11800,7 +11800,7 @@
   	};
   }
 
-  function create_fragment$x(ctx) {
+  function create_fragment$B(ctx) {
   	let popper;
   	let updating_open;
   	let current;
@@ -11822,7 +11822,7 @@
   	}
 
   	let popper_props = {
-  		$$slots: { default: [create_default_slot$a] },
+  		$$slots: { default: [create_default_slot$c] },
   		$$scope: { ctx }
   	};
 
@@ -11888,7 +11888,7 @@
   	};
   }
 
-  function instance$x($$self, $$props, $$invalidate) {
+  function instance$B($$self, $$props, $$invalidate) {
   	let containerCls;
   	let headerCls;
   	let ulCls;
@@ -12009,7 +12009,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$x, create_fragment$x, safe_not_equal, {
+  		init(this, options, instance$B, create_fragment$B, safe_not_equal, {
   			activeUrl: 13,
   			open: 0,
   			containerClass: 14,
@@ -12032,7 +12032,7 @@
 
   /* node_modules\flowbite-svelte\dist\utils\Wrapper.svelte generated by Svelte v4.2.19 */
 
-  function create_else_block$6(ctx) {
+  function create_else_block$7(ctx) {
   	let current;
   	const default_slot_template = /*#slots*/ ctx[5].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[4], null);
@@ -12080,7 +12080,7 @@
   }
 
   // (7:0) {#if show}
-  function create_if_block$n(ctx) {
+  function create_if_block$r(ctx) {
   	let previous_tag = /*tag*/ ctx[0];
   	let svelte_element_anchor;
   	let current;
@@ -12211,12 +12211,12 @@
   	};
   }
 
-  function create_fragment$w(ctx) {
+  function create_fragment$A(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$n, create_else_block$6];
+  	const if_block_creators = [create_if_block$r, create_else_block$7];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -12283,7 +12283,7 @@
   	};
   }
 
-  function instance$w($$self, $$props, $$invalidate) {
+  function instance$A($$self, $$props, $$invalidate) {
   	const omit_props_names = ["tag","show","use"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -12309,7 +12309,7 @@
   class Wrapper extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$w, create_fragment$w, safe_not_equal, { tag: 0, show: 1, use: 2 });
+  		init(this, options, instance$A, create_fragment$A, safe_not_equal, { tag: 0, show: 1, use: 2 });
   	}
   }
 
@@ -12419,7 +12419,7 @@
   }
 
   // (21:0) <Wrapper tag="li" show={wrap} use={init}>
-  function create_default_slot$9(ctx) {
+  function create_default_slot$b(ctx) {
   	let previous_tag = /*href*/ ctx[0] ? 'a' : 'button';
   	let svelte_element_anchor;
   	let current;
@@ -12476,7 +12476,7 @@
   	};
   }
 
-  function create_fragment$v(ctx) {
+  function create_fragment$z(ctx) {
   	let wrapper;
   	let current;
 
@@ -12485,7 +12485,7 @@
   				tag: "li",
   				show: /*wrap*/ ctx[1],
   				use: /*init*/ ctx[3],
-  				$$slots: { default: [create_default_slot$9] },
+  				$$slots: { default: [create_default_slot$b] },
   				$$scope: { ctx }
   			}
   		});
@@ -12523,7 +12523,7 @@
   	};
   }
 
-  function instance$v($$self, $$props, $$invalidate) {
+  function instance$z($$self, $$props, $$invalidate) {
   	let active;
   	let liClass;
   	const omit_props_names = ["defaultClass","href","activeClass"];
@@ -12623,13 +12623,13 @@
   class DropdownItem extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$v, create_fragment$v, safe_not_equal, { defaultClass: 5, href: 0, activeClass: 6 });
+  		init(this, options, instance$z, create_fragment$z, safe_not_equal, { defaultClass: 5, href: 0, activeClass: 6 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\forms\Label.svelte generated by Svelte v4.2.19 */
 
-  function create_else_block$5(ctx) {
+  function create_else_block$6(ctx) {
   	let current;
   	const default_slot_template = /*#slots*/ ctx[7].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[6], null);
@@ -12677,7 +12677,7 @@
   }
 
   // (19:0) {#if show}
-  function create_if_block$m(ctx) {
+  function create_if_block$q(ctx) {
   	let label;
   	let current;
   	const default_slot_template = /*#slots*/ ctx[7].default;
@@ -12746,12 +12746,12 @@
   	};
   }
 
-  function create_fragment$u(ctx) {
+  function create_fragment$y(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$m, create_else_block$5];
+  	const if_block_creators = [create_if_block$q, create_else_block$6];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -12818,7 +12818,7 @@
   	};
   }
 
-  function instance$u($$self, $$props, $$invalidate) {
+  function instance$y($$self, $$props, $$invalidate) {
   	let labelClass;
   	const omit_props_names = ["color","defaultClass","show"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
@@ -12880,7 +12880,7 @@
   class Label extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$u, create_fragment$u, safe_not_equal, { color: 4, defaultClass: 5, show: 0 });
+  		init(this, options, instance$y, create_fragment$y, safe_not_equal, { color: 4, defaultClass: 5, show: 0 });
   	}
   }
 
@@ -12914,7 +12914,7 @@
 
   /* node_modules\flowbite-svelte\dist\forms\Checkbox.svelte generated by Svelte v4.2.19 */
 
-  function get_each_context$4(ctx, list, i) {
+  function get_each_context$5(ctx, list, i) {
   	const child_ctx = ctx.slice();
   	child_ctx[10] = list[i].value;
   	child_ctx[31] = list[i].label;
@@ -12923,7 +12923,7 @@
   }
 
   // (24:0) {:else}
-  function create_else_block$4(ctx) {
+  function create_else_block$5(ctx) {
   	let label_1;
   	let current;
 
@@ -12931,7 +12931,7 @@
   			props: {
   				class: labelClass(/*inline*/ ctx[5], /*$$props*/ ctx[14].class),
   				show: /*$$slots*/ ctx[12].default,
-  				$$slots: { default: [create_default_slot_1$5] },
+  				$$slots: { default: [create_default_slot_1$6] },
   				$$scope: { ctx }
   			}
   		});
@@ -12971,14 +12971,14 @@
   }
 
   // (17:0) {#if choices.length > 0}
-  function create_if_block$l(ctx) {
+  function create_if_block$p(ctx) {
   	let each_1_anchor;
   	let current;
   	let each_value = ensure_array_like(/*choices*/ ctx[6]);
   	let each_blocks = [];
 
   	for (let i = 0; i < each_value.length; i += 1) {
-  		each_blocks[i] = create_each_block$4(get_each_context$4(ctx, each_value, i));
+  		each_blocks[i] = create_each_block$5(get_each_context$5(ctx, each_value, i));
   	}
 
   	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -13009,13 +13009,13 @@
   				let i;
 
   				for (i = 0; i < each_value.length; i += 1) {
-  					const child_ctx = get_each_context$4(ctx, each_value, i);
+  					const child_ctx = get_each_context$5(ctx, each_value, i);
 
   					if (each_blocks[i]) {
   						each_blocks[i].p(child_ctx, dirty);
   						transition_in(each_blocks[i], 1);
   					} else {
-  						each_blocks[i] = create_each_block$4(child_ctx);
+  						each_blocks[i] = create_each_block$5(child_ctx);
   						each_blocks[i].c();
   						transition_in(each_blocks[i], 1);
   						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
@@ -13060,7 +13060,7 @@
   }
 
   // (25:0) <Label class={labelClass(inline, $$props.class)} show={$$slots.default}>
-  function create_default_slot_1$5(ctx) {
+  function create_default_slot_1$6(ctx) {
   	let input;
   	let input_class_value;
   	let t;
@@ -13176,7 +13176,7 @@
   }
 
   // (19:4) <Label class={labelClass(inline, groupLabelClass)} show={$$slots.default} for={`checkbox-${i}`}>
-  function create_default_slot$8(ctx) {
+  function create_default_slot$a(ctx) {
   	let t0_value = /*label*/ ctx[31] + "";
   	let t0;
   	let t1;
@@ -13305,7 +13305,7 @@
   }
 
   // (18:2) {#each choices as {value, label}
-  function create_each_block$4(ctx) {
+  function create_each_block$5(ctx) {
   	let label_1;
   	let current;
 
@@ -13314,7 +13314,7 @@
   				class: labelClass(/*inline*/ ctx[5], /*groupLabelClass*/ ctx[8]),
   				show: /*$$slots*/ ctx[12].default,
   				for: `checkbox-${/*i*/ ctx[33]}`,
-  				$$slots: { default: [create_default_slot$8] },
+  				$$slots: { default: [create_default_slot$a] },
   				$$scope: { ctx }
   			}
   		});
@@ -13353,12 +13353,12 @@
   	};
   }
 
-  function create_fragment$t(ctx) {
+  function create_fragment$x(ctx) {
   	let current_block_type_index;
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$l, create_else_block$4];
+  	const if_block_creators = [create_if_block$p, create_else_block$5];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -13425,7 +13425,7 @@
   	};
   }
 
-  function instance$t($$self, $$props, $$invalidate) {
+  function instance$x($$self, $$props, $$invalidate) {
   	const omit_props_names = [
   		"name","color","custom","inline","group","choices","value","checked","spacing","groupLabelClass","groupInputClass"
   	];
@@ -13562,8 +13562,8 @@
   		init(
   			this,
   			options,
-  			instance$t,
-  			create_fragment$t,
+  			instance$x,
+  			create_fragment$x,
   			safe_not_equal,
   			{
   				name: 2,
@@ -13586,7 +13586,7 @@
 
   /* node_modules\flowbite-svelte\dist\forms\Toggle.svelte generated by Svelte v4.2.19 */
 
-  function create_default_slot$7(ctx) {
+  function create_default_slot$9(ctx) {
   	let span;
   	let t;
   	let current;
@@ -13650,7 +13650,7 @@
   	};
   }
 
-  function create_fragment$s(ctx) {
+  function create_fragment$w(ctx) {
   	let checkbox;
   	let updating_checked;
   	let updating_group;
@@ -13672,7 +13672,7 @@
   	}
 
   	let checkbox_props = {
-  		$$slots: { default: [create_default_slot$7] },
+  		$$slots: { default: [create_default_slot$9] },
   		$$scope: { ctx }
   	};
 
@@ -13747,7 +13747,7 @@
 
   const common = "me-3 shrink-0 bg-gray-200 rounded-full peer-focus:ring-4 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:bg-white after:border-gray-300 after:border after:rounded-full after:transition-all";
 
-  function instance$s($$self, $$props, $$invalidate) {
+  function instance$w($$self, $$props, $$invalidate) {
   	const omit_props_names = ["size","group","value","checked","customSize"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -13845,7 +13845,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$s, create_fragment$s, safe_not_equal, {
+  		init(this, options, instance$w, create_fragment$w, safe_not_equal, {
   			size: 6,
   			group: 0,
   			value: 2,
@@ -13889,11 +13889,11 @@
       e.preventDefault();
     }
 
-    document.addEventListener('keydown', handleFocusTrap, true);
+    document.addEventListener('keydown', handleFocusTrap);
 
     return {
       destroy() {
-        document.removeEventListener('keydown', handleFocusTrap, true);
+        document.removeEventListener('keydown', handleFocusTrap);
       }
     };
   }
@@ -13905,7 +13905,7 @@
   const get_header_slot_context = ctx => ({});
 
   // (94:0) {#if open}
-  function create_if_block$k(ctx) {
+  function create_if_block$o(ctx) {
   	let div0;
   	let t;
   	let div2;
@@ -13925,7 +13925,7 @@
   	];
 
   	let frame_props = {
-  		$$slots: { default: [create_default_slot$6] },
+  		$$slots: { default: [create_default_slot$8] },
   		$$scope: { ctx }
   	};
 
@@ -14023,7 +14023,7 @@
   }
 
   // (104:8) {#if $$slots.header || title}
-  function create_if_block_3$2(ctx) {
+  function create_if_block_3$3(ctx) {
   	let frame;
   	let current;
 
@@ -14031,7 +14031,7 @@
   			props: {
   				class: /*headerCls*/ ctx[7],
   				color: /*color*/ ctx[3],
-  				$$slots: { default: [create_default_slot_2$4] },
+  				$$slots: { default: [create_default_slot_2$5] },
   				$$scope: { ctx }
   			}
   		});
@@ -14071,7 +14071,7 @@
   }
 
   // (106:32)                
-  function fallback_block$2(ctx) {
+  function fallback_block$3(ctx) {
   	let h3;
   	let t;
   	let h3_class_value;
@@ -14149,13 +14149,13 @@
   }
 
   // (105:10) <Frame class={headerCls} {color}>
-  function create_default_slot_2$4(ctx) {
+  function create_default_slot_2$5(ctx) {
   	let t;
   	let if_block_anchor;
   	let current;
   	const header_slot_template = /*#slots*/ ctx[33].header;
   	const header_slot = create_slot(header_slot_template, ctx, /*$$scope*/ ctx[36], get_header_slot_context);
-  	const header_slot_or_fallback = header_slot || fallback_block$2(ctx);
+  	const header_slot_or_fallback = header_slot || fallback_block$3(ctx);
   	let if_block = /*dismissable*/ ctx[4] && create_if_block_4$2(ctx);
 
   	return {
@@ -14242,7 +14242,7 @@
   }
 
   // (116:10) {#if dismissable && !$$slots.header && !title}
-  function create_if_block_2$2(ctx) {
+  function create_if_block_2$3(ctx) {
   	let closebutton;
   	let current;
 
@@ -14285,7 +14285,7 @@
   }
 
   // (122:8) {#if $$slots.footer}
-  function create_if_block_1$e(ctx) {
+  function create_if_block_1$h(ctx) {
   	let frame;
   	let current;
 
@@ -14293,7 +14293,7 @@
   			props: {
   				class: /*footerCls*/ ctx[5],
   				color: /*color*/ ctx[3],
-  				$$slots: { default: [create_default_slot_1$4] },
+  				$$slots: { default: [create_default_slot_1$5] },
   				$$scope: { ctx }
   			}
   		});
@@ -14333,7 +14333,7 @@
   }
 
   // (123:10) <Frame class={footerCls} {color}>
-  function create_default_slot_1$4(ctx) {
+  function create_default_slot_1$5(ctx) {
   	let current;
   	const footer_slot_template = /*#slots*/ ctx[33].footer;
   	const footer_slot = create_slot(footer_slot_template, ctx, /*$$scope*/ ctx[36], get_footer_slot_context);
@@ -14381,7 +14381,7 @@
   }
 
   // (102:6) <Frame rounded shadow {...$$restProps} class={frameCls} {color}>
-  function create_default_slot$6(ctx) {
+  function create_default_slot$8(ctx) {
   	let t0;
   	let div;
   	let t1;
@@ -14390,11 +14390,11 @@
   	let current;
   	let mounted;
   	let dispose;
-  	let if_block0 = (/*$$slots*/ ctx[18].header || /*title*/ ctx[1]) && create_if_block_3$2(ctx);
-  	let if_block1 = /*dismissable*/ ctx[4] && !/*$$slots*/ ctx[18].header && !/*title*/ ctx[1] && create_if_block_2$2(ctx);
+  	let if_block0 = (/*$$slots*/ ctx[18].header || /*title*/ ctx[1]) && create_if_block_3$3(ctx);
+  	let if_block1 = /*dismissable*/ ctx[4] && !/*$$slots*/ ctx[18].header && !/*title*/ ctx[1] && create_if_block_2$3(ctx);
   	const default_slot_template = /*#slots*/ ctx[33].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[36], null);
-  	let if_block2 = /*$$slots*/ ctx[18].footer && create_if_block_1$e(ctx);
+  	let if_block2 = /*$$slots*/ ctx[18].footer && create_if_block_1$h(ctx);
 
   	return {
   		c() {
@@ -14444,7 +14444,7 @@
   						transition_in(if_block0, 1);
   					}
   				} else {
-  					if_block0 = create_if_block_3$2(ctx);
+  					if_block0 = create_if_block_3$3(ctx);
   					if_block0.c();
   					transition_in(if_block0, 1);
   					if_block0.m(t0.parentNode, t0);
@@ -14467,7 +14467,7 @@
   						transition_in(if_block1, 1);
   					}
   				} else {
-  					if_block1 = create_if_block_2$2(ctx);
+  					if_block1 = create_if_block_2$3(ctx);
   					if_block1.c();
   					transition_in(if_block1, 1);
   					if_block1.m(div, t1);
@@ -14509,7 +14509,7 @@
   						transition_in(if_block2, 1);
   					}
   				} else {
-  					if_block2 = create_if_block_1$e(ctx);
+  					if_block2 = create_if_block_1$h(ctx);
   					if_block2.c();
   					transition_in(if_block2, 1);
   					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
@@ -14557,10 +14557,10 @@
   	};
   }
 
-  function create_fragment$r(ctx) {
+  function create_fragment$v(ctx) {
   	let if_block_anchor;
   	let current;
-  	let if_block = /*open*/ ctx[0] && create_if_block$k(ctx);
+  	let if_block = /*open*/ ctx[0] && create_if_block$o(ctx);
 
   	return {
   		c() {
@@ -14581,7 +14581,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block$k(ctx);
+  					if_block = create_if_block$o(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -14615,7 +14615,7 @@
   	};
   }
 
-  function instance$r($$self, $$props, $$invalidate) {
+  function instance$v($$self, $$props, $$invalidate) {
   	let backdropCls;
   	let dialogCls;
   	let frameCls;
@@ -14834,8 +14834,8 @@
   		init(
   			this,
   			options,
-  			instance$r,
-  			create_fragment$r,
+  			instance$v,
+  			create_fragment$v,
   			safe_not_equal,
   			{
   				open: 0,
@@ -14861,6 +14861,303 @@
   			null,
   			[-1, -1]
   		);
+  	}
+  }
+
+  /* node_modules\flowbite-svelte\dist\popover\Popover.svelte generated by Svelte v4.2.19 */
+  const get_title_slot_changes$1 = dirty => ({});
+  const get_title_slot_context$1 = ctx => ({});
+
+  // (7:2) {#if $$slots.title || title}
+  function create_if_block$n(ctx) {
+  	let div;
+  	let current;
+  	const title_slot_template = /*#slots*/ ctx[5].title;
+  	const title_slot = create_slot(title_slot_template, ctx, /*$$scope*/ ctx[7], get_title_slot_context$1);
+  	const title_slot_or_fallback = title_slot || fallback_block$2(ctx);
+
+  	return {
+  		c() {
+  			div = element("div");
+  			if (title_slot_or_fallback) title_slot_or_fallback.c();
+  			attr(div, "class", "py-2 px-3 bg-gray-100 rounded-t-md border-b border-gray-200 dark:border-gray-600 dark:bg-gray-700");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+
+  			if (title_slot_or_fallback) {
+  				title_slot_or_fallback.m(div, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (title_slot) {
+  				if (title_slot.p && (!current || dirty & /*$$scope*/ 128)) {
+  					update_slot_base(
+  						title_slot,
+  						title_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[7],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[7])
+  						: get_slot_changes(title_slot_template, /*$$scope*/ ctx[7], dirty, get_title_slot_changes$1),
+  						get_title_slot_context$1
+  					);
+  				}
+  			} else {
+  				if (title_slot_or_fallback && title_slot_or_fallback.p && (!current || dirty & /*title*/ 1)) {
+  					title_slot_or_fallback.p(ctx, !current ? -1 : dirty);
+  				}
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(title_slot_or_fallback, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(title_slot_or_fallback, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			if (title_slot_or_fallback) title_slot_or_fallback.d(detaching);
+  		}
+  	};
+  }
+
+  // (9:25)          
+  function fallback_block$2(ctx) {
+  	let h3;
+  	let t;
+
+  	return {
+  		c() {
+  			h3 = element("h3");
+  			t = text(/*title*/ ctx[0]);
+  			attr(h3, "class", "font-semibold text-gray-900 dark:text-white");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h3, anchor);
+  			append(h3, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 1) set_data(t, /*title*/ ctx[0]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h3);
+  			}
+  		}
+  	};
+  }
+
+  // (6:0) <Popper activeContent border shadow rounded {...$$restProps} class="dark:!border-gray-600 {$$props.class}" on:show>
+  function create_default_slot$7(ctx) {
+  	let t;
+  	let div;
+  	let current;
+  	let if_block = (/*$$slots*/ ctx[4].title || /*title*/ ctx[0]) && create_if_block$n(ctx);
+  	const default_slot_template = /*#slots*/ ctx[5].default;
+  	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[7], null);
+
+  	return {
+  		c() {
+  			if (if_block) if_block.c();
+  			t = space$1();
+  			div = element("div");
+  			if (default_slot) default_slot.c();
+  			attr(div, "class", /*defaultClass*/ ctx[1]);
+  		},
+  		m(target, anchor) {
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, t, anchor);
+  			insert$1(target, div, anchor);
+
+  			if (default_slot) {
+  				default_slot.m(div, null);
+  			}
+
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if (/*$$slots*/ ctx[4].title || /*title*/ ctx[0]) {
+  				if (if_block) {
+  					if_block.p(ctx, dirty);
+
+  					if (dirty & /*$$slots, title*/ 17) {
+  						transition_in(if_block, 1);
+  					}
+  				} else {
+  					if_block = create_if_block$n(ctx);
+  					if_block.c();
+  					transition_in(if_block, 1);
+  					if_block.m(t.parentNode, t);
+  				}
+  			} else if (if_block) {
+  				group_outros();
+
+  				transition_out(if_block, 1, 1, () => {
+  					if_block = null;
+  				});
+
+  				check_outros();
+  			}
+
+  			if (default_slot) {
+  				if (default_slot.p && (!current || dirty & /*$$scope*/ 128)) {
+  					update_slot_base(
+  						default_slot,
+  						default_slot_template,
+  						ctx,
+  						/*$$scope*/ ctx[7],
+  						!current
+  						? get_all_dirty_from_scope(/*$$scope*/ ctx[7])
+  						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[7], dirty, null),
+  						null
+  					);
+  				}
+  			}
+
+  			if (!current || dirty & /*defaultClass*/ 2) {
+  				attr(div, "class", /*defaultClass*/ ctx[1]);
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(if_block);
+  			transition_in(default_slot, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(if_block);
+  			transition_out(default_slot, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  				detach(div);
+  			}
+
+  			if (if_block) if_block.d(detaching);
+  			if (default_slot) default_slot.d(detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$u(ctx) {
+  	let popper;
+  	let current;
+
+  	const popper_spread_levels = [
+  		{ activeContent: true },
+  		{ border: true },
+  		{ shadow: true },
+  		{ rounded: true },
+  		/*$$restProps*/ ctx[2],
+  		{
+  			class: "dark:!border-gray-600 " + /*$$props*/ ctx[3].class
+  		}
+  	];
+
+  	let popper_props = {
+  		$$slots: { default: [create_default_slot$7] },
+  		$$scope: { ctx }
+  	};
+
+  	for (let i = 0; i < popper_spread_levels.length; i += 1) {
+  		popper_props = assign(popper_props, popper_spread_levels[i]);
+  	}
+
+  	popper = new Popper({ props: popper_props });
+  	popper.$on("show", /*show_handler*/ ctx[6]);
+
+  	return {
+  		c() {
+  			create_component(popper.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(popper, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			const popper_changes = (dirty & /*$$restProps, $$props*/ 12)
+  			? get_spread_update(popper_spread_levels, [
+  					popper_spread_levels[0],
+  					popper_spread_levels[1],
+  					popper_spread_levels[2],
+  					popper_spread_levels[3],
+  					dirty & /*$$restProps*/ 4 && get_spread_object(/*$$restProps*/ ctx[2]),
+  					dirty & /*$$props*/ 8 && {
+  						class: "dark:!border-gray-600 " + /*$$props*/ ctx[3].class
+  					}
+  				])
+  			: {};
+
+  			if (dirty & /*$$scope, defaultClass, title, $$slots*/ 147) {
+  				popper_changes.$$scope = { dirty, ctx };
+  			}
+
+  			popper.$set(popper_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(popper.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(popper.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(popper, detaching);
+  		}
+  	};
+  }
+
+  function instance$u($$self, $$props, $$invalidate) {
+  	const omit_props_names = ["title","defaultClass"];
+  	let $$restProps = compute_rest_props($$props, omit_props_names);
+  	let { $$slots: slots = {}, $$scope } = $$props;
+  	const $$slots = compute_slots(slots);
+  	let { title = "" } = $$props;
+  	let { defaultClass = "py-2 px-3" } = $$props;
+
+  	function show_handler(event) {
+  		bubble.call(this, $$self, event);
+  	}
+
+  	$$self.$$set = $$new_props => {
+  		$$invalidate(3, $$props = assign(assign({}, $$props), exclude_internal_props($$new_props)));
+  		$$invalidate(2, $$restProps = compute_rest_props($$props, omit_props_names));
+  		if ('title' in $$new_props) $$invalidate(0, title = $$new_props.title);
+  		if ('defaultClass' in $$new_props) $$invalidate(1, defaultClass = $$new_props.defaultClass);
+  		if ('$$scope' in $$new_props) $$invalidate(7, $$scope = $$new_props.$$scope);
+  	};
+
+  	$$props = exclude_internal_props($$props);
+
+  	return [
+  		title,
+  		defaultClass,
+  		$$restProps,
+  		$$props,
+  		$$slots,
+  		slots,
+  		show_handler,
+  		$$scope
+  	];
+  }
+
+  class Popover extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$u, create_fragment$u, safe_not_equal, { title: 0, defaultClass: 1 });
   	}
   }
 
@@ -14986,7 +15283,7 @@
 
   /* node_modules\flowbite-svelte\dist\progress\Progressbar.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$d(ctx) {
+  function create_if_block_1$g(ctx) {
   	let div;
   	let span0;
   	let t0;
@@ -15049,7 +15346,7 @@
   }
 
   // (43:2) {:else}
-  function create_else_block$3(ctx) {
+  function create_else_block$4(ctx) {
   	let div;
   	let div_class_value;
 
@@ -15080,7 +15377,7 @@
   }
 
   // (39:2) {#if labelInside}
-  function create_if_block$j(ctx) {
+  function create_if_block$m(ctx) {
   	let div;
   	let t0_value = /*$_progress*/ ctx[8].toFixed(/*precision*/ ctx[1]) + "";
   	let t0;
@@ -15119,15 +15416,15 @@
   	};
   }
 
-  function create_fragment$q(ctx) {
+  function create_fragment$t(ctx) {
   	let t;
   	let div;
   	let div_class_value;
-  	let if_block0 = /*labelOutside*/ ctx[4] && create_if_block_1$d(ctx);
+  	let if_block0 = /*labelOutside*/ ctx[4] && create_if_block_1$g(ctx);
 
   	function select_block_type(ctx, dirty) {
-  		if (/*labelInside*/ ctx[3]) return create_if_block$j;
-  		return create_else_block$3;
+  		if (/*labelInside*/ ctx[3]) return create_if_block$m;
+  		return create_else_block$4;
   	}
 
   	let current_block_type = select_block_type(ctx);
@@ -15152,7 +15449,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$d(ctx);
+  					if_block0 = create_if_block_1$g(ctx);
   					if_block0.c();
   					if_block0.m(t.parentNode, t);
   				}
@@ -15191,7 +15488,7 @@
   	};
   }
 
-  function instance$q($$self, $$props, $$invalidate) {
+  function instance$t($$self, $$props, $$invalidate) {
   	const omit_props_names = [
   		"progress","precision","tweenDuration","animate","size","labelInside","labelOutside","easing","color","labelInsideClass","divClass"
   	];
@@ -15276,7 +15573,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$q, create_fragment$q, safe_not_equal, {
+  		init(this, options, instance$t, create_fragment$t, safe_not_equal, {
   			progress: 0,
   			precision: 1,
   			tweenDuration: 13,
@@ -15294,7 +15591,7 @@
 
   /* node_modules\flowbite-svelte\dist\table\Table.svelte generated by Svelte v4.2.19 */
 
-  function create_fragment$p(ctx) {
+  function create_fragment$s(ctx) {
   	let div;
   	let table;
   	let table_class_value;
@@ -15378,7 +15675,7 @@
   	};
   }
 
-  function instance$p($$self, $$props, $$invalidate) {
+  function instance$s($$self, $$props, $$invalidate) {
   	const omit_props_names = ["divClass","striped","hoverable","noborder","shadow","color","customeColor"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -15455,7 +15752,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$p, create_fragment$p, safe_not_equal, {
+  		init(this, options, instance$s, create_fragment$s, safe_not_equal, {
   			divClass: 0,
   			striped: 6,
   			hoverable: 7,
@@ -15469,7 +15766,7 @@
 
   /* node_modules\flowbite-svelte\dist\table\TableBody.svelte generated by Svelte v4.2.19 */
 
-  function create_fragment$o(ctx) {
+  function create_fragment$r(ctx) {
   	let tbody;
   	let current;
   	const default_slot_template = /*#slots*/ ctx[2].default;
@@ -15529,7 +15826,7 @@
   	};
   }
 
-  function instance$o($$self, $$props, $$invalidate) {
+  function instance$r($$self, $$props, $$invalidate) {
   	let { $$slots: slots = {}, $$scope } = $$props;
   	let { tableBodyClass = void 0 } = $$props;
 
@@ -15544,13 +15841,13 @@
   class TableBody extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$o, create_fragment$o, safe_not_equal, { tableBodyClass: 0 });
+  		init(this, options, instance$r, create_fragment$r, safe_not_equal, { tableBodyClass: 0 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\table\TableBodyCell.svelte generated by Svelte v4.2.19 */
 
-  function create_else_block$2(ctx) {
+  function create_else_block$3(ctx) {
   	let current;
   	const default_slot_template = /*#slots*/ ctx[6].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
@@ -15598,7 +15895,7 @@
   }
 
   // (11:2) {#if $$props.onclick}
-  function create_if_block$i(ctx) {
+  function create_if_block$l(ctx) {
   	let button;
   	let current;
   	let mounted;
@@ -15667,12 +15964,12 @@
   	};
   }
 
-  function create_fragment$n(ctx) {
+  function create_fragment$q(ctx) {
   	let td;
   	let current_block_type_index;
   	let if_block;
   	let current;
-  	const if_block_creators = [create_if_block$i, create_else_block$2];
+  	const if_block_creators = [create_if_block$l, create_else_block$3];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -15751,7 +16048,7 @@
   	};
   }
 
-  function instance$n($$self, $$props, $$invalidate) {
+  function instance$q($$self, $$props, $$invalidate) {
   	const omit_props_names = ["tdClass"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -15784,13 +16081,13 @@
   class TableBodyCell extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$n, create_fragment$n, safe_not_equal, { tdClass: 3 });
+  		init(this, options, instance$q, create_fragment$q, safe_not_equal, { tdClass: 3 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\table\TableBodyRow.svelte generated by Svelte v4.2.19 */
 
-  function create_fragment$m(ctx) {
+  function create_fragment$p(ctx) {
   	let tr;
   	let current;
   	let mounted;
@@ -15871,7 +16168,7 @@
   	};
   }
 
-  function instance$m($$self, $$props, $$invalidate) {
+  function instance$p($$self, $$props, $$invalidate) {
   	const omit_props_names = ["color"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -15955,13 +16252,13 @@
   class TableBodyRow extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$m, create_fragment$m, safe_not_equal, { color: 2 });
+  		init(this, options, instance$p, create_fragment$p, safe_not_equal, { color: 2 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\table\TableHead.svelte generated by Svelte v4.2.19 */
 
-  function create_else_block$1(ctx) {
+  function create_else_block$2(ctx) {
   	let current;
   	const default_slot_template = /*#slots*/ ctx[6].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[5], null);
@@ -16009,7 +16306,7 @@
   }
 
   // (25:2) {#if defaultRow}
-  function create_if_block$h(ctx) {
+  function create_if_block$k(ctx) {
   	let tr;
   	let current;
   	const default_slot_template = /*#slots*/ ctx[6].default;
@@ -16064,12 +16361,12 @@
   	};
   }
 
-  function create_fragment$l(ctx) {
+  function create_fragment$o(ctx) {
   	let thead;
   	let current_block_type_index;
   	let if_block;
   	let current;
-  	const if_block_creators = [create_if_block$h, create_else_block$1];
+  	const if_block_creators = [create_if_block$k, create_else_block$2];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -16148,7 +16445,7 @@
   	};
   }
 
-  function instance$l($$self, $$props, $$invalidate) {
+  function instance$o($$self, $$props, $$invalidate) {
   	let theadClassfinal;
   	const omit_props_names = ["theadClass","defaultRow"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
@@ -16200,13 +16497,13 @@
   class TableHead extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$l, create_fragment$l, safe_not_equal, { theadClass: 3, defaultRow: 0 });
+  		init(this, options, instance$o, create_fragment$o, safe_not_equal, { theadClass: 3, defaultRow: 0 });
   	}
   }
 
   /* node_modules\flowbite-svelte\dist\table\TableHeadCell.svelte generated by Svelte v4.2.19 */
 
-  function create_fragment$k(ctx) {
+  function create_fragment$n(ctx) {
   	let th;
   	let th_class_value;
   	let current;
@@ -16300,7 +16597,7 @@
   	};
   }
 
-  function instance$k($$self, $$props, $$invalidate) {
+  function instance$n($$self, $$props, $$invalidate) {
   	const omit_props_names = ["padding"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -16367,7 +16664,7 @@
   class TableHeadCell extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$k, create_fragment$k, safe_not_equal, { padding: 0 });
+  		init(this, options, instance$n, create_fragment$n, safe_not_equal, { padding: 0 });
   	}
   }
 
@@ -16398,7 +16695,7 @@
   }
 
   // (34:2) {#if open}
-  function create_if_block$g(ctx) {
+  function create_if_block$j(ctx) {
   	let div1;
   	let div0;
   	let current;
@@ -16466,7 +16763,7 @@
   	};
   }
 
-  function create_fragment$j(ctx) {
+  function create_fragment$m(ctx) {
   	let li;
   	let button;
   	let t;
@@ -16491,7 +16788,7 @@
   		button_data = assign(button_data, button_levels[i]);
   	}
 
-  	let if_block = /*open*/ ctx[0] && create_if_block$g(ctx);
+  	let if_block = /*open*/ ctx[0] && create_if_block$j(ctx);
 
   	return {
   		c() {
@@ -16570,7 +16867,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block$g(ctx);
+  					if_block = create_if_block$j(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(li, null);
@@ -16613,7 +16910,7 @@
   	};
   }
 
-  function instance$j($$self, $$props, $$invalidate) {
+  function instance$m($$self, $$props, $$invalidate) {
   	const omit_props_names = ["open","title","activeClasses","inactiveClasses","defaultClass"];
   	let $$restProps = compute_rest_props($$props, omit_props_names);
   	let { $$slots: slots = {}, $$scope } = $$props;
@@ -16736,7 +17033,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$j, create_fragment$j, safe_not_equal, {
+  		init(this, options, instance$m, create_fragment$m, safe_not_equal, {
   			open: 0,
   			title: 1,
   			activeClasses: 6,
@@ -16753,7 +17050,7 @@
   const get_default_slot_context = ctx => ({ tabStyle: /*tabStyle*/ ctx[1] });
 
   // (43:0) {#if divider}
-  function create_if_block$f(ctx) {
+  function create_if_block$i(ctx) {
   	let current;
   	const divider_slot_template = /*#slots*/ ctx[9].divider;
   	const divider_slot = create_slot(divider_slot_template, ctx, /*$$scope*/ ctx[8], get_divider_slot_context);
@@ -16822,7 +17119,7 @@
   	};
   }
 
-  function create_fragment$i(ctx) {
+  function create_fragment$l(ctx) {
   	let ul;
   	let t0;
   	let t1;
@@ -16832,7 +17129,7 @@
   	let dispose;
   	const default_slot_template = /*#slots*/ ctx[9].default;
   	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[8], get_default_slot_context);
-  	let if_block = /*divider*/ ctx[0] && create_if_block$f(ctx);
+  	let if_block = /*divider*/ ctx[0] && create_if_block$i(ctx);
 
   	return {
   		c() {
@@ -16893,7 +17190,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block$f(ctx);
+  					if_block = create_if_block$i(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(t1.parentNode, t1);
@@ -16939,7 +17236,7 @@
   	};
   }
 
-  function instance$i($$self, $$props, $$invalidate) {
+  function instance$l($$self, $$props, $$invalidate) {
   	let ulClass;
   	let { $$slots: slots = {}, $$scope } = $$props;
   	let { tabStyle = "none" } = $$props;
@@ -17018,7 +17315,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$i, create_fragment$i, safe_not_equal, {
+  		init(this, options, instance$l, create_fragment$l, safe_not_equal, {
   			tabStyle: 1,
   			defaultClass: 5,
   			contentClass: 2,
@@ -17031,7 +17328,7 @@
 
   /* src\ui\ErrorModal.svelte generated by Svelte v4.2.19 */
 
-  function create_default_slot$5(ctx) {
+  function create_default_slot$6(ctx) {
   	let pre;
   	let t;
 
@@ -17055,7 +17352,7 @@
   	};
   }
 
-  function create_fragment$h(ctx) {
+  function create_fragment$k(ctx) {
   	let modal;
   	let current;
 
@@ -17065,7 +17362,7 @@
   				title: /*title*/ ctx[0],
   				open: true,
   				outsideclose: true,
-  				$$slots: { default: [create_default_slot$5] },
+  				$$slots: { default: [create_default_slot$6] },
   				$$scope: { ctx }
   			}
   		});
@@ -17108,7 +17405,7 @@
   	};
   }
 
-  function instance$h($$self, $$props, $$invalidate) {
+  function instance$k($$self, $$props, $$invalidate) {
   	let { title } = $$props;
   	let { msg } = $$props;
   	let { onClose } = $$props;
@@ -17125,7 +17422,7 @@
   class ErrorModal extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$h, create_fragment$h, safe_not_equal, { title: 0, msg: 1, onClose: 2 });
+  		init(this, options, instance$k, create_fragment$k, safe_not_equal, { title: 0, msg: 1, onClose: 2 });
   	}
   }
 
@@ -45069,7 +45366,7 @@
 
   /* src\ui\menu\libraries\LibraryCard.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$c(ctx) {
+  function create_if_block_1$f(ctx) {
   	let span;
   	let t0;
   	let t1_value = /*library*/ ctx[2]?.headers.version + "";
@@ -45104,7 +45401,7 @@
   	let t0_value = /*library*/ ctx[2]?.headers.name + "";
   	let t0;
   	let t1;
-  	let if_block = /*library*/ ctx[2]?.headers.version && create_if_block_1$c(ctx);
+  	let if_block = /*library*/ ctx[2]?.headers.version && create_if_block_1$f(ctx);
 
   	return {
   		c() {
@@ -45127,7 +45424,7 @@
   				if (if_block) {
   					if_block.p(ctx, dirty);
   				} else {
-  					if_block = create_if_block_1$c(ctx);
+  					if_block = create_if_block_1$f(ctx);
   					if_block.c();
   					if_block.m(h2, null);
   				}
@@ -45170,7 +45467,7 @@
   }
 
   // (38:8) {#if library?.headers.downloadUrl}
-  function create_if_block$e(ctx) {
+  function create_if_block$h(ctx) {
   	let button;
   	let update;
   	let current;
@@ -45229,7 +45526,7 @@
   	let dispose;
   	delete_1 = new Delete({ props: { size: 28 } });
   	pencil = new Pencil({ props: { size: 28 } });
-  	let if_block = /*library*/ ctx[2]?.headers.downloadUrl && create_if_block$e(ctx);
+  	let if_block = /*library*/ ctx[2]?.headers.downloadUrl && create_if_block$h(ctx);
 
   	return {
   		c() {
@@ -45271,7 +45568,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block$e(ctx);
+  					if_block = create_if_block$h(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -45317,7 +45614,7 @@
   	};
   }
 
-  function create_fragment$g(ctx) {
+  function create_fragment$j(ctx) {
   	let card;
   	let current;
 
@@ -45368,7 +45665,7 @@
   	};
   }
 
-  function instance$g($$self, $$props, $$invalidate) {
+  function instance$j($$self, $$props, $$invalidate) {
   	let { startDrag } = $$props;
   	let { dragDisabled } = $$props;
   	let { library } = $$props;
@@ -45405,7 +45702,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$g, create_fragment$g, safe_not_equal, {
+  		init(this, options, instance$j, create_fragment$j, safe_not_equal, {
   			startDrag: 0,
   			dragDisabled: 1,
   			library: 2,
@@ -45416,7 +45713,7 @@
 
   /* node_modules\svelte-material-icons\PlusBoxOutline.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$b(ctx) {
+  function create_if_block_1$e(ctx) {
   	let desc_1;
   	let t;
 
@@ -45441,7 +45738,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$d(ctx) {
+  function create_if_block$g(ctx) {
   	let title_1;
   	let t;
 
@@ -45465,12 +45762,12 @@
   	};
   }
 
-  function create_fragment$f(ctx) {
+  function create_fragment$i(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$b(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$d(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$e(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$g(ctx);
 
   	return {
   		c() {
@@ -45500,7 +45797,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$b(ctx);
+  					if_block0 = create_if_block_1$e(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -45513,7 +45810,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$d(ctx);
+  					if_block1 = create_if_block$g(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -45563,7 +45860,7 @@
   	};
   }
 
-  function instance$f($$self, $$props, $$invalidate) {
+  function instance$i($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -45606,7 +45903,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$f, create_fragment$f, safe_not_equal, {
+  		init(this, options, instance$i, create_fragment$i, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -45623,7 +45920,948 @@
 
   /* node_modules\svelte-material-icons\Import.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$a(ctx) {
+  function create_if_block_1$d(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$f(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$h(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$d(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$f(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$d(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$f(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$h($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Import extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$h, create_fragment$h, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\ChevronDown.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$c(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$e(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$g(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$c(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$e(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$c(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$e(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$g($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class ChevronDown extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$g, create_fragment$g, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\libraries\LibraryCardsList.svelte generated by Svelte v4.2.19 */
+
+  function add_css$2(target) {
+  	append_styles(target, "svelte-9bfahn", ".libs.svelte-9bfahn{grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}");
+  }
+
+  function get_each_context$4(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[13] = list[i];
+  	const constants_0 = /*libManager*/ child_ctx[0].getLib(/*item*/ child_ctx[13].id);
+  	child_ctx[14] = constants_0;
+  	return child_ctx;
+  }
+
+  // (66:8) <Button class="h-7 mr-2">
+  function create_default_slot_2$4(ctx) {
+  	let t;
+  	let chevrondown;
+  	let current;
+  	chevrondown = new ChevronDown({ props: { class: "ml-1", size: 20 } });
+
+  	return {
+  		c() {
+  			t = text("Bulk actions");
+  			create_component(chevrondown.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  			mount_component(chevrondown, target, anchor);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(chevrondown.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(chevrondown.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(chevrondown, detaching);
+  		}
+  	};
+  }
+
+  // (68:12) <DropdownItem on:click={deleteAll}>
+  function create_default_slot_1$4(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Delete all");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (67:8) <Dropdown bind:open={bulkOpen}>
+  function create_default_slot$5(ctx) {
+  	let dropdownitem;
+  	let current;
+
+  	dropdownitem = new DropdownItem({
+  			props: {
+  				$$slots: { default: [create_default_slot_1$4] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	dropdownitem.$on("click", /*deleteAll*/ ctx[9]);
+
+  	return {
+  		c() {
+  			create_component(dropdownitem.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(dropdownitem, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const dropdownitem_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				dropdownitem_changes.$$scope = { dirty, ctx };
+  			}
+
+  			dropdownitem.$set(dropdownitem_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(dropdownitem.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(dropdownitem.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(dropdownitem, detaching);
+  		}
+  	};
+  }
+
+  // (71:4) {#if $libs.length === 0}
+  function create_if_block$d(ctx) {
+  	let h2;
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			h2.textContent = "No libraries installed!";
+  			attr(h2, "class", "text-xl");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (77:8) {#each items as item (item.id)}
+  function create_each_block$4(key_1, ctx) {
+  	let div;
+  	let librarycard;
+  	let t;
+  	let rect;
+  	let stop_animation = noop;
+  	let current;
+
+  	librarycard = new LibraryCard({
+  			props: {
+  				library: /*library*/ ctx[14],
+  				startDrag: /*startDrag*/ ctx[8],
+  				dragDisabled: /*dragDisabled*/ ctx[3],
+  				libManager: /*libManager*/ ctx[0]
+  			}
+  		});
+
+  	return {
+  		key: key_1,
+  		first: null,
+  		c() {
+  			div = element("div");
+  			create_component(librarycard.$$.fragment);
+  			t = space$1();
+  			this.first = div;
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(librarycard, div, null);
+  			append(div, t);
+  			current = true;
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  			const librarycard_changes = {};
+  			if (dirty & /*libManager, items*/ 5) librarycard_changes.library = /*library*/ ctx[14];
+  			if (dirty & /*dragDisabled*/ 8) librarycard_changes.dragDisabled = /*dragDisabled*/ ctx[3];
+  			if (dirty & /*libManager*/ 1) librarycard_changes.libManager = /*libManager*/ ctx[0];
+  			librarycard.$set(librarycard_changes);
+  		},
+  		r() {
+  			rect = div.getBoundingClientRect();
+  		},
+  		f() {
+  			fix_position(div);
+  			stop_animation();
+  		},
+  		a() {
+  			stop_animation();
+  			stop_animation = create_animation(div, rect, flip$2, { duration: flipDurationMs$1 });
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(librarycard.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(librarycard.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(librarycard);
+  		}
+  	};
+  }
+
+  function create_fragment$f(ctx) {
+  	let div2;
+  	let div0;
+  	let button0;
+  	let plusboxoutline;
+  	let t0;
+  	let button1;
+  	let import_1;
+  	let t1;
+  	let button2;
+  	let t2;
+  	let dropdown;
+  	let updating_open;
+  	let t3;
+  	let t4;
+  	let div1;
+  	let each_blocks = [];
+  	let each_1_lookup = new Map();
+  	let dndzone_action;
+  	let current;
+  	let mounted;
+  	let dispose;
+  	plusboxoutline = new PlusBoxOutline({ props: { size: 32 } });
+  	import_1 = new Import({ props: { size: 32 } });
+
+  	button2 = new Button({
+  			props: {
+  				class: "h-7 mr-2",
+  				$$slots: { default: [create_default_slot_2$4] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	function dropdown_open_binding(value) {
+  		/*dropdown_open_binding*/ ctx[12](value);
+  	}
+
+  	let dropdown_props = {
+  		$$slots: { default: [create_default_slot$5] },
+  		$$scope: { ctx }
+  	};
+
+  	if (/*bulkOpen*/ ctx[4] !== void 0) {
+  		dropdown_props.open = /*bulkOpen*/ ctx[4];
+  	}
+
+  	dropdown = new Dropdown({ props: dropdown_props });
+  	binding_callbacks.push(() => bind(dropdown, 'open', dropdown_open_binding));
+  	let if_block = /*$libs*/ ctx[1].length === 0 && create_if_block$d();
+  	let each_value = ensure_array_like(/*items*/ ctx[2]);
+  	const get_key = ctx => /*item*/ ctx[13].id;
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		let child_ctx = get_each_context$4(ctx, each_value, i);
+  		let key = get_key(child_ctx);
+  		each_1_lookup.set(key, each_blocks[i] = create_each_block$4(key, child_ctx));
+  	}
+
+  	return {
+  		c() {
+  			div2 = element("div");
+  			div0 = element("div");
+  			button0 = element("button");
+  			create_component(plusboxoutline.$$.fragment);
+  			t0 = space$1();
+  			button1 = element("button");
+  			create_component(import_1.$$.fragment);
+  			t1 = space$1();
+  			create_component(button2.$$.fragment);
+  			t2 = space$1();
+  			create_component(dropdown.$$.fragment);
+  			t3 = space$1();
+  			if (if_block) if_block.c();
+  			t4 = space$1();
+  			div1 = element("div");
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			attr(div0, "class", "flex items-center mb-[3px]");
+  			attr(div1, "class", "max-h-full overflow-y-auto grid gap-4 libs pb-1 flex-grow svelte-9bfahn");
+  			attr(div2, "class", "flex flex-col");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div2, anchor);
+  			append(div2, div0);
+  			append(div0, button0);
+  			mount_component(plusboxoutline, button0, null);
+  			append(div0, t0);
+  			append(div0, button1);
+  			mount_component(import_1, button1, null);
+  			append(div0, t1);
+  			mount_component(button2, div0, null);
+  			append(div0, t2);
+  			mount_component(dropdown, div0, null);
+  			append(div2, t3);
+  			if (if_block) if_block.m(div2, null);
+  			append(div2, t4);
+  			append(div2, div1);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(div1, null);
+  				}
+  			}
+
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = [
+  					listen(button0, "click", /*click_handler*/ ctx[11]),
+  					listen(button1, "click", /*importLib*/ ctx[10]),
+  					action_destroyer(dndzone_action = dndzone.call(null, div1, {
+  						items: /*items*/ ctx[2],
+  						flipDurationMs: flipDurationMs$1,
+  						dragDisabled: /*dragDisabled*/ ctx[3],
+  						dropTargetStyle: {}
+  					})),
+  					listen(div1, "consider", /*handleDndConsider*/ ctx[6]),
+  					listen(div1, "finalize", /*handleDndFinalize*/ ctx[7])
+  				];
+
+  				mounted = true;
+  			}
+  		},
+  		p(ctx, [dirty]) {
+  			const button2_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				button2_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button2.$set(button2_changes);
+  			const dropdown_changes = {};
+
+  			if (dirty & /*$$scope*/ 131072) {
+  				dropdown_changes.$$scope = { dirty, ctx };
+  			}
+
+  			if (!updating_open && dirty & /*bulkOpen*/ 16) {
+  				updating_open = true;
+  				dropdown_changes.open = /*bulkOpen*/ ctx[4];
+  				add_flush_callback(() => updating_open = false);
+  			}
+
+  			dropdown.$set(dropdown_changes);
+
+  			if (/*$libs*/ ctx[1].length === 0) {
+  				if (if_block) ; else {
+  					if_block = create_if_block$d();
+  					if_block.c();
+  					if_block.m(div2, t4);
+  				}
+  			} else if (if_block) {
+  				if_block.d(1);
+  				if_block = null;
+  			}
+
+  			if (dirty & /*libManager, items, startDrag, dragDisabled*/ 269) {
+  				each_value = ensure_array_like(/*items*/ ctx[2]);
+  				group_outros();
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].r();
+  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$4, null, get_each_context$4);
+  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].a();
+  				check_outros();
+  			}
+
+  			if (dndzone_action && is_function(dndzone_action.update) && dirty & /*items, dragDisabled*/ 12) dndzone_action.update.call(null, {
+  				items: /*items*/ ctx[2],
+  				flipDurationMs: flipDurationMs$1,
+  				dragDisabled: /*dragDisabled*/ ctx[3],
+  				dropTargetStyle: {}
+  			});
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(plusboxoutline.$$.fragment, local);
+  			transition_in(import_1.$$.fragment, local);
+  			transition_in(button2.$$.fragment, local);
+  			transition_in(dropdown.$$.fragment, local);
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(plusboxoutline.$$.fragment, local);
+  			transition_out(import_1.$$.fragment, local);
+  			transition_out(button2.$$.fragment, local);
+  			transition_out(dropdown.$$.fragment, local);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div2);
+  			}
+
+  			destroy_component(plusboxoutline);
+  			destroy_component(import_1);
+  			destroy_component(button2);
+  			destroy_component(dropdown);
+  			if (if_block) if_block.d();
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].d();
+  			}
+
+  			mounted = false;
+  			run_all(dispose);
+  		}
+  	};
+  }
+
+  const flipDurationMs$1 = 300;
+
+  function instance$f($$self, $$props, $$invalidate) {
+  	let $libs;
+  	let { libManager } = $$props;
+  	let { libs } = libManager;
+  	component_subscribe($$self, libs, value => $$invalidate(1, $libs = value));
+  	let items = $libs.map(lib => ({ id: lib.headers.name }));
+  	let dragDisabled = true;
+
+  	function handleDndConsider(e) {
+  		$$invalidate(2, items = e.detail.items);
+  	}
+
+  	function handleDndFinalize(e) {
+  		$$invalidate(2, items = e.detail.items);
+  		$$invalidate(3, dragDisabled = true);
+
+  		// Update the order of the libraries
+  		let newOrder = [];
+
+  		for (let item of items) {
+  			let lib = $libs.find(l => l.headers.name === item.id);
+  			if (lib) newOrder.push(lib);
+  		}
+
+  		libManager.libs.set(newOrder);
+  		libManager.save();
+  	}
+
+  	function startDrag() {
+  		$$invalidate(3, dragDisabled = false);
+  	}
+
+  	let bulkOpen = false;
+
+  	function deleteAll() {
+  		$$invalidate(4, bulkOpen = false);
+  		if ($libs.length === 0) return;
+  		const conf = confirm(`Are you sure you want to delete all libraries?`);
+  		if (!conf) return;
+
+  		for (let i = $libs.length - 1; i >= 0; i--) {
+  			let lib = $libs[i];
+  			libManager.deleteLib(lib);
+  		}
+  	}
+
+  	function importLib() {
+  		readUserFile(".js").then(code => {
+  			code = code.replaceAll("\r\n", "\n");
+  			libManager.createLib(code);
+  		}).catch(() => {
+  			
+  		});
+  	}
+
+  	const click_handler = () => createLib(libManager);
+
+  	function dropdown_open_binding(value) {
+  		bulkOpen = value;
+  		$$invalidate(4, bulkOpen);
+  	}
+
+  	$$self.$$set = $$props => {
+  		if ('libManager' in $$props) $$invalidate(0, libManager = $$props.libManager);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*$libs*/ 2) {
+  			$$invalidate(2, items = $libs.map(lib => ({ id: lib.headers.name })));
+  		}
+  	};
+
+  	return [
+  		libManager,
+  		$libs,
+  		items,
+  		dragDisabled,
+  		bulkOpen,
+  		libs,
+  		handleDndConsider,
+  		handleDndFinalize,
+  		startDrag,
+  		deleteAll,
+  		importLib,
+  		click_handler,
+  		dropdown_open_binding
+  	];
+  }
+
+  class LibraryCardsList extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$f, create_fragment$f, safe_not_equal, { libManager: 0 }, add_css$2);
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\BookSettings.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$b(ctx) {
   	let desc_1;
   	let t;
 
@@ -45676,7 +46914,7 @@
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$a(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$b(ctx);
   	let if_block1 = /*title*/ ctx[6] && create_if_block$c(ctx);
 
   	return {
@@ -45686,7 +46924,7 @@
   			if_block0_anchor = empty$1();
   			if (if_block1) if_block1.c();
   			path = svg_element("path");
-  			attr(path, "d", "M14,12L10,8V11H2V13H10V16M20,18V6C20,4.89 19.1,4 18,4H6A2,2 0 0,0 4,6V9H6V6H18V18H6V15H4V18A2,2 0 0,0 6,20H18A2,2 0 0,0 20,18Z");
+  			attr(path, "d", "M20 2V18C20 19.11 19.11 20 18 20H6C4.89 20 4 19.11 4 18V2C4 .895 4.89 0 6 0H7V7L9.5 5.5L12 7V0H18C19.1 0 20 .89 20 2M7 24H9V22H7V24M15 24H17V22H15V24M11 24H13V22H11V24Z");
   			attr(path, "fill", /*color*/ ctx[2]);
   			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
   			attr(svg, "width", /*width*/ ctx[0]);
@@ -45707,7 +46945,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$a(ctx);
+  					if_block0 = create_if_block_1$b(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -45809,7 +47047,7 @@
   	];
   }
 
-  class Import extends SvelteComponent {
+  class BookSettings extends SvelteComponent {
   	constructor(options) {
   		super();
 
@@ -45828,9 +47066,9 @@
   	}
   }
 
-  /* node_modules\svelte-material-icons\ChevronDown.svelte generated by Svelte v4.2.19 */
+  /* node_modules\svelte-material-icons\Cog.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$9(ctx) {
+  function create_if_block_1$a(ctx) {
   	let desc_1;
   	let t;
 
@@ -45883,7 +47121,7 @@
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$9(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$a(ctx);
   	let if_block1 = /*title*/ ctx[6] && create_if_block$b(ctx);
 
   	return {
@@ -45893,7 +47131,7 @@
   			if_block0_anchor = empty$1();
   			if (if_block1) if_block1.c();
   			path = svg_element("path");
-  			attr(path, "d", "M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z");
+  			attr(path, "d", "M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z");
   			attr(path, "fill", /*color*/ ctx[2]);
   			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
   			attr(svg, "width", /*width*/ ctx[0]);
@@ -45914,7 +47152,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$9(ctx);
+  					if_block0 = create_if_block_1$a(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -46016,7 +47254,7 @@
   	];
   }
 
-  class ChevronDown extends SvelteComponent {
+  class Cog extends SvelteComponent {
   	constructor(options) {
   		super();
 
@@ -46035,534 +47273,214 @@
   	}
   }
 
-  /* src\ui\menu\libraries\LibraryCardsList.svelte generated by Svelte v4.2.19 */
+  /* node_modules\svelte-material-icons\OpenInNew.svelte generated by Svelte v4.2.19 */
 
-  function add_css$2(target) {
-  	append_styles(target, "svelte-9bfahn", ".libs.svelte-9bfahn{grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}");
-  }
-
-  function get_each_context$3(ctx, list, i) {
-  	const child_ctx = ctx.slice();
-  	child_ctx[13] = list[i];
-  	const constants_0 = /*libManager*/ child_ctx[0].getLib(/*item*/ child_ctx[13].id);
-  	child_ctx[14] = constants_0;
-  	return child_ctx;
-  }
-
-  // (66:8) <Button class="h-7 mr-2">
-  function create_default_slot_2$3(ctx) {
-  	let t;
-  	let chevrondown;
-  	let current;
-  	chevrondown = new ChevronDown({ props: { class: "ml-1", size: 20 } });
-
-  	return {
-  		c() {
-  			t = text("Bulk actions");
-  			create_component(chevrondown.$$.fragment);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, t, anchor);
-  			mount_component(chevrondown, target, anchor);
-  			current = true;
-  		},
-  		p: noop,
-  		i(local) {
-  			if (current) return;
-  			transition_in(chevrondown.$$.fragment, local);
-  			current = true;
-  		},
-  		o(local) {
-  			transition_out(chevrondown.$$.fragment, local);
-  			current = false;
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(t);
-  			}
-
-  			destroy_component(chevrondown, detaching);
-  		}
-  	};
-  }
-
-  // (68:12) <DropdownItem on:click={deleteAll}>
-  function create_default_slot_1$3(ctx) {
+  function create_if_block_1$9(ctx) {
+  	let desc_1;
   	let t;
 
   	return {
   		c() {
-  			t = text("Delete all");
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
   		},
   		m(target, anchor) {
-  			insert$1(target, t, anchor);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(t);
-  			}
-  		}
-  	};
-  }
-
-  // (67:8) <Dropdown bind:open={bulkOpen}>
-  function create_default_slot$4(ctx) {
-  	let dropdownitem;
-  	let current;
-
-  	dropdownitem = new DropdownItem({
-  			props: {
-  				$$slots: { default: [create_default_slot_1$3] },
-  				$$scope: { ctx }
-  			}
-  		});
-
-  	dropdownitem.$on("click", /*deleteAll*/ ctx[9]);
-
-  	return {
-  		c() {
-  			create_component(dropdownitem.$$.fragment);
-  		},
-  		m(target, anchor) {
-  			mount_component(dropdownitem, target, anchor);
-  			current = true;
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
   		},
   		p(ctx, dirty) {
-  			const dropdownitem_changes = {};
-
-  			if (dirty & /*$$scope*/ 131072) {
-  				dropdownitem_changes.$$scope = { dirty, ctx };
-  			}
-
-  			dropdownitem.$set(dropdownitem_changes);
-  		},
-  		i(local) {
-  			if (current) return;
-  			transition_in(dropdownitem.$$.fragment, local);
-  			current = true;
-  		},
-  		o(local) {
-  			transition_out(dropdownitem.$$.fragment, local);
-  			current = false;
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
   		},
   		d(detaching) {
-  			destroy_component(dropdownitem, detaching);
+  			if (detaching) {
+  				detach(desc_1);
+  			}
   		}
   	};
   }
 
-  // (71:4) {#if $libs.length === 0}
+  // (16:165) {#if title}
   function create_if_block$a(ctx) {
-  	let h2;
-
-  	return {
-  		c() {
-  			h2 = element("h2");
-  			h2.textContent = "No libraries installed!";
-  			attr(h2, "class", "text-xl");
-  		},
-  		m(target, anchor) {
-  			insert$1(target, h2, anchor);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(h2);
-  			}
-  		}
-  	};
-  }
-
-  // (77:8) {#each items as item (item.id)}
-  function create_each_block$3(key_1, ctx) {
-  	let div;
-  	let librarycard;
+  	let title_1;
   	let t;
-  	let rect;
-  	let stop_animation = noop;
-  	let current;
-
-  	librarycard = new LibraryCard({
-  			props: {
-  				library: /*library*/ ctx[14],
-  				startDrag: /*startDrag*/ ctx[8],
-  				dragDisabled: /*dragDisabled*/ ctx[3],
-  				libManager: /*libManager*/ ctx[0]
-  			}
-  		});
 
   	return {
-  		key: key_1,
-  		first: null,
   		c() {
-  			div = element("div");
-  			create_component(librarycard.$$.fragment);
-  			t = space$1();
-  			this.first = div;
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
   		},
   		m(target, anchor) {
-  			insert$1(target, div, anchor);
-  			mount_component(librarycard, div, null);
-  			append(div, t);
-  			current = true;
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
   		},
-  		p(new_ctx, dirty) {
-  			ctx = new_ctx;
-  			const librarycard_changes = {};
-  			if (dirty & /*libManager, items*/ 5) librarycard_changes.library = /*library*/ ctx[14];
-  			if (dirty & /*dragDisabled*/ 8) librarycard_changes.dragDisabled = /*dragDisabled*/ ctx[3];
-  			if (dirty & /*libManager*/ 1) librarycard_changes.libManager = /*libManager*/ ctx[0];
-  			librarycard.$set(librarycard_changes);
-  		},
-  		r() {
-  			rect = div.getBoundingClientRect();
-  		},
-  		f() {
-  			fix_position(div);
-  			stop_animation();
-  		},
-  		a() {
-  			stop_animation();
-  			stop_animation = create_animation(div, rect, flip$2, { duration: flipDurationMs$1 });
-  		},
-  		i(local) {
-  			if (current) return;
-  			transition_in(librarycard.$$.fragment, local);
-  			current = true;
-  		},
-  		o(local) {
-  			transition_out(librarycard.$$.fragment, local);
-  			current = false;
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
   		},
   		d(detaching) {
   			if (detaching) {
-  				detach(div);
+  				detach(title_1);
   			}
-
-  			destroy_component(librarycard);
   		}
   	};
   }
 
   function create_fragment$c(ctx) {
-  	let div2;
-  	let div0;
-  	let button0;
-  	let plusboxoutline;
-  	let t0;
-  	let button1;
-  	let import_1;
-  	let t1;
-  	let button2;
-  	let t2;
-  	let dropdown;
-  	let updating_open;
-  	let t3;
-  	let t4;
-  	let div1;
-  	let each_blocks = [];
-  	let each_1_lookup = new Map();
-  	let dndzone_action;
-  	let current;
-  	let mounted;
-  	let dispose;
-  	plusboxoutline = new PlusBoxOutline({ props: { size: 32 } });
-  	import_1 = new Import({ props: { size: 32 } });
-
-  	button2 = new Button({
-  			props: {
-  				class: "h-7 mr-2",
-  				$$slots: { default: [create_default_slot_2$3] },
-  				$$scope: { ctx }
-  			}
-  		});
-
-  	function dropdown_open_binding(value) {
-  		/*dropdown_open_binding*/ ctx[12](value);
-  	}
-
-  	let dropdown_props = {
-  		$$slots: { default: [create_default_slot$4] },
-  		$$scope: { ctx }
-  	};
-
-  	if (/*bulkOpen*/ ctx[4] !== void 0) {
-  		dropdown_props.open = /*bulkOpen*/ ctx[4];
-  	}
-
-  	dropdown = new Dropdown({ props: dropdown_props });
-  	binding_callbacks.push(() => bind(dropdown, 'open', dropdown_open_binding));
-  	let if_block = /*$libs*/ ctx[1].length === 0 && create_if_block$a();
-  	let each_value = ensure_array_like(/*items*/ ctx[2]);
-  	const get_key = ctx => /*item*/ ctx[13].id;
-
-  	for (let i = 0; i < each_value.length; i += 1) {
-  		let child_ctx = get_each_context$3(ctx, each_value, i);
-  		let key = get_key(child_ctx);
-  		each_1_lookup.set(key, each_blocks[i] = create_each_block$3(key, child_ctx));
-  	}
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$9(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$a(ctx);
 
   	return {
   		c() {
-  			div2 = element("div");
-  			div0 = element("div");
-  			button0 = element("button");
-  			create_component(plusboxoutline.$$.fragment);
-  			t0 = space$1();
-  			button1 = element("button");
-  			create_component(import_1.$$.fragment);
-  			t1 = space$1();
-  			create_component(button2.$$.fragment);
-  			t2 = space$1();
-  			create_component(dropdown.$$.fragment);
-  			t3 = space$1();
-  			if (if_block) if_block.c();
-  			t4 = space$1();
-  			div1 = element("div");
-
-  			for (let i = 0; i < each_blocks.length; i += 1) {
-  				each_blocks[i].c();
-  			}
-
-  			attr(div0, "class", "flex items-center mb-[3px]");
-  			attr(div1, "class", "max-h-full overflow-y-auto grid gap-4 libs pb-1 flex-grow svelte-9bfahn");
-  			attr(div2, "class", "flex flex-col");
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
   		},
   		m(target, anchor) {
-  			insert$1(target, div2, anchor);
-  			append(div2, div0);
-  			append(div0, button0);
-  			mount_component(plusboxoutline, button0, null);
-  			append(div0, t0);
-  			append(div0, button1);
-  			mount_component(import_1, button1, null);
-  			append(div0, t1);
-  			mount_component(button2, div0, null);
-  			append(div0, t2);
-  			mount_component(dropdown, div0, null);
-  			append(div2, t3);
-  			if (if_block) if_block.m(div2, null);
-  			append(div2, t4);
-  			append(div2, div1);
-
-  			for (let i = 0; i < each_blocks.length; i += 1) {
-  				if (each_blocks[i]) {
-  					each_blocks[i].m(div1, null);
-  				}
-  			}
-
-  			current = true;
-
-  			if (!mounted) {
-  				dispose = [
-  					listen(button0, "click", /*click_handler*/ ctx[11]),
-  					listen(button1, "click", /*importLib*/ ctx[10]),
-  					action_destroyer(dndzone_action = dndzone.call(null, div1, {
-  						items: /*items*/ ctx[2],
-  						flipDurationMs: flipDurationMs$1,
-  						dragDisabled: /*dragDisabled*/ ctx[3],
-  						dropTargetStyle: {}
-  					})),
-  					listen(div1, "consider", /*handleDndConsider*/ ctx[6]),
-  					listen(div1, "finalize", /*handleDndFinalize*/ ctx[7])
-  				];
-
-  				mounted = true;
-  			}
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
   		},
   		p(ctx, [dirty]) {
-  			const button2_changes = {};
-
-  			if (dirty & /*$$scope*/ 131072) {
-  				button2_changes.$$scope = { dirty, ctx };
-  			}
-
-  			button2.$set(button2_changes);
-  			const dropdown_changes = {};
-
-  			if (dirty & /*$$scope*/ 131072) {
-  				dropdown_changes.$$scope = { dirty, ctx };
-  			}
-
-  			if (!updating_open && dirty & /*bulkOpen*/ 16) {
-  				updating_open = true;
-  				dropdown_changes.open = /*bulkOpen*/ ctx[4];
-  				add_flush_callback(() => updating_open = false);
-  			}
-
-  			dropdown.$set(dropdown_changes);
-
-  			if (/*$libs*/ ctx[1].length === 0) {
-  				if (if_block) ; else {
-  					if_block = create_if_block$a();
-  					if_block.c();
-  					if_block.m(div2, t4);
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$9(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
   				}
-  			} else if (if_block) {
-  				if_block.d(1);
-  				if_block = null;
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
   			}
 
-  			if (dirty & /*libManager, items, startDrag, dragDisabled*/ 269) {
-  				each_value = ensure_array_like(/*items*/ ctx[2]);
-  				group_outros();
-  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].r();
-  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$3, null, get_each_context$3);
-  				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].a();
-  				check_outros();
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$a(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
   			}
 
-  			if (dndzone_action && is_function(dndzone_action.update) && dirty & /*items, dragDisabled*/ 12) dndzone_action.update.call(null, {
-  				items: /*items*/ ctx[2],
-  				flipDurationMs: flipDurationMs$1,
-  				dragDisabled: /*dragDisabled*/ ctx[3],
-  				dropTargetStyle: {}
-  			});
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
   		},
-  		i(local) {
-  			if (current) return;
-  			transition_in(plusboxoutline.$$.fragment, local);
-  			transition_in(import_1.$$.fragment, local);
-  			transition_in(button2.$$.fragment, local);
-  			transition_in(dropdown.$$.fragment, local);
-
-  			for (let i = 0; i < each_value.length; i += 1) {
-  				transition_in(each_blocks[i]);
-  			}
-
-  			current = true;
-  		},
-  		o(local) {
-  			transition_out(plusboxoutline.$$.fragment, local);
-  			transition_out(import_1.$$.fragment, local);
-  			transition_out(button2.$$.fragment, local);
-  			transition_out(dropdown.$$.fragment, local);
-
-  			for (let i = 0; i < each_blocks.length; i += 1) {
-  				transition_out(each_blocks[i]);
-  			}
-
-  			current = false;
-  		},
+  		i: noop,
+  		o: noop,
   		d(detaching) {
   			if (detaching) {
-  				detach(div2);
+  				detach(svg);
   			}
 
-  			destroy_component(plusboxoutline);
-  			destroy_component(import_1);
-  			destroy_component(button2);
-  			destroy_component(dropdown);
-  			if (if_block) if_block.d();
-
-  			for (let i = 0; i < each_blocks.length; i += 1) {
-  				each_blocks[i].d();
-  			}
-
-  			mounted = false;
-  			run_all(dispose);
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
   		}
   	};
   }
 
-  const flipDurationMs$1 = 300;
-
   function instance$c($$self, $$props, $$invalidate) {
-  	let $libs;
-  	let { libManager } = $$props;
-  	let { libs } = libManager;
-  	component_subscribe($$self, libs, value => $$invalidate(1, $libs = value));
-  	let items = $libs.map(lib => ({ id: lib.headers.name }));
-  	let dragDisabled = true;
-
-  	function handleDndConsider(e) {
-  		$$invalidate(2, items = e.detail.items);
-  	}
-
-  	function handleDndFinalize(e) {
-  		$$invalidate(2, items = e.detail.items);
-  		$$invalidate(3, dragDisabled = true);
-
-  		// Update the order of the libraries
-  		let newOrder = [];
-
-  		for (let item of items) {
-  			let lib = $libs.find(l => l.headers.name === item.id);
-  			if (lib) newOrder.push(lib);
-  		}
-
-  		libManager.libs.set(newOrder);
-  		libManager.save();
-  	}
-
-  	function startDrag() {
-  		$$invalidate(3, dragDisabled = false);
-  	}
-
-  	let bulkOpen = false;
-
-  	function deleteAll() {
-  		$$invalidate(4, bulkOpen = false);
-  		if ($libs.length === 0) return;
-  		const conf = confirm(`Are you sure you want to delete all libraries?`);
-  		if (!conf) return;
-
-  		for (let i = $libs.length - 1; i >= 0; i--) {
-  			let lib = $libs[i];
-  			libManager.deleteLib(lib);
-  		}
-  	}
-
-  	function importLib() {
-  		readUserFile(".js").then(code => {
-  			code = code.replaceAll("\r\n", "\n");
-  			libManager.createLib(code);
-  		}).catch(() => {
-  			
-  		});
-  	}
-
-  	const click_handler = () => createLib(libManager);
-
-  	function dropdown_open_binding(value) {
-  		bulkOpen = value;
-  		$$invalidate(4, bulkOpen);
-  	}
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
 
   	$$self.$$set = $$props => {
-  		if ('libManager' in $$props) $$invalidate(0, libManager = $$props.libManager);
-  	};
-
-  	$$self.$$.update = () => {
-  		if ($$self.$$.dirty & /*$libs*/ 2) {
-  			$$invalidate(2, items = $libs.map(lib => ({ id: lib.headers.name })));
-  		}
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
   	};
 
   	return [
-  		libManager,
-  		$libs,
-  		items,
-  		dragDisabled,
-  		bulkOpen,
-  		libs,
-  		handleDndConsider,
-  		handleDndFinalize,
-  		startDrag,
-  		deleteAll,
-  		importLib,
-  		click_handler,
-  		dropdown_open_binding
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
   	];
   }
 
-  class LibraryCardsList extends SvelteComponent {
+  class OpenInNew extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$c, create_fragment$c, safe_not_equal, { libManager: 0 }, add_css$2);
+
+  		init(this, options, instance$c, create_fragment$c, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
   	}
   }
 
-  /* node_modules\svelte-material-icons\BookSettings.svelte generated by Svelte v4.2.19 */
+  /* node_modules\svelte-material-icons\Download.svelte generated by Svelte v4.2.19 */
 
   function create_if_block_1$8(ctx) {
   	let desc_1;
@@ -46627,7 +47545,7 @@
   			if_block0_anchor = empty$1();
   			if (if_block1) if_block1.c();
   			path = svg_element("path");
-  			attr(path, "d", "M20 2V18C20 19.11 19.11 20 18 20H6C4.89 20 4 19.11 4 18V2C4 .895 4.89 0 6 0H7V7L9.5 5.5L12 7V0H18C19.1 0 20 .89 20 2M7 24H9V22H7V24M15 24H17V22H15V24M11 24H13V22H11V24Z");
+  			attr(path, "d", "M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z");
   			attr(path, "fill", /*color*/ ctx[2]);
   			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
   			attr(svg, "width", /*width*/ ctx[0]);
@@ -46750,7 +47668,7 @@
   	];
   }
 
-  class BookSettings extends SvelteComponent {
+  class Download extends SvelteComponent {
   	constructor(options) {
   		super();
 
@@ -46769,630 +47687,9 @@
   	}
   }
 
-  /* node_modules\svelte-material-icons\Cog.svelte generated by Svelte v4.2.19 */
-
-  function create_if_block_1$7(ctx) {
-  	let desc_1;
-  	let t;
-
-  	return {
-  		c() {
-  			desc_1 = svg_element("desc");
-  			t = text(/*desc*/ ctx[7]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, desc_1, anchor);
-  			append(desc_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(desc_1);
-  			}
-  		}
-  	};
-  }
-
-  // (16:165) {#if title}
-  function create_if_block$8(ctx) {
-  	let title_1;
-  	let t;
-
-  	return {
-  		c() {
-  			title_1 = svg_element("title");
-  			t = text(/*title*/ ctx[6]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, title_1, anchor);
-  			append(title_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(title_1);
-  			}
-  		}
-  	};
-  }
-
-  function create_fragment$a(ctx) {
-  	let svg;
-  	let if_block0_anchor;
-  	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$7(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$8(ctx);
-
-  	return {
-  		c() {
-  			svg = svg_element("svg");
-  			if (if_block0) if_block0.c();
-  			if_block0_anchor = empty$1();
-  			if (if_block1) if_block1.c();
-  			path = svg_element("path");
-  			attr(path, "d", "M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z");
-  			attr(path, "fill", /*color*/ ctx[2]);
-  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			attr(svg, "width", /*width*/ ctx[0]);
-  			attr(svg, "height", /*height*/ ctx[1]);
-  			attr(svg, "class", /*className*/ ctx[8]);
-  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, svg, anchor);
-  			if (if_block0) if_block0.m(svg, null);
-  			append(svg, if_block0_anchor);
-  			if (if_block1) if_block1.m(svg, null);
-  			append(svg, path);
-  		},
-  		p(ctx, [dirty]) {
-  			if (/*desc*/ ctx[7]) {
-  				if (if_block0) {
-  					if_block0.p(ctx, dirty);
-  				} else {
-  					if_block0 = create_if_block_1$7(ctx);
-  					if_block0.c();
-  					if_block0.m(svg, if_block0_anchor);
-  				}
-  			} else if (if_block0) {
-  				if_block0.d(1);
-  				if_block0 = null;
-  			}
-
-  			if (/*title*/ ctx[6]) {
-  				if (if_block1) {
-  					if_block1.p(ctx, dirty);
-  				} else {
-  					if_block1 = create_if_block$8(ctx);
-  					if_block1.c();
-  					if_block1.m(svg, path);
-  				}
-  			} else if (if_block1) {
-  				if_block1.d(1);
-  				if_block1 = null;
-  			}
-
-  			if (dirty & /*color*/ 4) {
-  				attr(path, "fill", /*color*/ ctx[2]);
-  			}
-
-  			if (dirty & /*viewBox*/ 8) {
-  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			}
-
-  			if (dirty & /*width*/ 1) {
-  				attr(svg, "width", /*width*/ ctx[0]);
-  			}
-
-  			if (dirty & /*height*/ 2) {
-  				attr(svg, "height", /*height*/ ctx[1]);
-  			}
-
-  			if (dirty & /*className*/ 256) {
-  				attr(svg, "class", /*className*/ ctx[8]);
-  			}
-
-  			if (dirty & /*ariaLabel*/ 16) {
-  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			}
-
-  			if (dirty & /*ariaHidden*/ 32) {
-  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  			}
-  		},
-  		i: noop,
-  		o: noop,
-  		d(detaching) {
-  			if (detaching) {
-  				detach(svg);
-  			}
-
-  			if (if_block0) if_block0.d();
-  			if (if_block1) if_block1.d();
-  		}
-  	};
-  }
-
-  function instance$a($$self, $$props, $$invalidate) {
-  	let { size = "1em" } = $$props;
-  	let { width = size } = $$props;
-  	let { height = size } = $$props;
-  	let { color = "currentColor" } = $$props;
-  	let { viewBox = "0 0 24 24" } = $$props;
-  	let { ariaLabel = void 0 } = $$props;
-  	let { ariaHidden = void 0 } = $$props;
-  	let { title = void 0 } = $$props;
-  	let { desc = void 0 } = $$props;
-  	let { class: className = void 0 } = $$props;
-
-  	$$self.$$set = $$props => {
-  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
-  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
-  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
-  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
-  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
-  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
-  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
-  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
-  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
-  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
-  	};
-
-  	return [
-  		width,
-  		height,
-  		color,
-  		viewBox,
-  		ariaLabel,
-  		ariaHidden,
-  		title,
-  		desc,
-  		className,
-  		size
-  	];
-  }
-
-  class Cog extends SvelteComponent {
-  	constructor(options) {
-  		super();
-
-  		init(this, options, instance$a, create_fragment$a, safe_not_equal, {
-  			size: 9,
-  			width: 0,
-  			height: 1,
-  			color: 2,
-  			viewBox: 3,
-  			ariaLabel: 4,
-  			ariaHidden: 5,
-  			title: 6,
-  			desc: 7,
-  			class: 8
-  		});
-  	}
-  }
-
-  /* node_modules\svelte-material-icons\OpenInNew.svelte generated by Svelte v4.2.19 */
-
-  function create_if_block_1$6(ctx) {
-  	let desc_1;
-  	let t;
-
-  	return {
-  		c() {
-  			desc_1 = svg_element("desc");
-  			t = text(/*desc*/ ctx[7]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, desc_1, anchor);
-  			append(desc_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(desc_1);
-  			}
-  		}
-  	};
-  }
-
-  // (16:165) {#if title}
-  function create_if_block$7(ctx) {
-  	let title_1;
-  	let t;
-
-  	return {
-  		c() {
-  			title_1 = svg_element("title");
-  			t = text(/*title*/ ctx[6]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, title_1, anchor);
-  			append(title_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(title_1);
-  			}
-  		}
-  	};
-  }
-
-  function create_fragment$9(ctx) {
-  	let svg;
-  	let if_block0_anchor;
-  	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$6(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$7(ctx);
-
-  	return {
-  		c() {
-  			svg = svg_element("svg");
-  			if (if_block0) if_block0.c();
-  			if_block0_anchor = empty$1();
-  			if (if_block1) if_block1.c();
-  			path = svg_element("path");
-  			attr(path, "d", "M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z");
-  			attr(path, "fill", /*color*/ ctx[2]);
-  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			attr(svg, "width", /*width*/ ctx[0]);
-  			attr(svg, "height", /*height*/ ctx[1]);
-  			attr(svg, "class", /*className*/ ctx[8]);
-  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, svg, anchor);
-  			if (if_block0) if_block0.m(svg, null);
-  			append(svg, if_block0_anchor);
-  			if (if_block1) if_block1.m(svg, null);
-  			append(svg, path);
-  		},
-  		p(ctx, [dirty]) {
-  			if (/*desc*/ ctx[7]) {
-  				if (if_block0) {
-  					if_block0.p(ctx, dirty);
-  				} else {
-  					if_block0 = create_if_block_1$6(ctx);
-  					if_block0.c();
-  					if_block0.m(svg, if_block0_anchor);
-  				}
-  			} else if (if_block0) {
-  				if_block0.d(1);
-  				if_block0 = null;
-  			}
-
-  			if (/*title*/ ctx[6]) {
-  				if (if_block1) {
-  					if_block1.p(ctx, dirty);
-  				} else {
-  					if_block1 = create_if_block$7(ctx);
-  					if_block1.c();
-  					if_block1.m(svg, path);
-  				}
-  			} else if (if_block1) {
-  				if_block1.d(1);
-  				if_block1 = null;
-  			}
-
-  			if (dirty & /*color*/ 4) {
-  				attr(path, "fill", /*color*/ ctx[2]);
-  			}
-
-  			if (dirty & /*viewBox*/ 8) {
-  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			}
-
-  			if (dirty & /*width*/ 1) {
-  				attr(svg, "width", /*width*/ ctx[0]);
-  			}
-
-  			if (dirty & /*height*/ 2) {
-  				attr(svg, "height", /*height*/ ctx[1]);
-  			}
-
-  			if (dirty & /*className*/ 256) {
-  				attr(svg, "class", /*className*/ ctx[8]);
-  			}
-
-  			if (dirty & /*ariaLabel*/ 16) {
-  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			}
-
-  			if (dirty & /*ariaHidden*/ 32) {
-  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  			}
-  		},
-  		i: noop,
-  		o: noop,
-  		d(detaching) {
-  			if (detaching) {
-  				detach(svg);
-  			}
-
-  			if (if_block0) if_block0.d();
-  			if (if_block1) if_block1.d();
-  		}
-  	};
-  }
-
-  function instance$9($$self, $$props, $$invalidate) {
-  	let { size = "1em" } = $$props;
-  	let { width = size } = $$props;
-  	let { height = size } = $$props;
-  	let { color = "currentColor" } = $$props;
-  	let { viewBox = "0 0 24 24" } = $$props;
-  	let { ariaLabel = void 0 } = $$props;
-  	let { ariaHidden = void 0 } = $$props;
-  	let { title = void 0 } = $$props;
-  	let { desc = void 0 } = $$props;
-  	let { class: className = void 0 } = $$props;
-
-  	$$self.$$set = $$props => {
-  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
-  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
-  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
-  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
-  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
-  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
-  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
-  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
-  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
-  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
-  	};
-
-  	return [
-  		width,
-  		height,
-  		color,
-  		viewBox,
-  		ariaLabel,
-  		ariaHidden,
-  		title,
-  		desc,
-  		className,
-  		size
-  	];
-  }
-
-  class OpenInNew extends SvelteComponent {
-  	constructor(options) {
-  		super();
-
-  		init(this, options, instance$9, create_fragment$9, safe_not_equal, {
-  			size: 9,
-  			width: 0,
-  			height: 1,
-  			color: 2,
-  			viewBox: 3,
-  			ariaLabel: 4,
-  			ariaHidden: 5,
-  			title: 6,
-  			desc: 7,
-  			class: 8
-  		});
-  	}
-  }
-
-  /* node_modules\svelte-material-icons\Download.svelte generated by Svelte v4.2.19 */
-
-  function create_if_block_1$5(ctx) {
-  	let desc_1;
-  	let t;
-
-  	return {
-  		c() {
-  			desc_1 = svg_element("desc");
-  			t = text(/*desc*/ ctx[7]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, desc_1, anchor);
-  			append(desc_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(desc_1);
-  			}
-  		}
-  	};
-  }
-
-  // (16:165) {#if title}
-  function create_if_block$6(ctx) {
-  	let title_1;
-  	let t;
-
-  	return {
-  		c() {
-  			title_1 = svg_element("title");
-  			t = text(/*title*/ ctx[6]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, title_1, anchor);
-  			append(title_1, t);
-  		},
-  		p(ctx, dirty) {
-  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
-  		},
-  		d(detaching) {
-  			if (detaching) {
-  				detach(title_1);
-  			}
-  		}
-  	};
-  }
-
-  function create_fragment$8(ctx) {
-  	let svg;
-  	let if_block0_anchor;
-  	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$5(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$6(ctx);
-
-  	return {
-  		c() {
-  			svg = svg_element("svg");
-  			if (if_block0) if_block0.c();
-  			if_block0_anchor = empty$1();
-  			if (if_block1) if_block1.c();
-  			path = svg_element("path");
-  			attr(path, "d", "M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z");
-  			attr(path, "fill", /*color*/ ctx[2]);
-  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			attr(svg, "width", /*width*/ ctx[0]);
-  			attr(svg, "height", /*height*/ ctx[1]);
-  			attr(svg, "class", /*className*/ ctx[8]);
-  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  		},
-  		m(target, anchor) {
-  			insert$1(target, svg, anchor);
-  			if (if_block0) if_block0.m(svg, null);
-  			append(svg, if_block0_anchor);
-  			if (if_block1) if_block1.m(svg, null);
-  			append(svg, path);
-  		},
-  		p(ctx, [dirty]) {
-  			if (/*desc*/ ctx[7]) {
-  				if (if_block0) {
-  					if_block0.p(ctx, dirty);
-  				} else {
-  					if_block0 = create_if_block_1$5(ctx);
-  					if_block0.c();
-  					if_block0.m(svg, if_block0_anchor);
-  				}
-  			} else if (if_block0) {
-  				if_block0.d(1);
-  				if_block0 = null;
-  			}
-
-  			if (/*title*/ ctx[6]) {
-  				if (if_block1) {
-  					if_block1.p(ctx, dirty);
-  				} else {
-  					if_block1 = create_if_block$6(ctx);
-  					if_block1.c();
-  					if_block1.m(svg, path);
-  				}
-  			} else if (if_block1) {
-  				if_block1.d(1);
-  				if_block1 = null;
-  			}
-
-  			if (dirty & /*color*/ 4) {
-  				attr(path, "fill", /*color*/ ctx[2]);
-  			}
-
-  			if (dirty & /*viewBox*/ 8) {
-  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
-  			}
-
-  			if (dirty & /*width*/ 1) {
-  				attr(svg, "width", /*width*/ ctx[0]);
-  			}
-
-  			if (dirty & /*height*/ 2) {
-  				attr(svg, "height", /*height*/ ctx[1]);
-  			}
-
-  			if (dirty & /*className*/ 256) {
-  				attr(svg, "class", /*className*/ ctx[8]);
-  			}
-
-  			if (dirty & /*ariaLabel*/ 16) {
-  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
-  			}
-
-  			if (dirty & /*ariaHidden*/ 32) {
-  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
-  			}
-  		},
-  		i: noop,
-  		o: noop,
-  		d(detaching) {
-  			if (detaching) {
-  				detach(svg);
-  			}
-
-  			if (if_block0) if_block0.d();
-  			if (if_block1) if_block1.d();
-  		}
-  	};
-  }
-
-  function instance$8($$self, $$props, $$invalidate) {
-  	let { size = "1em" } = $$props;
-  	let { width = size } = $$props;
-  	let { height = size } = $$props;
-  	let { color = "currentColor" } = $$props;
-  	let { viewBox = "0 0 24 24" } = $$props;
-  	let { ariaLabel = void 0 } = $$props;
-  	let { ariaHidden = void 0 } = $$props;
-  	let { title = void 0 } = $$props;
-  	let { desc = void 0 } = $$props;
-  	let { class: className = void 0 } = $$props;
-
-  	$$self.$$set = $$props => {
-  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
-  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
-  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
-  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
-  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
-  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
-  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
-  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
-  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
-  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
-  	};
-
-  	return [
-  		width,
-  		height,
-  		color,
-  		viewBox,
-  		ariaLabel,
-  		ariaHidden,
-  		title,
-  		desc,
-  		className,
-  		size
-  	];
-  }
-
-  class Download extends SvelteComponent {
-  	constructor(options) {
-  		super();
-
-  		init(this, options, instance$8, create_fragment$8, safe_not_equal, {
-  			size: 9,
-  			width: 0,
-  			height: 1,
-  			color: 2,
-  			viewBox: 3,
-  			ariaLabel: 4,
-  			ariaHidden: 5,
-  			title: 6,
-  			desc: 7,
-  			class: 8
-  		});
-  	}
-  }
-
   /* src\ui\menu\plugins\PluginLibrariesInfo.svelte generated by Svelte v4.2.19 */
 
-  function get_each_context$2(ctx, list, i) {
+  function get_each_context$3(ctx, list, i) {
   	const child_ctx = ctx.slice();
   	child_ctx[6] = list[i];
   	const constants_0 = /*libManager*/ child_ctx[0].getLib(/*libInfo*/ child_ctx[6].name);
@@ -47631,7 +47928,7 @@
   }
 
   // (39:16) <TableBodyCell>
-  function create_default_slot_6$1(ctx) {
+  function create_default_slot_6$2(ctx) {
   	let t_value = /*libInfo*/ ctx[6].name + "";
   	let t;
 
@@ -47735,7 +48032,7 @@
   }
 
   // (52:42) 
-  function create_if_block_1$4(ctx) {
+  function create_if_block_1$7(ctx) {
   	let button;
   	let download;
   	let current;
@@ -47787,7 +48084,7 @@
   }
 
   // (48:20) {#if lib && lib.headers.downloadUrl}
-  function create_if_block$5(ctx) {
+  function create_if_block$8(ctx) {
   	let button;
   	let update;
   	let current;
@@ -47844,7 +48141,7 @@
   	let if_block;
   	let if_block_anchor;
   	let current;
-  	const if_block_creators = [create_if_block$5, create_if_block_1$4];
+  	const if_block_creators = [create_if_block$8, create_if_block_1$7];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -47928,7 +48225,7 @@
   }
 
   // (37:12) <TableBodyRow>
-  function create_default_slot_2$2(ctx) {
+  function create_default_slot_2$3(ctx) {
   	let tablebodycell0;
   	let t0;
   	let tablebodycell1;
@@ -47950,7 +48247,7 @@
 
   	tablebodycell1 = new TableBodyCell({
   			props: {
-  				$$slots: { default: [create_default_slot_6$1] },
+  				$$slots: { default: [create_default_slot_6$2] },
   				$$scope: { ctx }
   			}
   		});
@@ -48076,13 +48373,13 @@
   }
 
   // (35:8) {#each libsInfo as libInfo}
-  function create_each_block$2(ctx) {
+  function create_each_block$3(ctx) {
   	let tablebodyrow;
   	let current;
 
   	tablebodyrow = new TableBodyRow({
   			props: {
-  				$$slots: { default: [create_default_slot_2$2] },
+  				$$slots: { default: [create_default_slot_2$3] },
   				$$scope: { ctx }
   			}
   		});
@@ -48120,14 +48417,14 @@
   }
 
   // (34:4) <TableBody>
-  function create_default_slot_1$2(ctx) {
+  function create_default_slot_1$3(ctx) {
   	let each_1_anchor;
   	let current;
   	let each_value = ensure_array_like(/*libsInfo*/ ctx[1]);
   	let each_blocks = [];
 
   	for (let i = 0; i < each_value.length; i += 1) {
-  		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+  		each_blocks[i] = create_each_block$3(get_each_context$3(ctx, each_value, i));
   	}
 
   	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -48158,13 +48455,13 @@
   				let i;
 
   				for (i = 0; i < each_value.length; i += 1) {
-  					const child_ctx = get_each_context$2(ctx, each_value, i);
+  					const child_ctx = get_each_context$3(ctx, each_value, i);
 
   					if (each_blocks[i]) {
   						each_blocks[i].p(child_ctx, dirty);
   						transition_in(each_blocks[i], 1);
   					} else {
-  						each_blocks[i] = create_each_block$2(child_ctx);
+  						each_blocks[i] = create_each_block$3(child_ctx);
   						each_blocks[i].c();
   						transition_in(each_blocks[i], 1);
   						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
@@ -48209,7 +48506,7 @@
   }
 
   // (26:0) <Table>
-  function create_default_slot$3(ctx) {
+  function create_default_slot$4(ctx) {
   	let tablehead;
   	let t;
   	let tablebody;
@@ -48224,7 +48521,7 @@
 
   	tablebody = new TableBody({
   			props: {
-  				$$slots: { default: [create_default_slot_1$2] },
+  				$$slots: { default: [create_default_slot_1$3] },
   				$$scope: { ctx }
   			}
   		});
@@ -48279,13 +48576,13 @@
   	};
   }
 
-  function create_fragment$7(ctx) {
+  function create_fragment$a(ctx) {
   	let table;
   	let current;
 
   	table = new Table({
   			props: {
-  				$$slots: { default: [create_default_slot$3] },
+  				$$slots: { default: [create_default_slot$4] },
   				$$scope: { ctx }
   			}
   		});
@@ -48322,7 +48619,7 @@
   	};
   }
 
-  function instance$7($$self, $$props, $$invalidate) {
+  function instance$a($$self, $$props, $$invalidate) {
   	let { plugin } = $$props;
   	let { libManager } = $$props;
   	let libsInfo = [];
@@ -48365,7 +48662,7 @@
   class PluginLibrariesInfo extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$7, create_fragment$7, safe_not_equal, { plugin: 3, libManager: 0 });
+  		init(this, options, instance$a, create_fragment$a, safe_not_equal, { plugin: 3, libManager: 0 });
   	}
   }
 
@@ -48381,7 +48678,7 @@
   				open: true,
   				outsideclose: true,
   				title: `Libraries used by ${/*plugin*/ ctx[4].headers.name}`,
-  				$$slots: { default: [create_default_slot$2] },
+  				$$slots: { default: [create_default_slot$3] },
   				$$scope: { ctx }
   			}
   		});
@@ -48422,7 +48719,7 @@
   }
 
   // (40:4) <Modal size="lg" open outsideclose on:close={() => libInfoOpen = false}          title={`Libraries used by ${plugin.headers.name}`}>
-  function create_default_slot$2(ctx) {
+  function create_default_slot$3(ctx) {
   	let pluginlibrariesinfo;
   	let current;
 
@@ -48463,7 +48760,7 @@
   }
 
   // (50:12) {#if plugin?.headers.version}
-  function create_if_block_3$1(ctx) {
+  function create_if_block_3$2(ctx) {
   	let span;
   	let t0;
   	let t1_value = /*plugin*/ ctx[4]?.headers.version + "";
@@ -48505,7 +48802,7 @@
   	let current;
   	let mounted;
   	let dispose;
-  	let if_block = /*plugin*/ ctx[4]?.headers.version && create_if_block_3$1(ctx);
+  	let if_block = /*plugin*/ ctx[4]?.headers.version && create_if_block_3$2(ctx);
 
   	function toggle_checked_binding(value) {
   		/*toggle_checked_binding*/ ctx[17](value);
@@ -48553,7 +48850,7 @@
   				if (if_block) {
   					if_block.p(ctx, dirty);
   				} else {
-  					if_block = create_if_block_3$1(ctx);
+  					if_block = create_if_block_3$2(ctx);
   					if_block.c();
   					if_block.m(h2, null);
   				}
@@ -48620,7 +48917,7 @@
   }
 
   // (68:8) {#if plugin?.return?.openSettingsMenu}
-  function create_if_block_2$1(ctx) {
+  function create_if_block_2$2(ctx) {
   	let button;
   	let cog;
   	let current;
@@ -48666,7 +48963,7 @@
   }
 
   // (73:8) {#if plugin?.headers.downloadUrl}
-  function create_if_block_1$3(ctx) {
+  function create_if_block_1$6(ctx) {
   	let button;
   	let update;
   	let current;
@@ -48712,7 +49009,7 @@
   }
 
   // (78:8) {#if plugin?.headers.needsLib || plugin?.headers.optionalLib}
-  function create_if_block$4(ctx) {
+  function create_if_block$7(ctx) {
   	let button;
   	let booksettings;
   	let current;
@@ -48773,9 +49070,9 @@
   	let dispose;
   	delete_1 = new Delete({ props: { size: 28 } });
   	pencil = new Pencil({ props: { size: 28 } });
-  	let if_block0 = /*plugin*/ ctx[4]?.return?.openSettingsMenu && create_if_block_2$1(ctx);
-  	let if_block1 = /*plugin*/ ctx[4]?.headers.downloadUrl && create_if_block_1$3(ctx);
-  	let if_block2 = (/*plugin*/ ctx[4]?.headers.needsLib || /*plugin*/ ctx[4]?.headers.optionalLib) && create_if_block$4(ctx);
+  	let if_block0 = /*plugin*/ ctx[4]?.return?.openSettingsMenu && create_if_block_2$2(ctx);
+  	let if_block1 = /*plugin*/ ctx[4]?.headers.downloadUrl && create_if_block_1$6(ctx);
+  	let if_block2 = (/*plugin*/ ctx[4]?.headers.needsLib || /*plugin*/ ctx[4]?.headers.optionalLib) && create_if_block$7(ctx);
 
   	return {
   		c() {
@@ -48825,7 +49122,7 @@
   						transition_in(if_block0, 1);
   					}
   				} else {
-  					if_block0 = create_if_block_2$1(ctx);
+  					if_block0 = create_if_block_2$2(ctx);
   					if_block0.c();
   					transition_in(if_block0, 1);
   					if_block0.m(t2.parentNode, t2);
@@ -48848,7 +49145,7 @@
   						transition_in(if_block1, 1);
   					}
   				} else {
-  					if_block1 = create_if_block_1$3(ctx);
+  					if_block1 = create_if_block_1$6(ctx);
   					if_block1.c();
   					transition_in(if_block1, 1);
   					if_block1.m(t3.parentNode, t3);
@@ -48871,7 +49168,7 @@
   						transition_in(if_block2, 1);
   					}
   				} else {
-  					if_block2 = create_if_block$4(ctx);
+  					if_block2 = create_if_block$7(ctx);
   					if_block2.c();
   					transition_in(if_block2, 1);
   					if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
@@ -48925,7 +49222,7 @@
   	};
   }
 
-  function create_fragment$6(ctx) {
+  function create_fragment$9(ctx) {
   	let t;
   	let card;
   	let current;
@@ -49012,7 +49309,7 @@
   	};
   }
 
-  function instance$6($$self, $$props, $$invalidate) {
+  function instance$9($$self, $$props, $$invalidate) {
   	let enabled;
   	let $pluginsStore;
   	let { startDrag } = $$props;
@@ -49091,7 +49388,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$6, create_fragment$6, safe_not_equal, {
+  		init(this, options, instance$9, create_fragment$9, safe_not_equal, {
   			startDrag: 0,
   			dragDisabled: 1,
   			pluginManager: 2,
@@ -49107,7 +49404,7 @@
   	append_styles(target, "svelte-7mk8z1", ".plugins.svelte-7mk8z1{grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}");
   }
 
-  function get_each_context$1(ctx, list, i) {
+  function get_each_context$2(ctx, list, i) {
   	const child_ctx = ctx.slice();
   	child_ctx[21] = list[i];
   	const constants_0 = /*pluginManager*/ child_ctx[0].getPlugin(/*item*/ child_ctx[21].id);
@@ -49172,7 +49469,7 @@
   }
 
   // (103:12) <DropdownItem on:click={() => setAll(true)}>
-  function create_default_slot_6(ctx) {
+  function create_default_slot_6$1(ctx) {
   	let t;
 
   	return {
@@ -49229,7 +49526,7 @@
 
   	dropdownitem1 = new DropdownItem({
   			props: {
-  				$$slots: { default: [create_default_slot_6] },
+  				$$slots: { default: [create_default_slot_6$1] },
   				$$scope: { ctx }
   			}
   		});
@@ -49348,7 +49645,7 @@
   }
 
   // (108:12) <DropdownItem on:click={sortEnabled}>
-  function create_default_slot_2$1(ctx) {
+  function create_default_slot_2$2(ctx) {
   	let t;
 
   	return {
@@ -49367,7 +49664,7 @@
   }
 
   // (109:12) <DropdownItem on:click={sortAlphabetical}>
-  function create_default_slot_1$1(ctx) {
+  function create_default_slot_1$2(ctx) {
   	let t;
 
   	return {
@@ -49386,7 +49683,7 @@
   }
 
   // (107:8) <Dropdown bind:open={sortOpen}>
-  function create_default_slot$1(ctx) {
+  function create_default_slot$2(ctx) {
   	let dropdownitem0;
   	let t;
   	let dropdownitem1;
@@ -49394,7 +49691,7 @@
 
   	dropdownitem0 = new DropdownItem({
   			props: {
-  				$$slots: { default: [create_default_slot_2$1] },
+  				$$slots: { default: [create_default_slot_2$2] },
   				$$scope: { ctx }
   			}
   		});
@@ -49403,7 +49700,7 @@
 
   	dropdownitem1 = new DropdownItem({
   			props: {
-  				$$slots: { default: [create_default_slot_1$1] },
+  				$$slots: { default: [create_default_slot_1$2] },
   				$$scope: { ctx }
   			}
   		});
@@ -49461,7 +49758,7 @@
   }
 
   // (112:4) {#if $pluginsStore.length === 0}
-  function create_if_block$3(ctx) {
+  function create_if_block$6(ctx) {
   	let h2;
 
   	return {
@@ -49482,7 +49779,7 @@
   }
 
   // (118:8) {#each items as item (item.id)}
-  function create_each_block$1(key_1, ctx) {
+  function create_each_block$2(key_1, ctx) {
   	let div;
   	let plugincard;
   	let t;
@@ -49554,7 +49851,7 @@
   	};
   }
 
-  function create_fragment$5(ctx) {
+  function create_fragment$8(ctx) {
   	let div2;
   	let div0;
   	let button0;
@@ -49621,7 +49918,7 @@
   	}
 
   	let dropdown1_props = {
-  		$$slots: { default: [create_default_slot$1] },
+  		$$slots: { default: [create_default_slot$2] },
   		$$scope: { ctx }
   	};
 
@@ -49631,14 +49928,14 @@
 
   	dropdown1 = new Dropdown({ props: dropdown1_props });
   	binding_callbacks.push(() => bind(dropdown1, 'open', dropdown1_open_binding));
-  	let if_block = /*$pluginsStore*/ ctx[2].length === 0 && create_if_block$3();
+  	let if_block = /*$pluginsStore*/ ctx[2].length === 0 && create_if_block$6();
   	let each_value = ensure_array_like(/*items*/ ctx[3]);
   	const get_key = ctx => /*item*/ ctx[21].id;
 
   	for (let i = 0; i < each_value.length; i += 1) {
-  		let child_ctx = get_each_context$1(ctx, each_value, i);
+  		let child_ctx = get_each_context$2(ctx, each_value, i);
   		let key = get_key(child_ctx);
-  		each_1_lookup.set(key, each_blocks[i] = create_each_block$1(key, child_ctx));
+  		each_1_lookup.set(key, each_blocks[i] = create_each_block$2(key, child_ctx));
   	}
 
   	return {
@@ -49761,7 +50058,7 @@
 
   			if (/*$pluginsStore*/ ctx[2].length === 0) {
   				if (if_block) ; else {
-  					if_block = create_if_block$3();
+  					if_block = create_if_block$6();
   					if_block.c();
   					if_block.m(div2, t6);
   				}
@@ -49774,7 +50071,7 @@
   				each_value = ensure_array_like(/*items*/ ctx[3]);
   				group_outros();
   				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].r();
-  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$1, null, get_each_context$1);
+  				each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, div1, fix_and_outro_and_destroy_block, create_each_block$2, null, get_each_context$2);
   				for (let i = 0; i < each_blocks.length; i += 1) each_blocks[i].a();
   				check_outros();
   			}
@@ -49840,7 +50137,7 @@
 
   const flipDurationMs = 300;
 
-  function instance$5($$self, $$props, $$invalidate) {
+  function instance$8($$self, $$props, $$invalidate) {
   	let $pluginsStore;
   	let { pluginManager } = $$props;
   	let { libManager } = $$props;
@@ -49982,13 +50279,13 @@
   class PluginCardsList extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$5, create_fragment$5, safe_not_equal, { pluginManager: 0, libManager: 1 }, add_css$1);
+  		init(this, options, instance$8, create_fragment$8, safe_not_equal, { pluginManager: 0, libManager: 1 }, add_css$1);
   	}
   }
 
   /* node_modules\svelte-material-icons\Wrench.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$2(ctx) {
+  function create_if_block_1$5(ctx) {
   	let desc_1;
   	let t;
 
@@ -50013,7 +50310,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$2(ctx) {
+  function create_if_block$5(ctx) {
   	let title_1;
   	let t;
 
@@ -50037,12 +50334,12 @@
   	};
   }
 
-  function create_fragment$4(ctx) {
+  function create_fragment$7(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$2(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$2(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$5(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$5(ctx);
 
   	return {
   		c() {
@@ -50072,7 +50369,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$2(ctx);
+  					if_block0 = create_if_block_1$5(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -50085,7 +50382,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$2(ctx);
+  					if_block1 = create_if_block$5(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -50135,7 +50432,7 @@
   	};
   }
 
-  function instance$4($$self, $$props, $$invalidate) {
+  function instance$7($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -50178,7 +50475,7 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
+  		init(this, options, instance$7, create_fragment$7, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -50195,7 +50492,7 @@
 
   /* node_modules\svelte-material-icons\Book.svelte generated by Svelte v4.2.19 */
 
-  function create_if_block_1$1(ctx) {
+  function create_if_block_1$4(ctx) {
   	let desc_1;
   	let t;
 
@@ -50220,7 +50517,7 @@
   }
 
   // (16:165) {#if title}
-  function create_if_block$1(ctx) {
+  function create_if_block$4(ctx) {
   	let title_1;
   	let t;
 
@@ -50244,12 +50541,12 @@
   	};
   }
 
-  function create_fragment$3(ctx) {
+  function create_fragment$6(ctx) {
   	let svg;
   	let if_block0_anchor;
   	let path;
-  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$1(ctx);
-  	let if_block1 = /*title*/ ctx[6] && create_if_block$1(ctx);
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$4(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$4(ctx);
 
   	return {
   		c() {
@@ -50279,7 +50576,7 @@
   				if (if_block0) {
   					if_block0.p(ctx, dirty);
   				} else {
-  					if_block0 = create_if_block_1$1(ctx);
+  					if_block0 = create_if_block_1$4(ctx);
   					if_block0.c();
   					if_block0.m(svg, if_block0_anchor);
   				}
@@ -50292,7 +50589,7 @@
   				if (if_block1) {
   					if_block1.p(ctx, dirty);
   				} else {
-  					if_block1 = create_if_block$1(ctx);
+  					if_block1 = create_if_block$4(ctx);
   					if_block1.c();
   					if_block1.m(svg, path);
   				}
@@ -50342,7 +50639,7 @@
   	};
   }
 
-  function instance$3($$self, $$props, $$invalidate) {
+  function instance$6($$self, $$props, $$invalidate) {
   	let { size = "1em" } = $$props;
   	let { width = size } = $$props;
   	let { height = size } = $$props;
@@ -50385,7 +50682,214 @@
   	constructor(options) {
   		super();
 
-  		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
+  		init(this, options, instance$6, create_fragment$6, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\KeyboardOutline.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$3(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$3(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$5(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$3(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$3(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M4,5A2,2 0 0,0 2,7V17A2,2 0 0,0 4,19H20A2,2 0 0,0 22,17V7A2,2 0 0,0 20,5H4M4,7H20V17H4V7M5,8V10H7V8H5M8,8V10H10V8H8M11,8V10H13V8H11M14,8V10H16V8H14M17,8V10H19V8H17M5,11V13H7V11H5M8,11V13H10V11H8M11,11V13H13V11H11M14,11V13H16V11H14M17,11V13H19V11H17M8,14V16H16V14H8Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$3(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$3(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$5($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class KeyboardOutline extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$5, create_fragment$5, safe_not_equal, {
   			size: 9,
   			width: 0,
   			height: 1,
@@ -50402,13 +50906,13 @@
 
   /* src\ui\menu\Updates.svelte generated by Svelte v4.2.19 */
 
-  function get_each_context(ctx, list, i) {
+  function get_each_context$1(ctx, list, i) {
   	const child_ctx = ctx.slice();
   	child_ctx[11] = list[i];
   	return child_ctx;
   }
 
-  function get_each_context_1(ctx, list, i) {
+  function get_each_context_1$1(ctx, list, i) {
   	const child_ctx = ctx.slice();
   	child_ctx[14] = list[i];
   	return child_ctx;
@@ -50462,7 +50966,7 @@
   	let each_blocks = [];
 
   	for (let i = 0; i < each_value_1.length; i += 1) {
-  		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+  		each_blocks[i] = create_each_block_1$1(get_each_context_1$1(ctx, each_value_1, i));
   	}
 
   	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -50493,13 +50997,13 @@
   				let i;
 
   				for (i = 0; i < each_value_1.length; i += 1) {
-  					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+  					const child_ctx = get_each_context_1$1(ctx, each_value_1, i);
 
   					if (each_blocks[i]) {
   						each_blocks[i].p(child_ctx, dirty);
   						transition_in(each_blocks[i], 1);
   					} else {
-  						each_blocks[i] = create_each_block_1(child_ctx);
+  						each_blocks[i] = create_each_block_1$1(child_ctx);
   						each_blocks[i].c();
   						transition_in(each_blocks[i], 1);
   						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
@@ -50544,7 +51048,7 @@
   }
 
   // (96:4) {#if $plugins.length === 0}
-  function create_if_block_2(ctx) {
+  function create_if_block_2$1(ctx) {
   	let h2;
 
   	return {
@@ -50568,7 +51072,7 @@
   }
 
   // (101:16) {#if plugin.headers.downloadUrl}
-  function create_if_block_3(ctx) {
+  function create_if_block_3$1(ctx) {
   	let button;
   	let update;
   	let current;
@@ -50620,7 +51124,7 @@
   }
 
   // (99:8) {#each $plugins as plugin}
-  function create_each_block_1(ctx) {
+  function create_each_block_1$1(ctx) {
   	let div;
   	let t0;
   	let t1_value = /*plugin*/ ctx[14].headers.name + "";
@@ -50634,7 +51138,7 @@
   	let t3;
   	let t4;
   	let current;
-  	let if_block = /*plugin*/ ctx[14].headers.downloadUrl && create_if_block_3(ctx);
+  	let if_block = /*plugin*/ ctx[14].headers.downloadUrl && create_if_block_3$1(ctx);
 
   	return {
   		c() {
@@ -50666,7 +51170,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block_3(ctx);
+  					if_block = create_if_block_3$1(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(div, t0);
@@ -50707,14 +51211,14 @@
   }
 
   // (113:4) {:else}
-  function create_else_block(ctx) {
+  function create_else_block$1(ctx) {
   	let each_1_anchor;
   	let current;
   	let each_value = ensure_array_like(/*$libs*/ ctx[4]);
   	let each_blocks = [];
 
   	for (let i = 0; i < each_value.length; i += 1) {
-  		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+  		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
   	}
 
   	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -50745,13 +51249,13 @@
   				let i;
 
   				for (i = 0; i < each_value.length; i += 1) {
-  					const child_ctx = get_each_context(ctx, each_value, i);
+  					const child_ctx = get_each_context$1(ctx, each_value, i);
 
   					if (each_blocks[i]) {
   						each_blocks[i].p(child_ctx, dirty);
   						transition_in(each_blocks[i], 1);
   					} else {
-  						each_blocks[i] = create_each_block(child_ctx);
+  						each_blocks[i] = create_each_block$1(child_ctx);
   						each_blocks[i].c();
   						transition_in(each_blocks[i], 1);
   						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
@@ -50796,7 +51300,7 @@
   }
 
   // (111:4) {#if $libs.length === 0}
-  function create_if_block(ctx) {
+  function create_if_block$2(ctx) {
   	let h2;
 
   	return {
@@ -50820,7 +51324,7 @@
   }
 
   // (116:16) {#if lib.headers.downloadUrl}
-  function create_if_block_1(ctx) {
+  function create_if_block_1$2(ctx) {
   	let button;
   	let update;
   	let current;
@@ -50872,7 +51376,7 @@
   }
 
   // (114:8) {#each $libs as lib}
-  function create_each_block(ctx) {
+  function create_each_block$1(ctx) {
   	let div;
   	let t0;
   	let t1_value = /*lib*/ ctx[11].headers.name + "";
@@ -50886,7 +51390,7 @@
   	let t3;
   	let t4;
   	let current;
-  	let if_block = /*lib*/ ctx[11].headers.downloadUrl && create_if_block_1(ctx);
+  	let if_block = /*lib*/ ctx[11].headers.downloadUrl && create_if_block_1$2(ctx);
 
   	return {
   		c() {
@@ -50918,7 +51422,7 @@
   						transition_in(if_block, 1);
   					}
   				} else {
-  					if_block = create_if_block_1(ctx);
+  					if_block = create_if_block_1$2(ctx);
   					if_block.c();
   					transition_in(if_block, 1);
   					if_block.m(div, t0);
@@ -50958,7 +51462,7 @@
   	};
   }
 
-  function create_fragment$2(ctx) {
+  function create_fragment$4(ctx) {
   	let div2;
   	let div0;
   	let button0;
@@ -50990,7 +51494,7 @@
   	update0 = new Update({ props: { size: 25 } });
   	let if_block0 = /*showingProgress*/ ctx[1] && create_if_block_4(ctx);
   	update1 = new Update({ props: { size: 25 } });
-  	const if_block_creators = [create_if_block_2, create_else_block_1];
+  	const if_block_creators = [create_if_block_2$1, create_else_block_1];
   	const if_blocks = [];
 
   	function select_block_type(ctx, dirty) {
@@ -51000,7 +51504,7 @@
 
   	current_block_type_index = select_block_type(ctx);
   	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-  	const if_block_creators_1 = [create_if_block, create_else_block];
+  	const if_block_creators_1 = [create_if_block$2, create_else_block$1];
   	const if_blocks_1 = [];
 
   	function select_block_type_1(ctx, dirty) {
@@ -51191,7 +51695,7 @@
   	};
   }
 
-  function instance$2($$self, $$props, $$invalidate) {
+  function instance$4($$self, $$props, $$invalidate) {
   	let $libs;
   	let $plugins;
   	let { gimloader } = $$props;
@@ -51286,13 +51790,13 @@
   class Updates extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$2, create_fragment$2, safe_not_equal, { gimloader: 0 });
+  		init(this, options, instance$4, create_fragment$4, safe_not_equal, { gimloader: 0 });
   	}
   }
 
   /* src\ui\menu\Settings.svelte generated by Svelte v4.2.19 */
 
-  function create_fragment$1(ctx) {
+  function create_fragment$3(ctx) {
   	let h10;
   	let t1;
   	let div0;
@@ -51418,7 +51922,7 @@
   	};
   }
 
-  function instance$1($$self, $$props, $$invalidate) {
+  function instance$3($$self, $$props, $$invalidate) {
   	let { gimloader } = $$props;
   	let buttonsEnabled = gimloader.UI.showPluginButtons;
   	let pollEnabled = gimloader.poller.enabled;
@@ -51468,7 +51972,998 @@
   class Settings extends SvelteComponent {
   	constructor(options) {
   		super();
-  		init(this, options, instance$1, create_fragment$1, safe_not_equal, { gimloader: 0 });
+  		init(this, options, instance$3, create_fragment$3, safe_not_equal, { gimloader: 0 });
+  	}
+  }
+
+  /* node_modules\svelte-material-icons\Undo.svelte generated by Svelte v4.2.19 */
+
+  function create_if_block_1$1(ctx) {
+  	let desc_1;
+  	let t;
+
+  	return {
+  		c() {
+  			desc_1 = svg_element("desc");
+  			t = text(/*desc*/ ctx[7]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, desc_1, anchor);
+  			append(desc_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*desc*/ 128) set_data(t, /*desc*/ ctx[7]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(desc_1);
+  			}
+  		}
+  	};
+  }
+
+  // (16:165) {#if title}
+  function create_if_block$1(ctx) {
+  	let title_1;
+  	let t;
+
+  	return {
+  		c() {
+  			title_1 = svg_element("title");
+  			t = text(/*title*/ ctx[6]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, title_1, anchor);
+  			append(title_1, t);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*title*/ 64) set_data(t, /*title*/ ctx[6]);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(title_1);
+  			}
+  		}
+  	};
+  }
+
+  function create_fragment$2(ctx) {
+  	let svg;
+  	let if_block0_anchor;
+  	let path;
+  	let if_block0 = /*desc*/ ctx[7] && create_if_block_1$1(ctx);
+  	let if_block1 = /*title*/ ctx[6] && create_if_block$1(ctx);
+
+  	return {
+  		c() {
+  			svg = svg_element("svg");
+  			if (if_block0) if_block0.c();
+  			if_block0_anchor = empty$1();
+  			if (if_block1) if_block1.c();
+  			path = svg_element("path");
+  			attr(path, "d", "M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z");
+  			attr(path, "fill", /*color*/ ctx[2]);
+  			attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			attr(svg, "width", /*width*/ ctx[0]);
+  			attr(svg, "height", /*height*/ ctx[1]);
+  			attr(svg, "class", /*className*/ ctx[8]);
+  			attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, svg, anchor);
+  			if (if_block0) if_block0.m(svg, null);
+  			append(svg, if_block0_anchor);
+  			if (if_block1) if_block1.m(svg, null);
+  			append(svg, path);
+  		},
+  		p(ctx, [dirty]) {
+  			if (/*desc*/ ctx[7]) {
+  				if (if_block0) {
+  					if_block0.p(ctx, dirty);
+  				} else {
+  					if_block0 = create_if_block_1$1(ctx);
+  					if_block0.c();
+  					if_block0.m(svg, if_block0_anchor);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (/*title*/ ctx[6]) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+  				} else {
+  					if_block1 = create_if_block$1(ctx);
+  					if_block1.c();
+  					if_block1.m(svg, path);
+  				}
+  			} else if (if_block1) {
+  				if_block1.d(1);
+  				if_block1 = null;
+  			}
+
+  			if (dirty & /*color*/ 4) {
+  				attr(path, "fill", /*color*/ ctx[2]);
+  			}
+
+  			if (dirty & /*viewBox*/ 8) {
+  				attr(svg, "viewBox", /*viewBox*/ ctx[3]);
+  			}
+
+  			if (dirty & /*width*/ 1) {
+  				attr(svg, "width", /*width*/ ctx[0]);
+  			}
+
+  			if (dirty & /*height*/ 2) {
+  				attr(svg, "height", /*height*/ ctx[1]);
+  			}
+
+  			if (dirty & /*className*/ 256) {
+  				attr(svg, "class", /*className*/ ctx[8]);
+  			}
+
+  			if (dirty & /*ariaLabel*/ 16) {
+  				attr(svg, "aria-label", /*ariaLabel*/ ctx[4]);
+  			}
+
+  			if (dirty & /*ariaHidden*/ 32) {
+  				attr(svg, "aria-hidden", /*ariaHidden*/ ctx[5]);
+  			}
+  		},
+  		i: noop,
+  		o: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(svg);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function instance$2($$self, $$props, $$invalidate) {
+  	let { size = "1em" } = $$props;
+  	let { width = size } = $$props;
+  	let { height = size } = $$props;
+  	let { color = "currentColor" } = $$props;
+  	let { viewBox = "0 0 24 24" } = $$props;
+  	let { ariaLabel = void 0 } = $$props;
+  	let { ariaHidden = void 0 } = $$props;
+  	let { title = void 0 } = $$props;
+  	let { desc = void 0 } = $$props;
+  	let { class: className = void 0 } = $$props;
+
+  	$$self.$$set = $$props => {
+  		if ('size' in $$props) $$invalidate(9, size = $$props.size);
+  		if ('width' in $$props) $$invalidate(0, width = $$props.width);
+  		if ('height' in $$props) $$invalidate(1, height = $$props.height);
+  		if ('color' in $$props) $$invalidate(2, color = $$props.color);
+  		if ('viewBox' in $$props) $$invalidate(3, viewBox = $$props.viewBox);
+  		if ('ariaLabel' in $$props) $$invalidate(4, ariaLabel = $$props.ariaLabel);
+  		if ('ariaHidden' in $$props) $$invalidate(5, ariaHidden = $$props.ariaHidden);
+  		if ('title' in $$props) $$invalidate(6, title = $$props.title);
+  		if ('desc' in $$props) $$invalidate(7, desc = $$props.desc);
+  		if ('class' in $$props) $$invalidate(8, className = $$props.class);
+  	};
+
+  	return [
+  		width,
+  		height,
+  		color,
+  		viewBox,
+  		ariaLabel,
+  		ariaHidden,
+  		title,
+  		desc,
+  		className,
+  		size
+  	];
+  }
+
+  class Undo extends SvelteComponent {
+  	constructor(options) {
+  		super();
+
+  		init(this, options, instance$2, create_fragment$2, safe_not_equal, {
+  			size: 9,
+  			width: 0,
+  			height: 1,
+  			color: 2,
+  			viewBox: 3,
+  			ariaLabel: 4,
+  			ariaHidden: 5,
+  			title: 6,
+  			desc: 7,
+  			class: 8
+  		});
+  	}
+  }
+
+  /* src\ui\menu\Hotkeys.svelte generated by Svelte v4.2.19 */
+
+  function get_each_context(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[14] = list[i][0];
+  	child_ctx[6] = list[i][1];
+  	child_ctx[16] = i;
+  	return child_ctx;
+  }
+
+  function get_each_context_1(ctx, list, i) {
+  	const child_ctx = ctx.slice();
+  	child_ctx[17] = list[i];
+  	return child_ctx;
+  }
+
+  // (84:8) {#if Object.keys(categories).length === 0}
+  function create_if_block_3(ctx) {
+  	let h1;
+  	let t1;
+  	let h2;
+
+  	return {
+  		c() {
+  			h1 = element("h1");
+  			h1.textContent = "There aren't any hotkeys!";
+  			t1 = space$1();
+  			h2 = element("h2");
+  			h2.textContent = "Some plugins will add hotkeys that can be changed here.";
+  			attr(h1, "class", "col-span-4 text-center font-bold text-3xl pt-5");
+  			attr(h2, "class", "col-span-4 text-center text-xl");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h1, anchor);
+  			insert$1(target, t1, anchor);
+  			insert$1(target, h2, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h1);
+  				detach(t1);
+  				detach(h2);
+  			}
+  		}
+  	};
+  }
+
+  // (97:20) {:else}
+  function create_else_block(ctx) {
+  	let t_value = Array.from(/*hotkey*/ ctx[17].keys).map(renameKey).join(" + ") + "";
+  	let t;
+
+  	return {
+  		c() {
+  			t = text(t_value);
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (dirty & /*categories*/ 1 && t_value !== (t_value = Array.from(/*hotkey*/ ctx[17].keys).map(renameKey).join(" + ") + "")) set_data(t, t_value);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (95:20) {#if hotkey.keys.size === 0}
+  function create_if_block_2(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Not Bound");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		p: noop,
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (94:16) <Button id={hotkey.id} on:click={() => startConfigure(hotkey)} on:keydown={onKeydown}>
+  function create_default_slot_2$1(ctx) {
+  	let if_block_anchor;
+
+  	function select_block_type(ctx, dirty) {
+  		if (/*hotkey*/ ctx[17].keys.size === 0) return create_if_block_2;
+  		return create_else_block;
+  	}
+
+  	let current_block_type = select_block_type(ctx);
+  	let if_block = current_block_type(ctx);
+
+  	return {
+  		c() {
+  			if_block.c();
+  			if_block_anchor = empty$1();
+  		},
+  		m(target, anchor) {
+  			if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  		},
+  		p(ctx, dirty) {
+  			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+  				if_block.p(ctx, dirty);
+  			} else {
+  				if_block.d(1);
+  				if_block = current_block_type(ctx);
+
+  				if (if_block) {
+  					if_block.c();
+  					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+  				}
+  			}
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(if_block_anchor);
+  			}
+
+  			if_block.d(detaching);
+  		}
+  	};
+  }
+
+  // (101:16) <Popover title="Configure Hotkey" trigger="focus" on:show={onShow}>
+  function create_default_slot_1$1(ctx) {
+  	let t;
+
+  	return {
+  		c() {
+  			t = text("Click outside or hit enter to confirm");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, t, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+  		}
+  	};
+  }
+
+  // (90:12) {#each hotkeys as hotkey}
+  function create_each_block_1(ctx) {
+  	let div0;
+  	let t0_value = /*hotkey*/ ctx[17].title + "";
+  	let t0;
+  	let t1;
+  	let button0;
+  	let t2;
+  	let popover;
+  	let t3;
+  	let button1;
+  	let undo;
+  	let t4;
+  	let div1;
+  	let current;
+  	let mounted;
+  	let dispose;
+
+  	function click_handler() {
+  		return /*click_handler*/ ctx[9](/*hotkey*/ ctx[17]);
+  	}
+
+  	button0 = new Button({
+  			props: {
+  				id: /*hotkey*/ ctx[17].id,
+  				$$slots: { default: [create_default_slot_2$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	button0.$on("click", click_handler);
+  	button0.$on("keydown", /*onKeydown*/ ctx[2]);
+
+  	popover = new Popover({
+  			props: {
+  				title: "Configure Hotkey",
+  				trigger: "focus",
+  				$$slots: { default: [create_default_slot_1$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	popover.$on("show", /*onShow*/ ctx[3]);
+  	undo = new Undo({});
+
+  	function click_handler_1() {
+  		return /*click_handler_1*/ ctx[10](/*hotkey*/ ctx[17]);
+  	}
+
+  	return {
+  		c() {
+  			div0 = element("div");
+  			t0 = text(t0_value);
+  			t1 = space$1();
+  			create_component(button0.$$.fragment);
+  			t2 = space$1();
+  			create_component(popover.$$.fragment);
+  			t3 = space$1();
+  			button1 = element("button");
+  			create_component(undo.$$.fragment);
+  			t4 = space$1();
+  			div1 = element("div");
+  			attr(div0, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div0, anchor);
+  			append(div0, t0);
+  			insert$1(target, t1, anchor);
+  			mount_component(button0, target, anchor);
+  			insert$1(target, t2, anchor);
+  			mount_component(popover, target, anchor);
+  			insert$1(target, t3, anchor);
+  			insert$1(target, button1, anchor);
+  			mount_component(undo, button1, null);
+  			insert$1(target, t4, anchor);
+  			insert$1(target, div1, anchor);
+  			current = true;
+
+  			if (!mounted) {
+  				dispose = listen(button1, "click", click_handler_1);
+  				mounted = true;
+  			}
+  		},
+  		p(new_ctx, dirty) {
+  			ctx = new_ctx;
+  			if ((!current || dirty & /*categories*/ 1) && t0_value !== (t0_value = /*hotkey*/ ctx[17].title + "")) set_data(t0, t0_value);
+  			const button0_changes = {};
+  			if (dirty & /*categories*/ 1) button0_changes.id = /*hotkey*/ ctx[17].id;
+
+  			if (dirty & /*$$scope, categories*/ 1048577) {
+  				button0_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button0.$set(button0_changes);
+  			const popover_changes = {};
+
+  			if (dirty & /*$$scope*/ 1048576) {
+  				popover_changes.$$scope = { dirty, ctx };
+  			}
+
+  			popover.$set(popover_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(button0.$$.fragment, local);
+  			transition_in(popover.$$.fragment, local);
+  			transition_in(undo.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(button0.$$.fragment, local);
+  			transition_out(popover.$$.fragment, local);
+  			transition_out(undo.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div0);
+  				detach(t1);
+  				detach(t2);
+  				detach(t3);
+  				detach(button1);
+  				detach(t4);
+  				detach(div1);
+  			}
+
+  			destroy_component(button0, detaching);
+  			destroy_component(popover, detaching);
+  			destroy_component(undo);
+  			mounted = false;
+  			dispose();
+  		}
+  	};
+  }
+
+  // (109:12) {#if i > 0}
+  function create_if_block_1(ctx) {
+  	let div;
+
+  	return {
+  		c() {
+  			div = element("div");
+  			attr(div, "class", "h-px bg-gray-200 col-span-4");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+  		}
+  	};
+  }
+
+  // (88:8) {#each Object.entries(categories) as [category, hotkeys], i}
+  function create_each_block(ctx) {
+  	let h2;
+  	let t0_value = /*category*/ ctx[14] + "";
+  	let t0;
+  	let t1;
+  	let t2;
+  	let if_block_anchor;
+  	let current;
+  	let each_value_1 = ensure_array_like(/*hotkeys*/ ctx[6]);
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value_1.length; i += 1) {
+  		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	let if_block = /*i*/ ctx[16] > 0 && create_if_block_1();
+
+  	return {
+  		c() {
+  			h2 = element("h2");
+  			t0 = text(t0_value);
+  			t1 = space$1();
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			t2 = space$1();
+  			if (if_block) if_block.c();
+  			if_block_anchor = empty$1();
+  			attr(h2, "class", "text-xl font-bold col-span-4 border-b border-gray-200");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, h2, anchor);
+  			append(h2, t0);
+  			insert$1(target, t1, anchor);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(target, anchor);
+  				}
+  			}
+
+  			insert$1(target, t2, anchor);
+  			if (if_block) if_block.m(target, anchor);
+  			insert$1(target, if_block_anchor, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			if ((!current || dirty & /*categories*/ 1) && t0_value !== (t0_value = /*category*/ ctx[14] + "")) set_data(t0, t0_value);
+
+  			if (dirty & /*reset, Object, categories, onShow, startConfigure, onKeydown, Array, renameKey*/ 31) {
+  				each_value_1 = ensure_array_like(/*hotkeys*/ ctx[6]);
+  				let i;
+
+  				for (i = 0; i < each_value_1.length; i += 1) {
+  					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block_1(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(t2.parentNode, t2);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value_1.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value_1.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(h2);
+  				detach(t1);
+  				detach(t2);
+  				detach(if_block_anchor);
+  			}
+
+  			destroy_each(each_blocks, detaching);
+  			if (if_block) if_block.d(detaching);
+  		}
+  	};
+  }
+
+  // (115:8) {#if Object.keys(categories).length > 0}
+  function create_if_block(ctx) {
+  	let button;
+  	let current;
+
+  	button = new Button({
+  			props: {
+  				class: "h-7",
+  				$$slots: { default: [create_default_slot$1] },
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	button.$on("click", /*resetAll*/ ctx[5]);
+
+  	return {
+  		c() {
+  			create_component(button.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(button, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const button_changes = {};
+
+  			if (dirty & /*$$scope*/ 1048576) {
+  				button_changes.$$scope = { dirty, ctx };
+  			}
+
+  			button.$set(button_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(button.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(button.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(button, detaching);
+  		}
+  	};
+  }
+
+  // (116:12) <Button class="h-7" on:click={resetAll}>
+  function create_default_slot$1(ctx) {
+  	let undo;
+  	let t;
+  	let current;
+  	undo = new Undo({ props: { class: "mr-1" } });
+
+  	return {
+  		c() {
+  			create_component(undo.$$.fragment);
+  			t = text("Reset All");
+  		},
+  		m(target, anchor) {
+  			mount_component(undo, target, anchor);
+  			insert$1(target, t, anchor);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(undo.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(undo.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(t);
+  			}
+
+  			destroy_component(undo, detaching);
+  		}
+  	};
+  }
+
+  function create_fragment$1(ctx) {
+  	let div2;
+  	let div0;
+  	let show_if_1 = Object.keys(/*categories*/ ctx[0]).length === 0;
+  	let t0;
+  	let t1;
+  	let div1;
+  	let show_if = Object.keys(/*categories*/ ctx[0]).length > 0;
+  	let current;
+  	let if_block0 = show_if_1 && create_if_block_3();
+  	let each_value = ensure_array_like(Object.entries(/*categories*/ ctx[0]));
+  	let each_blocks = [];
+
+  	for (let i = 0; i < each_value.length; i += 1) {
+  		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+  	}
+
+  	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+  		each_blocks[i] = null;
+  	});
+
+  	let if_block1 = show_if && create_if_block(ctx);
+
+  	return {
+  		c() {
+  			div2 = element("div");
+  			div0 = element("div");
+  			if (if_block0) if_block0.c();
+  			t0 = space$1();
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				each_blocks[i].c();
+  			}
+
+  			t1 = space$1();
+  			div1 = element("div");
+  			if (if_block1) if_block1.c();
+  			attr(div0, "class", "flex-grow overflow-y-auto grid gap-x-5 gap-y-1 pb-1");
+  			set_style(div0, "grid-template-columns", "auto auto auto 1fr");
+  			attr(div2, "class", "flex flex-col");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div2, anchor);
+  			append(div2, div0);
+  			if (if_block0) if_block0.m(div0, null);
+  			append(div0, t0);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				if (each_blocks[i]) {
+  					each_blocks[i].m(div0, null);
+  				}
+  			}
+
+  			append(div2, t1);
+  			append(div2, div1);
+  			if (if_block1) if_block1.m(div1, null);
+  			current = true;
+  		},
+  		p(ctx, [dirty]) {
+  			if (dirty & /*categories*/ 1) show_if_1 = Object.keys(/*categories*/ ctx[0]).length === 0;
+
+  			if (show_if_1) {
+  				if (if_block0) ; else {
+  					if_block0 = create_if_block_3();
+  					if_block0.c();
+  					if_block0.m(div0, t0);
+  				}
+  			} else if (if_block0) {
+  				if_block0.d(1);
+  				if_block0 = null;
+  			}
+
+  			if (dirty & /*Object, categories, reset, onShow, startConfigure, onKeydown, Array, renameKey*/ 31) {
+  				each_value = ensure_array_like(Object.entries(/*categories*/ ctx[0]));
+  				let i;
+
+  				for (i = 0; i < each_value.length; i += 1) {
+  					const child_ctx = get_each_context(ctx, each_value, i);
+
+  					if (each_blocks[i]) {
+  						each_blocks[i].p(child_ctx, dirty);
+  						transition_in(each_blocks[i], 1);
+  					} else {
+  						each_blocks[i] = create_each_block(child_ctx);
+  						each_blocks[i].c();
+  						transition_in(each_blocks[i], 1);
+  						each_blocks[i].m(div0, null);
+  					}
+  				}
+
+  				group_outros();
+
+  				for (i = each_value.length; i < each_blocks.length; i += 1) {
+  					out(i);
+  				}
+
+  				check_outros();
+  			}
+
+  			if (dirty & /*categories*/ 1) show_if = Object.keys(/*categories*/ ctx[0]).length > 0;
+
+  			if (show_if) {
+  				if (if_block1) {
+  					if_block1.p(ctx, dirty);
+
+  					if (dirty & /*categories*/ 1) {
+  						transition_in(if_block1, 1);
+  					}
+  				} else {
+  					if_block1 = create_if_block(ctx);
+  					if_block1.c();
+  					transition_in(if_block1, 1);
+  					if_block1.m(div1, null);
+  				}
+  			} else if (if_block1) {
+  				group_outros();
+
+  				transition_out(if_block1, 1, 1, () => {
+  					if_block1 = null;
+  				});
+
+  				check_outros();
+  			}
+  		},
+  		i(local) {
+  			if (current) return;
+
+  			for (let i = 0; i < each_value.length; i += 1) {
+  				transition_in(each_blocks[i]);
+  			}
+
+  			transition_in(if_block1);
+  			current = true;
+  		},
+  		o(local) {
+  			each_blocks = each_blocks.filter(Boolean);
+
+  			for (let i = 0; i < each_blocks.length; i += 1) {
+  				transition_out(each_blocks[i]);
+  			}
+
+  			transition_out(if_block1);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div2);
+  			}
+
+  			if (if_block0) if_block0.d();
+  			destroy_each(each_blocks, detaching);
+  			if (if_block1) if_block1.d();
+  		}
+  	};
+  }
+
+  function renameKey(key) {
+  	if (key === " ") return "Space";
+  	return key[0].toUpperCase() + key.slice(1);
+  }
+
+  function instance$1($$self, $$props, $$invalidate) {
+  	let $hotkeys;
+  	let { hotkeyManager } = $$props;
+  	let hotkeys = hotkeyManager.configurableHotkeys;
+  	component_subscribe($$self, hotkeys, value => $$invalidate(8, $hotkeys = value));
+  	let categories = {};
+  	let configuring = null;
+  	let configureClear = true;
+
+  	function startConfigure(hotkey) {
+  		configuring = hotkey;
+  		configureClear = true;
+  	}
+
+  	function onKeydown(e) {
+  		if (!configuring || !e.key) return;
+  		e.preventDefault();
+  		e.stopPropagation();
+
+  		if (configureClear) {
+  			configuring.keys.clear();
+  			configureClear = false;
+  		}
+
+  		if (e.key == "Escape") {
+  			configuring.keys.clear();
+  			stopConfigure();
+  		} else if (e.key === "Enter") {
+  			stopConfigure();
+  		} else {
+  			configuring.keys.add(e.key.toLowerCase());
+  		}
+
+  		hotkeys.update();
+  	}
+
+  	function stopConfigure() {
+  		configuring = null;
+  		document.documentElement.click();
+  		document.activeElement?.blur?.();
+  		hotkeyManager.saveConfigurableHotkeys();
+  	}
+
+  	function onShow(e) {
+  		if (e.detail) return;
+  		stopConfigure();
+  	}
+
+  	function reset(hotkey, noSave = false) {
+  		if (hotkey.defaultKeys) {
+  			hotkey.keys = new Set(hotkey.defaultKeys);
+  		} else {
+  			hotkey.keys = new Set();
+  		}
+
+  		if (noSave) return;
+  		hotkeys.update();
+  		hotkeyManager.saveConfigurableHotkeys();
+  	}
+
+  	function resetAll() {
+  		if (!confirm("Are you sure you want to reset all hotkeys?")) return;
+
+  		for (let hotkey of $hotkeys.values()) {
+  			reset(hotkey, true);
+  		}
+
+  		hotkeys.update();
+  		hotkeyManager.saveConfigurableHotkeys();
+  	}
+
+  	const click_handler = hotkey => startConfigure(hotkey);
+  	const click_handler_1 = hotkey => reset(hotkey);
+
+  	$$self.$$set = $$props => {
+  		if ('hotkeyManager' in $$props) $$invalidate(7, hotkeyManager = $$props.hotkeyManager);
+  	};
+
+  	$$self.$$.update = () => {
+  		if ($$self.$$.dirty & /*$hotkeys, categories*/ 257) {
+  			{
+  				$$invalidate(0, categories = {});
+
+  				for (let hotkey of $hotkeys.values()) {
+  					if (!categories[hotkey.category]) {
+  						$$invalidate(0, categories[hotkey.category] = [], categories);
+  					}
+
+  					categories[hotkey.category].push(hotkey);
+  				}
+  			}
+  		}
+  	};
+
+  	return [
+  		categories,
+  		startConfigure,
+  		onKeydown,
+  		onShow,
+  		reset,
+  		resetAll,
+  		hotkeys,
+  		hotkeyManager,
+  		$hotkeys,
+  		click_handler,
+  		click_handler_1
+  	];
+  }
+
+  class Hotkeys extends SvelteComponent {
+  	constructor(options) {
+  		super();
+  		init(this, options, instance$1, create_fragment$1, safe_not_equal, { hotkeyManager: 7 });
   	}
   }
 
@@ -51478,8 +52973,8 @@
   	append_styles(target, "svelte-1ahnqqw", ".fadeBg>div:first-child{animation:fadeIn 0.3s}.zoomIn{animation:zoomIn ease-out 0.15s}.fixMargin .h-px{margin-top:0 !important}.fixMargin div:has(> div[role=\"tabpanel\"]){display:flex;flex-direction:column}.fixMargin div[role=\"tabpanel\"]{margin-top:2px !important;flex-grow:1;min-width:0;min-height:0}.fixMargin div[role=\"tabpanel\"]>div{height:100%}");
   }
 
-  // (20:16) <TabItem open>
-  function create_default_slot_5(ctx) {
+  // (21:16) <TabItem open>
+  function create_default_slot_6(ctx) {
   	let plugincardslist;
   	let current;
 
@@ -51519,8 +53014,8 @@
   	};
   }
 
-  // (21:20) 
-  function create_title_slot_3(ctx) {
+  // (22:20) 
+  function create_title_slot_4(ctx) {
   	let div;
   	let wrench;
   	let t0;
@@ -51566,8 +53061,8 @@
   	};
   }
 
-  // (28:16) <TabItem>
-  function create_default_slot_4(ctx) {
+  // (29:16) <TabItem>
+  function create_default_slot_5(ctx) {
   	let librarycardslist;
   	let current;
 
@@ -51603,8 +53098,8 @@
   	};
   }
 
-  // (29:20) 
-  function create_title_slot_2(ctx) {
+  // (30:20) 
+  function create_title_slot_3(ctx) {
   	let div;
   	let book;
   	let t0;
@@ -51650,7 +53145,93 @@
   	};
   }
 
-  // (35:16) <TabItem>
+  // (36:16) <TabItem>
+  function create_default_slot_4(ctx) {
+  	let hotkeys;
+  	let current;
+
+  	hotkeys = new Hotkeys({
+  			props: {
+  				hotkeyManager: /*gimloader*/ ctx[0].hotkeys
+  			}
+  		});
+
+  	return {
+  		c() {
+  			create_component(hotkeys.$$.fragment);
+  		},
+  		m(target, anchor) {
+  			mount_component(hotkeys, target, anchor);
+  			current = true;
+  		},
+  		p(ctx, dirty) {
+  			const hotkeys_changes = {};
+  			if (dirty & /*gimloader*/ 1) hotkeys_changes.hotkeyManager = /*gimloader*/ ctx[0].hotkeys;
+  			hotkeys.$set(hotkeys_changes);
+  		},
+  		i(local) {
+  			if (current) return;
+  			transition_in(hotkeys.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(hotkeys.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			destroy_component(hotkeys, detaching);
+  		}
+  	};
+  }
+
+  // (37:20) 
+  function create_title_slot_2(ctx) {
+  	let div;
+  	let keyboardoutline;
+  	let t0;
+  	let span;
+  	let current;
+  	keyboardoutline = new KeyboardOutline({ props: { size: 24 } });
+
+  	return {
+  		c() {
+  			div = element("div");
+  			create_component(keyboardoutline.$$.fragment);
+  			t0 = space$1();
+  			span = element("span");
+  			span.textContent = "Hotkeys";
+  			attr(span, "class", "ml-2");
+  			attr(div, "slot", "title");
+  			attr(div, "class", "flex items-center");
+  		},
+  		m(target, anchor) {
+  			insert$1(target, div, anchor);
+  			mount_component(keyboardoutline, div, null);
+  			append(div, t0);
+  			append(div, span);
+  			current = true;
+  		},
+  		p: noop,
+  		i(local) {
+  			if (current) return;
+  			transition_in(keyboardoutline.$$.fragment, local);
+  			current = true;
+  		},
+  		o(local) {
+  			transition_out(keyboardoutline.$$.fragment, local);
+  			current = false;
+  		},
+  		d(detaching) {
+  			if (detaching) {
+  				detach(div);
+  			}
+
+  			destroy_component(keyboardoutline);
+  		}
+  	};
+  }
+
+  // (43:16) <TabItem>
   function create_default_slot_3(ctx) {
   	let updates;
   	let current;
@@ -51687,7 +53268,7 @@
   	};
   }
 
-  // (36:20) 
+  // (44:20) 
   function create_title_slot_1(ctx) {
   	let div;
   	let update;
@@ -51734,7 +53315,7 @@
   	};
   }
 
-  // (42:16) <TabItem>
+  // (50:16) <TabItem>
   function create_default_slot_2(ctx) {
   	let settings;
   	let current;
@@ -51771,7 +53352,7 @@
   	};
   }
 
-  // (43:20) 
+  // (51:20) 
   function create_title_slot(ctx) {
   	let div;
   	let cog;
@@ -51818,7 +53399,7 @@
   	};
   }
 
-  // (19:12) <Tabs contentClass="bg-white">
+  // (20:12) <Tabs contentClass="bg-white">
   function create_default_slot_1(ctx) {
   	let tabitem0;
   	let t0;
@@ -51827,11 +53408,23 @@
   	let tabitem2;
   	let t2;
   	let tabitem3;
+  	let t3;
+  	let tabitem4;
   	let current;
 
   	tabitem0 = new TabItem({
   			props: {
   				open: true,
+  				$$slots: {
+  					title: [create_title_slot_4],
+  					default: [create_default_slot_6]
+  				},
+  				$$scope: { ctx }
+  			}
+  		});
+
+  	tabitem1 = new TabItem({
+  			props: {
   				$$slots: {
   					title: [create_title_slot_3],
   					default: [create_default_slot_5]
@@ -51840,7 +53433,7 @@
   			}
   		});
 
-  	tabitem1 = new TabItem({
+  	tabitem2 = new TabItem({
   			props: {
   				$$slots: {
   					title: [create_title_slot_2],
@@ -51850,7 +53443,7 @@
   			}
   		});
 
-  	tabitem2 = new TabItem({
+  	tabitem3 = new TabItem({
   			props: {
   				$$slots: {
   					title: [create_title_slot_1],
@@ -51860,7 +53453,7 @@
   			}
   		});
 
-  	tabitem3 = new TabItem({
+  	tabitem4 = new TabItem({
   			props: {
   				$$slots: {
   					title: [create_title_slot],
@@ -51879,6 +53472,8 @@
   			create_component(tabitem2.$$.fragment);
   			t2 = space$1();
   			create_component(tabitem3.$$.fragment);
+  			t3 = space$1();
+  			create_component(tabitem4.$$.fragment);
   		},
   		m(target, anchor) {
   			mount_component(tabitem0, target, anchor);
@@ -51888,6 +53483,8 @@
   			mount_component(tabitem2, target, anchor);
   			insert$1(target, t2, anchor);
   			mount_component(tabitem3, target, anchor);
+  			insert$1(target, t3, anchor);
+  			mount_component(tabitem4, target, anchor);
   			current = true;
   		},
   		p(ctx, dirty) {
@@ -51919,6 +53516,13 @@
   			}
 
   			tabitem3.$set(tabitem3_changes);
+  			const tabitem4_changes = {};
+
+  			if (dirty & /*$$scope, gimloader*/ 5) {
+  				tabitem4_changes.$$scope = { dirty, ctx };
+  			}
+
+  			tabitem4.$set(tabitem4_changes);
   		},
   		i(local) {
   			if (current) return;
@@ -51926,6 +53530,7 @@
   			transition_in(tabitem1.$$.fragment, local);
   			transition_in(tabitem2.$$.fragment, local);
   			transition_in(tabitem3.$$.fragment, local);
+  			transition_in(tabitem4.$$.fragment, local);
   			current = true;
   		},
   		o(local) {
@@ -51933,6 +53538,7 @@
   			transition_out(tabitem1.$$.fragment, local);
   			transition_out(tabitem2.$$.fragment, local);
   			transition_out(tabitem3.$$.fragment, local);
+  			transition_out(tabitem4.$$.fragment, local);
   			current = false;
   		},
   		d(detaching) {
@@ -51940,17 +53546,19 @@
   				detach(t0);
   				detach(t1);
   				detach(t2);
+  				detach(t3);
   			}
 
   			destroy_component(tabitem0, detaching);
   			destroy_component(tabitem1, detaching);
   			destroy_component(tabitem2, detaching);
   			destroy_component(tabitem3, detaching);
+  			destroy_component(tabitem4, detaching);
   		}
   	};
   }
 
-  // (17:8) <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"              size="xl" on:close={onClose} open outsideclose>
+  // (18:8) <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"              size="xl" on:close={onClose} open outsideclose>
   function create_default_slot(ctx) {
   	let tabs;
   	let current;
@@ -52581,8 +54189,10 @@
   const shiftKeyHeldKeys = `~!@#$%^&*()_+{}|:"<>?`;
   const normalKeys = "`1234567890-=[]\\;',./";
   class HotkeyManager {
-      hotkeys = new Map();
       pressedKeys = new Set();
+      hotkeys = new Map();
+      configurableHotkeys = easyAccessWritable(new Map());
+      savedHotkeys = GM_getValue('configurableHotkeys', {});
       constructor() {
           window.addEventListener('keydown', (event) => {
               this.pressedKeys.add(event.key.toLowerCase());
@@ -52602,21 +54212,33 @@
       releaseAll() {
           this.pressedKeys.clear();
       }
+      setPressed(set) {
+          if (set.size === 0)
+              return false;
+          if (this.pressedKeys.size < set.size)
+              return false;
+          let match = true;
+          for (let key of set) {
+              if (!this.pressedKeys.has(key)) {
+                  match = false;
+                  break;
+              }
+          }
+          return match;
+      }
       checkHotkeys(event) {
           for (let [hotkey, run] of this.hotkeys.entries()) {
-              if (this.pressedKeys.size < hotkey.size)
-                  continue;
-              let match = true;
-              for (let key of hotkey) {
-                  if (!this.pressedKeys.has(key)) {
-                      match = false;
-                      break;
-                  }
-              }
-              if (match) {
+              if (this.setPressed(hotkey)) {
                   if (run.preventDefault)
                       event.preventDefault();
                   run.callback(event);
+              }
+          }
+          for (let hotkey of this.configurableHotkeys.value.values()) {
+              if (this.setPressed(hotkey.keys)) {
+                  if (hotkey.preventDefault)
+                      event.preventDefault();
+                  hotkey.callback(event);
               }
           }
       }
@@ -52625,6 +54247,46 @@
       }
       remove(hotkey) {
           this.hotkeys.delete(hotkey);
+      }
+      addConfigurable(pluginName, id, callback, options) {
+          if (!pluginName)
+              throw new Error('Configurable hotkey missing plugin name');
+          if (!id)
+              throw new Error('Configurable hotkey missing id');
+          let mandatory = ['category', 'title'];
+          for (let key of mandatory) {
+              if (!options[key])
+                  throw new Error(`Configurable hotkey missing mandatory option ${key}`);
+          }
+          let hotkeyId = `${pluginName}-${id}`;
+          let set = new Set();
+          if (this.savedHotkeys[hotkeyId]) {
+              set = new Set(this.savedHotkeys[hotkeyId]);
+          }
+          else if (options.defaultKeys) {
+              set = options.defaultKeys;
+          }
+          let hotkey = {
+              id: hotkeyId,
+              category: options.category,
+              title: options.title,
+              preventDefault: options.preventDefault ?? true,
+              callback,
+              keys: set,
+              defaultKeys: options.defaultKeys
+          };
+          this.configurableHotkeys.value.set(hotkeyId, hotkey);
+          this.configurableHotkeys.update();
+      }
+      removeConfigurable(pluginName, id) {
+          this.configurableHotkeys.value.delete(`${pluginName}-${id}`);
+      }
+      saveConfigurableHotkeys() {
+          this.savedHotkeys = {};
+          for (let [id, hotkey] of this.configurableHotkeys.value.entries()) {
+              this.savedHotkeys[id] = Array.from(hotkey.keys);
+          }
+          GM_setValue('configurableHotkeys', this.savedHotkeys);
       }
   }
 

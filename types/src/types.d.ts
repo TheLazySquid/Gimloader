@@ -52,7 +52,6 @@ export interface IConfigurableHotkey {
     keys: Set<string>;
 }
 export interface IConfigurableHotkeyOptions {
-    id: string;
     category: string;
     title: string;
     preventDefault?: boolean;
