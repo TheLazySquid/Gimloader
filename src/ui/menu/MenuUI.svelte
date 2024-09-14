@@ -11,6 +11,7 @@
     import Cog from 'svelte-material-icons/Cog.svelte';
     import Updates from "./Updates.svelte";
     import Settings from "./Settings.svelte";
+    import Hotkeys from "./Hotkeys.svelte";
 
     export let gimloader: Gimloader;
     export let onClose: () => void;
@@ -35,6 +36,13 @@
                         <span class="ml-2">Libraries</span>
                     </div>
                     <LibraryCardsList libManager={gimloader.lib} />
+                </TabItem>
+                <TabItem>
+                    <div slot="title" class="flex items-center">
+                        <KeyboardOutline size={24} />
+                        <span class="ml-2">Hotkeys</span>
+                    </div>
+                    <Hotkeys hotkeyManager={gimloader.hotkeys} />
                 </TabItem>
                 <TabItem>
                     <div slot="title" class="flex items-center">
