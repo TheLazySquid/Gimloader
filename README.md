@@ -8,6 +8,8 @@ This is a Gimkit plugin loader and manager, based on a trick first used in [Gimh
 2. Click on [this link](https://raw.githubusercontent.com/TheLazySquid/GimLoader/main/build/bundle.user.js)
 3. Go to [gimkit.com/join](https://www.gimkit.com/join) and there should be a wrench icon next to the join button.
 
+![UI Preview](/images/UIPreview.png)
+
 ## Usage
 
 At any point, you can open the mod menu by pressing `alt + p`.
@@ -27,9 +29,9 @@ At any point, you can open the mod menu by pressing `alt + p`.
 
 </details>
 
-Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/).
+These buttons can be disabled in the settings section.
 
-You can check for updates to the modloader with the update button at the top left. If it is the first time you do this, Tampermonkey will ask whether to allow Gimloader to use cross-origin resources. Hit "Always allow" so you don't have to do this every time.
+Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/). Some plugins depend on libraries, which you can manage in the libraries tab. Some plugins may also add hotkeys that you can change, which will be in the hotkeys tab.
 
 ## Gimhook Compatibility
 
@@ -37,34 +39,4 @@ Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have 
 
 ## Development
 
-### Plugin Structure
-
-Plugins should start with a jsdoc comment that looks like this to give some information about the plugin (more info [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-and-Library-Headers)).
-
-```javascript
-/**
- * @name Plugin Name
- * @description A description of the plugin
- * @author Your Name
- */
-```
-
-Additionally, if your plugin requires cleanup when turned off please export a function called onStop, like so:
-
-```javascript
-export function onStop() {
-  // clean up whatever you need to here
-}
-```
-
-### API
-
-The api reference can be found [here](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-API).
-
-### Build Tools
-
-Gimloader provides an easy way to build more complex plugins. Find more information [here](https://github.com/TheLazySquid/Gimloader/wiki/Build-Tools).
-
-### Types
-
-When using gimloader for a project, run `npm i -D @types/gimloader@github:TheLazySquid/Gimloader` to get types for the api.
+Information on developing plugins can be found in [the wiki](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Development).
