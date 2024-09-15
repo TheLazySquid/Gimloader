@@ -20,7 +20,11 @@ This plugin allows you to save and load states in platformer gamemodes. Save wit
 
 Adds an autosplitter and timer to Don't Look Down and Fishtopia, which allows you to time speedruns with high accuracy.
 
-## InfoLines [code](./InfoLines.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js)
+## QuickReset [code](./QuickReset.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/QuickReset.js)
+
+Adds a hotkey to quickly reset any 2d game that you are the host of
+
+## InfoLines [code](./InfoLines) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js)
 
 Displays a configurable list of information in 2d gamemodes, such as coordinates, velocity and fps.
 
