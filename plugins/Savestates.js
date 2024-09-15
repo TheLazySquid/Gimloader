@@ -2,7 +2,7 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.2.4
+ * @version 0.2.5
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
@@ -43,9 +43,6 @@ for(let i = 0; i <= 6; i++) {
     summitHotkeys.push(new Set(['shift', 'alt', hotkeyEquivs[i]]));
 }
 
-let saveStateHotkey = new Set(['alt', ',']);
-let loadStateHotkey = new Set(['alt', '.']);
-
 const tp = (summit) => {
     let physics = GL.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
@@ -61,7 +58,10 @@ const tp = (summit) => {
 let lastPos = GL.storage.getValue("Savestates", "lastPos", null);
 let lastState = GL.storage.getValue("Savestates", "lastState", null);
 
+let gameLoaded = false;
+
 const saveState = () => {
+    if(!gameLoaded) return;
     let physics = GL.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
 
@@ -76,6 +76,7 @@ const saveState = () => {
 }
 
 const loadState = () => {
+    if(!gameLoaded) return;
     let physics = GL.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
 
@@ -90,19 +91,14 @@ const loadState = () => {
     stateLoadCallbacks.forEach(cb => cb("custom"));
 }
 
-GL.addEventListener("loadEnd", () => {    
+GL.addEventListener("loadEnd", () => { 
+    gameLoaded = true;   
     // add hotkeys for summits
     for(let i = 0; i < summitHotkeys.length; i++) {
         let hotkey = summitHotkeys[i];
         
         GL.hotkeys.add(hotkey, () => tp(i));
     }
-
-    // saving
-    GL.hotkeys.add(saveStateHotkey, saveState)
-
-    // loading
-    GL.hotkeys.add(loadStateHotkey, loadState)
 
     // optional command line integration
     let commandLine = GL.lib("CommandLine");
@@ -116,7 +112,21 @@ GL.addEventListener("loadEnd", () => {
         commandLine.addCommand("save", [], saveState);
         commandLine.addCommand("load", [], loadState);
     }
-})
+});
+
+// saving
+GL.hotkeys.addConfigurable("Savestates", "saveState", saveState, {
+    category: "Savestates",
+    title: "Save Current State",
+    defaultKeys: new Set(['alt', ','])
+});
+
+// loading
+GL.hotkeys.addConfigurable("Savestates", "loadState", loadState, {
+    category: "Savestates",
+    title: "Load Last State",
+    defaultKeys: new Set(['alt', '.'])
+});
 
 export function onStateLoaded(callback) {
     stateLoadCallbacks.push(callback);
@@ -138,7 +148,8 @@ export function onStop() {
         commandLine.removeCommand("load");
     }
 
-    GL.hotkeys.remove(saveStateHotkey, loadStateHotkey);
+    GL.hotkeys.removeConfigurable("Savestates", "saveState");
+    GL.hotkeys.removeConfigurable("Savestates", "loadState");
     GL.patcher.unpatchAll("Savestates");
     GL.parcel.stopIntercepts("Savestates");
 }
