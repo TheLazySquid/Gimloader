@@ -2,16 +2,13 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.2.2
+ * @version 0.2.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  */
 
 let shiftToZoom = GL.storage.getValue("CameraControl", "shiftToZoom", true);
-let toggleZoomOut = GL.storage.getValue("CameraControl", "toggleZoomOut", false);
 let toggleZoomFactor = GL.storage.getValue("CameraControl", "toggleZoomFactor", 2);
-
-const freecamHotkey = new Set(["shift", "f"]);
 
 window.addEventListener("wheel", onWheel);
 
@@ -24,7 +21,7 @@ let scrollInterval = null;
 
 let stopProps = [new Set(["arrowleft"]), new Set(["arrowright"]), new Set(["arrowup"]), new Set(["arrowdown"])];
 
-GL.hotkeys.add(freecamHotkey, () => {
+GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
     let scene = GL.stores?.phaser?.scene;
     let camera = scene?.cameras?.cameras?.[0];
     if(!scene || !camera) return;
@@ -73,7 +70,12 @@ GL.hotkeys.add(freecamHotkey, () => {
     }
 
     freecamming = !freecamming;
-}, false)
+}, {
+    category: "Camera Control",
+    title: "Enable Freecam",
+    stopPropagation: false,
+    defaultKeys: new Set(["shift", "f"])
+})
 
 scrollInterval = setInterval(() => {
     let camera = GL.stores?.phaser?.scene?.cameras?.cameras?.[0];
@@ -108,13 +110,10 @@ function onWheel(e) {
     scrollMomentum += e.deltaY / 5000;
 }
 
-const sHotkey = new Set(["s"]);
-const downHotkey = new Set(["arrowdown"]);
-
 let zoomToggled = false;
 let initialZoom = 1;
 const onDown = () => {
-    if(!toggleZoomOut || !toggleZoomFactor) return;
+    if(!toggleZoomFactor) return;
     
     let scene = GL.stores?.phaser?.scene;
     let camera = scene?.cameras?.cameras?.[0];
@@ -130,14 +129,16 @@ const onDown = () => {
     zoomToggled = !zoomToggled;
 }
 
-GL.hotkeys.add(sHotkey, onDown, false);
-GL.hotkeys.add(downHotkey, onDown, false);
+GL.hotkeys.addConfigurable("CameraControl", "zoomToggle", onDown, {
+    category: "Camera Control",
+    title: "Quick Zoom Toggle",
+    stopPropagation: false
+});
 
 export function onStop() {
     window.removeEventListener("wheel", onWheel);
-    GL.hotkeys.remove(freecamHotkey);
-    GL.hotkeys.remove(sHotkey);
-    GL.hotkeys.remove(downHotkey);
+    GL.hotkeys.removeConfigurable("CameraControl", "freecam");
+    GL.hotkeys.removeConfigurable("CameraControl", "zoomToggle");
 
     clearInterval(freecamInterval);
     clearInterval(scrollInterval);
@@ -170,9 +171,6 @@ export function openSettingsMenu() {
     div.innerHTML = `<label for="shiftToZoom">Shift to Zoom</label>
     <input type="checkbox" id="shiftToZoom" ${shiftToZoom ? "checked" : ""}>
     <br>
-    <label for="toggleZoomOut">Press down to toggle zooming out</label>
-    <input type="checkbox" id="toggleZoomOut" ${toggleZoomOut ? "checked" : ""}>
-    <br>
     <label for="toggleZoomFactor">Toggle zoom factor</label>
     <input type="number" min="0.05" max="20" id="toggleZoomFactor" value=${toggleZoomFactor}>`
     div.id = "cameraControlSettings";
@@ -182,15 +180,10 @@ export function openSettingsMenu() {
         GL.storage.setValue("CameraControl", "shiftToZoom", shiftToZoom);
     });
 
-    div.querySelector("#toggleZoomOut").addEventListener("change", (e) => {
-        toggleZoomOut = e.target.checked;
-        GL.storage.setValue("CameraControl", "toggleZoomOut", toggleZoomOut);
-    });
-
     div.querySelector("#toggleZoomFactor").addEventListener("change", (e) => {
         toggleZoomFactor = e.target.value;
         GL.storage.setValue("CameraControl", "toggleZoomFactor", toggleZoomFactor);
-    })
+    });
 
     GL.UI.showModal(div, {
         id: "CameraControlSettings",
