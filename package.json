@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -8,8 +8,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "buildTypes": "tsc -p declaration.tsconfig.json",
-    "postinstall": "patch-package"
+    "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "files": [
     "types",
@@ -41,7 +40,6 @@
     "@types/tampermonkey": "^5.0.2",
     "antd": "^5.17.0",
     "autoprefixer": "^10.4.20",
-    "patch-package": "^8.0.0",
     "postcss": "^8.4.41",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-svelte": "^7.2.2",

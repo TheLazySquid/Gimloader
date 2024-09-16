@@ -3,6 +3,8 @@
     import type { EasyAccessWritable, IConfigurableHotkey } from "../../types";
     import { Button, Popover } from "flowbite-svelte";
     import Undo from 'svelte-material-icons/Undo.svelte';
+    import { overrideKeydown, stopOverrideKeydown } from '../../util';
+    import { onDestroy } from "svelte";
 
     export let hotkeyManager: HotkeyManager;
     let hotkeys: EasyAccessWritable<Map<string, IConfigurableHotkey>> = hotkeyManager.configurableHotkeys;
@@ -24,6 +26,7 @@
     function startConfigure(hotkey: IConfigurableHotkey) {
         configuring = hotkey;
         configureClear = true;
+        overrideKeydown(onKeydown);
     }
 
     function onKeydown(e: KeyboardEvent) {
@@ -53,6 +56,7 @@
         document.documentElement.click();
         (document.activeElement as HTMLElement)?.blur?.();
         hotkeyManager.saveConfigurableHotkeys();
+        stopOverrideKeydown();
     }
 
     function renameKey(key: string) {
@@ -86,6 +90,8 @@
         hotkeys.update();
         hotkeyManager.saveConfigurableHotkeys();
     }
+
+    onDestroy(stopOverrideKeydown);
 </script>
 
 <div class="flex flex-col">
@@ -101,7 +107,7 @@
                 <div class="flex items-center">
                     {hotkey.title}
                 </div>
-                <Button id={hotkey.id} on:click={() => startConfigure(hotkey)} on:keydown={onKeydown}>
+                <Button id={hotkey.id} on:click={() => startConfigure(hotkey)}>
                     {#if hotkey.keys.size === 0}
                         Not Bound
                     {:else}
