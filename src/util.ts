@@ -6,6 +6,26 @@ export function log(...args: any[]) {
     console.log('%c[GL]', 'color:#5030f2', ...args);
 }
 
+let keydownOverriding = false;
+let keydownCallback: (e: KeyboardEvent) => void;
+
+document.addEventListener("keydown", (e) => {
+    if(!keydownOverriding) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    keydownCallback(e);
+}, true);
+
+export function overrideKeydown(callback: (e: KeyboardEvent) => void) {
+    keydownOverriding = true;
+    keydownCallback = callback;
+}
+
+export function stopOverrideKeydown() {
+    keydownOverriding = false;
+}
+
 export function easyAccessWritable<T>(initial: T): EasyAccessWritable<T> {
     let callbacks = new Set<(value: T) => void>();
 
