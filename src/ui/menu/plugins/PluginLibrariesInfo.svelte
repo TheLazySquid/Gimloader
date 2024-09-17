@@ -53,10 +53,14 @@
                 <TableBodyCell>{lib ? 'Yes' : 'No'}</TableBodyCell>
                 <TableBodyCell>{libInfo.name}</TableBodyCell>
                 <TableBodyCell class="max-w-80 text-wrap">
-                    <a class="hover:underline" href={libInfo.url} target="_blank" rel="noopener noreferrer">
-                        {libInfo.url}
-                        <OpenInNew class="inline-block" size={16} />
-                    </a>
+                    {#if libInfo.url}
+                        <a class="hover:underline" href={libInfo.url} target="_blank" rel="noopener noreferrer">
+                            {libInfo.url}
+                            <OpenInNew class="inline-block" size={16} />
+                        </a>
+                    {:else}
+                        None
+                    {/if}
                 </TableBodyCell>
                 <TableBodyCell>{libInfo.required ? 'Yes' : 'No'}</TableBodyCell>
                 <TableBodyCell>
