@@ -50,6 +50,7 @@ export interface IConfigurableHotkey {
     preventDefault: boolean;
     callback: (event: KeyboardEvent) => void;
     keys: Set<string>;
+    defaultKeys?: Set<string>;
 }
 export interface IConfigurableHotkeyOptions {
     category: string;
