@@ -14,5 +14,5 @@
         },
         "verbatimModuleSyntax": true
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx", "main.d.ts"]
+    "include": ["./src/**/*.ts", "main.d.ts"]
 }

@@ -1,4 +1,3 @@
-/// <reference types="tampermonkey" />
 import type { Gimloader } from "../gimloader";
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
 export default class Net {
