@@ -6,8 +6,8 @@
   "type": "module",
   "types": "index.d.ts",
   "scripts": {
-    "build": "bun run build.ts",
-    "watch": "bun run build.ts -w",
+    "build": "node build.js",
+    "watch": "node build.js -w",
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "files": [

@@ -1,9 +1,12 @@
-import { build, type BuildOptions, context, type Plugin } from 'esbuild';
+import { build, context } from 'esbuild';
 import sveltePlugin from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
 import postcss from 'postcss';
 import postcssLoadConfig from 'postcss-load-config';
-import { version } from './package.json';
+import fs from 'fs';
+
+const pkg = JSON.parse(fs.readFileSync("package.json"));
+const version = pkg.version;
 
 import { compileAsync } from "sass";
 import path from "path";
@@ -12,7 +15,7 @@ console.time("Built");
 let timerRunning = true;
 
 // unholy amalgamation of esbuild-postcss-inline-styles and esbuild-style-plugin
-function importStyles(): Plugin {
+function importStyles() {
     return {
         name: "import-styles",
         setup(build) {
@@ -62,7 +65,7 @@ const meta = `// ==UserScript==
 // @grant       GM_addValueChangeListener
 // ==/UserScript==`
 
-let config: BuildOptions = {
+let config = {
     entryPoints: ["src/index.ts"],
     mainFields: ["svelte", "browser", "module", "main"],
     conditions: ["svelte", "browser"],
@@ -89,7 +92,7 @@ let config: BuildOptions = {
 
 
 if(process.argv.includes("-w") || process.argv.includes("--watch")) {
-    config.plugins!.push({
+    config.plugins.push({
         name: "rebuild-notify",
         setup(build) {
             build.onStart(() => {
@@ -113,7 +116,6 @@ if(process.argv.includes("-w") || process.argv.includes("--watch")) {
     const ctx = await context(config)
     await ctx.watch()
 } else {
-    console.time("Built")
     await build(config);
     console.timeEnd("Built")
 }
