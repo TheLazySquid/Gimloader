@@ -39,7 +39,7 @@ const libManagerMethods = {
         }
 
         if(existing) {
-            existing.disable();
+            this.deleteLib(existing);
         }
 
         let lib = new Lib(script, headers);
