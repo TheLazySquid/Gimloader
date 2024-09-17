@@ -1,6 +1,6 @@
 {
   "name": "@gimloader/build",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A package to help build complex plugins for Gimloader",
   "main": "dist/index.js",
   "scripts": {

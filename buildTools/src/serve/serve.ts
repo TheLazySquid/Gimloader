@@ -70,6 +70,7 @@ export default function serve(args: any) {
             .then((config) => {
                 let time = Math.ceil(Date.now() - start);
                 console.log(`\rBuild completed in ${time}ms`);
+                poller.isLibrary = config.isLibrary;
                 onCodeUpdate(config.name);
             })
             .catch((err: string) => {
