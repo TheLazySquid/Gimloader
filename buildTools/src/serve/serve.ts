@@ -1,6 +1,8 @@
-import { watch, type RollupWatcher } from 'rollup';
-import getConfig from '../build/getConfig';
-import addHeadersPlugin from '../build/addHeadersPlugin';
+import type { RollupWatcher } from 'rollup';
+import rollup from 'rollup';
+import esbuild, { BuildContext } from 'esbuild';
+import { createEsbuildConfig, createEsbuildWatchConfig, getConfig } from '../build/getConfig';
+import { addHeadersPlugin } from '../build/addHeaders';
 import chokidar from 'chokidar';
 import { join } from 'path';
 import fs from 'fs/promises';
@@ -10,6 +12,7 @@ import waitForEnter from './manual';
 
 export default function serve(args: any) {
     let watcher: RollupWatcher | null = null;
+    let ctx: BuildContext | null = null;
 
     let poller = new Poller();
 
@@ -21,17 +24,26 @@ export default function serve(args: any) {
         poller.updateCode(newCode);
     }
 
-    const makeWatcher = async () => {
+    const makeWatcher = () => {
         if(watcher) watcher.close();
+        if(ctx) ctx.dispose();
 
         getConfig()
-            .then(async (config) => {
-                poller.isLibrary = config.isLibrary === true;
+        .then(async (config) => {
+            poller.isLibrary = config.isLibrary === true;
 
+            if(config.bundler === "esbuild") {
+                let buildConfig = createEsbuildWatchConfig(config, () => {
+                    onCodeUpdate(config.name);
+                });
+
+                ctx = await esbuild.context(buildConfig);
+                await ctx.watch();
+            } else {
                 let plugins = config.plugins ?? [];
                 plugins.push(addHeadersPlugin(config));
                 
-                watcher = watch({
+                watcher = rollup.watch({
                     input: config.input,
                     output: {
                         file: `build/${config.name}.js`,
@@ -46,7 +58,7 @@ export default function serve(args: any) {
                     if(event.code === "BUNDLE_START") {
                         process.stdout.write("Building...");
                     } else if(event.code === "BUNDLE_END") {
-                        console.log(`\rBuild completed in ${event.duration}ms`);
+                        console.log(`\x1b[2K\rBuild completed in ${event.duration}ms`);
                         onCodeUpdate(config.name);
                         event.result.close();
                     } else if(event.code === "ERROR") {
@@ -54,16 +66,17 @@ export default function serve(args: any) {
                         event.result?.close();
                     }
                 })
-            })
-            .catch((err: string) => {
-                console.error(err);
-            })
+            }
+        })
+        .catch((err: string) => {
+            console.error(err);
+        })
     }
 
     let isBuilding = false;
     const buildPlugin = () => {
         isBuilding = true;
-        process.stdout.write("\rBuilding...            ");
+        process.stdout.write("\x1b[2K\rBuilding...");
 
         let start = Date.now();
         build()

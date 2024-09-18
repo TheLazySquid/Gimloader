@@ -1,14 +1,17 @@
 {
   "name": "@gimloader/build",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "A package to help build complex plugins for Gimloader",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc"
   },
   "bin": {
-    "gimloader": "dist/cli.js",
-    "gl": "dist/cli.js"
+    "gimloader": "dist/src/cli.js",
+    "gl": "dist/src/cli.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,7 @@
   "dependencies": {
     "@inquirer/prompts": "^5.1.2",
     "chokidar": "^3.6.0",
+    "esbuild": "^0.23.1",
     "express": "^4.19.2",
     "rollup": "^4.18.1",
     "yargs": "^17.7.2"

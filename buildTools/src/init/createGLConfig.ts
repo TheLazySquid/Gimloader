@@ -1,4 +1,4 @@
-export default function createGLConfig(name: string, description: string, author: string, plugins: string[]) {
+export default function createGLConfig(name: string, description: string, author: string, bundler: string, plugins: string[]) {
     let useTs = plugins.includes('typescript');
 
     let config = "";
@@ -18,7 +18,11 @@ export default function createGLConfig(name: string, description: string, author
     if(plugins.includes('svelte')) {
         config += `import svelte from 'rollup-plugin-svelte';\n`;
         config += `import resolve from '@rollup/plugin-node-resolve';\n`;
-        config += `import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';\n`;
+        config += `import { sveltePreprocess } from 'svelte-preprocess';\n`;
+    }
+    if(plugins.includes('esbuild-svelte')) {
+        config += `import sveltePlugin from 'esbuild-svelte';\n`
+        config += `import { sveltePreprocess } from 'svelte-preprocess';\n`;
     }
 
     config += `import fs from 'fs';
@@ -31,8 +35,10 @@ export default {
     name: '${name}',
     description: '${description}',
     author: '${author}',
-    version: pkg.version,
-    plugins: [`;
+    version: pkg.version,`
+    if(bundler === "esbuild") config += `\n    bundler: "esbuild",`
+
+    config += `\n    plugins: [`;
 
     let pluginStrs: string[] = [];
 
@@ -61,13 +67,21 @@ export default {
             compilerOptions: {
                 css: 'injected'
             },
-            preprocess: vitePreprocess()
+            preprocess: sveltePreprocess()
         })`);
         pluginStrs.push(`        resolve({
             browser: true,
             exportConditions: ['svelte'],
             extensions: ['.svelte', '.js', '.ts', '.json']
         })`);
+    }
+    if(plugins.includes("esbuild-svelte")) {
+        pluginStrs.push(`        sveltePlugin({
+            preprocess: sveltePreprocess(),
+            compilerOptions: {
+                css: "injected"
+            }    
+        })`)
     }
 
     if(pluginStrs.length > 0) {

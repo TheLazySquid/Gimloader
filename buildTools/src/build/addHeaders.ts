@@ -1,11 +1,11 @@
-import { Config, IPluginTypes } from '../types';
+import type { Config, IPluginTypes } from '../types';
 
-export default function addHeadersPlugin(config: Config) {
+export function createHeader(config: Config) {
     let meta = `/**
  * @name ${config.name}
  * @description ${config.description}
  * @author ${config.author}`;
-
+   
     if(config.version) {
         meta += `\n * @version ${config.version}`;
     }
@@ -15,21 +15,21 @@ export default function addHeadersPlugin(config: Config) {
     }
 
     if(!config.isLibrary) {
-        config = config as IPluginTypes;
-        if(config.reloadRequired === true) {
+        let pluginConfig = config as IPluginTypes;
+        if(pluginConfig.reloadRequired === true) {
             meta += '\n * @reloadRequired true';
-        } else if(config.reloadRequired === "ingame") {
+        } else if(pluginConfig.reloadRequired === "ingame") {
             meta += '\n * @reloadRequired ingame';
         }
     
-        if(config.libs) {
-            for(let lib of config.libs) {
+        if(pluginConfig.libs) {
+            for(let lib of pluginConfig.libs) {
                 meta += `\n * @needsLib ${lib}`;
             }
         }
     
-        if(config.optionalLibs) {
-            for(let lib of config.optionalLibs) {
+        if(pluginConfig.optionalLibs) {
+            for(let lib of pluginConfig.optionalLibs) {
                 meta += `\n * @optionalLib ${lib}`;
             }
         }
@@ -40,6 +40,12 @@ export default function addHeadersPlugin(config: Config) {
     }
 
     meta += '\n */\n';
+   
+    return meta;
+}
+
+export function addHeadersPlugin(config: Config) {
+    let meta = createHeader(config);
 
     return {
         name: 'addMeta',

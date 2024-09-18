@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { input, confirm, checkbox } from '@inquirer/prompts';
-import { join } from 'path';
-import { execSync } from 'child_process';
+import { input, confirm, checkbox, select } from '@inquirer/prompts';
+import { join, basename } from 'path';
+import createPackageJson from './createPackageJson'
 import createGLConfig from './createGLConfig';
 
 export default async function init() {
@@ -18,68 +18,60 @@ export default async function init() {
 
     let name = await input({
         message: "Plugin name",
-        required: true
+        required: true,
+        default: basename(process.cwd())
     });
-
+    
     let description = await input({
         message: "Plugin description",
         required: true
     });
+
     let author = await input({
         message: "Author",
         required: true
     });
 
-    let plugins = await checkbox({
-        message: "Select plugins (optional)",
+    let bundler = await select({
+        message: "Which bundler would you like to use?",
         choices: [
-            { name: "@rollup/plugin-typescript", value: "typescript" },
-            { name: "@rollup/plugin-babel", value: "babel" },
-            { name: "rollup-plugin-string", value: "string" },
-            { name: "rollup-plugin-sass", value: "sass" },
-            { name: "rollup-plugin-svelte", value: "svelte" }
+            {
+                name: "Esbuild",
+                value: "esbuild"
+            },
+            {
+                name: "Rollup",
+                value: "rollup"
+            }
         ]
     });
 
+    let plugins: string[];
+
+    if(bundler === "esbuild") {
+        plugins = await checkbox({
+            message: "Select plugins (optional)",
+            choices: [
+                { name: "esbuild-svelte", value: "esbuild-svelte" }
+            ]
+        })
+    } else {
+        plugins = await checkbox({
+            message: "Select plugins (optional)",
+            choices: [
+                { name: "@rollup/plugin-typescript", value: "typescript" },
+                { name: "@rollup/plugin-babel", value: "babel" },
+                { name: "rollup-plugin-string", value: "string" },
+                { name: "rollup-plugin-sass", value: "sass" },
+                { name: "rollup-plugin-svelte", value: "svelte" }
+            ]
+        });
+    }
+
     let useTs = plugins.includes('typescript');
     
-    let pkgPath = join(process.cwd(), 'package.json')
     // create the package.json if it doesn't exist
-    if(!fs.existsSync(pkgPath)) {
-        console.log('Creating package.json...');
-        fs.writeFileSync(pkgPath, JSON.stringify({
-            name: name.toLowerCase().replace(/ /g, '-'),
-            version: '1.0.0',
-            description: description,
-            author: author,
-            main: useTs ? 'src/index.ts' : 'src/index.js',
-            scripts: {
-                build: "gl build"
-            },
-            type: 'module',
-            dependencies: {},
-            devDependencies: {}
-        }, null, 2))
-    }
-    
-    // install dependencies
-    console.log('Installing dependencies...');
-
-    let devDeps = {
-        'typescript': '@rollup/plugin-typescript tslib @types/gimloader@github:TheLazySquid/Gimloader',
-        'babel': '@rollup/plugin-babel @babel/preset-react',
-        'string': 'rollup-plugin-string',
-        'sass': 'rollup-plugin-sass',
-        'svelte': 'svelte rollup-plugin-svelte @rollup/plugin-node-resolve @sveltejs/vite-plugin-svelte'
-    }
-
-    let installStr = 'npm install --save-dev @gimloader/build';
-    
-    for(let plugin of plugins) {
-        installStr += ` ${devDeps[plugin]}`;
-    }
-
-    execSync(installStr, { stdio: 'inherit' });
+    createPackageJson(name, description, author, useTs, plugins);
 
     // create .gitignore
     if(!fs.existsSync(join(process.cwd(), '.gitignore'))) {
@@ -97,7 +89,7 @@ export default async function init() {
 
     // create GL.config.js
     console.log('Creating GL.config.js...');
-    let config = createGLConfig(name, description, author, plugins);
+    let config = createGLConfig(name, description, author, bundler, plugins);
     fs.writeFileSync(configPath, config);
     
     // create main file
@@ -112,5 +104,5 @@ export default async function init() {
         fs.writeFileSync(mainPath, "console.log('Hello, World!')");
     }
 
-    console.log('Done!');
+    console.log('Done! Run npm install to get started.');
 }
