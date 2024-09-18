@@ -18,7 +18,7 @@ To get started, make an empty folder and run the following command in the termin
 gl init
 ```
 
-From there you will be given some options to choose from. This command will generate the file `GL.config.js`, which houses the configuration for the build tools.
+From there you will be given some options to choose from. This command will generate the file `GL.config.js`, which houses the configuration for the build tools. You can pick between [esbuild](https://esbuild.github.io/) and [Rollup](https://rollupjs.org/) for bundlers.
 
 ##### Mandatory Fields
 - `input`: The input file that will be compiled.
@@ -29,9 +29,16 @@ From there you will be given some options to choose from. This command will gene
 ##### Optional Fields
 - `version`: The version of the plugin / library.
 - `downloadUrl`: The download URL for the plugin / library, used by Gimloader for updates.
+- `bundler`: This decides which bundler is used. Set to esbuild to use esbuild, otherwise Rollup is used.
+
+##### Optional Fields (Rollup)
 - `plugins`: An array of Rollup plugins to use.
 - `rollupOptions`: Options to pass to Rollup.
 - `outputOptions`: Options to pass to Rollup's output.
+
+##### Optional Fields (Esbuild)
+- `plugins`: An array of Esbuild plugins to use
+- `esbuildOptions`: Options to pass to esbuild
 
 ##### Plugin Fields (Optional)
 - `reloadRequired`: Set to true if the plugin needs a reload to take effect, or set to "ingame" if it only needs a reload when in-game.

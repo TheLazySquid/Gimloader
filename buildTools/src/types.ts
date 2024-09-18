@@ -1,6 +1,7 @@
 import type { InputPluginOption, OutputOptions, RollupOptions } from "rollup";
+import type { BuildOptions, Plugin } from "esbuild";
 
-export interface IMandatory {
+export interface MandatoryConfig {
     /**
      * The input file that will be compiled.
      */
@@ -19,7 +20,7 @@ export interface IMandatory {
     author: string;
 }
 
-export interface IOptional extends IMandatory {
+export interface OptionalConfig extends MandatoryConfig {
     /**
      * The version of the plugin / library.
      */
@@ -28,21 +29,9 @@ export interface IOptional extends IMandatory {
      * A URL to get the raw code of the plugin / library, used for updates.
      */
     downloadUrl?: string;
-    /**
-     * Rollup plugins to use when building the plugin / library.
-     */
-    plugins?: InputPluginOption[];
-    /**
-     * Options to pass to rollup.
-     */
-    rollupOptions?: RollupOptions;
-    /**
-     * Options to pass to rollup.write
-     */
-    outputOptions?: OutputOptions;
 }
 
-export interface IPluginTypes extends IOptional {
+export interface IPluginTypes extends OptionalConfig {
     /**
      * Whether the plugin / library is a library.
      */
@@ -64,14 +53,50 @@ export interface IPluginTypes extends IOptional {
     optionalLibs: string[];
 }
 
-export interface ILibraryTypes extends IOptional {
+export interface LibraryTypes extends OptionalConfig {
     /**
      * Whether the plugin / library is a library.
      */
     isLibrary: true;
 }
 
-export type Config = IPluginTypes | ILibraryTypes;
+export type SharedConfig = IPluginTypes | LibraryTypes;
+
+export type RollupConfig = SharedConfig & {
+    /**
+     * Which bundler should be used
+     */
+    bundler: "rollup" | undefined;
+    /**
+     * Rollup plugins to use when building the plugin / library.
+     */
+    plugins?: InputPluginOption[];
+    /**
+     * Options to pass to rollup.
+     */
+    rollupOptions?: RollupOptions;
+    /**
+     * Options to pass to rollup.write
+     */
+    outputOptions?: OutputOptions;
+}
+
+export type EsbuildConfig = SharedConfig & {
+    /**
+     * Which bundler should be used
+     */
+    bundler: "esbuild";
+    /**
+     * Esbuild plugins to use when building the plugin/library
+     */
+    plugins?: Plugin[];
+    /**
+     * Options to be passed to esbuild's build and context functions
+     */
+    esbuildOptions?: BuildOptions;
+}
+
+export type Config = RollupConfig | EsbuildConfig;
 
 export interface GLConfig {
     default: Config;
