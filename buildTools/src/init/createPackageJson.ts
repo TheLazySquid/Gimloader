@@ -24,7 +24,7 @@ let versions = {
     "rollup-plugin-svelte": "7.2.2",
     "@rollup/plugin-node-resolve": "15.2.3",
     "svelte-preprocess": "6.0.2",
-    "esbuild-svelte": "0.8.3",
+    "esbuild-svelte": "0.8.2",
     "@gimloader/build": version
 }
 
