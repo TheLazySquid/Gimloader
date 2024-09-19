@@ -31,6 +31,9 @@
             {/if}
         </h2>
     </svelte:fragment>
+    <svelte:fragment slot="author">
+        By {library?.headers.author}
+    </svelte:fragment>
     <svelte:fragment slot="description">
         {library?.headers.description}
     </svelte:fragment>
