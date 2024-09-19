@@ -1,6 +1,6 @@
 {
   "name": "@gimloader/build",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A package to help build complex plugins for Gimloader",
   "main": "dist/src/index.js",
   "files": [
@@ -22,7 +22,7 @@
   ],
   "author": "TheLazySquid",
   "license": "MIT",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "dependencies": {
     "@inquirer/prompts": "^5.1.2",
     "chokidar": "^3.6.0",
