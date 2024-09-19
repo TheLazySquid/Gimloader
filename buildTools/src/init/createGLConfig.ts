@@ -1,6 +1,4 @@
-export default function createGLConfig(name: string, description: string, author: string, bundler: string, plugins: string[]) {
-    let useTs = plugins.includes('typescript');
-
+export default function createGLConfig(name: string, description: string, author: string, bundler: string, useTs: boolean, plugins: string[]) {
     let config = "";
 
     if(plugins.includes('typescript')) {

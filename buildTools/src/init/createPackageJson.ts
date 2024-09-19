@@ -57,6 +57,8 @@ export default function createPackageJson(name: string, description: string, aut
 
     for(let plugin of plugins) {
         let deps = dependencies[plugin];
+        if(!deps) continue;
+        
         for(let dep of deps) {
             if(installed.includes(dep)) continue;
 

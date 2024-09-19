@@ -47,14 +47,18 @@ export default async function init() {
     });
 
     let plugins: string[];
+    let useTs = false;
 
     if(bundler === "esbuild") {
         plugins = await checkbox({
             message: "Select plugins (optional)",
             choices: [
+                { name: "typescript", value: "esbuild-typescript" },
                 { name: "esbuild-svelte", value: "esbuild-svelte" }
             ]
-        })
+        });
+
+        useTs = plugins.includes('esbuild-typescript');
     } else {
         plugins = await checkbox({
             message: "Select plugins (optional)",
@@ -66,9 +70,9 @@ export default async function init() {
                 { name: "rollup-plugin-svelte", value: "svelte" }
             ]
         });
-    }
 
-    let useTs = plugins.includes('typescript');
+        useTs = plugins.includes('typescript');
+    }
     
     // create the package.json if it doesn't exist
     createPackageJson(name, description, author, useTs, plugins);
@@ -89,7 +93,7 @@ export default async function init() {
 
     // create GL.config.js
     console.log('Creating GL.config.js...');
-    let config = createGLConfig(name, description, author, bundler, plugins);
+    let config = createGLConfig(name, description, author, bundler, useTs, plugins);
     fs.writeFileSync(configPath, config);
     
     // create main file
