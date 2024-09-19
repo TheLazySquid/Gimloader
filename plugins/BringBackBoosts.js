@@ -2,13 +2,35 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.3.2
+ * @version 0.3.3
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
+ * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  */
 
-let useOriginalPhysics = GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false);
+let settings = GL.lib("QuickSettings")("BringBackBoosts", [
+    {
+        type: "heading",
+        text: "BringBackBoosts Settings"
+    },
+    {
+        type: "boolean",
+        id: "useOriginalPhysics",
+        title: "Use Release Physics",
+        default: false
+    }
+]);
+
+settings.listen("useOriginalPhysics", (value) => {
+    if(!GL.platformerPhysics) return;
+    if(value) {
+        GL.platformerPhysics.movement.air = originalAirMovement;
+    } else {
+        GL.platformerPhysics.movement.air = defaultAirMovement;
+    }
+})
+
 const defaultAirMovement = {
     accelerationSpeed: 0.08125,
     decelerationSpeed: 0.08125,
@@ -21,36 +43,10 @@ const originalAirMovement = {
 }
 
 GL.addEventListener("loadEnd", () => {
-    if(useOriginalPhysics) {
+    if(settings.useOriginalPhysics) {
         GL.platformerPhysics.movement.air = originalAirMovement;
     }
 })
-
-export function openSettingsMenu() {
-    let div = document.createElement("div");
-    div.innerHTML = `<label for="useOriginalPhysics">Use Original Physics</label>
-    <input type="checkbox" id="useOriginalPhysics" ${useOriginalPhysics ? "checked" : ""}>`
-
-    div.querySelector("#useOriginalPhysics").addEventListener("change", (e) => {
-        useOriginalPhysics = e.target.checked;
-        GL.storage.setValue("BringBackBoosts", "useOriginalPhysics", useOriginalPhysics);
-
-        if(useOriginalPhysics) {
-            GL.platformerPhysics.movement.air = originalAirMovement;
-        } else {
-            GL.platformerPhysics.movement.air = defaultAirMovement;
-        }
-    })
-
-    GL.UI.showModal(div, {
-        id: "BringBackBoostsSettings",
-        title: "Bring Back Boosts Settings",
-        buttons: [{
-            text: "Close",
-            type: "primary"
-        }]
-    })
-}
 
 // WARNING: The code used in this has been taken from minified Gimkit code and therefore is nearly unreadable. Proceed with caution.
 var r, g;
@@ -135,3 +131,5 @@ GL.parcel.interceptRequire("Boosts", (exports) => exports?.CalculateMovementVelo
         return C(...args);
     })
 })
+
+export const openSettingsMenu = settings.openSettingsMenu;
