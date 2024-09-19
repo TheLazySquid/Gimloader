@@ -1,0 +1,22 @@
+{
+  "name": "quicksettings",
+  "version": "0.1.0",
+  "description": "Easily make simple settings menus",
+  "author": "TheLazySquid",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "gl build",
+    "serve": "gl serve -m"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@gimloader/build": "0.2.3",
+    "@types/gimloader": "github:TheLazySquid/Gimloader",
+    "esbuild-svelte": "0.8.2",
+    "svelte": "4.2.19",
+    "svelte-preprocess": "6.0.2"
+  },
+  "dependencies": {
+    "svelte-toggle": "^4.0.1"
+  }
+}
