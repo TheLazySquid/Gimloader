@@ -1,7 +1,7 @@
 import type { RollupWatcher } from 'rollup';
 import rollup from 'rollup';
 import esbuild, { BuildContext } from 'esbuild';
-import { createEsbuildConfig, createEsbuildWatchConfig, getConfig } from '../build/getConfig';
+import { createEsbuildWatchConfig, getConfig } from '../build/getConfig';
 import { addHeadersPlugin } from '../build/addHeaders';
 import chokidar from 'chokidar';
 import { join } from 'path';
@@ -83,7 +83,7 @@ export default function serve(args: any) {
             .then((config) => {
                 let time = Math.ceil(Date.now() - start);
                 console.log(`\rBuild completed in ${time}ms`);
-                poller.isLibrary = config.isLibrary;
+                poller.isLibrary = config.isLibrary === true;
                 onCodeUpdate(config.name);
             })
             .catch((err: string) => {

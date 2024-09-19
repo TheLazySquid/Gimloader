@@ -66,8 +66,12 @@ export default function createPackageJson(name: string, description: string, aut
         }
     }
 
-    if(!installed.includes("@gimloader/build")) {
-        pkg.devDependencies["@gimloader/build"] = versions["@gimloader/build"];
+
+    const alwaysInstall = ["@gimloader/build", "@types/gimloader"];
+    for(let dep of alwaysInstall) {
+        if(!installed.includes(dep)) {
+            pkg.devDependencies[dep] = versions[dep];
+        }
     }
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
