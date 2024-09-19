@@ -65,6 +65,9 @@
             <Toggle class="*:me-0" bind:checked={enabled} disabled></Toggle>
         </button>
     </svelte:fragment>
+    <svelte:fragment slot="author">
+        By {plugin?.headers.author}
+    </svelte:fragment>
     <svelte:fragment slot="description">
         {plugin?.headers.description}
     </svelte:fragment>

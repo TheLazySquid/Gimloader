@@ -5,9 +5,12 @@
     export let dragDisabled: boolean;
 </script>
 
-<div class="border border-gray-500 p-3 h-fit relative bg-white min-h-[150px] flex flex-col preflight rounded-xl">
-    <div class="w-full flex items-center">
+<div class="border border-gray-500 p-3 h-full relative bg-white min-h-[150px] flex flex-col preflight rounded-xl">
+    <div class="w-full flex gap-2 items-center leading-3">
         <slot name="header" />
+    </div>
+    <div class="overflow-ellipsis overflow-hidden whitespace-nowrap w-full text-base leading-4">
+        <slot name="author" />
     </div>
     <div class="flex-grow text-sm pr-7 overflow-hidden overflow-ellipsis line-clamp-6">
         <slot name="description" />
