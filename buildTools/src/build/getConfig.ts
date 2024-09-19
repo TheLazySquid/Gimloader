@@ -42,6 +42,7 @@ export function createEsbuildConfig(config: EsbuildConfig): BuildOptions {
         conditions: ["svelte", "browser"],
         bundle: true,
         outfile: `build/${config.name}.js`,
+        format: "esm",
         plugins,
         banner: {
             "js": createHeader(config)
