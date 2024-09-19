@@ -2,13 +2,31 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.2.3
+ * @version 0.2.4
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
+ * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  */
 
-let shiftToZoom = GL.storage.getValue("CameraControl", "shiftToZoom", true);
-let toggleZoomFactor = GL.storage.getValue("CameraControl", "toggleZoomFactor", 2);
+let settings = GL.lib("QuickSettings")("CameraControl", [
+    {
+        type: "heading",
+        text: "CameraControl Settings"
+    },
+    {
+        type: "boolean",
+        id: "shiftToZoom",
+        title: "Hold Shift to Zoom",
+        default: true
+    }, {
+        type: "number",
+        id: "toggleZoomFactor",
+        title: "Toggle Zoom Factor",
+        min: 0.05,
+        max: 20,
+        default: 2
+    }
+]);
 
 window.addEventListener("wheel", onWheel);
 
@@ -105,7 +123,7 @@ if(commandLine) {
 }
 
 function onWheel(e) {
-    if(shiftToZoom && !e.shiftKey) return;
+    if(settings.shiftToZoom && !e.shiftKey) return;
 
     scrollMomentum += e.deltaY / 5000;
 }
@@ -113,7 +131,7 @@ function onWheel(e) {
 let zoomToggled = false;
 let initialZoom = 1;
 const onDown = () => {
-    if(!toggleZoomFactor) return;
+    if(!settings.toggleZoomFactor) return;
     
     let scene = GL.stores?.phaser?.scene;
     let camera = scene?.cameras?.cameras?.[0];
@@ -123,7 +141,7 @@ const onDown = () => {
         camera.zoom = initialZoom;
     } else {
         initialZoom = camera.zoom;
-        camera.zoom /= toggleZoomFactor;
+        camera.zoom /= settings.toggleZoomFactor;
     }
 
     zoomToggled = !zoomToggled;
@@ -166,31 +184,4 @@ export function onStop() {
     }
 }
 
-export function openSettingsMenu() {
-    let div = document.createElement("div");
-    div.innerHTML = `<label for="shiftToZoom">Shift to Zoom</label>
-    <input type="checkbox" id="shiftToZoom" ${shiftToZoom ? "checked" : ""}>
-    <br>
-    <label for="toggleZoomFactor">Toggle zoom factor</label>
-    <input type="number" min="0.05" max="20" id="toggleZoomFactor" value=${toggleZoomFactor}>`
-    div.id = "cameraControlSettings";
-
-    div.querySelector("#shiftToZoom").addEventListener("change", (e) => {
-        shiftToZoom = e.target.checked;
-        GL.storage.setValue("CameraControl", "shiftToZoom", shiftToZoom);
-    });
-
-    div.querySelector("#toggleZoomFactor").addEventListener("change", (e) => {
-        toggleZoomFactor = e.target.value;
-        GL.storage.setValue("CameraControl", "toggleZoomFactor", toggleZoomFactor);
-    });
-
-    GL.UI.showModal(div, {
-        id: "CameraControlSettings",
-        title: "Camera Control Settings",
-        buttons: [{
-            text: "Close",
-            type: "primary"
-        }]
-    })
-}
+export const openSettingsMenu = settings.openSettingsMenu;
