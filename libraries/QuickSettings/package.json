@@ -1,6 +1,6 @@
 {
   "name": "quicksettings",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Easily make simple settings menus",
   "author": "TheLazySquid",
   "main": "src/index.ts",

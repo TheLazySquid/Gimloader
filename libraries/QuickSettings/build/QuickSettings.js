@@ -2,7 +2,8 @@
  * @name QuickSettings
  * @description Easily make simple settings menus
  * @author TheLazySquid
- * @version 1.0.0
+ * @version 0.1.1
+ * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @isLibrary true
  */
 

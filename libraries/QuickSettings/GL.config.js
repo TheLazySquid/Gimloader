@@ -10,6 +10,7 @@ export default {
     name: 'QuickSettings',
     description: 'Easily make simple settings menus',
     author: 'TheLazySquid',
+    downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js",
     version: pkg.version,
     isLibrary: true,
     bundler: "esbuild",

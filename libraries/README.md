@@ -10,10 +10,10 @@ This library disables the server snapping back the player, causing desync and al
 
 This library detects which official gamemode (if any) the player is currently in. Gamemode values: `Don't Look Down`, `Fishtopia`, `Capture The Flag`, `Knockback`, `Dig It Up`, `One Way Out`, `Snowbrawl`, `Blastball`, `Snowy Survival`, `Tag`, and `Farmchain`. The gamemode can be accessed with GL.lib("GamemodeDetector").currentGamemode().
 
-### MobxUtils [code](./MobxUtils.js)
+## MobxUtils [code](./MobxUtils.js)
 
 Allows for relatively easy react injection despite mobx.
 
-### QuickSettings [code](./QuickSettings)
+## QuickSettings [code](./QuickSettings)
 
 An easy way to make simple settings menus.
