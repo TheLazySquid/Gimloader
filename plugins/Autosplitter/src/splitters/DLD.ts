@@ -23,7 +23,8 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
 
         this.category = "Current Patch";
         if(GL.pluginManager.isEnabled("BringBackBoosts")) {
-            if(GL.storage.getValue("BringBackBoosts", "useOriginalPhysics", false)) {
+            let bbbSettings = GL.storage.getValue("BringBackBoosts", "QS-Settings", {})
+            if(bbbSettings.useOriginalPhysics) {
                 this.category = "Original Physics";
             } else {
                 this.category = "Creative Platforming Patch";

@@ -1,6 +1,5 @@
 import typescript from '@rollup/plugin-typescript'
 import { string } from 'rollup-plugin-string';
-import babel from '@rollup/plugin-babel';
 import sass from 'rollup-plugin-sass';
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
@@ -18,7 +17,6 @@ export default {
     downloadUrl: 'https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js',
     libs: ["GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js"],
     plugins: [
-        babel({ include: ['src/**/*.jsx', 'src/**/*.tsx'], babelHelpers: 'bundled' }),
         sass(),
         string({ include: ['**/*.css', '**/*.svg'] }),
         typescript({
