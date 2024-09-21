@@ -1,10 +1,11 @@
-import { DLDData, FishtopiaData } from "./types";
+import { DLDData, SplitsData } from "./types";
 
 export function getGamemodeData(gamemode: string) {
     switch(gamemode) {
         case "DLD": return getDLDData();
         case "Fishtopia": return getFishtopiaData();
-        default: throw new Error("Invalid gamemode");
+        case "OneWayOut": return getOneWayOutData();
+        default: throw new Error(`Invalid gamemode: ${gamemode}`);
     }
 }
 
@@ -31,7 +32,7 @@ export function getDLDData(): DLDData {
     return Object.assign(DLDDefaults, data);
 }
 
-const fishtopiaDefaults: FishtopiaData = {
+const splitsDefaults: SplitsData = {
     attempts: {},
     pb: {},
     bestSplits: {},
@@ -43,9 +44,14 @@ const fishtopiaDefaults: FishtopiaData = {
     timerPosition: 'top right'
 }
 
-export function getFishtopiaData(): FishtopiaData {
+export function getFishtopiaData(): SplitsData {
     let data = GL.storage.getValue("Autosplitter", "FishtopiaData", {});
-    return Object.assign(fishtopiaDefaults, data);
+    return Object.assign(splitsDefaults, data);
+}
+
+export function getOneWayOutData(): SplitsData {
+    let data = GL.storage.getValue("Autosplitter", "OneWayOutData", {});
+    return Object.assign(splitsDefaults, data);
 }
 
 export function downloadFile(data: string, filename: string) {
@@ -122,11 +128,21 @@ export interface Coords {
     y: number
 }
 
+export interface Box {
+    p1: Coords;
+    p2: Coords;
+}
+
 export function inArea(coords: Coords, area: Area) {
     if(area.direction === "right" && coords.x < area.x) return false;
     if(area.direction === "left" && coords.x > area.x) return false;
     if(coords.y > area.y + 10) return false; // little bit of leeway
     return true;
+}
+
+export function inBox(coords: Coords, box: Box) {
+    return coords.x > box.p1.x && coords.x < box.p2.x &&
+        coords.y > box.p1.y && coords.y < box.p2.y
 }
 
 export function onPhysicsStep(callback: () => void) {

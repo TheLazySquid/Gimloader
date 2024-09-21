@@ -6,6 +6,7 @@ import styles from './styles.scss';
 import { Autosplitter } from "./splitters/autosplitter";
 import FishtopiaAutosplitter from "./splitters/fishtopia";
 import DLDAutosplitter from "./splitters/DLD";
+import OneWayOutAutosplitter from "./splitters/OneWayOut";
 
 GL.UI.addStyles("Autosplitter", styles);
 
@@ -22,6 +23,8 @@ onceOrIfLoaded(() => {
         autosplitter = new DLDAutosplitter();
     } else if(gamemode === "Fishtopia") {
         autosplitter = new FishtopiaAutosplitter();        
+    } else if(gamemode === "One Way Out") {
+        autosplitter = new OneWayOutAutosplitter();
     }
 })
 
@@ -34,6 +37,7 @@ export function onStop() {
 
 export function openSettingsMenu() {
     let div = document.createElement("div");
+    // @ts-ignore
     let settings = new Settings({
         target: div
     });

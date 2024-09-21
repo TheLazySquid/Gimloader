@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { FishtopiaData } from "../types";
+    import type { SplitsData } from "../types";
 
-    export let data: FishtopiaData;
+    export let data: SplitsData;
 </script>
 
 <div class="row">
@@ -44,5 +44,6 @@
     input {
         width: 20px;
         height: 20px;
+        appearance: auto !important;
     }
 </style>

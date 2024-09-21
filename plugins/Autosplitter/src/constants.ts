@@ -1,6 +1,6 @@
-import { Area } from "./util";
+import { Area, Box } from "./util";
 
-export const gamemodes = ["DLD", "Fishtopia"];
+export const gamemodes = ["DLD", "Fishtopia", "OneWayOut"];
 export const DLDSplits = ["Summit 1", "Summit 2", "Summit 3", "Summit 4", "Summit 5", "Summit 6"];
 export const fishtopiaSplits = ["Fishtopia", "Purple Pond", "Sandy Shores", "Cosmic Cove", "Lucky Lake"];
 
@@ -52,3 +52,14 @@ export const summitCoords: Area[] = [ {
 export const resetCoordinates = { x: 9050, y: 6300 };
 
 export const categories = ["Current Patch", "Creative Platforming Patch", "Original Physics"];
+
+// One Way Out
+export const oneWayOutSplits = ["Stage 1", "Stage 2", "Stage 3"];
+
+export const stageCoords: Box[] = [{
+    p1: { x: 12008, y: 3147 },
+    p2: { x: 13072, y: 5770 }
+}, {
+    p1: { x: 10813, y: 8962 },
+    p2: { x: 13312, y: 9888 }
+}]

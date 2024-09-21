@@ -29,12 +29,10 @@ export interface DLDData extends IlData {
     autoRecord: boolean
 }
 
-// No additional properties, just to be consistent
-export interface FishtopiaData extends SplitsData {}
-
 export type GamemodeData = BasicData | SplitsData;
 
 export interface GamemodesData {
     "DLD": DLDData,
-    "Fishtopia": FishtopiaData
+    "Fishtopia": SplitsData,
+    "OneWayOut": SplitsData
 }

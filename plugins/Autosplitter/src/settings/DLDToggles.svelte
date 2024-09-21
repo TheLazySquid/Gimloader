@@ -60,6 +60,7 @@
     input {
         width: 20px;
         height: 20px;
+        appearance: auto !important;
     }
 
     .note {

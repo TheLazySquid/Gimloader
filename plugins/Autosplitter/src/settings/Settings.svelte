@@ -4,6 +4,7 @@
     import { downloadFile, getGamemodeData, readFile } from "../util";
     import Dld from "./DLD.svelte";
     import Fishtopia from "./Fishtopia.svelte";
+    import OneWayOut from "./OneWayOut.svelte";
 
     let activeTab = gamemodes[0];
     let dataObj: any = {};
@@ -78,6 +79,8 @@
             <Dld data={data.DLD} />
         {:else if activeTab === "Fishtopia"}
             <Fishtopia data={data.Fishtopia} />
+        {:else if activeTab === "OneWayOut"}
+            <OneWayOut data={data.OneWayOut} />
         {/if}
     </div>
 </div>
