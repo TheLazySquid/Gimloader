@@ -2,7 +2,7 @@
  * @name Autosplitter
  * @description Automatically times speedruns for various gamemodes
  * @author TheLazySquid
- * @version 0.4.0
+ * @version 0.4.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js
  * @needsLib GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js
  */
@@ -3752,7 +3752,6 @@ class OneWayOutAutosplitter extends SplitsAutosplitter {
                 this.addAttempt();
                 this.ui.updateAttempts();
                 this.timer.start();
-                setTimeout(() => this.timer.split(), 1000);
             }
         });
         // start the timer when the game starts

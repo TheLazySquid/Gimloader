@@ -6,7 +6,7 @@ import styles from './styles.scss';
 import { Autosplitter } from "./splitters/autosplitter";
 import FishtopiaAutosplitter from "./splitters/fishtopia";
 import DLDAutosplitter from "./splitters/DLD";
-import OneWayOutAutosplitter from "./splitters/OneWayOut";
+import OneWayOutAutosplitter from "./splitters/oneWayOut";
 
 GL.UI.addStyles("Autosplitter", styles);
 

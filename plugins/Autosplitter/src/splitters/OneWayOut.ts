@@ -22,8 +22,6 @@ export default class OneWayOutAutosplitter extends SplitsAutosplitter {
                 this.addAttempt();
                 this.ui.updateAttempts();
                 this.timer.start();
-
-                setTimeout(() => this.timer.split(), 1000)
             }
         });
 
