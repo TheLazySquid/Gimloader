@@ -2,7 +2,7 @@
  * @name IdleForXp
  * @description Automatically performs actions to let you gain XP while idle
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/IdleForXp.js
@@ -44,28 +44,6 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (event) => {
             if(key == "GLOBAL_questions") {
                 questions = JSON.parse(value);
                 console.log("Got questions", questions);
-
-                // make sure the user isn't using a spam kit
-                let isSpamKit = true;
-
-                for(let question of questions) {
-                    if(question.type == "text") {
-                        isSpamKit = false;
-                        break;
-                    }
-
-                    if(!question.answers.every(a => a.correct)) {
-                        isSpamKit = false;
-                        break;
-                    }
-                }
-
-                if(isSpamKit) {
-                    if(GL.net.type === "Colyseus") displaySpamKitMsg();
-                    GL.addEventListener("loadEnd", () => {
-                        if(GL.net.type === "Colyseus") displaySpamKitMsg();
-                    }, { once: true })
-                }
                 
                 answerDeviceId = id;
             }
@@ -78,18 +56,6 @@ GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (event) => {
         } 
     }
 });
-
-let msgOpen = false;
-function displaySpamKitMsg() {
-    if(msgOpen) return;
-    msgOpen = true;
-    GL.notification.open({
-        message: "You are using a spam kit, you likely won't gain any XP",
-        type: "error",
-        duration: null,
-        onClose: () => msgOpen = false
-    });
-}
 
 function start() {
     GL.notification.open({ message: "IdleForXp is active" });
