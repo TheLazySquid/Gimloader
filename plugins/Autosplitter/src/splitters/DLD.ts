@@ -236,10 +236,11 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
         GL.notification.open({ message: `Auto-saved PB of ${time}`, placement: "topLeft" });
     }
 
-    onStateLoaded(summit: number | string) {
+    onStateLoaded(summit: number | "custom") {
+        if(summit === "custom") return;
         if(this.data.autostartILs) {
             if(summit === 1 && this.data.mode === "Full Game") return;
-            this.setMode("Summit", (summit as number) - 1);
+            this.setMode("Summit", summit - 1);
             this.reset();
 
             if(!this.data.ilPreboosts) this.loadedCorrectSummit = true;
