@@ -15,15 +15,19 @@ export default class OneWayOutAutosplitter extends SplitsAutosplitter {
         
         let gameSession = GL.net.colyseus.room.state.session.gameSession;
 
-        GL.net.colyseus.room.state.session.listen("loadingPhase", (val: boolean) => {
-            if(val) return;
-
-            if(gameSession.phase === "game") {
-                this.addAttempt();
-                this.ui.updateAttempts();
-                this.timer.start();
+        GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (msg: any) => {
+            for(let change of msg.detail.changes) {
+                if(msg.detail.values[change[1][0]] === "GLOBAL_healthPercent") {
+                    console.log(change)
+                    let device = GL.stores.phaser.scene.worldManager.devices.getDeviceById(change[0]);
+                    if(device.propOption.id === "barriers/scifi_barrier_1" && change[2][0] == 0) {
+                        this.addAttempt();
+                        this.ui.updateAttempts();
+                        this.timer.start();
+                    }
+                }
             }
-        });
+        })
 
         // start the timer when the game starts
         gameSession.listen("phase", (phase: string) => {

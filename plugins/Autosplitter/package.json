@@ -1,6 +1,6 @@
 {
   "name": "autosplitter",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Automatically times speedruns for various gamemodes",
   "author": "TheLazySquid",
   "main": "src/index.ts",
