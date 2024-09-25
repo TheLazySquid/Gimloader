@@ -2,7 +2,7 @@
  * @name Autosplitter
  * @description Automatically times speedruns for various gamemodes
  * @author TheLazySquid
- * @version 0.4.3
+ * @version 0.4.4
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js
  * @needsLib GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js
  */
@@ -3740,19 +3740,35 @@ class DLDAutosplitter extends SplitsAutosplitter {
     }
 }
 
+class OneWayOutUI extends SplitsUI {
+    autosplitter;
+    dropRateDiv;
+    constructor(autosplitter) {
+        super(autosplitter, oneWayOutSplits);
+        this.autosplitter = autosplitter;
+        this.dropRateDiv = document.createElement("div");
+        this.dropRateDiv.innerText = "0/0";
+        let bar = this.element.querySelector(".bar");
+        bar?.insertBefore(this.dropRateDiv, bar?.firstChild);
+    }
+    setDropRate(rate) {
+        this.dropRateDiv.innerText = rate;
+    }
+}
+
 class OneWayOutAutosplitter extends SplitsAutosplitter {
-    ui = new SplitsUI(this, oneWayOutSplits);
+    ui = new OneWayOutUI(this);
     timer = new SplitsTimer(this, this.ui);
     stage = 0;
+    drops = 0;
+    knockouts = 0;
     constructor() {
         super("OneWayOut");
         let gameSession = GL.net.colyseus.room.state.session.gameSession;
         GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (msg) => {
             for (let change of msg.detail.changes) {
                 if (msg.detail.values[change[1][0]] === "GLOBAL_healthPercent") {
-                    console.log(change);
                     let device = GL.stores.phaser.scene.worldManager.devices.getDeviceById(change[0]);
-                    console.log(change);
                     if (device.propOption.id === "barriers/scifi_barrier_1" && change[2][0] == 0) {
                         this.addAttempt();
                         this.ui.updateAttempts();
@@ -3760,6 +3776,27 @@ class OneWayOutAutosplitter extends SplitsAutosplitter {
                     }
                 }
             }
+        });
+        GL.net.colyseus.addEventListener("KNOCKOUT", (e) => {
+            if (e.detail.name !== "Evil Plant")
+                return;
+            this.knockouts++;
+            let dropped = false;
+            // wait 100ms to count the drop
+            const addDrop = (e) => {
+                if (e.detail.devices.addedDevices.devices.length === 0)
+                    return;
+                dropped = true;
+                this.drops++;
+                this.updateDrops();
+                GL.net.colyseus.removeEventListener("WORLD_CHANGES", addDrop);
+            };
+            setTimeout(() => {
+                GL.net.colyseus.removeEventListener("WORLD_CHANGES", addDrop);
+                if (!dropped)
+                    this.updateDrops();
+            }, 100);
+            GL.net.colyseus.addEventListener("WORLD_CHANGES", addDrop);
         });
         // start the timer when the game starts
         gameSession.listen("phase", (phase) => {
@@ -3791,12 +3828,26 @@ class OneWayOutAutosplitter extends SplitsAutosplitter {
             }
         });
     }
+    updateDrops() {
+        if (this.knockouts === 0) {
+            this.ui.setDropRate("0/0");
+        }
+        else {
+            let percent = this.drops / this.knockouts * 100;
+            let percentStr = percent.toFixed(2);
+            if (percent === 0)
+                percentStr = "0";
+            this.ui.setDropRate(`${this.drops}/${this.knockouts} (${percentStr}%)`);
+        }
+    }
     getCategoryId() { return "OneWayOut"; }
     reset() {
         this.ui?.remove();
-        this.ui = new SplitsUI(this, oneWayOutSplits);
+        this.ui = new OneWayOutUI(this);
         this.timer = new SplitsTimer(this, this.ui);
         this.stage = 0;
+        this.drops = 0;
+        this.knockouts = 0;
     }
     destroy() {
         this.ui.remove();
