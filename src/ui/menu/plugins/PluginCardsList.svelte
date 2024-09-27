@@ -93,11 +93,14 @@
             for(let plugin of $pluginsStore) {
                 if(plugin.enabled) plugin.disable();
             }
+
+            pluginManager.save();
         } else {
             let toEnable = $pluginsStore.filter((p) => !p.enabled);
             let res = await Promise.allSettled(toEnable.map((p) => p.enable()));
             let errors = res.filter((r) => r.status === "rejected");
 
+            pluginManager.save();
             if(errors.length === 0) return;
             let msg = errors.map((r) => r.reason.message).join("\n\n");
             showErrorMessage(msg, "Failed to enable some plugins");
