@@ -18,6 +18,7 @@ import PluginManager from './pluginManager/pluginManager';
 import Storage from './storage/storage';
 import makeLibManager from './lib/libManager';
 import Poller from './net/poller';
+import { checkScriptUpdate } from './net/checkUpdates';
 
 export class Gimloader extends EventTarget {
     version: string = version;
@@ -44,7 +45,8 @@ export class Gimloader extends EventTarget {
         removeStyles,
         showPluginButtons: GM_getValue('showPluginButtons', true),
         setShowPluginButtons
-    }
+    };
+    autoUpdate = GM_getValue('autoUpdate', false)
 
     constructor() {
         super();
@@ -58,6 +60,10 @@ export class Gimloader extends EventTarget {
 
         // create a polyfill for gimhook
         gimhookPolyfill(this);
+
+        if(onGimkit && this.autoUpdate) {
+            checkScriptUpdate(this, false);
+        }
     }
 
     addStyleSheets() {

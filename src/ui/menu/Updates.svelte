@@ -102,7 +102,7 @@
     {/if}
     <h1 class="font-bold text-xl">Gimloader</h1>
     <div class="flex items-center">
-        <button on:click={checkScriptUpdate}>
+        <button on:click={() => checkScriptUpdate(gimloader, true)}>
             <Update size={25} />
         </button>
         Gimloader v{gimloader.version}
