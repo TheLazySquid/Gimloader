@@ -88,7 +88,7 @@
                 <Update size={28} />
             </button>
         {/if}
-        {#if plugin?.headers.needsLib || plugin?.headers.optionalLib}
+        {#if plugin?.headers.needsLib?.length || plugin?.headers.optionalLib?.length}
             <button on:click={() => libInfoOpen = true}>
                 <BookSettings size={24} />
             </button>
