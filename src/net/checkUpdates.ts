@@ -1,3 +1,4 @@
+import type { Gimloader } from '$src/gimloader';
 import type Lib from '$src/lib/lib';
 import { version } from '../../package.json';
 import type Plugin from '../pluginManager/plugin';
@@ -5,8 +6,8 @@ import { parseLibHeader, parsePluginHeader } from '../util';
 
 export const scriptUrl = "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js";
 
-export async function checkScriptUpdate() {
-    const res = await GL.net.corsRequest({ url: scriptUrl })
+export async function checkScriptUpdate(gimloader: Gimloader, manual: boolean) {
+    const res = await gimloader.net.corsRequest({ url: scriptUrl })
         .catch(() => {
             alert("Failed to check for updates. Did you allow Gimloader to make Cross-Origin requests?");
         })
@@ -19,13 +20,14 @@ export async function checkScriptUpdate() {
 
     // compare versions
     let comparison = compareVersions(version, incomingVersion);
-    if(comparison === 'same') alert("This script is up to date!");
-    else if(comparison === 'older') {
-        let conf = confirm(`A new version of Gimloader is available! Would you like to update?`);
+    if(comparison === 'same') {
+        if(manual) alert("This script is up to date!");
+    } else if(comparison === 'older') {
+        let conf = confirm(`A new version of Gimloader is available (v${incomingVersion})! Would you like to update?`);
         if(conf) {
             window.location.href = scriptUrl;
         }
-    } else {
+    } else if(manual) {
         alert("You are using a newer version of Gimloader than the one available on Github.");
     }
 }

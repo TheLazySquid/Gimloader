@@ -1,13 +1,26 @@
 <script lang="ts">
     import { Toggle } from "flowbite-svelte";
     import type { Gimloader } from "../../gimloader";
+    import { checkScriptUpdate } from "$src/net/checkUpdates";
 
     export let gimloader: Gimloader;
     let buttonsEnabled = gimloader.UI.showPluginButtons;
     let pollEnabled = gimloader.poller.enabled;
+
+    function saveAutoUpdate() {
+        GM_setValue('autoUpdate', gimloader.autoUpdate);
+
+        if(gimloader.autoUpdate) {
+            checkScriptUpdate(gimloader, false);
+        }
+    }
 </script>
 
 <h1 class="text-xl font-bold">General Settings</h1>
+<div class="flex items-center mb-2">
+    <Toggle bind:checked={gimloader.autoUpdate} on:change={saveAutoUpdate} />
+    Automatically check for updates
+</div>
 <div class="flex items-center">
     <Toggle bind:checked={buttonsEnabled} on:change={() => {
         if(!buttonsEnabled) {
