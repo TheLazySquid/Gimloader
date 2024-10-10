@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -105,6 +105,7 @@ GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
         updateFreecam = (dt) => {
             let moveAmount = 0.8 / camera.zoom * dt;
             let pressed = GL.hotkeys.pressedKeys;
+            if(pressed.has("control")) moveAmount *= 5;
 
             if(pressed.has("arrowleft")) freecamPos.x -= moveAmount;
             if(pressed.has("arrowright")) freecamPos.x += moveAmount;
