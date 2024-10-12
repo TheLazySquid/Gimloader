@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.1
+ * @version 0.3.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -19,6 +19,11 @@ let settings = GL.lib("QuickSettings")("CameraControl", [
         title: "Hold Shift to Zoom",
         default: true
     }, {
+        type: "boolean",
+        id: "mouseControls",
+        title: "Use mouse controls while freecamming",
+        default: true
+    }, {
         type: "number",
         id: "toggleZoomFactor",
         title: "Toggle Zoom Factor",
@@ -32,8 +37,6 @@ let settings = GL.lib("QuickSettings")("CameraControl", [
         default: true
     }
 ]);
-
-window.addEventListener("wheel", onWheel);
 
 let freecamming = false;
 let freecamPos = {x: 0, y: 0};
@@ -72,23 +75,71 @@ const patchFrame = () => {
 if(GL.net.type === "Colyseus") patchFrame()
 GL.addEventListener("loadEnd", patchFrame);
 
+let scene, camera;
+
+function onPointermove(pointer) {
+    if (!pointer.isDown) return;
+    
+    freecamPos.x -= (pointer.x - pointer.prevPosition.x) / camera.zoom;
+    freecamPos.y -= (pointer.y - pointer.prevPosition.y) / camera.zoom;
+}
+
+function onWheel(pointer, _, __, deltaY) {
+    if(!freecamming || !settings.mouseControls) {
+        if(settings.shiftToZoom && !GL.hotkeys.pressedKeys.has("shift")) return;
+        scrollMomentum -= deltaY / 65000;
+        return;
+    }
+
+    if(camera.zoom == 0.1 && settings.capZoomOut) return;
+
+    var oldzoom = camera.zoom;
+    var newzoom = oldzoom * (deltaY < 0 ? 1.1 : 0.9);
+
+    var mouse_x = pointer.x;
+    var mouse_y = pointer.y;
+
+    var pixels_difference_w = (camera.width / oldzoom) - (camera.width / newzoom);
+    var side_ratio_x = (mouse_x - (camera.width / 2)) / camera.width;
+    freecamPos.x += pixels_difference_w * side_ratio_x;
+
+    var pixels_difference_h = (camera.height / oldzoom) - (camera.height / newzoom);
+    var side_ratio_h = (mouse_y - (camera.height / 2)) / camera.height;
+    freecamPos.y += pixels_difference_h * side_ratio_h;
+
+    camera.setZoom(newzoom);
+}
+
+GL.addEventListener("loadEnd", () => {
+    scene = GL.stores?.phaser?.scene;
+    camera = scene?.cameras?.cameras?.[0];
+
+    GL.stores.phaser.scene.input.on('wheel', onWheel);
+});
+
+function stopFreecamming() {
+    if(!scene || !camera) return;
+
+    camera.useBounds = true;
+    let charObj = scene.characterManager.characters
+        .get(GL.stores.phaser.mainCharacter.id).body
+
+    scene.cameraHelper.startFollowingObject({ object: charObj })
+    updateFreecam = null;
+
+    for(let key of stopProps) {
+        GL.hotkeys.remove(key);
+    }
+
+    scene.input.off('pointermove', onPointermove);
+}
+
 GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
-    let scene = GL.stores?.phaser?.scene;
-    let camera = scene?.cameras?.cameras?.[0];
     if(!scene || !camera) return;
     
     if(freecamming) {
         // stop freecamming
-        camera.useBounds = true;
-        let charObj = scene.characterManager.characters
-            .get(GL.stores.phaser.mainCharacter.id).body
-
-        scene.cameraHelper.startFollowingObject({ object: charObj })
-        updateFreecam = null;
-
-        for(let key of stopProps) {
-            GL.hotkeys.remove(key);
-        }
+        stopFreecamming();
     } else {
         // start freecamming
         scene.cameraHelper.stopFollow();
@@ -114,6 +165,8 @@ GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
 
             scene.cameraHelper.goTo(freecamPos);
         };
+
+        scene.input.on('pointermove', onPointermove);
     }
 
     freecamming = !freecamming;
@@ -136,12 +189,6 @@ if(commandLine) {
 
         camera.zoom = parseFloat(zoom);
     })
-}
-
-function onWheel(e) {
-    if(settings.shiftToZoom && !e.shiftKey) return;
-
-    scrollMomentum += e.deltaY / 65000;
 }
 
 let zoomToggled = false;
@@ -170,7 +217,6 @@ GL.hotkeys.addConfigurable("CameraControl", "zoomToggle", onDown, {
 });
 
 export function onStop() {
-    window.removeEventListener("wheel", onWheel);
     GL.hotkeys.removeConfigurable("CameraControl", "freecam");
     GL.hotkeys.removeConfigurable("CameraControl", "zoomToggle");
     GL.patcher.unpatchAll("CameraControl");
@@ -179,21 +225,11 @@ export function onStop() {
         commandLine.removeCommand("setzoom");
     }
 
+    GL.stores?.phaser?.scene?.input?.off('wheel', onWheel);
+
     // stop freecamming
     if(freecamming) {
-        let scene = GL.stores?.phaser?.scene;
-        let camera = scene?.cameras?.cameras?.[0];
-        if(!scene || !camera) return;
-
-        camera.useBounds = true;
-        let charObj = scene.characterManager.characters
-            .get(GL.stores.phaser.mainCharacter.id).body
-
-        scene.cameraHelper.startFollowingObject({ object: charObj })
-
-        for(let key of stopProps) {
-            GL.hotkeys.remove(key);
-        }
+        stopFreecamming();
     }
 }
 
