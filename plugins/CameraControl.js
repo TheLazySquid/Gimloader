@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.2
+ * @version 0.3.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -91,7 +91,7 @@ function onWheel(pointer, _, __, deltaY) {
         return;
     }
 
-    if(camera.zoom == 0.1 && settings.capZoomOut) return;
+    if(camera.zoom == 0.1 && deltaY > 0 && settings.capZoomOut) return;
 
     var oldzoom = camera.zoom;
     var newzoom = oldzoom * (deltaY < 0 ? 1.1 : 0.9);
