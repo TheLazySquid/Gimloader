@@ -169,8 +169,8 @@ export default class Patcher {
         const unpatchers = this.unpatchers.get(id);
         if(!unpatchers) return;
 
-        for(const unpatcher of unpatchers) {
-            unpatcher();
+        for(let i = unpatchers.length - 1; i >= 0; i--) {
+            unpatchers[i]();
         }
     }
 }
