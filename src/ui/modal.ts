@@ -1,9 +1,12 @@
 import type { ReactElement } from "react";
 import type { IModalOptions } from "../types";
+import { focusTrapEnabled } from "./menu/stores";
 
 let openModals = new Set<string>();
 
 export default function showModal(content: HTMLElement | ReactElement, options?: Partial<IModalOptions>) {
+    focusTrapEnabled.set(false);
+
     if(options?.id) {
         if(openModals.has(options.id)) return;
         openModals.add(options.id);
@@ -70,6 +73,7 @@ export default function showModal(content: HTMLElement | ReactElement, options?:
     document.body.appendChild(bgEl);
     
     function closeModal() {
+        focusTrapEnabled.set(true);
         if(options?.id) {
             openModals.delete(options.id);
         }

@@ -2,7 +2,8 @@
     import type { Gimloader } from "../../gimloader";
     import LibraryCardsList from "./libraries/LibraryCardsList.svelte";
     import PluginCardsList from "./plugins/PluginCardsList.svelte";
-    import { Tabs, TabItem, Modal } from "flowbite-svelte";
+    import { Tabs, TabItem } from "flowbite-svelte";
+    import Modal from '../flowbite/Modal.svelte';
     
     import Wrench from 'svelte-material-icons/Wrench.svelte';
     import Book from 'svelte-material-icons/Book.svelte';
@@ -12,6 +13,7 @@
     import Updates from "./Updates.svelte";
     import Settings from "./Settings.svelte";
     import Hotkeys from "./Hotkeys.svelte";
+    import { focusTrapEnabled } from "./stores";
 
     export let gimloader: Gimloader;
     export let onClose: () => void;
@@ -20,7 +22,7 @@
 <div class="h-full">
     <div class="preflight fadeBg fixMargin">
         <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"
-            size="xl" on:close={onClose} open outsideclose>
+            size="xl" on:close={onClose} open outsideclose bind:focusTrapEnabled={$focusTrapEnabled}>
             <Tabs contentClass="bg-white">
                 <TabItem open>
                     <div slot="title" class="flex items-center">
