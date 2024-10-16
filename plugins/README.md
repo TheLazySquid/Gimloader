@@ -4,6 +4,10 @@
 
 When using this plugin you can hold shift and scroll to make your camera zoom in and out. You can also hit a hotkey (Shift + F by default) to enable freecam, which you can move around with the arrow keys. Pressing ctrl will move the camera much faster. Zooming out too much can lead to lag or crashes.
 
+## PerformantGims [code](./PerformantGims.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PerformantGims.js)
+
+Replaces all gims with images to drastically improve performance. This is designed for [Apocalypse](https://gimkit.wiki/wiki/Apocalypse), where the game can be nearly unplayable on bad computers with large team sizes.
+
 ## IdleForXp [code](./IdleForXp.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/IdleForXp.js)
 
 Performs actions to allow you to automatically get XP while AFK in Gimkit games. You will not gain any XP if you are using a kit with all correct answers.
