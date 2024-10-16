@@ -40,6 +40,10 @@ This plugin allows you to equip any skin/trail, or even use a custom skin. This 
 
 A modified version of the TAS tool that allows you to record and play back inputs in Don't Look Down. Hit alt+r to start/stop recording, and alt+b to play back a recording.
 
+## CrazyFlag [code](./CrazyFlag.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CrazyFlag.js)
+
+Make the flags in capture the flag or creative swing like crazy! Swing speed and swing amount can be configured.
+
 ## InstantUse [code](./InstantUse.js) [install](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js)
 
 This plugin allows you to use devices instantly, without waiting for their meter to fill.
