@@ -18,6 +18,7 @@ export default class AutoKicker {
 
     idleKickTimeouts: Map<string, any> = new Map();
     unOnAdd: () => void;
+    kicked = new Set<string>();
 
     constructor() {
         this.loadSettings();
@@ -25,7 +26,6 @@ export default class AutoKicker {
 
     loadSettings() {
         let settings = GL.storage.getValue("AutoKicker", "Settings", {});
-        console.log("SETTINGS", settings);
 
         this.kickDuplicateNames = settings.kickDuplicateNames ?? false;
         this.kickSkinless = settings.kickSkinless ?? false;
@@ -76,7 +76,6 @@ export default class AutoKicker {
                     const onMove = () => {
                         clearTimeout(timeout);
                         this.idleKickTimeouts.delete(e.id);
-                        console.log("Moved !!!")
                     }
 
                     // wait a bit to get the initial packets out of the way
@@ -116,15 +115,11 @@ export default class AutoKicker {
         }
 
         unsubX = player.listen("x", (x: number) => {
-            if(x !== startX) {
-                onMove();
-            }
+            if(x !== startX) onMove();
         })
 
         unsubY = player.listen("y", (y: number) => {
-            if(y !== startY) {
-                onMove();
-            }
+            if(y !== startY) onMove();
         })
     }
 
@@ -190,50 +185,42 @@ export default class AutoKicker {
     }
 
     scanPlayersColyseus() {
+        let characters = GL.net.colyseus.room.state.characters;
         let nameCount = new Map<string, number>();
 
         // tally name counts
         if(this.kickDuplicateNames) {
-            for(let [_, player] of GL.stores.phaser.scene.characterManager.characters) {
-                let name = this.trimName(player.nametag.name);
+            for(let [_, player] of characters.entries()) {
+                let name = this.trimName(player.name);
                 if(!nameCount.has(name)) nameCount.set(name, 0);
                 nameCount.set(name, nameCount.get(name)! + 1);
             }
         }
 
-        for(let [id, player] of GL.stores.phaser.scene.characterManager.characters) {
+        for(let [id, player] of characters.entries()) {
             if(id === this.myId) continue;
 
-            const check = () => {
-                let name = this.trimName(player.nametag.name);
+            let name = this.trimName(player.name);
 
-                // check name duplication
-                if(this.kickDuplicateNames) {
-                    if(nameCount.get(name)! >= 3) {
-                        this.colyseusKick(id, 'duplicate name');
-                        return;
-                    }
-                }
-
-                // check filters
-                if(this.checkIfNameBlacklisted(name)) {
-                    this.colyseusKick(id, 'blacklisted name');
-                    return;
-                }
-
-                // check the player's skin
-                if(this.kickSkinless) {
-                    let skin = player.skin.skinId;
-                    if(skin.startsWith("default_")) {
-                        this.colyseusKick(id, 'not having a skin');
-                        return;
-                    }
+            // check name duplication
+            if(this.kickDuplicateNames) {
+                if(nameCount.get(name)! >= 3) {
+                    this.colyseusKick(id, 'duplicate name');
                 }
             }
 
-            // give players three seconds to load in skins
-            if(this.kickSkinless) setTimeout(check, 3000);
-            else check();
+            // check filters
+            if(this.checkIfNameBlacklisted(name)) {
+                this.colyseusKick(id, 'blacklisted name');
+            }
+
+            // check the player's skin
+            if(this.kickSkinless) {
+                let skin = JSON.parse(player.appearance.skin).id;
+                if(skin.startsWith("character_default_")) {
+                    this.colyseusKick(id, 'not having a skin');
+                }
+            }
         }
     }
 
@@ -262,17 +249,19 @@ export default class AutoKicker {
     }
 
     colyseusKick(id: string, reason: string) {
-        let char = GL.stores.phaser.scene.characterManager.characters.get(id)!;
-        let playername = char.nametag.name;
+        if(this.kicked.has(id)) return;
+        this.kicked.add(id);
+
+        let char = GL.net.colyseus.room.state.characters.get(id)!;
         
         GL.net.colyseus.send("KICK_PLAYER", { characterId: id });
-        
-        if(char.scale.activeScale !== 0) {       
-            GL.notification.open({ message: `Kicked ${playername} for ${reason}` })
-        }
+        GL.notification.open({ message: `Kicked ${char.name} for ${reason}` })
     }
 
     blueboatKick(id: string, reason: string) {
+        if(this.kicked.has(id)) return;
+        this.kicked.add(id);
+
         let playername = this.lastLeaderboard.find((e: any) => e.id === id)?.name;
 
         GL.net.blueboat.send("KICK_PLAYER", id);
