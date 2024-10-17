@@ -1,5 +1,4 @@
 import { IBlacklistedName } from "./types";
-import UI from './ui';
 
 const toggleUIHotkey = new Set(['alt', 'k'])
 
@@ -44,21 +43,7 @@ export default class AutoKicker {
         });
     }
 
-    start() {
-        let root = document.createElement("div");
-        root.id = "AutoKick-UI";
-        GL.ReactDOM.createRoot(root).render(GL.React.createElement(UI, { autoKicker: this }));
-        document.body.appendChild(root);
-
-        GL.hotkeys.add(toggleUIHotkey, () => {
-            if(this.UIVisible) root.style.display = "none";
-            else root.style.display = "block";
-
-            this.UIVisible = !this.UIVisible;
-        }, true)
-        
-        this.el = root;
-        
+    start() {                
         if(GL.net.type === "Colyseus") {
             this.myId = GL.stores.phaser.mainCharacter.id;
             let chars = GL.net.colyseus.room.serializer.state.characters
@@ -269,7 +254,6 @@ export default class AutoKicker {
     }
 
     dispose() {
-        this.el?.remove();
         this.unOnAdd?.();
         GL.net.blueboat.removeEventListener("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
 

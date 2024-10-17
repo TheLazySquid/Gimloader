@@ -16,4 +16,4 @@ When you join a game as the host, a UI will appear in the top left. This allows 
 
 You can also set up a blacklist, which allows you to automatically kick players with certain names. This is case-insensitive. You can configure whether each rule is exact or partial, and trailing numbers are ignored.
 
-The UI can be shown or hidden by pressing `alt + k`.
+The UI can be shown or hidden by pressing a hotkey (`alt + k` by default).
