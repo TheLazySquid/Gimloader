@@ -8,7 +8,7 @@ export default function initInstallApi(loader: Gimloader) {
         if(existingPlugin) {
             existingPlugin.edit(script, headers);
         } else {
-            loader.pluginManager.createPlugin(script);
+            loader.pluginManager.createPlugin(script, false);
         }
     };
 

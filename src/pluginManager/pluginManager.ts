@@ -121,7 +121,7 @@ export default class PluginManager {
         return plugin?.enabled ?? false;
     }
 
-    async createPlugin(script: string) {
+    async createPlugin(script: string, saveFirst = true) {
         let headers = parsePluginHeader(script);
         let existing = this.getPlugin(headers.name);
         if(existing) {
@@ -131,11 +131,10 @@ export default class PluginManager {
             this.deletePlugin(existing);
         }
 
-
         let plugin = new Plugin(this.gimloader, script, false);
         this.plugins.value.unshift(plugin);
 
-        this.save();
+        if(saveFirst) this.save();
         this.plugins.update();
 
         if(plugin.headers.needsLib.length > 0) {

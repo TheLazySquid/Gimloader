@@ -21,6 +21,12 @@ export default class Plugin {
 
     async enable(initial: boolean = false) {
         return new Promise<void>(async (res, rej) => {
+            if(!this.gimloader.pluginManager.runPlugins) {
+                this.enabled = true;
+                res();
+                return;
+            }
+
             let libObjs = [];
             let optionalLibObjs = [];
 
@@ -68,9 +74,7 @@ export default class Plugin {
                 this.gimloader.pluginManager.plugins.update();
                 return;
             }
-    
-            if(!this.gimloader.pluginManager.runPlugins) return;
-    
+        
             // create a blob from the script and import it
             let blob = new Blob([this.script], { type: 'application/javascript' });
             let url = URL.createObjectURL(blob);

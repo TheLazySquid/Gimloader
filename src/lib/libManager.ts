@@ -121,8 +121,6 @@ function makeLibManager() {
             newLibs.push(lib);
         }
 
-        console.log(newLibs);
-
         // check if any libraries were removed
         for(let checkLib of libs.value) {
             if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
