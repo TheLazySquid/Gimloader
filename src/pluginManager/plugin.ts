@@ -27,6 +27,18 @@ export default class Plugin {
                 return;
             }
 
+            if(this.gimloader.settings.autoDownloadMissingLibs) {
+                let failed = false;
+                await this.gimloader.net.downloadLibraries(this.headers.needsLib)
+                    .catch((e) => {
+                        failed = true;
+                        this.enabled = false;
+                        rej(new Error(e));
+                    })
+
+                if(failed) return;
+            }
+
             let libObjs = [];
             let optionalLibObjs = [];
 

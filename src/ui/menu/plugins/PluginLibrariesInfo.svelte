@@ -2,7 +2,6 @@
     import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell } from "flowbite-svelte";
     import type Plugin from "../../../pluginManager/plugin";
     import type { LibManagerType } from "../../../lib/libManager";
-    import { downloadLibrary } from "../../../net/downloadLibraries";
     import { checkLibUpdate } from "../../../net/checkUpdates";
     import showErrorMessage from "../../showErrorMessage";
 
@@ -32,7 +31,7 @@
     }
 
     function downloadLib(name: string, url: string) {
-        downloadLibrary(url)
+        GL.net.downloadLibrary(url)
             .then(() => libsInfo = libsInfo)
             .catch((err) => showErrorMessage(err, `Failed to download library ${name}`));
     }

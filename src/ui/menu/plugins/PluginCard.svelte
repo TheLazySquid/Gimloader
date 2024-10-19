@@ -31,15 +31,25 @@
     }
 
     $: enabled = plugin?.enabled;
+    let loading = false;
 
     async function onClick() {
         if(enabled) {
             plugin.disable();
             pluginManager.save();
         } else {
+            let loadingTimeout = setTimeout(() => loading = true, 200);
+
             plugin.enable()
                 .then(() => pluginManager.save())
-                .catch((e) => showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`));
+                .catch((e) => {
+                    if(!e?.message) return;
+                    showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`)
+                })
+                .finally(() => {
+                    clearTimeout(loadingTimeout);
+                    loading = false;
+                });
         }
     }
 
@@ -53,7 +63,7 @@
     </Modal>
 {/if}
 
-<Card {dragDisabled} {startDrag}>
+<Card {dragDisabled} {startDrag} {loading}>
     <svelte:fragment slot="header">
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {plugin?.headers.name}
