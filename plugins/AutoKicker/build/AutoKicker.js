@@ -2,7 +2,7 @@
  * @name AutoKicker
  * @description Automatically kicks players from your lobby with a customizable set of rules
  * @author TheLazySquid
- * @version 0.1.4
+ * @version 0.1.5
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js
  */
 var styles = "#AutoKick-UI {\n  position: absolute;\n  top: 20px;\n  left: 20px;\n  z-index: 9999;\n  background-color: rgba(0, 0, 0, 0.5);\n  border-radius: 5px;\n}\n#AutoKick-UI .root {\n  display: flex;\n  flex-direction: column;\n  color: white;\n  padding: 10px;\n}\n#AutoKick-UI .checkboxes {\n  display: flex;\n  align-items: center;\n  justify-content: space-around;\n  gap: 5px;\n}\n#AutoKick-UI .idleDelaySlider {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n}\n#AutoKick-UI .idleDelaySlider input {\n  flex-grow: 1;\n}\n#AutoKick-UI .idleDelaySlider label {\n  font-size: 12px;\n}\n#AutoKick-UI h2 {\n  width: 100%;\n  text-align: center;\n  margin-bottom: 5px;\n}\n#AutoKick-UI .blacklist {\n  display: flex;\n  flex-direction: column;\n  gap: 5px;\n  max-height: 500px;\n  overflow-y: auto;\n}\n#AutoKick-UI .blacklist .rule {\n  display: flex;\n  align-items: center;\n  border-radius: 8px;\n  border: 1px solid white;\n  background-color: rgba(0, 0, 0, 0.5);\n}\n#AutoKick-UI .blacklist .rule .name {\n  flex-grow: 1;\n}\n#AutoKick-UI .blacklist .rule .exact {\n  padding: 3px;\n  transition: transform 0.2s;\n  background-color: rgba(0, 0, 0, 0.5);\n  text-decoration: underline;\n  border: none;\n}\n#AutoKick-UI .blacklist .rule .exact:hover {\n  transform: scale(1.05);\n}\n#AutoKick-UI .blacklist .rule .delete {\n  font-size: 20px;\n  border: none;\n  background-color: transparent;\n  transition: transform 0.2s;\n}\n#AutoKick-UI .blacklist .rule .delete:hover {\n  transform: scale(1.05);\n}\n#AutoKick-UI .blacklist .add {\n  font-size: 20px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 8px;\n  border: 1px solid white;\n  background-color: rgba(0, 0, 0, 0.5);\n}";
@@ -315,7 +315,7 @@ function UI({ autoKicker }) {
 // @ts-ignore
 let autoKicker = new AutoKicker();
 let ui = null;
-let uiShown = true;
+let uiShown = GL.storage.getValue("AutoKicker", "uiShown", true);
 const checkStart = () => {
     if (GL.net.isHost) {
         autoKicker.start();
@@ -323,6 +323,13 @@ const checkStart = () => {
         ui.id = "AutoKick-UI";
         GL.ReactDOM.createRoot(ui).render(GL.React.createElement(UI, { autoKicker }));
         document.body.appendChild(ui);
+        if (!uiShown) {
+            ui.style.display = "none";
+            if (autoKicker.kickDuplicateNames || autoKicker.kickSkinless || autoKicker.blacklist.length > 0 ||
+                autoKicker.kickIdle) {
+                GL.notification.open({ message: "AutoKicker is running!" });
+            }
+        }
     }
 };
 GL.hotkeys.addConfigurable("AutoKicker", "toggleUI", () => {
@@ -333,6 +340,7 @@ GL.hotkeys.addConfigurable("AutoKicker", "toggleUI", () => {
         ui.style.display = "block";
     else
         ui.style.display = "none";
+    GL.storage.setValue("AutoKicker", "uiShown", uiShown);
 }, {
     category: "Auto Kicker",
     title: "Toggle UI",

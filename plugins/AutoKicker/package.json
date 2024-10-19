@@ -1,6 +1,6 @@
 {
   "name": "autokicker",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Automatically kicks users in a Gimkit game who match certain rules",
   "main": "build/AutoKicker.js",
   "type": "module",

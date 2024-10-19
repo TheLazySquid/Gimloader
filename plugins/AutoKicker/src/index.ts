@@ -7,7 +7,7 @@ import UI from './ui';
 
 let autoKicker = new AutoKicker();
 let ui: HTMLElement | null = null;
-let uiShown = true;
+let uiShown = GL.storage.getValue("AutoKicker", "uiShown", true);
 
 const checkStart = () => {
     if(GL.net.isHost) {
@@ -17,6 +17,14 @@ const checkStart = () => {
         ui.id = "AutoKick-UI";
         GL.ReactDOM.createRoot(ui).render(GL.React.createElement(UI, { autoKicker }));
         document.body.appendChild(ui);
+
+        if(!uiShown) {
+            ui.style.display = "none";
+            if(autoKicker.kickDuplicateNames || autoKicker.kickSkinless || autoKicker.blacklist.length > 0 || 
+            autoKicker.kickIdle) {
+                GL.notification.open({ message: "AutoKicker is running!" });
+            }
+        }
     }
 }
 
@@ -25,6 +33,7 @@ GL.hotkeys.addConfigurable("AutoKicker", "toggleUI", () => {
     uiShown = !uiShown;
     if(uiShown) ui.style.display = "block";
     else ui.style.display = "none";
+    GL.storage.setValue("AutoKicker", "uiShown", uiShown);
 }, {
     category: "Auto Kicker",
     title: "Toggle UI",
