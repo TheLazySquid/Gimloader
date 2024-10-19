@@ -30,12 +30,17 @@ export class Gimloader extends EventTarget {
     stores: any;
     platformerPhysics: any;
 
+    settings = {
+        autoUpdate: GM_getValue('autoUpdate', false),
+        autoDownloadMissingLibs: GM_getValue('autoDownloadMissingLibs', true)
+    };
+
+    parcel: Parcel = new Parcel(this);
     lib = makeLibManager();
+    net: Net = new Net(this);
     pluginManager: PluginManager = new PluginManager(this, onGimkit);
     patcher: Patcher = new Patcher();
-    parcel: Parcel = new Parcel(this);
     poller: Poller = new Poller();
-    net: Net = new Net(this);
     hotkeys: HotkeyManager = new HotkeyManager();
     contextMenu: ContextMenu = new ContextMenu(this);
     storage: Storage = new Storage();
@@ -46,7 +51,6 @@ export class Gimloader extends EventTarget {
         showPluginButtons: GM_getValue('showPluginButtons', true),
         setShowPluginButtons
     };
-    autoUpdate = GM_getValue('autoUpdate', false)
 
     constructor() {
         super();
@@ -61,7 +65,7 @@ export class Gimloader extends EventTarget {
         // create a polyfill for gimhook
         gimhookPolyfill(this);
 
-        if(onGimkit && this.autoUpdate) {
+        if(onGimkit && this.settings.autoUpdate) {
             checkScriptUpdate(this, false);
         }
     }

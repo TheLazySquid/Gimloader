@@ -1,22 +1,22 @@
 import type { Gimloader } from "../gimloader";
-import { log } from "../util";
+import { BlueboatIntercept, ColyseusIntercept } from "./clients";
 
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
 
 export default class Net {
-    loader: Gimloader;
+    gimloader: Gimloader;
     blueboat: BlueboatIntercept;
     colyseus: ColyseusIntercept;
     type: NetType = 'Unknown';
     is1dHost: boolean = false;
 
     constructor(loader: Gimloader) {
-        this.loader = loader;
+        this.gimloader = loader;
 
         this.blueboat = new BlueboatIntercept(loader, this);
         this.colyseus = new ColyseusIntercept(loader, this);
 
-        this.loader.parcel.interceptRequire(null,
+        this.gimloader.parcel.interceptRequire(null,
             exports => exports?.default?.toString?.().includes("hasReceivedHostStaticState"), () => {
                 this.is1dHost = true;
         })
@@ -32,110 +32,89 @@ export default class Net {
     get isHost() {
         return this.is1dHost || GL.stores.session.amIGameOwner;
     }
-}
 
-export class BlueboatIntercept extends EventTarget {
-    room: any | null = null;
-    blueboatLoaded: boolean = false;
-
-    constructor(loader: Gimloader, net: Net) {
-        super();
-
-        let me = this;
-
-        loader.parcel.interceptRequire(null, exports => exports?.default?.toString?.().includes("this.socketListener()"), exports => {
-            let nativeRoom = exports.default;
-            
-            return function() {
-                let room = new nativeRoom(...arguments);
-                me.room = room;
-
-                net.type = 'Blueboat';
-
-                log('Blueboat room intercepted')
-
-                let nativeCall = room.onMessage.call
-                room.onMessage.call = function(channel: string, data: any) {
-                    me.dispatchEvent(new CustomEvent(channel, { detail: data }));
-                    me.dispatchEvent(new CustomEvent('*', { detail: { channel, data } }));
-                    
-                    if(!me.blueboatLoaded) {
-                        me.blueboatLoaded = true;
-                        loader.dispatchEvent(new CustomEvent('loadEnd'))
-                        log("Blueboat game finished loading")
-                    }
-
-                    return nativeCall.apply(this, arguments);
+    downloadLibraries(needsLibs: string[], confirmName?: string) {
+        return new Promise<void>(async (res, rej) => {
+            let missing = [];
+        
+            for(let lib of needsLibs) {
+                let parts = lib.split('|');
+                let libName = parts[0].trim();
+                let libUrl = parts[1]?.trim();
+        
+                if(!this.gimloader.lib.getLib(libName)) {
+                    missing.push({ libName, libUrl });
                 }
-
-                return room;
             }
-        })
-    }
-
-    send(channel: string, message: any) {
-        if(!this.room) return;
-
-        this.room.send(channel, message);
-    }
-}
-
-export class ColyseusIntercept extends EventTarget {
-    room: any | null = null;
-    colyseusLoaded: boolean = false;
-
-    constructor(loader: Gimloader, net: Net) {
-        super();
-        let me = this;
-
-        // somewhat taken from https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/modloader/src/game.ts
-        loader.parcel.interceptRequire(null, exports => exports?.OnJoinedRoom, exports => {
-            let nativeOnJoined = exports.OnJoinedRoom;
-            delete exports.OnJoinedRoom;
+        
+            if(missing.length === 0) return res();
+        
+            let downloadable = missing.filter(m => m.libUrl);
             
-            net.type = 'Colyseus';
-
-            log('Colyseus room intercepted')
-
-            exports.OnJoinedRoom = function(colyseus: any) {
-                me.room = colyseus.room;
-                
-                let nativeSend = colyseus.room.send;
-                delete colyseus.room.send;
-                colyseus.room.send = function(channel: string, message: any) {
-                    me.dispatchEvent(new CustomEvent(`send:${channel}`, { detail: message }));
-                    me.dispatchEvent(new CustomEvent('send:*', { detail: { channel, message } }));
-
-                    return nativeSend.apply(this, arguments);
+            // wait for user confirmation
+            if(confirmName && !this.gimloader.settings.autoDownloadMissingLibs) {
+                let single = missing.length === 1;
+                let msgStart = `The plugin ${confirmName} is missing ${missing.length} ${single ? 'library' : 'libraries'}.`;
+                if(downloadable.length === 0) {
+                    alert(`${msgStart} You will need to manually download and install ${single ? 'it' : 'them'}.`)
+                    return rej();
                 }
-
-                let nativeDispatchMsg = colyseus.room.dispatchMessage;
-                delete colyseus.room.dispatchMessage;
-
-                // intercept colyseus.room.dispatchMessage
-                colyseus.room.dispatchMessage = function(channel: string, message: any) {
-                    if(!me.colyseusLoaded) {
-                        me.colyseusLoaded = true;
-                        loader.awaitColyseusLoad();
-                        log("Colyseus game finished loading")
-                    }
-
-                    me.dispatchEvent(new CustomEvent(channel, { detail: message }));
-                    me.dispatchEvent(new CustomEvent('*', { detail: { channel, message } }));
-                    
-                    nativeDispatchMsg.apply(this, arguments);
+        
+                let conf: boolean = false;
+                if(downloadable.length === missing.length) {
+                    conf = confirm(`${msgStart} Would you like to download ${single ? 'it' : 'them'}?`);
+                } else {
+                    conf = confirm(msgStart +
+                        ` ${downloadable.length} ${single ? 'is' : 'are'} able to be automatically downloaded. Would you like to do so?` +
+                        " The rest will need to be manually downloaded and installed.");
                 }
-
-                return nativeOnJoined.apply(this, [colyseus]);
+            
+                if(!conf) return rej();
             }
-
-            return exports;
-        })
+        
+            let results = await Promise.allSettled(downloadable.map(({ libName, libUrl }) => {
+                return new Promise<string>((res, rej) => {
+                    this.corsRequest({ url: libUrl })
+                        .then((resp) => {
+                            if(resp.status !== 200) {
+                                rej(`Failed to download library ${libName} from ${libUrl}\nRecieved response status of ${resp.status}`);
+                                return;
+                            }
+                            res(resp.responseText)
+                        })
+                        .catch(() => rej(`Failed to download library ${libName} from ${libUrl}`));
+                })
+            }))
+        
+            let successes = results.filter(r => r.status === 'fulfilled') as PromiseFulfilledResult<string>[];
+            let libs = successes.map(s => this.gimloader.lib.createLib(s.value)).filter(l => l);
+            await Promise.all(libs.map(l => l.enable()));
+        
+            this.gimloader.lib.save();
+            this.gimloader.lib.libs.update();
+        
+            let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
+            if(failed.length > 0) {
+                let msg = failed.map(f => f.reason).join('\n');
+                return rej(msg);
+            }
+        
+            res();
+        });
     }
 
-    send(channel: string, message: any) {
-        if(!this.room) return;
-
-        this.room.send(channel, message);
+    downloadLibrary(url: string) {
+        return new Promise<void>((res, rej) => {
+            this.corsRequest({ url })
+                .then((resp) => {
+                    if(resp.status !== 200) {
+                        rej(`Failed to download library from ${url}\nRecieved response status of ${resp.status}`);
+                        return;
+                    }
+                    this.gimloader.lib.createLib(resp.responseText);
+                    res();
+                })
+                .catch(() => rej(`Failed to download library from ${url}`));
+        })
     }
 }

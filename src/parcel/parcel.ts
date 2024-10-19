@@ -20,10 +20,10 @@ export default class Parcel extends EventTarget {
     reqIntercepts: Intercept[] = [];
     readyToIntercept = true;
 
-    constructor(loader: Gimloader) {
+    constructor(gimloader: Gimloader) {
         super();
 
-        this.gimloader = loader;
+        this.gimloader = gimloader;
 
         // When the page would navigate to a page that would normally break
         // navigate to a page that doesn't exist and from there set up Gimloader
@@ -54,7 +54,7 @@ export default class Parcel extends EventTarget {
                     this.reloadExistingScripts(existingScripts);
                 })
             }
-            else this.setup();
+            else setTimeout(() => this.setup());
         }
     }
 

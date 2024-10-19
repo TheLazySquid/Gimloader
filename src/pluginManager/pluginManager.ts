@@ -1,5 +1,4 @@
 import type { Gimloader } from "$src/gimloader";
-import downloadLibraries from "$src/net/downloadLibraries";
 import showErrorMessage from "$src/ui/showErrorMessage";
 import debounce from "debounce";
 import type { IPluginInfo } from "../types";
@@ -138,8 +137,18 @@ export default class PluginManager {
         this.plugins.update();
 
         if(plugin.headers.needsLib.length > 0) {
-            let success = await downloadLibraries(plugin.headers.needsLib, plugin.headers.name);
-            if(success) await plugin.enable();
+            let failed = false;
+            await this.gimloader.net.downloadLibraries(plugin.headers.needsLib, plugin.headers.name)
+                .catch((e) => {
+                    failed = true;
+                    if(!e) return;
+                    showErrorMessage(e, `Some libraries were unable to be downloaded`);
+                });
+            if(failed) return;
+            await plugin.enable()
+                .catch((e: Error) => {
+                    showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
+                });
         } else {
             await plugin.enable()
                 .catch((e: Error) => {
