@@ -2,7 +2,7 @@
  * @name PerformantGims
  * @description Replaces gims with images of them. Looks like crap, runs really fast.
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PerformantGims.js
  * @reloadRequired ingame
  */
@@ -39,6 +39,8 @@ GL.parcel.interceptRequire("PerformantGims", exports => exports?.default?.toStri
             this.character.spine.skeleton = {color: {}, physicsTranslate: () => {}};
             let scale = this.character.scale;
             this.character.spine.setScale(scale.scaleX, scale.scaleY);
+
+            this.character.characterTrail.followCharacter();
         }
         applyEditStyles() {}
     }
@@ -49,5 +51,10 @@ GL.parcel.interceptRequire("PerformantGims", exports => exports?.ANIMATION_TRACK
     exports.default = class {
         destroy() {}
         update() {}
+        onSkinChanged() {}
     }
 })
+
+export function onStop() {
+    GL.patcher.unpatchAll("PerformantGims");
+}
