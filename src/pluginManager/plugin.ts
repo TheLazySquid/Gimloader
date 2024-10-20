@@ -107,6 +107,8 @@ export default class Plugin {
                         ) {
                             let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
                             if(reload) {
+                                // call the save function directly, rather than the debounced one
+                                this.gimloader.pluginManager.saveFn();
                                 location.reload();
                             }
                         }
