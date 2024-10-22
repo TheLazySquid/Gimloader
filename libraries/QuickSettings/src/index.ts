@@ -15,6 +15,7 @@ export default function QuickSettings(name: string, els: QSElement[]): QuickSett
             else {
                 if(el.type === "number") settings[el.id] = el.min ?? 0;
                 else if(el.type === "boolean") settings[el.id] = false;
+                else if(el.type === "dropdown") settings[el.id] = el.options[0];
                 else settings[el.id] = "";
             }
         }

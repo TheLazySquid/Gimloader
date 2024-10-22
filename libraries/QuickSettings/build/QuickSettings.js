@@ -2,7 +2,7 @@
  * @name QuickSettings
  * @description Easily make simple settings menus
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @isLibrary true
  */
@@ -2315,6 +2315,7 @@ function QuickSettings(name, els) {
       else {
         if (el.type === "number") settings[el.id] = el.min ?? 0;
         else if (el.type === "boolean") settings[el.id] = false;
+        else if (el.type === "dropdown") settings[el.id] = el.options[0];
         else settings[el.id] = "";
       }
     }
