@@ -2,7 +2,7 @@
  * @name QuickSettings
  * @description Easily make simple settings menus
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @isLibrary true
  */
@@ -269,6 +269,22 @@ function set_style(node, key, value, important) {
   } else {
     node.style.setProperty(key, value, important ? "important" : "");
   }
+}
+function select_option(select, value, mounting) {
+  for (let i = 0; i < select.options.length; i += 1) {
+    const option = select.options[i];
+    if (option.__value === value) {
+      option.selected = true;
+      return;
+    }
+  }
+  if (!mounting || value !== void 0) {
+    select.selectedIndex = -1;
+  }
+}
+function select_value(select) {
+  const selected_option = select.querySelector(":checked");
+  return selected_option && selected_option.__value;
 }
 function toggle_class(element2, name, toggle) {
   element2.classList.toggle(name, !!toggle);
@@ -1493,17 +1509,160 @@ function add_css2(target) {
 }
 function get_each_context(ctx, list, i) {
   const child_ctx = ctx.slice();
-  child_ctx[9] = list[i];
-  child_ctx[10] = list;
-  child_ctx[11] = i;
+  child_ctx[11] = list[i];
+  child_ctx[12] = list;
+  child_ctx[13] = i;
   return child_ctx;
+}
+function get_each_context_1(ctx, list, i) {
+  const child_ctx = ctx.slice();
+  child_ctx[14] = list[i];
+  return child_ctx;
+}
+function create_if_block_4(ctx) {
+  let div1;
+  let div0;
+  let t0_value = (
+    /*el*/
+    ctx[11].title + ""
+  );
+  let t0;
+  let t1;
+  let select;
+  let t2;
+  let mounted;
+  let dispose;
+  let each_value_1 = ensure_array_like(
+    /*el*/
+    ctx[11].options
+  );
+  let each_blocks = [];
+  for (let i = 0; i < each_value_1.length; i += 1) {
+    each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+  }
+  function select_change_handler() {
+    ctx[9].call(
+      select,
+      /*el*/
+      ctx[11]
+    );
+  }
+  function change_handler_2() {
+    return (
+      /*change_handler_2*/
+      ctx[10](
+        /*el*/
+        ctx[11]
+      )
+    );
+  }
+  return {
+    c() {
+      div1 = element("div");
+      div0 = element("div");
+      t0 = text(t0_value);
+      t1 = space();
+      select = element("select");
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].c();
+      }
+      t2 = space();
+      attr(div0, "class", "text svelte-18vwb4f");
+      if (
+        /*settings*/
+        ctx[0][
+          /*el*/
+          ctx[11].id
+        ] === void 0
+      ) add_render_callback(select_change_handler);
+      attr(div1, "class", "setting svelte-18vwb4f");
+    },
+    m(target, anchor) {
+      insert(target, div1, anchor);
+      append(div1, div0);
+      append(div0, t0);
+      append(div1, t1);
+      append(div1, select);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        if (each_blocks[i]) {
+          each_blocks[i].m(select, null);
+        }
+      }
+      select_option(
+        select,
+        /*settings*/
+        ctx[0][
+          /*el*/
+          ctx[11].id
+        ],
+        true
+      );
+      append(div1, t2);
+      if (!mounted) {
+        dispose = [
+          listen(select, "change", select_change_handler),
+          listen(select, "change", change_handler_2)
+        ];
+        mounted = true;
+      }
+    },
+    p(new_ctx, dirty) {
+      ctx = new_ctx;
+      if (dirty & /*els*/
+      2 && t0_value !== (t0_value = /*el*/
+      ctx[11].title + "")) set_data(t0, t0_value);
+      if (dirty & /*els*/
+      2) {
+        each_value_1 = ensure_array_like(
+          /*el*/
+          ctx[11].options
+        );
+        let i;
+        for (i = 0; i < each_value_1.length; i += 1) {
+          const child_ctx = get_each_context_1(ctx, each_value_1, i);
+          if (each_blocks[i]) {
+            each_blocks[i].p(child_ctx, dirty);
+          } else {
+            each_blocks[i] = create_each_block_1(child_ctx);
+            each_blocks[i].c();
+            each_blocks[i].m(select, null);
+          }
+        }
+        for (; i < each_blocks.length; i += 1) {
+          each_blocks[i].d(1);
+        }
+        each_blocks.length = each_value_1.length;
+      }
+      if (dirty & /*settings, els*/
+      3) {
+        select_option(
+          select,
+          /*settings*/
+          ctx[0][
+            /*el*/
+            ctx[11].id
+          ]
+        );
+      }
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) {
+        detach(div1);
+      }
+      destroy_each(each_blocks, detaching);
+      mounted = false;
+      run_all(dispose);
+    }
+  };
 }
 function create_if_block_3(ctx) {
   let div1;
   let div0;
   let t0_value = (
     /*el*/
-    ctx[9].title + ""
+    ctx[11].title + ""
   );
   let t0;
   let t1;
@@ -1516,7 +1675,7 @@ function create_if_block_3(ctx) {
     ctx[7].call(
       input,
       /*el*/
-      ctx[9]
+      ctx[11]
     );
   }
   function change_handler_1() {
@@ -1524,7 +1683,7 @@ function create_if_block_3(ctx) {
       /*change_handler_1*/
       ctx[8](
         /*el*/
-        ctx[9]
+        ctx[11]
       )
     );
   }
@@ -1539,7 +1698,7 @@ function create_if_block_3(ctx) {
       attr(div0, "class", "text svelte-18vwb4f");
       attr(input, "type", "text");
       attr(input, "maxlength", input_maxlength_value = /*el*/
-      ctx[9].maxLength);
+      ctx[11].maxLength);
       attr(input, "class", "svelte-18vwb4f");
       attr(div1, "class", "setting svelte-18vwb4f");
     },
@@ -1554,7 +1713,7 @@ function create_if_block_3(ctx) {
         /*settings*/
         ctx[0][
           /*el*/
-          ctx[9].id
+          ctx[11].id
         ]
       );
       append(div1, t2);
@@ -1570,24 +1729,24 @@ function create_if_block_3(ctx) {
       ctx = new_ctx;
       if (dirty & /*els*/
       2 && t0_value !== (t0_value = /*el*/
-      ctx[9].title + "")) set_data(t0, t0_value);
+      ctx[11].title + "")) set_data(t0, t0_value);
       if (dirty & /*els*/
       2 && input_maxlength_value !== (input_maxlength_value = /*el*/
-      ctx[9].maxLength)) {
+      ctx[11].maxLength)) {
         attr(input, "maxlength", input_maxlength_value);
       }
       if (dirty & /*settings, els*/
       3 && input.value !== /*settings*/
       ctx[0][
         /*el*/
-        ctx[9].id
+        ctx[11].id
       ]) {
         set_input_value(
           input,
           /*settings*/
           ctx[0][
             /*el*/
-            ctx[9].id
+            ctx[11].id
           ]
         );
       }
@@ -1608,7 +1767,7 @@ function create_if_block_2(ctx) {
   let div0;
   let t0_value = (
     /*el*/
-    ctx[9].title + ""
+    ctx[11].title + ""
   );
   let t0;
   let t1;
@@ -1623,7 +1782,7 @@ function create_if_block_2(ctx) {
     ctx[5].call(
       input,
       /*el*/
-      ctx[9]
+      ctx[11]
     );
   }
   function change_handler() {
@@ -1631,7 +1790,7 @@ function create_if_block_2(ctx) {
       /*change_handler*/
       ctx[6](
         /*el*/
-        ctx[9]
+        ctx[11]
       )
     );
   }
@@ -1646,11 +1805,11 @@ function create_if_block_2(ctx) {
       attr(div0, "class", "text svelte-18vwb4f");
       attr(input, "type", "number");
       attr(input, "min", input_min_value = /*el*/
-      ctx[9].min);
+      ctx[11].min);
       attr(input, "max", input_max_value = /*el*/
-      ctx[9].max);
+      ctx[11].max);
       attr(input, "step", input_step_value = /*el*/
-      ctx[9].step);
+      ctx[11].step);
       attr(input, "class", "svelte-18vwb4f");
       attr(div1, "class", "setting svelte-18vwb4f");
     },
@@ -1665,7 +1824,7 @@ function create_if_block_2(ctx) {
         /*settings*/
         ctx[0][
           /*el*/
-          ctx[9].id
+          ctx[11].id
         ]
       );
       append(div1, t2);
@@ -1681,34 +1840,34 @@ function create_if_block_2(ctx) {
       ctx = new_ctx;
       if (dirty & /*els*/
       2 && t0_value !== (t0_value = /*el*/
-      ctx[9].title + "")) set_data(t0, t0_value);
+      ctx[11].title + "")) set_data(t0, t0_value);
       if (dirty & /*els*/
       2 && input_min_value !== (input_min_value = /*el*/
-      ctx[9].min)) {
+      ctx[11].min)) {
         attr(input, "min", input_min_value);
       }
       if (dirty & /*els*/
       2 && input_max_value !== (input_max_value = /*el*/
-      ctx[9].max)) {
+      ctx[11].max)) {
         attr(input, "max", input_max_value);
       }
       if (dirty & /*els*/
       2 && input_step_value !== (input_step_value = /*el*/
-      ctx[9].step)) {
+      ctx[11].step)) {
         attr(input, "step", input_step_value);
       }
       if (dirty & /*settings, els*/
       3 && to_number(input.value) !== /*settings*/
       ctx[0][
         /*el*/
-        ctx[9].id
+        ctx[11].id
       ]) {
         set_input_value(
           input,
           /*settings*/
           ctx[0][
             /*el*/
-            ctx[9].id
+            ctx[11].id
           ]
         );
       }
@@ -1729,7 +1888,7 @@ function create_if_block_1(ctx) {
   let div0;
   let t0_value = (
     /*el*/
-    ctx[9].title + ""
+    ctx[11].title + ""
   );
   let t0;
   let t1;
@@ -1741,7 +1900,7 @@ function create_if_block_1(ctx) {
     ctx[3](
       value,
       /*el*/
-      ctx[9]
+      ctx[11]
     );
   }
   function toggle_handler() {
@@ -1749,7 +1908,7 @@ function create_if_block_1(ctx) {
       /*toggle_handler*/
       ctx[4](
         /*el*/
-        ctx[9]
+        ctx[11]
       )
     );
   }
@@ -1758,13 +1917,13 @@ function create_if_block_1(ctx) {
     /*settings*/
     ctx[0][
       /*el*/
-      ctx[9].id
+      ctx[11].id
     ] !== void 0
   ) {
     toggle_props.toggled = /*settings*/
     ctx[0][
       /*el*/
-      ctx[9].id
+      ctx[11].id
     ];
   }
   toggle = new Toggle_default({ props: toggle_props });
@@ -1794,7 +1953,7 @@ function create_if_block_1(ctx) {
       ctx = new_ctx;
       if ((!current || dirty & /*els*/
       2) && t0_value !== (t0_value = /*el*/
-      ctx[9].title + "")) set_data(t0, t0_value);
+      ctx[11].title + "")) set_data(t0, t0_value);
       const toggle_changes = {};
       if (!updating_toggled && dirty & /*settings, els*/
       3) {
@@ -1802,7 +1961,7 @@ function create_if_block_1(ctx) {
         toggle_changes.toggled = /*settings*/
         ctx[0][
           /*el*/
-          ctx[9].id
+          ctx[11].id
         ];
         add_flush_callback(() => updating_toggled = false);
       }
@@ -1829,7 +1988,7 @@ function create_if_block2(ctx) {
   let h2;
   let t_value = (
     /*el*/
-    ctx[9].text + ""
+    ctx[11].text + ""
   );
   let t;
   return {
@@ -1845,7 +2004,7 @@ function create_if_block2(ctx) {
     p(ctx2, dirty) {
       if (dirty & /*els*/
       2 && t_value !== (t_value = /*el*/
-      ctx2[9].text + "")) set_data(t, t_value);
+      ctx2[11].text + "")) set_data(t, t_value);
     },
     i: noop,
     o: noop,
@@ -1856,30 +2015,78 @@ function create_if_block2(ctx) {
     }
   };
 }
+function create_each_block_1(ctx) {
+  let option_1;
+  let t_value = (
+    /*option*/
+    ctx[14] + ""
+  );
+  let t;
+  let option_1_value_value;
+  return {
+    c() {
+      option_1 = element("option");
+      t = text(t_value);
+      option_1.__value = option_1_value_value = /*option*/
+      ctx[14];
+      set_input_value(option_1, option_1.__value);
+    },
+    m(target, anchor) {
+      insert(target, option_1, anchor);
+      append(option_1, t);
+    },
+    p(ctx2, dirty) {
+      if (dirty & /*els*/
+      2 && t_value !== (t_value = /*option*/
+      ctx2[14] + "")) set_data(t, t_value);
+      if (dirty & /*els*/
+      2 && option_1_value_value !== (option_1_value_value = /*option*/
+      ctx2[14])) {
+        option_1.__value = option_1_value_value;
+        set_input_value(option_1, option_1.__value);
+      }
+    },
+    d(detaching) {
+      if (detaching) {
+        detach(option_1);
+      }
+    }
+  };
+}
 function create_each_block(ctx) {
   let current_block_type_index;
   let if_block;
   let if_block_anchor;
   let current;
-  const if_block_creators = [create_if_block2, create_if_block_1, create_if_block_2, create_if_block_3];
+  const if_block_creators = [
+    create_if_block2,
+    create_if_block_1,
+    create_if_block_2,
+    create_if_block_3,
+    create_if_block_4
+  ];
   const if_blocks = [];
   function select_block_type(ctx2, dirty) {
     if (
       /*el*/
-      ctx2[9].type === "heading"
+      ctx2[11].type === "heading"
     ) return 0;
     if (
       /*el*/
-      ctx2[9].type === "boolean"
+      ctx2[11].type === "boolean"
     ) return 1;
     if (
       /*el*/
-      ctx2[9].type === "number"
+      ctx2[11].type === "number"
     ) return 2;
     if (
       /*el*/
-      ctx2[9].type === "text"
+      ctx2[11].type === "text"
     ) return 3;
+    if (
+      /*el*/
+      ctx2[11].type === "dropdown"
+    ) return 4;
     return -1;
   }
   if (~(current_block_type_index = select_block_type(ctx, -1))) {
@@ -2046,6 +2253,7 @@ function instance3($$self, $$props, $$invalidate) {
   function input_input_handler(el) {
     settings[el.id] = to_number(this.value);
     $$invalidate(0, settings);
+    $$invalidate(1, els);
   }
   const change_handler = (el) => {
     $$invalidate(0, settings[el.id] = clampNum(settings[el.id], el), settings);
@@ -2054,8 +2262,15 @@ function instance3($$self, $$props, $$invalidate) {
   function input_input_handler_1(el) {
     settings[el.id] = this.value;
     $$invalidate(0, settings);
+    $$invalidate(1, els);
   }
   const change_handler_1 = (el) => settings.onChange(el.id);
+  function select_change_handler(el) {
+    settings[el.id] = select_value(this);
+    $$invalidate(0, settings);
+    $$invalidate(1, els);
+  }
+  const change_handler_2 = (el) => settings.onChange(el.id);
   $$self.$$set = ($$props2) => {
     if ("name" in $$props2) $$invalidate(2, name = $$props2.name);
     if ("els" in $$props2) $$invalidate(1, els = $$props2.els);
@@ -2076,7 +2291,9 @@ function instance3($$self, $$props, $$invalidate) {
     input_input_handler,
     change_handler,
     input_input_handler_1,
-    change_handler_1
+    change_handler_1,
+    select_change_handler,
+    change_handler_2
   ];
 }
 var Settings = class extends SvelteComponent {

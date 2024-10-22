@@ -49,6 +49,17 @@
                 on:change={() => settings.onChange(el.id)}
                 maxlength={el.maxLength} />
             </div>
+        {:else if el.type === "dropdown"}
+            <div class="setting">
+                <div class="text">
+                    {el.title}
+                </div>
+                <select bind:value={settings[el.id]} on:change={() => settings.onChange(el.id)}>
+                    {#each el.options as option}
+                        <option value={option}>{option}</option>
+                    {/each}
+                </select>
+            </div>
         {/if}
     {/each}
 </div>

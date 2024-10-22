@@ -22,12 +22,18 @@ export interface TextEl extends Setting {
     default?: string;
 }
 
+export interface DropdownEl extends Setting {
+    type: "dropdown";
+    options: string[];
+    default?: string;
+}
+
 export interface HeadingEl {
     type: "heading";
     text: string;
 }
 
-export type QSElement = BooleanEl | NumberEl | TextEl | HeadingEl;
+export type QSElement = BooleanEl | NumberEl | TextEl | DropdownEl | HeadingEl;
 
 export type QuickSettingsReturn = Record<string, any> & {
     openSettingsMenu: () => void

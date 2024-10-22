@@ -101,6 +101,14 @@ default?: string,
 maxLength?: number
 ```
 
+#### Dropdown properties
+
+```ts
+type: "dropdown",
+options: string[],
+default?: string
+```
+
 ### Getting settings
 You can get the value of a setting by its `id` on the settings object.
 
