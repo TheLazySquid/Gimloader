@@ -12,7 +12,7 @@ export default class PluginManager {
     save(newPlugins?: Plugin[]): void;
     getPlugin(name: string): Plugin;
     isEnabled(name: string): boolean;
-    createPlugin(script: string): Promise<void>;
+    createPlugin(script: string, saveFirst?: boolean): Promise<void>;
     deletePlugin(plugin: Plugin): void;
     enableAll(): void;
     disableAll(): void;
