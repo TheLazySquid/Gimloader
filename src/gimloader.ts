@@ -28,6 +28,7 @@ export class Gimloader extends EventTarget {
     
     notification: any;
     stores: any;
+    /** @deprecated No longer supported */
     platformerPhysics: any;
 
     settings = {

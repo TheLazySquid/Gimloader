@@ -17,13 +17,18 @@ export declare class Gimloader extends EventTarget {
     ReactDOM: typeof ReactDOM;
     notification: any;
     stores: any;
+    /** @deprecated No longer supported */
     platformerPhysics: any;
+    settings: {
+        autoUpdate: boolean;
+        autoDownloadMissingLibs: boolean;
+    };
+    parcel: Parcel;
     lib: import("./lib/libManager").LibManagerType;
+    net: Net;
     pluginManager: PluginManager;
     patcher: Patcher;
-    parcel: Parcel;
     poller: Poller;
-    net: Net;
     hotkeys: HotkeyManager;
     contextMenu: ContextMenu;
     storage: Storage;
@@ -34,8 +39,6 @@ export declare class Gimloader extends EventTarget {
         showPluginButtons: boolean;
         setShowPluginButtons: typeof setShowPluginButtons;
     };
-    autoUpdate: boolean;
-    updateIgnored: string | null;
     constructor();
     addStyleSheets(): void;
     exposeValues(): void;
