@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.3
+ * @version 0.3.4
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -63,7 +63,7 @@ let updateScroll = (dt) => {
 
 const patchFrame = () => {
     if(GL.net.type !== "Colyseus") return;
-    let worldManager = GL.stores.phaser.scene.worldManager
+    let worldManager = GL.stores.phaser.scene.worldManager;
 
     // whenever a frame passes
     GL.patcher.after("CameraControl", worldManager, "update", (_, args) => {
@@ -117,8 +117,11 @@ GL.addEventListener("loadEnd", () => {
     GL.stores.phaser.scene.input.on('wheel', onWheel);
 });
 
+let disableAim = false;
+
 function stopFreecamming() {
     if(!scene || !camera) return;
+    disableAim = false;
 
     camera.useBounds = true;
     let charObj = scene.characterManager.characters
@@ -133,6 +136,12 @@ function stopFreecamming() {
 
     scene.input.off('pointermove', onPointermove);
 }
+
+GL.parcel.interceptRequire("CameraControl", (exports) => exports?.AmIAiming, (exports) => {
+    GL.patcher.before("CameraControl", exports, "AmIAiming", () => {
+        if(disableAim) return true;
+    })
+});
 
 GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
     if(!scene || !camera) return;
@@ -165,6 +174,10 @@ GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
 
             scene.cameraHelper.goTo(freecamPos);
         };
+
+        // show the cursor
+        disableAim = true;
+        GL.stores.phaser.scene.game.canvas.style.cursor = "default";
 
         scene.input.on('pointermove', onPointermove);
     }
@@ -220,6 +233,7 @@ export function onStop() {
     GL.hotkeys.removeConfigurable("CameraControl", "freecam");
     GL.hotkeys.removeConfigurable("CameraControl", "zoomToggle");
     GL.patcher.unpatchAll("CameraControl");
+    GL.parcel.stopIntercepts("CameraControl");
 
     if(commandLine) {
         commandLine.removeCommand("setzoom");
