@@ -11,7 +11,7 @@ GL.addEventListener("loadEnd", () => {
 
 export function onStop() {
     // @ts-ignore vscode, again
-    ui.$destroy();
+    ui?.$destroy();
     GL.patcher.unpatchAll("2dMovementTAS");
     GL.parcel.stopIntercepts("2dMovementTAS");
 }

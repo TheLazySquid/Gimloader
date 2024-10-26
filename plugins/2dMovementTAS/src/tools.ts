@@ -22,6 +22,8 @@ GL.parcel.interceptRequire("2dMovementTAS", exports => exports?.default?.toStrin
     })
 });
 
+(window as any).expectedPoses = [];
+
 export default class TASTools {
     startPos: { x: number, y: number };
 
@@ -169,10 +171,9 @@ export default class TASTools {
 
         if(!frame.purchase) return;
         let devices = GL.stores.phaser.scene.worldManager.devices;
-        let body = GL.stores.phaser.mainCharacter.body;
+        let realPos = this.rb.translation();
 
-
-        let device = devices.interactives.findClosestInteractiveDevice(devices.devicesInView, body.x, body.y);
+        let device = devices.interactives.findClosestInteractiveDevice(devices.devicesInView, realPos.x * 100, realPos.y * 100);
         if(!device) return;
         
         // check whether we can afford it
