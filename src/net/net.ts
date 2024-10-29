@@ -30,7 +30,7 @@ export default class Net {
     }
 
     get isHost() {
-        return this.is1dHost || GL.stores.session.amIGameOwner;
+        return this.is1dHost || (GL.stores?.session?.amIGameOwner ?? false);
     }
 
     downloadLibraries(needsLibs: string[], confirmName?: string) {
