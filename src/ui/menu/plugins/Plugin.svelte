@@ -14,12 +14,14 @@
     import Update from "svelte-material-icons/Update.svelte";
     import Cog from "svelte-material-icons/Cog.svelte";
     import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
+    import ListItem from '../ListItem.svelte'
 
     export let startDrag: () => void;
     export let dragDisabled: boolean;
     export let pluginManager: PluginManager;
     export let libManager: LibManagerType;
     export let plugin: Plugin;
+    export let view: string;
 
     let { plugins: pluginsStore } = pluginManager;
 
@@ -33,7 +35,7 @@
     $: enabled = plugin?.enabled;
     let loading = false;
 
-    async function onClick() {
+    async function toggleEnabled() {
         if(enabled) {
             plugin.disable();
             pluginManager.save();
@@ -54,6 +56,8 @@
     }
 
     let libInfoOpen = false;
+
+    $: component = view === 'grid' ? Card : ListItem;
 </script>
 
 {#if libInfoOpen}
@@ -63,7 +67,7 @@
     </Modal>
 {/if}
 
-<Card {dragDisabled} {startDrag} {loading}>
+<svelte:component this={component} {dragDisabled} {startDrag} {loading}>
     <svelte:fragment slot="header">
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {plugin?.headers.name}
@@ -71,7 +75,9 @@
                 <span class="text-sm">v{plugin?.headers.version}</span>
             {/if}
         </h2>
-        <button on:click={onClick}>
+    </svelte:fragment>
+    <svelte:fragment slot="toggle">
+        <button on:click={toggleEnabled}>
             <Toggle class="*:me-0" bind:checked={enabled} disabled></Toggle>
         </button>
     </svelte:fragment>
@@ -104,4 +110,4 @@
             </button>
         {/if}
     </svelte:fragment>
-</Card>
+</svelte:component>

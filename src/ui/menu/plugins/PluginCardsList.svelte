@@ -1,23 +1,24 @@
 <script lang="ts">
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
-    import PluginCard from "./PluginCard.svelte";
-    import PluginManager from "../../../pluginManager/pluginManager";
+    import Plugin from "./Plugin.svelte";
     import { createPlugin } from "../../editCodeModals";
     import { readUserFile } from "../../../util";
     import { Button, Dropdown, DropdownItem } from "flowbite-svelte";
     import showErrorMessage from "../../showErrorMessage";
-    import type { LibManagerType } from "../../../lib/libManager";
+    import type { Gimloader } from "$src/gimloader";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
+    import ViewModule from 'svelte-material-icons/ViewModule.svelte';
+    import ViewList from 'svelte-material-icons/ViewList.svelte';
 
     const flipDurationMs = 300;
 
-    export let pluginManager: PluginManager;
-    export let libManager: LibManagerType;
-    let { plugins: pluginsStore } = pluginManager;
+    export let gimloader: Gimloader;
+    let { pluginManager, lib: libManager } = gimloader;
+    let pluginsStore = pluginManager.plugins;
 
     let items = $pluginsStore.map((plugin) => ({ id: plugin.headers.name }));
     $: items = $pluginsStore.map((plugin) => ({ id: plugin.headers.name }));
@@ -106,6 +107,11 @@
             showErrorMessage(msg, "Failed to enable some plugins");
         }
     }
+
+    function setView(mode: string) {
+        GM_setValue('menuView', mode);
+        gimloader.settings.menuView = mode;
+    }
 </script>
 
 <div class="flex flex-col">
@@ -127,24 +133,40 @@
             <DropdownItem on:click={sortEnabled}>Enabled</DropdownItem>
             <DropdownItem on:click={sortAlphabetical}>Alphabetical</DropdownItem>
         </Dropdown>
+        <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1" 
+            class:bg-gray-200={gimloader.settings.menuView == 'grid'}
+            on:click={() => setView('grid')}>
+            <ViewModule width={24} height={24} />
+        </button>
+        <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1"
+            class:bg-gray-200={gimloader.settings.menuView == 'list'}
+            on:click={() => setView('list')}>
+            <ViewList width={24} height={24} />
+        </button>
     </div>
     {#if $pluginsStore.length === 0}
         <h2 class="text-xl">No plugins installed! Import or create one to get started.</h2>
     {/if}
-    <div class="max-h-full overflow-y-auto grid gap-4 plugins pb-1 flex-grow"
+
+    <div class="max-h-full overflow-y-auto grid gap-4 pb-1 flex-grow plugins-{gimloader.settings.menuView}"
     use:dndzone={{ items, flipDurationMs, dragDisabled, dropTargetStyle: {} }}
     on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
         {#each items as item (item.id)}
             {@const plugin = pluginManager.getPlugin(item.id)}
             <div animate:flip={{ duration: flipDurationMs }}>
-                <PluginCard {plugin} {startDrag} {dragDisabled} {pluginManager} {libManager} />
+                <Plugin {plugin} {startDrag} {dragDisabled} {pluginManager} {libManager}
+                    view={gimloader.settings.menuView} />
             </div>
         {/each}
     </div>
 </div>
 
 <style>
-    .plugins {
+    .plugins-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .plugins-list {
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     }
 </style>
