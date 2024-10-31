@@ -6,6 +6,10 @@
 @tailwind components;
 @tailwind utilities;
 
+#dnd-action-dragged-el {
+    outline: none;
+}
+
 :root {
     --text: black;
     --bg-primary: white;

@@ -29,15 +29,14 @@
                         <Wrench size={24} />
                         <span class="ml-2">Plugins</span>
                     </div>
-                    <PluginCardsList pluginManager={gimloader.pluginManager}
-                        libManager={gimloader.lib} />
+                    <PluginCardsList {gimloader} />
                 </TabItem>
                 <TabItem>
                     <div slot="title" class="flex items-center">
                         <Book size={24} />
                         <span class="ml-2">Libraries</span>
                     </div>
-                    <LibraryCardsList libManager={gimloader.lib} />
+                    <LibraryCardsList {gimloader} />
                 </TabItem>
                 <TabItem>
                     <div slot="title" class="flex items-center">

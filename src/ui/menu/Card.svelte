@@ -15,6 +15,7 @@
     {/if}
     <div class="w-full flex gap-2 items-center leading-3">
         <slot name="header" />
+        <slot name="toggle" />
     </div>
     <div class="overflow-ellipsis overflow-hidden whitespace-nowrap w-full text-base leading-4">
         <slot name="author" />
@@ -31,41 +32,4 @@
     </div>
 </div>
 
-<style>
-    .animWrap {
-        pointer-events: none;
-    }
-
-    .loadAnim {
-        position: relative;
-        animation: loading infinite 1s ease-in-out;
-    }
-
-    .loadAnim:after, .loadAnim:before {
-        content: "";
-        z-index: 1;
-        position: absolute;
-        bottom: 0;
-        height: 100%;
-        width: 45px;
-    }
-
-    .loadAnim:after {
-        right: 0;
-        background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1) 85%);
-    }
-
-    .loadAnim:before {
-        left: 0;
-        background-image: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1) 85%);
-    }
-
-    @keyframes loading {
-        0% {
-            margin-left: -160px;
-        }
-        100% {
-            margin-left: 100%;
-        }
-    }
-</style>
+<style src="./loadAnim.css"></style>

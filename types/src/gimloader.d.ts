@@ -22,6 +22,7 @@ export declare class Gimloader extends EventTarget {
     settings: {
         autoUpdate: boolean;
         autoDownloadMissingLibs: boolean;
+        menuView: string;
     };
     parcel: Parcel;
     lib: import("./lib/libManager").LibManagerType;

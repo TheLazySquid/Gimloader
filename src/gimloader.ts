@@ -33,7 +33,8 @@ export class Gimloader extends EventTarget {
 
     settings = {
         autoUpdate: GM_getValue('autoUpdate', false),
-        autoDownloadMissingLibs: GM_getValue('autoDownloadMissingLibs', true)
+        autoDownloadMissingLibs: GM_getValue('autoDownloadMissingLibs', true),
+        menuView: GM_getValue('menuView', 'grid')
     };
 
     parcel: Parcel = new Parcel(this);

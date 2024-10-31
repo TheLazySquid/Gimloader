@@ -1,21 +1,24 @@
 <script lang="ts">
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
-    import type { LibManagerType } from "../../../lib/libManager";
-    import LibraryCard from "./LibraryCard.svelte";
-    import type Lib from "../../../lib/lib";
+    import Library from "./Library.svelte";
     import { Button, Dropdown, DropdownItem } from "flowbite-svelte";
+    import { createLib } from "../../editCodeModals";
+    import { readUserFile } from "../../../util";
+    import type Lib from "../../../lib/lib";
+    import type { Gimloader } from "$src/gimloader";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
-    import { createLib } from "../../editCodeModals";
-    import { readUserFile } from "../../../util";
+    import ViewModule from 'svelte-material-icons/ViewModule.svelte';
+    import ViewList from 'svelte-material-icons/ViewList.svelte';
 
     const flipDurationMs = 300;
 
-    export let libManager: LibManagerType;
-    let { libs } = libManager;
+    export let gimloader: Gimloader;
+    let libManager = gimloader.lib;
+    let libs = libManager.libs;
 
     let items = $libs.map((lib: Lib) => ({ id: lib.headers.name }));
     $: items = $libs.map((lib: Lib) => ({ id: lib.headers.name }));
@@ -67,6 +70,11 @@
             })
             .catch(() => {});
     }
+
+    function setView(mode: string) {
+        GM_setValue('menuView', mode);
+        gimloader.settings.menuView = mode;
+    }
 </script>
 
 <div class="flex flex-col">
@@ -81,24 +89,39 @@
         <Dropdown bind:open={bulkOpen}>
             <DropdownItem on:click={deleteAll}>Delete all</DropdownItem>
         </Dropdown>
+        <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1" 
+        class:bg-gray-200={gimloader.settings.menuView == 'grid'}
+        on:click={() => setView('grid')}>
+            <ViewModule width={24} height={24} />
+        </button>
+        <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1"
+            class:bg-gray-200={gimloader.settings.menuView == 'list'}
+            on:click={() => setView('list')}>
+            <ViewList width={24} height={24} />
+        </button>
     </div>
     {#if $libs.length === 0}
         <h2 class="text-xl">No libraries installed!</h2>
     {/if}
-    <div class="max-h-full overflow-y-auto grid gap-4 libs pb-1 flex-grow"
+    <div class="max-h-full overflow-y-auto grid gap-4 libs-{gimloader.settings.menuView} pb-1 flex-grow"
     use:dndzone={{ items, flipDurationMs, dragDisabled, dropTargetStyle: {} }}
     on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
         {#each items as item (item.id)}
             {@const library = libManager.getLib(item.id)}
             <div animate:flip={{ duration: flipDurationMs }}>
-                <LibraryCard {library} {startDrag} {dragDisabled} {libManager} />
+                <Library {library} {startDrag} {dragDisabled} {libManager}
+                    view={gimloader.settings.menuView} />
             </div>
         {/each}
     </div>
 </div>
 
 <style>
-    .libs {
+    .libs-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .libs-list {
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     }
 </style>

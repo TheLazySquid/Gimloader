@@ -8,11 +8,13 @@
     import Update from "svelte-material-icons/Update.svelte";
     import { showLibCodeEditor } from "../../editCodeModals";
     import { checkLibUpdate } from "../../../net/checkUpdates";
+    import ListItem from "../ListItem.svelte";
 
     export let startDrag: () => void;
     export let dragDisabled: boolean;
     export let library: Lib;
     export let libManager: LibManagerType;
+    export let view: string;
 
     function deleteLib() {
         let conf = confirm(`Are you sure you want to delete ${library.headers.name}?`);
@@ -20,9 +22,11 @@
 
         libManager.deleteLib(library);
     }
+
+    $: component = view === 'grid' ? Card : ListItem;
 </script>
 
-<Card {dragDisabled} {startDrag}>
+<svelte:component this={component} {dragDisabled} {startDrag}>
     <svelte:fragment slot="header">
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {library?.headers.name}
@@ -50,4 +54,4 @@
             </button>
         {/if}
     </svelte:fragment>
-</Card>
+</svelte:component>
