@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.4
+ * @version 0.3.5
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -41,6 +41,7 @@ let settings = GL.lib("QuickSettings")("CameraControl", [
 let freecamming = false;
 let freecamPos = {x: 0, y: 0};
 let scrollMomentum = 0;
+let changedZoom = false;
 
 let stopProps = [new Set(["arrowleft"]), new Set(["arrowright"]), new Set(["arrowup"]), new Set(["arrowdown"])];
 
@@ -51,6 +52,7 @@ let updateScroll = (dt) => {
     
     scrollMomentum *= Math.pow(.97, dt);
     camera.zoom += scrollMomentum * dt;
+    if(scrollMomentum > 0) changedZoom = true;
 
     if(settings.capZoomOut) {
         if(camera.zoom <= 0.1) {
@@ -108,11 +110,18 @@ function onWheel(pointer, _, __, deltaY) {
     freecamPos.y += pixels_difference_h * side_ratio_h;
 
     camera.setZoom(newzoom);
+    changedZoom = true;
 }
 
 GL.addEventListener("loadEnd", () => {
     scene = GL.stores?.phaser?.scene;
     camera = scene?.cameras?.cameras?.[0];
+    if(!scene) return;
+    
+    // disable the camera zoom being reset when changing the screen size
+    GL.patcher.before("CameraControl", GL.stores.phaser.scene.cameraHelper, "resize", () => {
+        return changedZoom;
+    });
 
     GL.stores.phaser.scene.input.on('wheel', onWheel);
 });
