@@ -34,6 +34,7 @@
             <slot name="buttons" />
         </div>
         <div style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
+        title={dragAllowed ? '' : 'Cannot rearrange while searching'}
         class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
             <DotsGrid size={28} />
         </div>

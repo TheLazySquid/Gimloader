@@ -33,6 +33,7 @@
     </div>
     <div class="absolute right-3 top-1/2 transform -translate-y-1/2"
     style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
+    title={dragAllowed ? '' : 'Cannot rearrange while searching'}
     class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
         <DotsGrid size={28} />
     </div>
