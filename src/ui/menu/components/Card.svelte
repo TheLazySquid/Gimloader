@@ -4,6 +4,11 @@
     export let startDrag: () => void;
     export let dragDisabled: boolean;
     export let loading = false;
+    export let dragAllowed = true;
+
+    function checkDrag() {
+        if(dragAllowed) startDrag();
+    }
 </script>
 
 <div class="border border-gray-500 p-3 h-full relative bg-white min-h-[150px] flex flex-col
@@ -27,7 +32,8 @@
         <slot name="buttons" />
     </div>
     <div class="absolute right-3 top-1/2 transform -translate-y-1/2"
-    style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'} on:pointerdown={startDrag}>
+    style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
+    class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
         <DotsGrid size={28} />
     </div>
 </div>

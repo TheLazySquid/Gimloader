@@ -5,6 +5,11 @@
     export let startDrag: () => void;
     export let dragDisabled: boolean;
     export let loading = false;
+    export let dragAllowed = true;
+
+    function checkDrag() {
+        if(dragAllowed) startDrag();
+    }
 
     let expanded = false;
 </script>
@@ -28,7 +33,8 @@
         <div class="flex flex-row-reverse items-end">
             <slot name="buttons" />
         </div>
-        <div style={dragDisabled ? 'cursor: grab' : 'cursor: grabbing'} on:pointerdown={startDrag}>
+        <div style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
+        class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
             <DotsGrid size={28} />
         </div>
     </div>

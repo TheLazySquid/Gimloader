@@ -24,9 +24,11 @@
     }
 
     $: component = view === 'grid' ? Card : ListItem;
+
+    export let dragAllowed: boolean;
 </script>
 
-<svelte:component this={component} {dragDisabled} {startDrag}>
+<svelte:component this={component} {dragDisabled} {startDrag} {dragAllowed}>
     <svelte:fragment slot="header">
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {library?.headers.name}
