@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Card from "../Card.svelte";
+    import Card from "../components/Card.svelte";
     import type Lib from "../../../lib/lib";
     import type { LibManagerType } from "../../../lib/libManager";
 
@@ -8,7 +8,7 @@
     import Update from "svelte-material-icons/Update.svelte";
     import { showLibCodeEditor } from "../../editCodeModals";
     import { checkLibUpdate } from "../../../net/checkUpdates";
-    import ListItem from "../ListItem.svelte";
+    import ListItem from "../components/ListItem.svelte";
 
     export let startDrag: () => void;
     export let dragDisabled: boolean;

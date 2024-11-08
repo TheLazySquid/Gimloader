@@ -13,6 +13,7 @@
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
     import ViewModule from 'svelte-material-icons/ViewModule.svelte';
     import ViewList from 'svelte-material-icons/ViewList.svelte';
+    import Search from "../components/Search.svelte";
 
     const flipDurationMs = 300;
 
@@ -20,8 +21,12 @@
     let libManager = gimloader.lib;
     let libs = libManager.libs;
 
+    let searchValue = "";
+
     let items = $libs.map((lib: Lib) => ({ id: lib.headers.name }));
-    $: items = $libs.map((lib: Lib) => ({ id: lib.headers.name }));
+    $: items = $libs
+        .filter((lib) => lib.headers.name.toLowerCase().includes(searchValue.toLowerCase()))
+        .map((lib) => ({ id: lib.headers.name }));
 
     let dragDisabled = true;
 
@@ -99,6 +104,7 @@
             on:click={() => setView('list')}>
             <ViewList width={24} height={24} />
         </button>
+        <Search bind:value={searchValue} />
     </div>
     {#if $libs.length === 0}
         <h2 class="text-xl">No libraries installed!</h2>
@@ -106,13 +112,15 @@
     <div class="max-h-full overflow-y-auto grid gap-4 libs-{gimloader.settings.menuView} pb-1 flex-grow"
     use:dndzone={{ items, flipDurationMs, dragDisabled, dropTargetStyle: {} }}
     on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
-        {#each items as item (item.id)}
-            {@const library = libManager.getLib(item.id)}
-            <div animate:flip={{ duration: flipDurationMs }}>
-                <Library {library} {startDrag} {dragDisabled} {libManager}
-                    view={gimloader.settings.menuView} />
-            </div>
-        {/each}
+        {#key searchValue}
+            {#each items as item (item.id)}
+                {@const library = libManager.getLib(item.id)}
+                <div animate:flip={{ duration: flipDurationMs }}>
+                    <Library {library} {startDrag} {dragDisabled} {libManager}
+                        view={gimloader.settings.menuView} />
+                </div>
+            {/each}
+        {/key}
     </div>
 </div>
 
