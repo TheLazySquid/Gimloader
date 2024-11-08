@@ -58,6 +58,8 @@
     let libInfoOpen = false;
 
     $: component = view === 'grid' ? Card : ListItem;
+
+    export let dragAllowed: boolean;
 </script>
 
 {#if libInfoOpen}
@@ -67,7 +69,7 @@
     </Modal>
 {/if}
 
-<svelte:component this={component} {dragDisabled} {startDrag} {loading}>
+<svelte:component this={component} {dragDisabled} {startDrag} {loading} {dragAllowed}>
     <svelte:fragment slot="header">
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {plugin?.headers.name}

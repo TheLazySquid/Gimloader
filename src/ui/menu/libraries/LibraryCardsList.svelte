@@ -117,7 +117,7 @@
                 {@const library = libManager.getLib(item.id)}
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <Library {library} {startDrag} {dragDisabled} {libManager}
-                        view={gimloader.settings.menuView} />
+                        view={gimloader.settings.menuView} dragAllowed={searchValue == ''} />
                 </div>
             {/each}
         {/key}

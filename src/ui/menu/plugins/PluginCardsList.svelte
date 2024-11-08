@@ -161,7 +161,7 @@
                 {@const plugin = pluginManager.getPlugin(item.id)}
                 <div animate:flip={{ duration: flipDurationMs }}>
                     <Plugin {plugin} {startDrag} {dragDisabled} {pluginManager} {libManager}
-                        view={gimloader.settings.menuView} />
+                        view={gimloader.settings.menuView} dragAllowed={searchValue == ""} />
                 </div>
             {/each}
         {/key}
