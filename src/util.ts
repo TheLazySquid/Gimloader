@@ -99,7 +99,8 @@ export function parsePluginHeader(code: string) {
         isLibrary: "false",
         downloadUrl: null,
         needsLib: [],
-        optionalLib: []
+        optionalLib: [],
+        hasSettings: "false"
     };
 
     return parseHeader(code, basePluginHeaders);

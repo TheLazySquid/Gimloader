@@ -100,6 +100,10 @@
             <button on:click={() => plugin.return.openSettingsMenu()}>
                 <Cog size={28} />
             </button>
+        {:else if plugin?.headers.hasSettings !== "false"}
+            <Cog size={28} class="opacity-50" title={plugin.enabled ?
+                "This plugin's settings menu is missing/invalid" :
+                'Plugins need to be enabled to open settings'} />
         {/if}
         {#if plugin?.headers.downloadUrl}
             <button on:click={() => checkPluginUpdate(plugin)}>
