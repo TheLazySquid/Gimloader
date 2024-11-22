@@ -51,6 +51,10 @@ export interface IPluginTypes extends OptionalConfig {
      * Libraries are formatted like "[name]" or "[name] | [downloadUrl]".
      */
     optionalLibs: string[];
+    /**
+     * Whether the plugin has a settings menu.
+     */
+    hasSettings: boolean;
 }
 
 export interface LibraryTypes extends OptionalConfig {

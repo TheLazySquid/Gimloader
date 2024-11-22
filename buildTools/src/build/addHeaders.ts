@@ -33,6 +33,10 @@ export function createHeader(config: Config) {
                 meta += `\n * @optionalLib ${lib}`;
             }
         }
+
+        if(pluginConfig.hasSettings) {
+            meta += '\n * @hasSettings true'
+        }
     }
 
     if(config.isLibrary) {
