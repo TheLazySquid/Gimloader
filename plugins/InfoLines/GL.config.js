@@ -14,6 +14,7 @@ export default {
     author: 'TheLazySquid',
     version: pkg.version,
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js",
+    hasSettings: true,
     plugins: [
         sass(),
         string({ include: ['**/*.css', '**/*.svg'] }),

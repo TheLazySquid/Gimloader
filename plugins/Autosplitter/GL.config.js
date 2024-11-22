@@ -16,6 +16,7 @@ export default {
     version: pkg.version,
     downloadUrl: 'https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js',
     libs: ["GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js"],
+    hasSettings: true,
     plugins: [
         sass(),
         string({ include: ['**/*.css', '**/*.svg'] }),
@@ -35,5 +36,5 @@ export default {
             exportConditions: ['svelte'],
             extensions: ['.svelte', '.js', '.ts', '.json']
         })
-   ]
+    ]
 };

@@ -1,6 +1,6 @@
 {
   "name": "customui",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Allows you to customize various things about the Gimkit UI",
   "author": "TheLazySquid",
   "main": "src/index.ts",

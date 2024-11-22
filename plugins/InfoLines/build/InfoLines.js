@@ -2,8 +2,9 @@
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js
+ * @hasSettings true
  */
 function onceOrIfLoaded(callback) {
     if (GL.net.type === "Colyseus")

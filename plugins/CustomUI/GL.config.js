@@ -14,6 +14,7 @@ export default {
     description: 'Allows you to customize various things about the Gimkit UI',
     author: 'TheLazySquid',
     version: pkg.version,
+    hasSettings: true,
     plugins: [
         json(),
         sass(),
