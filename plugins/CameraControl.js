@@ -2,7 +2,7 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.3.6
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -80,27 +80,46 @@ GL.addEventListener("loadEnd", patchFrame);
 
 let scene, camera;
 
-function onPointermove(pointer) {
-    if (!pointer.isDown) return;
-    
-    freecamPos.x -= (pointer.x - pointer.prevPosition.x) / camera.zoom;
-    freecamPos.y -= (pointer.y - pointer.prevPosition.y) / camera.zoom;
+const getCanvasZoom = () => {
+    let transform = GL.stores.phaser.scene.game.canvas.style.transform;
+    if(!transform) return 1;
+    return parseFloat(transform.split("(")[1].replace(")", ""));
 }
 
-function onWheel(pointer, _, __, deltaY) {
+let isPointerDown = false;
+const setPointerDown = () => isPointerDown = true;
+const setPointerUp = () => isPointerDown = false;
+window.addEventListener('pointerdown', setPointerDown);
+window.addEventListener('pointerup', setPointerUp);
+
+let lastX, lastY;
+function onPointermove(e) {
+    let canvasZoom = getCanvasZoom();
+    
+    if (isPointerDown && lastX && lastY) {
+        freecamPos.x -= ((e.clientX / canvasZoom) - lastX) / camera.zoom;
+        freecamPos.y -= ((e.clientY / canvasZoom) - lastY) / camera.zoom;
+    }
+    
+    lastX = e.clientX / canvasZoom;
+    lastY = e.clientY / canvasZoom;
+}
+
+function onWheel(e) {
     if(!freecamming || !settings.mouseControls) {
         if(settings.shiftToZoom && !GL.hotkeys.pressedKeys.has("shift")) return;
-        scrollMomentum -= deltaY / 65000;
+        scrollMomentum -= e.deltaY / 65000;
         return;
     }
 
-    if(camera.zoom == 0.1 && deltaY > 0 && settings.capZoomOut) return;
+    if(camera.zoom == 0.1 && e.deltaY > 0 && settings.capZoomOut) return;
 
     var oldzoom = camera.zoom;
-    var newzoom = oldzoom * (deltaY < 0 ? 1.1 : 0.9);
+    var newzoom = oldzoom * (e.deltaY < 0 ? 1.1 : 0.9);
 
-    var mouse_x = pointer.x;
-    var mouse_y = pointer.y;
+    let canvasZoom = getCanvasZoom();
+    var mouse_x = e.clientX / canvasZoom;
+    var mouse_y = e.clientY / canvasZoom;
 
     var pixels_difference_w = (camera.width / oldzoom) - (camera.width / newzoom);
     var side_ratio_x = (mouse_x - (camera.width / 2)) / camera.width;
@@ -124,7 +143,7 @@ GL.addEventListener("loadEnd", () => {
         return changedZoom;
     });
 
-    GL.stores.phaser.scene.input.on('wheel', onWheel);
+    window.addEventListener("wheel", onWheel);
 });
 
 let disableAim = false;
@@ -144,7 +163,7 @@ function stopFreecamming() {
         GL.hotkeys.remove(key);
     }
 
-    scene.input.off('pointermove', onPointermove);
+    window.removeEventListener('pointermove', onPointermove);
 }
 
 GL.parcel.interceptRequire("CameraControl", (exports) => exports?.AmIAiming, (exports) => {
@@ -189,7 +208,7 @@ GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
         disableAim = true;
         GL.stores.phaser.scene.game.canvas.style.cursor = "default";
 
-        scene.input.on('pointermove', onPointermove);
+        window.addEventListener('pointermove', onPointermove);
     }
 
     freecamming = !freecamming;
@@ -249,7 +268,9 @@ export function onStop() {
         commandLine.removeCommand("setzoom");
     }
 
-    GL.stores?.phaser?.scene?.input?.off('wheel', onWheel);
+    window.removeEventListener('wheel', onWheel);
+    window.removeEventListener('mousedown', setPointerDown);
+    window.removeEventListener('mouseup', setPointerUp);
 
     // stop freecamming
     if(freecamming) {
