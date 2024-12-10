@@ -49,10 +49,13 @@ export default class Parcel extends EventTarget {
             let existingScripts = document.querySelectorAll(scriptSelector) as NodeListOf<HTMLScriptElement>;
             if(existingScripts.length > 0) {
                 this.readyToIntercept = false;
-                window.addEventListener('load', () => {
+                const run = () => {
                     this.setup();
                     this.reloadExistingScripts(existingScripts);
-                })
+                }
+
+                if(document.readyState === "complete") setTimeout(run);
+                else window.addEventListener('load', run)
             }
             else setTimeout(() => this.setup());
         }
