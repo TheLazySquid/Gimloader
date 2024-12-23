@@ -1,5 +1,6 @@
 import type { ComponentType, SvelteComponent } from "svelte";
 import type { EasyAccessWritable } from "./types";
+import type Lib from "./lib/lib";
 
 // gotta have pretty console.logs
 export function log(...args: any[]) {
@@ -113,7 +114,8 @@ export function parseLibHeader(code: string) {
         description: 'No description provided',
         version: null,
         downloadUrl: null,
-        isLibrary: "false"
+        isLibrary: "false",
+        reloadRequired: "false"
     }
 
     return parseHeader(code, baseLibHeaders);
@@ -186,4 +188,15 @@ export default function parseHeader(code: string, headers: Record<string, any>) 
     }
 
     return headers;
+}
+
+export function confirmLibReload(libs: Lib[]) {
+    let names = libs.map(l => l.headers.name);
+    let msg = names.slice(0, -1).join(', ');
+    if(names.length > 1) msg += ' and ';
+    msg += names.at(-1);
+    msg += names.length > 1 ? ' require' : ' requires';
+    msg += ' a reload to function properly. Reload now?';
+
+    return confirm(msg);
 }

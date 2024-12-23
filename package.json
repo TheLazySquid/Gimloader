@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.11.6",
+  "version": "0.11.7",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",

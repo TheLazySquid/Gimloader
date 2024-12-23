@@ -1,5 +1,6 @@
 import type { ComponentType, SvelteComponent } from "svelte";
 import type { EasyAccessWritable } from "./types";
+import type Lib from "./lib/lib";
 export declare function log(...args: any[]): void;
 export declare function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
 export declare function stopOverrideKeydown(): void;
@@ -10,3 +11,4 @@ export declare const onGimkit: boolean;
 export declare function parsePluginHeader(code: string): Record<string, any>;
 export declare function parseLibHeader(code: string): Record<string, any>;
 export default function parseHeader(code: string, headers: Record<string, any>): Record<string, any>;
+export declare function confirmLibReload(libs: Lib[]): boolean;

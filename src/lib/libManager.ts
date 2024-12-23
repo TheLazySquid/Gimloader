@@ -1,7 +1,8 @@
-import { easyAccessWritable, parseLibHeader } from '$src/util';
+import { confirmLibReload, easyAccessWritable, parseLibHeader } from '$src/util';
 import Lib from './lib';
 import type { EasyAccessWritable } from '$src/types';
 import debounce from 'debounce';
+import type { Gimloader } from '$src/gimloader';
 
 // The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
 // If there is a better way to do this please let me know
@@ -42,7 +43,7 @@ const libManagerMethods = {
             this.deleteLib(existing);
         }
 
-        let lib = new Lib(script, headers);
+        let lib = new Lib(this.gimloader, script, headers);
         this.libs.value.unshift(lib);
 
         this.save();
@@ -57,14 +58,22 @@ const libManagerMethods = {
         this.save();
         this.libs.update();
     },
-    editLib(lib: Lib, code: string, headers?: Record<string, any>) {
+    async editLib(lib: Lib, code: string, headers?: Record<string, any>) {
         headers = headers ?? parseLibHeader(code);
 
         if(lib.headers.name === headers.name) {
             let newLib = this.createLib(code, headers, true);
             if(newLib) {
                 newLib.usedBy = lib.usedBy;
-                if(newLib.usedBy.size > 0) newLib.enable();
+                if(newLib.usedBy.size == 0) return;
+                let needsReload = await newLib.enable();
+                if(!needsReload) return;
+
+                let reload = confirmLibReload([lib]);
+                if(!reload) return;
+
+                this.saveFn();
+                location.reload();
             }
         } else {
             let wentThrough = this.createLib(code, headers);
@@ -83,7 +92,7 @@ export interface LibManagerBase extends GetLibType {
 type additionalValuesType = typeof libManagerMethods;
 export interface LibManagerType extends LibManagerBase, additionalValuesType {};
 
-function makeLibManager() {
+function makeLibManager(gimloader: Gimloader) {
     let libScripts = GM_getValue('libs', []) as string[];
 
     // convert from the old, unordered version
@@ -94,7 +103,7 @@ function makeLibManager() {
     let libs = easyAccessWritable<Lib[]>([]);
 
     for(let script of libScripts) {
-        let lib = new Lib(script);
+        let lib = new Lib(gimloader, script);
 
         libs.value.push(lib);
     }
@@ -108,6 +117,7 @@ function makeLibManager() {
     
     const lib: LibManagerType = get as LibManagerType;
     Object.assign(lib, {
+        gimloader,
         get,
         libs
     }, libManagerMethods);
@@ -117,7 +127,7 @@ function makeLibManager() {
         let newLibs: Lib[] = [];
 
         for(let script of value) {
-            let lib = new Lib(script);
+            let lib = new Lib(this.gimloader, script);
             newLibs.push(lib);
         }
 
