@@ -1,16 +1,19 @@
+import type { Gimloader } from "$src/gimloader";
 import { log, parseLibHeader } from "../util";
 
 export default class Lib {
+    gimloader: Gimloader;
     script: string;
     library: any;
     headers: Record<string, any> = {};
     enabling: boolean = false;
     enableError?: Error;
-    enableSuccessCallbacks: (() => void)[] = [];
+    enableSuccessCallbacks: ((needsReload: boolean) => void)[] = [];
     enableFailCallbacks: ((e: any) => void)[] = [];
     usedBy = new Set<string>();
     
-    constructor(script: string, headers?: Record<string, any>) {
+    constructor(gimloader: Gimloader, script: string, headers?: Record<string, any>) {
+        this.gimloader = gimloader;
         this.script = script;
 
         if(headers) {
@@ -20,9 +23,9 @@ export default class Lib {
         }
     }
 
-    async enable() {
+    async enable(initial: boolean = false) {
         if(this.enableError) return Promise.reject(this.enableError);
-        if(this.library) return Promise.resolve();
+        if(this.library) return Promise.resolve(true);
 
         if(!this.enabling) {
             this.enabling = true;
@@ -34,9 +37,13 @@ export default class Lib {
                     if(returnVal.default) {
                         returnVal = returnVal.default;
                     }
+
+                    let needsReload = this.headers.reloadRequired === 'true' || 
+                        this.headers.reloadRequired === '' ||
+                        (this.headers.reloadRequired === 'ingame' && this.gimloader.net.type !== "Unknown");
             
                     this.library = returnVal;
-                    this.enableSuccessCallbacks.forEach(cb => cb());
+                    this.enableSuccessCallbacks.forEach(cb => cb(!initial && needsReload));
                 })
                 .catch((e) => {
                     let error = new Error(`Failed to enable library ${this.headers.name}:\n${e}`)
@@ -48,7 +55,7 @@ export default class Lib {
                 })
         }
 
-        return new Promise<void>((res, rej) => {
+        return new Promise<boolean>((res, rej) => {
             this.enableSuccessCallbacks.push(res);
             this.enableFailCallbacks.push(rej);
         });

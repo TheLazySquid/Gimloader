@@ -38,7 +38,7 @@ export class Gimloader extends EventTarget {
     };
 
     parcel: Parcel = new Parcel(this);
-    lib = makeLibManager();
+    lib = makeLibManager(this);
     net: Net = new Net(this);
     pluginManager: PluginManager = new PluginManager(this, onGimkit);
     patcher: Patcher = new Patcher();

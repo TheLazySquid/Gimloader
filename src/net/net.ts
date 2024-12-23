@@ -1,3 +1,5 @@
+import type Lib from "$src/lib/lib";
+import { confirmLibReload } from "$src/util";
 import type { Gimloader } from "../gimloader";
 import { BlueboatIntercept, ColyseusIntercept } from "./clients";
 
@@ -88,10 +90,16 @@ export default class Net {
         
             let successes = results.filter(r => r.status === 'fulfilled') as PromiseFulfilledResult<string>[];
             let libs = successes.map(s => this.gimloader.lib.createLib(s.value)).filter(l => l);
-            await Promise.all(libs.map(l => l.enable()));
+            let needsReloads = await Promise.all(libs.map(l => l.enable()));
         
             this.gimloader.lib.save();
             this.gimloader.lib.libs.update();
+
+            let reloadNeeders: Lib[] = libs.filter((_, i) => needsReloads[i]);
+            if(reloadNeeders.length > 0) {
+                let reload = confirmLibReload(reloadNeeders);
+                if(reload) location.reload();
+            }
         
             let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
             if(failed.length > 0) {
