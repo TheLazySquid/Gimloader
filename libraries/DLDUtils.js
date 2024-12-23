@@ -2,9 +2,10 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.6
+ * @version 0.2.7
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
+ * @reloadRequired ingame
  */
 
 const respawnHeight = 621.093;
