@@ -29,6 +29,11 @@ export interface OptionalConfig extends MandatoryConfig {
      * A URL to get the raw code of the plugin / library, used for updates.
      */
     downloadUrl?: string;
+    /**
+     * Whether the browser needs to be reloaded after the plugin is added.
+     * If set to "ingame" it will only reload if the user is currently in a game.
+     */
+    reloadRequired?: boolean | "ingame";
 }
 
 export interface IPluginTypes extends OptionalConfig {
@@ -36,11 +41,6 @@ export interface IPluginTypes extends OptionalConfig {
      * Whether the plugin / library is a library.
      */
     isLibrary?: false;
-    /**
-     * Whether the browser needs to be reloaded after the plugin is added.
-     * If set to "ingame" it will only reload if the user is currently in a game.
-     */
-    reloadRequired: boolean | "ingame";
     /**
      * A list of libraries that the plugin requires to start.
      * Libraries are formatted like "[name]" or "[name] | [downloadUrl]".
