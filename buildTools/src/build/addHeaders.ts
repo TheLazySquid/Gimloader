@@ -14,14 +14,14 @@ export function createHeader(config: Config) {
         meta += `\n * @downloadUrl ${config.downloadUrl}`;
     }
 
+    if(config.reloadRequired === true) {
+        meta += '\n * @reloadRequired true';
+    } else if(config.reloadRequired === "ingame") {
+        meta += '\n * @reloadRequired ingame';
+    }
+
     if(!config.isLibrary) {
         let pluginConfig = config as IPluginTypes;
-        if(pluginConfig.reloadRequired === true) {
-            meta += '\n * @reloadRequired true';
-        } else if(pluginConfig.reloadRequired === "ingame") {
-            meta += '\n * @reloadRequired ingame';
-        }
-    
         if(pluginConfig.libs) {
             for(let lib of pluginConfig.libs) {
                 meta += `\n * @needsLib ${lib}`;

@@ -30,6 +30,7 @@ From there you will be given some options to choose from. This command will gene
 - `version`: The version of the plugin / library.
 - `downloadUrl`: The download URL for the plugin / library, used by Gimloader for updates.
 - `bundler`: This decides which bundler is used. Set to esbuild to use esbuild, otherwise Rollup is used.
+- `reloadRequired`: Set to true if the plugin / library needs a reload to take effect, or set to "ingame" if it only needs a reload when in-game.
 
 ##### Optional Fields (Rollup)
 - `plugins`: An array of Rollup plugins to use.
@@ -41,12 +42,11 @@ From there you will be given some options to choose from. This command will gene
 - `esbuildOptions`: Options to pass to esbuild
 
 ##### Plugin Fields (Optional)
-- `reloadRequired`: Set to true if the plugin needs a reload to take effect, or set to "ingame" if it only needs a reload when in-game.
 - `libs`: A list of libraries to load. These strings should look like either "[library name]" or "[library name] | [download url]".
 - `optionalLibs`: The same as libs, but the plugin will still be run without these libraries.
 
 ##### Library Fields
-- `isLibrary`: Set to true if the plugin is a library.
+- `isLibrary`: Set to true if you are building a library.
 
 ### Building
 
