@@ -61,10 +61,7 @@
         const conf = confirm(`Are you sure you want to delete all libraries?`);
         if(!conf) return;
 
-        for(let i = $libs.length - 1; i >= 0; i--) {
-            let lib = $libs[i];
-            libManager.deleteLib(lib);
-        }
+        libManager.wipe();
     }
 
     function importLib() {
