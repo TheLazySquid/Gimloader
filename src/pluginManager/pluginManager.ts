@@ -99,6 +99,8 @@ export default class PluginManager {
     }
 
     saveFn() {
+        if(this.gimloader.destroyed) return;
+        
         let pluginObjs = this.plugins.value.map(p => ({ script: p.script, enabled: p.enabled }));
     
         GM_setValue('plugins', JSON.stringify(pluginObjs));
@@ -194,5 +196,14 @@ export default class PluginManager {
         }
 
         this.save();
+    }
+
+    wipe() {
+        for(let plugin of this.plugins.value) {
+            plugin.disable();
+        }
+
+        this.plugins.set([]);
+        this.saveFn();
     }
 }

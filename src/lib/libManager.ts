@@ -11,6 +11,8 @@ const libManagerMethods = {
         return this.libs.value.find((lib: Lib) => lib.headers.name === libName);
     },
     saveFn() {
+        if(this.gimloader.destroyed) return;
+
         let libStrs: string[] = [];
         for(let lib of this.libs.value) {
             libStrs.push(lib.script);
@@ -81,6 +83,14 @@ const libManagerMethods = {
                 this.deleteLib(lib);
             }
         }
+    },
+    wipe() {
+        for(let lib of this.libs.value) {
+            lib.disable();
+        }
+
+        this.libs.set([]);
+        this.saveFn();
     }
 }
 

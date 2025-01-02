@@ -87,9 +87,7 @@
         const conf = confirm("Are you sure you want to delete all plugins?");
         if (!conf) return;
 
-        for(let plugin of $pluginsStore) {
-            pluginManager.deletePlugin(plugin);
-        }
+        pluginManager.wipe();
     }
 
     async function setAll(enabled: boolean) {
