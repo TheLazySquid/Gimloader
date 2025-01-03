@@ -54,7 +54,6 @@ export class Gimloader extends EventTarget {
         showPluginButtons: GM_getValue('showPluginButtons', true),
         setShowPluginButtons
     };
-    destroyed = false;
 
     constructor() {
         super();
@@ -80,7 +79,7 @@ export class Gimloader extends EventTarget {
         GM.registerMenuCommand("Wipe All Plugins and Libraries", () => {
             if(!confirm("Do you really want to delete all plugins and libraries? This will also reload the page.")) return;
 
-            this.destroyed = true;
+            (window as any).destroyed = true;
             GM_setValue("plugins", '[]');
             GM_setValue("libs", []);
             location.reload();

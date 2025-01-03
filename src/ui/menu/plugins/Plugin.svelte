@@ -5,7 +5,7 @@
     import { showPluginCodeEditor } from "../../editCodeModals.svelte";
     import { checkPluginUpdate } from "../../../net/checkUpdates";
     import { Toggle, Modal } from "flowbite-svelte";
-    import type { LibManagerType } from "../../../lib/libManager.svelte";
+    import type { LibManagerClass } from "../../../lib/libManager.svelte";
 
     import Card from "../components/Card.svelte";
     import Delete from "svelte-material-icons/Delete.svelte";
@@ -61,7 +61,7 @@
         startDrag: () => void;
         dragDisabled: boolean;
         pluginManager: PluginManager;
-        libManager: LibManagerType;
+        libManager: LibManagerClass;
         plugin: Plugin;
         view: string;
         dragAllowed: boolean;

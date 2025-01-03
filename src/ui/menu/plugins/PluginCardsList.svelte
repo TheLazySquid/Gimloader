@@ -22,7 +22,7 @@
     }
 
     let { gimloader }: Props = $props();
-    let { pluginManager, lib: libManager } = gimloader;
+    let { pluginManager, libManager } = gimloader;
 
     let searchValue = $state("");
 

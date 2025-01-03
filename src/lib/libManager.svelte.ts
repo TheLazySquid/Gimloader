@@ -33,7 +33,7 @@ export class LibManagerClass {
     }
 
     saveFn() {
-        if(this.gimloader.destroyed) return;
+        if((window as any).destroyed) return;
 
         let libStrs: string[] = [];
         for(let lib of this.libs) {

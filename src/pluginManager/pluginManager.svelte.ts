@@ -101,7 +101,7 @@ export default class PluginManager {
     }
 
     saveFn() {
-        if(this.gimloader.destroyed) return;
+        if((window as any).destroyed) return;
         
         let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
     

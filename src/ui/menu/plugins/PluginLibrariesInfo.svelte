@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell } from "flowbite-svelte";
     import type Plugin from "../../../pluginManager/plugin.svelte";
-    import type { LibManagerType } from "../../../lib/libManager.svelte";
+    import type { LibManagerClass } from "../../../lib/libManager.svelte";
     import { checkLibUpdate } from "../../../net/checkUpdates";
     import showErrorMessage from "../../showErrorMessage";
 
@@ -11,7 +11,7 @@
 
     interface Props {
         plugin: Plugin;
-        libManager: LibManagerType;
+        libManager: LibManagerClass;
     }
 
     let { plugin, libManager }: Props = $props();
