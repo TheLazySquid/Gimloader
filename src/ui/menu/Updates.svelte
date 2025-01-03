@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Gimloader } from "../../gimloader";
+    import { Gimloader } from "../../gimloader.svelte";
     import { checkLibUpdate, checkPluginUpdate, checkScriptUpdate, compareVersions, scriptUrl } from "../../net/checkUpdates";
     import { parseLibHeader, parsePluginHeader } from "../../util";
     import showErrorMessage from "../showErrorMessage";
@@ -7,20 +7,24 @@
 
     import Update from 'svelte-material-icons/Update.svelte';
 
-    export let gimloader: Gimloader;
-    let { plugins } = gimloader.pluginManager;
-    let { libs } = gimloader.lib;
+    interface Props {
+        gimloader: Gimloader;
+    }
 
-    let showingProgress = false;
-    let completed = 0;
-    let total = 0;
+    let { gimloader }: Props = $props();
+    let libManager = gimloader.libManager;
+    let pluginManager = gimloader.pluginManager;
+
+    let showingProgress = $state(false);
+    let completed = $state(0);
+    let total = $state(0);
 
     async function checkAll() {
         if(!confirm("Do you want to try to update Gimloader, all plugins, and all libraries?")) return;
         showingProgress = true;
 
         let promises = [];
-        for(let plugin of $plugins) {
+        for(let plugin of pluginManager.plugins) {
             if(!plugin.headers.downloadUrl) continue;
             promises.push(new Promise<void>(async (res, rej) => {
                 let resp = await gimloader.net.corsRequest({ url: plugin.headers.downloadUrl })
@@ -38,7 +42,7 @@
             }))
         }
 
-        for(let lib of $libs) {
+        for(let lib of libManager.libs) {
             if(!lib.headers.downloadUrl) continue;
             promises.push(new Promise<void>(async (res, rej) => {
                 let resp = await gimloader.net.corsRequest({ url: lib.headers.downloadUrl })
@@ -52,7 +56,7 @@
 
                 if(comparison !== 'older') return res();
 
-                gimloader.lib.editLib(lib, resp.responseText, headers);
+                libManager.editLib(lib, resp.responseText, headers);
             }))
         }
 
@@ -92,7 +96,7 @@
 
 <div class="h-full overflow-y-auto">
     <div class="flex items-center">
-        <button on:click={checkAll}>
+        <button onclick={checkAll}>
             <Update size={25} />
         </button>
         Check all updates
@@ -102,19 +106,19 @@
     {/if}
     <h1 class="font-bold text-xl">Gimloader</h1>
     <div class="flex items-center">
-        <button on:click={() => checkScriptUpdate(gimloader, true)}>
+        <button onclick={() => checkScriptUpdate(gimloader, true)}>
             <Update size={25} />
         </button>
         Gimloader v{gimloader.version}
     </div>
     <h1 class="font-bold text-xl">Plugins</h1>
-    {#if $plugins.length === 0}
+    {#if pluginManager.plugins.length === 0}
         <h2 class="text-lg">No plugins installed</h2>
     {:else}
-        {#each $plugins as plugin}
+        {#each pluginManager.plugins as plugin}
             <div class="flex items-center">
                 {#if plugin.headers.downloadUrl}
-                    <button on:click={() => checkPluginUpdate(plugin).then(plugins.update)}>
+                    <button onclick={() => checkPluginUpdate(plugin)}>
                         <Update size={25} />
                     </button>
                 {/if}
@@ -123,13 +127,13 @@
         {/each}
     {/if}
     <h1 class="font-bold text-xl">Libraries</h1>
-    {#if $libs.length === 0}
+    {#if libManager.libs.length === 0}
         <h2 class="text-lg">No libraries installed</h2>
     {:else}
-        {#each $libs as lib}
+        {#each libManager.libs as lib}
             <div class="flex items-center">
                 {#if lib.headers.downloadUrl}
-                    <button on:click={() => checkLibUpdate(lib).then(libs.update)}>
+                    <button onclick={() => checkLibUpdate(lib)}>
                         <Update size={25} />
                     </button>
                 {/if}

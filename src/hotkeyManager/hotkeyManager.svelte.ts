@@ -1,13 +1,39 @@
-import { easyAccessWritable } from "$src/util";
-import type { IConfigurableHotkey, IConfigurableHotkeyOptions, IHotkey } from "../types";
+import { SvelteMap, SvelteSet } from "svelte/reactivity";
+import type { IConfigurableHotkeyOptions, IHotkey } from "../types";
 
 const shiftKeyHeldKeys = `~!@#$%^&*()_+{}|:"<>?`;
 const normalKeys = "`1234567890-=[]\\;',./";
 
+export class ConfigurableHotkey {
+    id: string;
+    category: string;
+    title: string;
+    preventDefault: boolean;
+    callback: (event: KeyboardEvent) => void;
+    keys: SvelteSet<string>;
+    defaultKeys?: Set<string>;
+
+    constructor(manager: HotkeyManager, id: string, callback: (event: KeyboardEvent) => void,
+        options: IConfigurableHotkeyOptions) {
+        this.id = id;
+        this.category = options.category;
+        this.title = options.title;
+        this.preventDefault = options.preventDefault ?? true;
+        this.defaultKeys = options.defaultKeys;
+        this.callback = callback;
+
+        if(manager.savedHotkeys[id]) {
+            this.keys = new SvelteSet(manager.savedHotkeys[id]);
+        } else if(options.defaultKeys) {
+            this.keys = new SvelteSet(options.defaultKeys);
+        }
+    }
+}
+
 export default class HotkeyManager {
     pressedKeys: Set<string> = new Set();
     hotkeys: Map<Set<string>, IHotkey> = new Map();
-    configurableHotkeys = easyAccessWritable(new Map<string, IConfigurableHotkey>());
+    configurableHotkeys = new SvelteMap<string, ConfigurableHotkey>();
     savedHotkeys: Record<string, string[]> = GM_getValue('configurableHotkeys', {});
 
     constructor() {
@@ -56,7 +82,7 @@ export default class HotkeyManager {
             }
         }
 
-        for(let hotkey of this.configurableHotkeys.value.values()) {
+        for(let hotkey of this.configurableHotkeys.values()) {
             if (this.setPressed(hotkey.keys)) {
                 if(hotkey.preventDefault) event.preventDefault();
                 hotkey.callback(event);
@@ -83,34 +109,18 @@ export default class HotkeyManager {
 
         let hotkeyId = `${pluginName}-${id}`;
 
-        let set: Set<string> = new Set();
-        if(this.savedHotkeys[hotkeyId]) {
-            set = new Set(this.savedHotkeys[hotkeyId]);
-        } else if(options.defaultKeys) {
-            set = options.defaultKeys;
-        }
+        let hotkey = new ConfigurableHotkey(this, hotkeyId, callback, options);
 
-        let hotkey: IConfigurableHotkey = {
-            id: hotkeyId,
-            category: options.category,
-            title: options.title,
-            preventDefault: options.preventDefault ?? true,
-            callback,
-            keys: set,
-            defaultKeys: options.defaultKeys
-        };
-
-        this.configurableHotkeys.value.set(hotkeyId, hotkey);
-        this.configurableHotkeys.update();
+        this.configurableHotkeys.set(hotkeyId, hotkey);
     }
 
     removeConfigurable(pluginName: string, id: string) {
-        this.configurableHotkeys.value.delete(`${pluginName}-${id}`);
+        this.configurableHotkeys.delete(`${pluginName}-${id}`);
     }
 
     saveConfigurableHotkeys() {
         this.savedHotkeys = {};
-        for(let [id, hotkey] of this.configurableHotkeys.value.entries()) {
+        for(let [id, hotkey] of this.configurableHotkeys.entries()) {
             this.savedHotkeys[id] = Array.from(hotkey.keys);
         }
 

@@ -1,4 +1,4 @@
-import type { Gimloader } from "$src/gimloader";
+import type { Gimloader } from "$src/gimloader.svelte";
 import { log, parseLibHeader } from "../util";
 
 export default class Lib {

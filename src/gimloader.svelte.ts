@@ -7,16 +7,16 @@ import styles from './css/styles.scss';
 import { log, onGimkit } from './util';
 import { addPluginButtons, setShowPluginButtons } from './ui/addPluginButtons';
 import Parcel from './parcel/parcel';
-import Net from './net/net';
-import HotkeyManager from './hotkeyManager/hotkeyManager';
+import Net from './net/net.svelte';
+import HotkeyManager from './hotkeyManager/hotkeyManager.svelte';
 import showModal from './ui/modal';
 import { addStyles, removeStyles } from './ui/addStyles';
 import Patcher from './patcher/patcher';
 import { gimhookPolyfill } from './gimhookPolyfill';
 import ContextMenu from './contextMenu/contextMenu';
-import PluginManager from './pluginManager/pluginManager';
+import PluginManager from './pluginManager/pluginManager.svelte';
 import Storage from './storage/storage';
-import makeLibManager from './lib/libManager';
+import makeLibManager, { LibManagerClass, type LibType } from './lib/libManager.svelte';
 import Poller from './net/poller';
 import { checkScriptUpdate } from './net/checkUpdates';
 
@@ -31,14 +31,15 @@ export class Gimloader extends EventTarget {
     /** @deprecated No longer supported */
     platformerPhysics: any;
 
-    settings = {
+    settings = $state({
         autoUpdate: GM_getValue('autoUpdate', false),
         autoDownloadMissingLibs: GM_getValue('autoDownloadMissingLibs', true),
         menuView: GM_getValue('menuView', 'grid')
-    };
+    });
 
     parcel: Parcel = new Parcel(this);
-    lib = makeLibManager(this);
+    lib: LibType;
+    libManager: LibManagerClass;
     net: Net = new Net(this);
     pluginManager: PluginManager = new PluginManager(this, onGimkit);
     patcher: Patcher = new Patcher();
@@ -58,6 +59,10 @@ export class Gimloader extends EventTarget {
     constructor() {
         super();
         log('Gimloader v' + this.version + ' loaded');
+
+        let [lib, libManager] = makeLibManager(this);
+        this.lib = lib;
+        this.libManager = libManager;
 
         this.addStyleSheets();
         this.getReact();

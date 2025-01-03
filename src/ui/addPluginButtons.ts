@@ -1,15 +1,16 @@
-import type { Gimloader } from "../gimloader";
+import type { Gimloader } from "../gimloader.svelte";
 import wrench from '../../assets/wrench.svg';
+import { mount, unmount } from "svelte";
 import MenuUI from "$src/ui/menu/MenuUI.svelte";
 
 function openPluginManager() {
-    let component = new MenuUI({
+    let component = mount(MenuUI, {
         target: document.body,
         props: {
             gimloader: GL,
-            onClose: () => component.$destroy()
+            onClose: () => unmount(component)
         }
-    })
+    });
 }
 
 export function setShowPluginButtons(loader: Gimloader, value: boolean) {

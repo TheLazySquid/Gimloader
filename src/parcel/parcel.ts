@@ -2,7 +2,7 @@
     This method of intercepting modules was inspired by https://codeberg.org/gimhook/gimhook
 */
 
-import type { Gimloader } from "../gimloader";
+import type { Gimloader } from "../gimloader.svelte";
 import type { Intercept, RequireHook } from "../types";
 import { log, onGimkit } from "../util";
 

@@ -1,32 +1,55 @@
-import { confirmLibReload, easyAccessWritable, parseLibHeader } from '$src/util';
+import { confirmLibReload, parseLibHeader } from '$src/util';
 import Lib from './lib';
-import type { EasyAccessWritable } from '$src/types';
 import debounce from 'debounce';
-import type { Gimloader } from '$src/gimloader';
+import type { Gimloader } from '$src/gimloader.svelte';
 
 // The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
 // If there is a better way to do this please let me know
-const libManagerMethods = {
+export class LibManagerClass {
+    libs: Lib[] = $state();
+    gimloader: Gimloader;
+
+    constructor(gimloader: Gimloader) {
+        let libScripts = GM_getValue('libs', []) as string[];
+
+        let libs = [];
+        // convert from the old, unordered version
+        if(!Array.isArray(libScripts)) {
+            libScripts = Object.values(libScripts);
+        }
+    
+        for(let script of libScripts) {
+            let lib = new Lib(gimloader, script);
+    
+            libs.push(lib);
+        }
+        this.libs = libs;
+
+        this.gimloader = gimloader;
+    }
+
     getLib(libName: string): Lib {
-        return this.libs.value.find((lib: Lib) => lib.headers.name === libName);
-    },
+        return this.libs.find((lib: Lib) => lib.headers.name === libName);
+    }
+
     saveFn() {
         if(this.gimloader.destroyed) return;
 
         let libStrs: string[] = [];
-        for(let lib of this.libs.value) {
+        for(let lib of this.libs) {
             libStrs.push(lib.script);
         }
 
         GM_setValue('libs', libStrs);
+    }
 
-    },
-    save(libs?: Record<string, string>) {
-        if(libs) this.libs.value = libs;
+    saveDebounced?: () => void;
+    save() {
         if(!this.saveDebounced) this.saveDebounced = debounce(this.saveFn, 100);
 
         this.saveDebounced();
-    },
+    }
+
     createLib(script: string, headers?: Record<string, any>, ignoreDuplicates?: boolean) {
         headers = headers ?? parseLibHeader(script);
         
@@ -46,20 +69,20 @@ const libManagerMethods = {
         }
 
         let lib = new Lib(this.gimloader, script, headers);
-        this.libs.value.unshift(lib);
+        this.libs.unshift(lib);
 
         this.save();
-        this.libs.update();
 
         return lib;
-    },
+    }
+
     deleteLib(lib: Lib) {
         lib.disable();
-        this.libs.value.splice(this.libs.value.indexOf(lib), 1);
+        this.libs.splice(this.libs.indexOf(lib), 1);
 
         this.save();
-        this.libs.update();
-    },
+    }
+
     async editLib(lib: Lib, code: string, headers?: Record<string, any>) {
         headers = headers ?? parseLibHeader(code);
 
@@ -83,54 +106,38 @@ const libManagerMethods = {
                 this.deleteLib(lib);
             }
         }
-    },
+    }
+
     wipe() {
-        for(let lib of this.libs.value) {
+        for(let lib of this.libs) {
             lib.disable();
         }
 
-        this.libs.set([]);
+        this.libs = [];
         this.saveFn();
     }
 }
 
 export type GetLibType = (lib: string) => any;
-export interface LibManagerBase extends GetLibType {
+export interface LibType extends GetLibType {
     get: GetLibType;
-    libs: EasyAccessWritable<Lib[]>;
+    getLib: (libName: string) => Lib;
 };
-type additionalValuesType = typeof libManagerMethods;
-export interface LibManagerType extends LibManagerBase, additionalValuesType {};
 
-function makeLibManager(gimloader: Gimloader) {
-    let libScripts = GM_getValue('libs', []) as string[];
-
-    // convert from the old, unordered version
-    if(!Array.isArray(libScripts)) {
-        libScripts = Object.values(libScripts);
-    }
-
-    let libs = easyAccessWritable<Lib[]>([]);
-
-    for(let script of libScripts) {
-        let lib = new Lib(gimloader, script);
-
-        libs.value.push(lib);
-    }
-
-    libs.update();
+function makeLibManager(gimloader: Gimloader): [LibType, LibManagerClass] {
+    const libManager = new LibManagerClass(gimloader);
 
     const get = function(libName: string) {
-        let lib = libs.value.find(lib => lib.headers.name === libName);
+        let lib = libManager.libs.find(lib => lib.headers.name === libName);
         return lib?.library ?? null;
     }
     
-    const lib: LibManagerType = get as LibManagerType;
+    const lib: LibType = get as LibType;
+
     Object.assign(lib, {
-        gimloader,
         get,
-        libs
-    }, libManagerMethods);
+        getLib: (name: string) => libManager.getLib(name)
+    });
 
     GM_addValueChangeListener('libs', (_, __, value: string[], remote) => {
         if(!remote) return;
@@ -142,24 +149,24 @@ function makeLibManager(gimloader: Gimloader) {
         }
 
         // check if any libraries were removed
-        for(let checkLib of libs.value) {
+        for(let checkLib of libManager.libs) {
             if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
-                lib.deleteLib(checkLib);
+                libManager.deleteLib(checkLib);
             }
         }
 
         // check if any libraries were added
         for(let newLib of newLibs) {
-            if(!libs.value.some(lib => lib.headers.name === newLib.headers.name)) {
-                lib.createLib(newLib.script, newLib.headers, true);
+            if(!libManager.libs.some(lib => lib.headers.name === newLib.headers.name)) {
+                libManager.createLib(newLib.script, newLib.headers, true);
             }
         }
 
         // check if any libraries were updated
         for(let newLib of newLibs) {
-            let existing = libs.value.find(lib => lib.headers.name === newLib.headers.name);
+            let existing = libManager.libs.find(lib => lib.headers.name === newLib.headers.name);
             if(existing.script !== newLib.script) {
-                lib.editLib(existing, newLib.script, newLib.headers);
+                libManager.editLib(existing, newLib.script, newLib.headers);
             }
         }
 
@@ -170,10 +177,10 @@ function makeLibManager(gimloader: Gimloader) {
             if (setLib) newOrder.push(setLib);
         }
 
-        lib.libs.set(newOrder);
+        libManager.libs = newOrder;
     })
 
-    return lib;
+    return [lib, libManager];
 }
 
 export default makeLibManager;

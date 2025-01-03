@@ -1,4 +1,4 @@
-import type { Gimloader } from "$src/gimloader";
+import type { Gimloader } from "$src/gimloader.svelte";
 export default class Lib {
     gimloader: Gimloader;
     script: string;

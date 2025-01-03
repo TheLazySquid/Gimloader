@@ -1,5 +1,4 @@
-import type { ComponentType, SvelteComponent } from "svelte";
-import type { EasyAccessWritable } from "./types";
+import { mount, type Component } from "svelte";
 import type Lib from "./lib/lib";
 
 // gotta have pretty console.logs
@@ -27,43 +26,16 @@ export function stopOverrideKeydown() {
     keydownOverriding = false;
 }
 
-export function easyAccessWritable<T>(initial: T): EasyAccessWritable<T> {
-    let callbacks = new Set<(value: T) => void>();
-
-    return {
-        value: initial,
-        set(value: T) {
-            this.value = value;
-            for(let callback of callbacks) {
-                callback(value);
-            }
-        },
-        update() {
-            for(let callback of callbacks) {
-                callback(this.value);
-            }
-        },
-        subscribe(callback: (value: T) => void) {
-            callbacks.add(callback);
-            callback(this.value);
-
-            return () => {
-                callbacks.delete(callback);
-            }
-        }
-    }
-}
-
-export function renderSvelteComponent(Component: ComponentType, props: Record<string, any> = {}): [HTMLDivElement, SvelteComponent] {
+export function renderSvelteComponent(component: Component, props: Record<string, any> = {}): [HTMLDivElement, Record<string, any>] {
     let div = document.createElement('div');
     div.style.display = "contents";
 
-    let component = new Component({
+    let comp = mount(component, {
         target: div,
         props
     });
 
-    return [div, component];
+    return [div, comp];
 }
 
 export function readUserFile(accept: string) {

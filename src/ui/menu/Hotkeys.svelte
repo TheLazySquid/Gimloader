@@ -1,29 +1,30 @@
 <script lang="ts">
-    import type HotkeyManager from "../../hotkeyManager/hotkeyManager";
-    import type { EasyAccessWritable, IConfigurableHotkey } from "../../types";
+    import type HotkeyManager from "../../hotkeyManager/hotkeyManager.svelte";
     import { Button, Popover } from "flowbite-svelte";
     import Undo from 'svelte-material-icons/Undo.svelte';
     import { overrideKeydown, stopOverrideKeydown } from '../../util';
     import { onDestroy } from "svelte";
+    import type { ConfigurableHotkey } from "../../hotkeyManager/hotkeyManager.svelte";
+    import { SvelteSet } from "svelte/reactivity";
 
-    export let hotkeyManager: HotkeyManager;
-    let hotkeys: EasyAccessWritable<Map<string, IConfigurableHotkey>> = hotkeyManager.configurableHotkeys;
+    let { hotkeyManager }: { hotkeyManager: HotkeyManager} = $props();
+    let hotkeys = hotkeyManager.configurableHotkeys;
 
-    let categories: Record<string, IConfigurableHotkey[]> = {};
-    $: {
-        categories = {};
-        for (let hotkey of $hotkeys.values()) {
+    let categories: Record<string, ConfigurableHotkey[]> = $derived.by(() => {
+        let categories = {};
+        for (let hotkey of hotkeys.values()) {
             if (!categories[hotkey.category]) {
                 categories[hotkey.category] = [];
             }
             categories[hotkey.category].push(hotkey);
         }
-    }
+        return categories;
+    });
 
-    let configuring: IConfigurableHotkey | null = null;
+    let configuring: ConfigurableHotkey | null = null;
     let configureClear = true;
 
-    function startConfigure(hotkey: IConfigurableHotkey) {
+    function startConfigure(hotkey: ConfigurableHotkey) {
         configuring = hotkey;
         configureClear = true;
         overrideKeydown(onKeydown);
@@ -47,8 +48,6 @@
         } else {
             configuring.keys.add(e.key.toLowerCase());
         }
-
-        hotkeys.update();
     }
 
     function stopConfigure() {
@@ -69,25 +68,24 @@
         stopConfigure();
     }
 
-    function reset(hotkey: IConfigurableHotkey, noSave = false) {
+    function reset(hotkey: ConfigurableHotkey, noSave = false) {
+        hotkey.keys.clear();
         if(hotkey.defaultKeys) {
-            hotkey.keys = new Set(hotkey.defaultKeys);
-        } else {
-            hotkey.keys = new Set();
+            for(let key of hotkey.defaultKeys) {
+                hotkey.keys.add(key);
+            }
         }
 
         if(noSave) return;
-        hotkeys.update();
         hotkeyManager.saveConfigurableHotkeys();
     }
 
     function resetAll() {
         if(!confirm("Are you sure you want to reset all hotkeys?")) return;
-        for(let hotkey of $hotkeys.values()) {
+        for(let hotkey of hotkeys.values()) {
             reset(hotkey, true);
         }
 
-        hotkeys.update();
         hotkeyManager.saveConfigurableHotkeys();
     }
 
@@ -107,7 +105,7 @@
                 <div class="flex items-center">
                     {hotkey.title}
                 </div>
-                <Button id={hotkey.id} on:click={() => startConfigure(hotkey)}>
+                <Button id={hotkey.id} onclick={() => startConfigure(hotkey)}>
                     {#if hotkey.keys.size === 0}
                         Not Bound
                     {:else}
@@ -117,7 +115,7 @@
                 <Popover title="Configure Hotkey" trigger="focus" on:show={onShow}>
                     Click outside or hit enter to confirm
                 </Popover>
-                <button on:click={() => reset(hotkey)}>
+                <button onclick={() => reset(hotkey)}>
                     <Undo />
                 </button>
                 <div></div>
@@ -129,7 +127,7 @@
     </div>
     <div>
         {#if Object.keys(categories).length > 0}
-            <Button class="h-7" on:click={resetAll}>
+            <Button class="h-7" onclick={resetAll}>
                 <Undo class="mr-1" />Reset All
             </Button>
         {/if}

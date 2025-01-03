@@ -2,16 +2,35 @@
     import DotsGrid from "svelte-material-icons/DotsGrid.svelte";
     import ChevronRight from "svelte-material-icons/ChevronRight.svelte";
 
-    export let startDrag: () => void;
-    export let dragDisabled: boolean;
-    export let loading = false;
-    export let dragAllowed = true;
+    interface Props {
+        startDrag: () => void;
+        dragDisabled: boolean;
+        loading?: boolean;
+        dragAllowed?: boolean;
+        toggle?: import('svelte').Snippet;
+        header?: import('svelte').Snippet;
+        buttons?: import('svelte').Snippet;
+        author?: import('svelte').Snippet;
+        description?: import('svelte').Snippet;
+    }
+
+    let {
+        startDrag,
+        dragDisabled,
+        loading = false,
+        dragAllowed = true,
+        toggle,
+        header,
+        buttons,
+        author,
+        description
+    }: Props = $props();
 
     function checkDrag() {
         if(dragAllowed) startDrag();
     }
 
-    let expanded = false;
+    let expanded = $state(false);
 </script>
 
 <div class="border border-gray-500 p-3 h-full bg-white preflight rounded-xl relative">
@@ -22,30 +41,30 @@
             </div>
         {/if}
         <button class="transition-transform" style={expanded ? 'transform: rotate(90deg)' : ''}
-        on:click={() => expanded = !expanded}>
+        onclick={() => expanded = !expanded}>
             <ChevronRight width={28} height={28} />
         </button>
-        <slot name="toggle" />
+        {@render toggle?.()}
         <div class="flex-grow leading-3 ml-2 min-w-0">
-            <slot name="header" />
+            {@render header?.()}
         </div>
 
         <div class="flex flex-row-reverse items-end">
-            <slot name="buttons" />
+            {@render buttons?.()}
         </div>
         <div style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
         title={dragAllowed ? '' : 'Cannot rearrange while searching'}
-        class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
+        class:opacity-50={!dragAllowed} onpointerdown={checkDrag}>
             <DotsGrid size={28} />
         </div>
     </div>
     {#if expanded}
         <div class="ml-7">
             <div class="overflow-ellipsis overflow-hidden whitespace-nowrap w-full text-base leading-4">
-                <slot name="author" />
+                {@render author?.()}
             </div>
             <div class="flex-grow text-sm pr-7 overflow-hidden overflow-ellipsis">
-                <slot name="description" />
+                {@render description?.()}
             </div>
         </div>
     {/if}

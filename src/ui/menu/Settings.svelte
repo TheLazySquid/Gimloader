@@ -1,11 +1,15 @@
 <script lang="ts">
     import { Toggle } from "flowbite-svelte";
-    import type { Gimloader } from "../../gimloader";
+    import type { Gimloader } from "../../gimloader.svelte";
     import { checkScriptUpdate } from "$src/net/checkUpdates";
 
-    export let gimloader: Gimloader;
-    let buttonsEnabled = gimloader.UI.showPluginButtons;
-    let pollEnabled = gimloader.poller.enabled;
+    interface Props {
+        gimloader: Gimloader;
+    }
+
+    let { gimloader = $bindable() }: Props = $props();
+    let buttonsEnabled = $state(gimloader.UI.showPluginButtons);
+    let pollEnabled = $state(gimloader.poller.enabled);
 
     function saveAutoUpdate() {
         GM_setValue('autoUpdate', gimloader.settings.autoUpdate);

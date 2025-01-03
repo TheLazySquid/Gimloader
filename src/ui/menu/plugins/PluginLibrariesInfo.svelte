@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell } from "flowbite-svelte";
-    import type Plugin from "../../../pluginManager/plugin";
-    import type { LibManagerType } from "../../../lib/libManager";
+    import type Plugin from "../../../pluginManager/plugin.svelte";
+    import type { LibManagerType } from "../../../lib/libManager.svelte";
     import { checkLibUpdate } from "../../../net/checkUpdates";
     import showErrorMessage from "../../showErrorMessage";
 
@@ -9,8 +9,12 @@
     import Update from "svelte-material-icons/Update.svelte";
     import Download from "svelte-material-icons/Download.svelte";
 
-    export let plugin: Plugin;
-    export let libManager: LibManagerType;
+    interface Props {
+        plugin: Plugin;
+        libManager: LibManagerType;
+    }
+
+    let { plugin, libManager }: Props = $props();
     
     interface ILibInfo {
         name: string;
@@ -18,17 +22,19 @@
         required: boolean;
     }
 
-    let libsInfo: ILibInfo[] = [];
+    let libsInitial: ILibInfo[] = [];
 
     for(let lib of plugin.headers.needsLib) {
         let parts = lib.split('|').map((p: string) => p.trim());
-        libsInfo.push({ name: parts[0], url: parts[1], required: true });
+        libsInitial.push({ name: parts[0], url: parts[1], required: true });
     }
 
     for(let lib of plugin.headers.optionalLib) {
         let parts = lib.split('|').map((p: string) => p.trim());
-        libsInfo.push({ name: parts[0], url: parts[1], required: false });
+        libsInitial.push({ name: parts[0], url: parts[1], required: false });
     }
+
+    let libsInfo: ILibInfo[] = $state(libsInitial);
 
     function downloadLib(name: string, url: string) {
         GL.net.downloadLibrary(url)
@@ -64,11 +70,11 @@
                 <TableBodyCell>{libInfo.required ? 'Yes' : 'No'}</TableBodyCell>
                 <TableBodyCell>
                     {#if lib && lib.headers.downloadUrl}
-                        <button on:click={() => checkLibUpdate(lib)}>
+                        <button onclick={() => checkLibUpdate(lib)}>
                             <Update size={25} />
                         </button>
                     {:else if libInfo.url}
-                        <button on:click={() => downloadLib(libInfo.name, libInfo.url)}>
+                        <button onclick={() => downloadLib(libInfo.name, libInfo.url)}>
                             <Download size={25} />
                         </button>
                     {/if}

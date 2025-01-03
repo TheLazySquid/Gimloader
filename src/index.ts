@@ -1,4 +1,4 @@
-import { Gimloader } from "./gimloader";
+import { Gimloader } from "./gimloader.svelte";
 import initInstallApi from "./installApi";
 import { onGimkit } from "./util";
 

@@ -1,11 +1,9 @@
-import type { ComponentType, SvelteComponent } from "svelte";
-import type { EasyAccessWritable } from "./types";
+import { type Component } from "svelte";
 import type Lib from "./lib/lib";
 export declare function log(...args: any[]): void;
 export declare function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
 export declare function stopOverrideKeydown(): void;
-export declare function easyAccessWritable<T>(initial: T): EasyAccessWritable<T>;
-export declare function renderSvelteComponent(Component: ComponentType, props?: Record<string, any>): [HTMLDivElement, SvelteComponent];
+export declare function renderSvelteComponent(component: Component, props?: Record<string, any>): [HTMLDivElement, Record<string, any>];
 export declare function readUserFile(accept: string): Promise<string>;
 export declare const onGimkit: boolean;
 export declare function parsePluginHeader(code: string): Record<string, any>;

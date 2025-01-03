@@ -2,12 +2,12 @@
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import Plugin from "./Plugin.svelte";
-    import { createPlugin } from "../../editCodeModals";
+    import { createPlugin } from "../../editCodeModals.svelte";
     import { readUserFile } from "../../../util";
     import { Button, Dropdown, DropdownItem } from "flowbite-svelte";
     import showErrorMessage from "../../showErrorMessage";
     import Search from '../components/Search.svelte';
-    import type { Gimloader } from "$src/gimloader";
+    import type { Gimloader } from "$src/gimloader.svelte";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
@@ -17,18 +17,24 @@
 
     const flipDurationMs = 300;
 
-    export let gimloader: Gimloader;
+    interface Props {
+        gimloader: Gimloader;
+    }
+
+    let { gimloader }: Props = $props();
     let { pluginManager, lib: libManager } = gimloader;
-    let pluginsStore = pluginManager.plugins;
 
-    let searchValue = "";
+    let searchValue = $state("");
 
-    let items = $pluginsStore.map((plugin) => ({ id: plugin.headers.name }));
-    $: items = $pluginsStore
-        .filter((plugin) => plugin.headers.name.toLowerCase().includes(searchValue.toLowerCase()))
-        .map((plugin) => ({ id: plugin.headers.name }));
+    let items = $state(pluginManager.plugins.map((plugin) => ({ id: plugin.headers.name })));
 
-    let dragDisabled = true;
+    $effect(() => {
+        items = pluginManager.plugins
+            .filter((plugin) => plugin.headers.name.toLowerCase().includes(searchValue.toLowerCase()))
+            .map((plugin) => ({ id: plugin.headers.name }));
+    });
+
+    let dragDisabled = $state(true);
 
     function handleDndConsider(e: any) {
         items = e.detail.items;
@@ -41,10 +47,10 @@
         // Update the order of the plugins
         let newOrder = [];
         for (let item of items) {
-            let plugin = $pluginsStore.find((p) => p.headers.name === item.id);
+            let plugin = pluginManager.plugins.find((p) => p.headers.name === item.id);
             if (plugin) newOrder.push(plugin);
         }
-        pluginManager.plugins.set(newOrder);
+        pluginManager.plugins = newOrder;
         pluginManager.save();
     }
 
@@ -61,29 +67,29 @@
             .catch(() => {});
     }
 
-    let sortOpen = false;
+    let sortOpen = $state(false);
 
     function sortEnabled() {
         sortOpen = false;
-        let enabled = $pluginsStore.filter((p) => p.enabled);
-        let disabled = $pluginsStore.filter((p) => !p.enabled);
-        pluginManager.plugins.set(enabled.concat(disabled));
+        let enabled = pluginManager.plugins.filter((p) => p.enabled);
+        let disabled = pluginManager.plugins.filter((p) => !p.enabled);
+        pluginManager.plugins = enabled.concat(disabled);
         pluginManager.save();
     }
 
     function sortAlphabetical() {
         sortOpen = false;
-        let sorted = $pluginsStore.sort((a, b) => a.headers.name.localeCompare(b.headers.name));
-        pluginManager.plugins.set(sorted);
+        let sorted = pluginManager.plugins.sort((a, b) => a.headers.name.localeCompare(b.headers.name));
+        pluginManager.plugins = sorted;
         pluginManager.save();
     }
 
-    let bulkOpen = false;
+    let bulkOpen = $state(false);
 
     function deleteAll() {
         bulkOpen = false;
 
-        if($pluginsStore.length === 0) return;
+        if(pluginManager.plugins.length === 0) return;
         const conf = confirm("Are you sure you want to delete all plugins?");
         if (!conf) return;
 
@@ -94,13 +100,13 @@
         bulkOpen = false;
 
         if(!enabled) {
-            for(let plugin of $pluginsStore) {
+            for(let plugin of pluginManager.plugins) {
                 if(plugin.enabled) plugin.disable();
             }
 
             pluginManager.save();
         } else {
-            let toEnable = $pluginsStore.filter((p) => !p.enabled);
+            let toEnable = pluginManager.plugins.filter((p) => !p.enabled);
             let res = await Promise.allSettled(toEnable.map((p) => p.enable()));
             let errors = res.filter((r) => r.status === "rejected");
 
@@ -119,10 +125,10 @@
 
 <div class="flex flex-col">
     <div class="flex items-center mb-[3px]">
-        <button on:click={() => createPlugin(pluginManager)}>
+        <button onclick={() => createPlugin(pluginManager)}>
             <PlusBoxOutline size={32} />
         </button>
-        <button on:click={importPlugin}>
+        <button onclick={importPlugin}>
             <Import size={32} />
         </button>
         <Button class="h-7 mr-2">Bulk actions<ChevronDown class="ml-1" size={20} /></Button>
@@ -138,22 +144,22 @@
         </Dropdown>
         <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1" 
             class:bg-gray-200={gimloader.settings.menuView == 'grid'}
-            on:click={() => setView('grid')}>
+            onclick={() => setView('grid')}>
             <ViewModule width={24} height={24} />
         </button>
         <button class="w-[30px] h-7 flex items-center justify-center rounded-md ml-1"
             class:bg-gray-200={gimloader.settings.menuView == 'list'}
-            on:click={() => setView('list')}>
+            onclick={() => setView('list')}>
             <ViewList width={24} height={24} />
         </button>
         <Search bind:value={searchValue} />
     </div>
-    {#if $pluginsStore.length === 0}
+    {#if pluginManager.plugins.length === 0}
         <h2 class="text-xl">No plugins installed! Import or create one to get started.</h2>
     {/if}
     <div class="max-h-full overflow-y-auto grid gap-4 pb-1 flex-grow plugins-{gimloader.settings.menuView}"
     use:dndzone={{ items, flipDurationMs, dragDisabled, dropTargetStyle: {} }}
-    on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
+    onconsider={handleDndConsider} onfinalize={handleDndFinalize}>
         {#key searchValue}
             {#each items as item (item.id)}
                 {@const plugin = pluginManager.getPlugin(item.id)}

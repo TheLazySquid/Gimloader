@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "0.11.8",
+  "version": "0.12.0",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -36,7 +36,7 @@
     "antd": "^5.17.0",
     "autoprefixer": "^10.4.20",
     "esbuild": "^0.23.1",
-    "esbuild-svelte": "^0.8.2",
+    "esbuild-svelte": "^0.9.0",
     "postcss": "^8.4.41",
     "postcss-load-config": "^6.0.1",
     "postcss-minify": "^1.1.0",
@@ -57,6 +57,7 @@
     "debounce": "^2.1.0",
     "flowbite": "^2.5.1",
     "flowbite-svelte": "^0.46.15",
+    "svelte": "^5.16.0",
     "svelte-dnd-action": "^0.9.50",
     "svelte-material-icons": "^3.0.5"
   }

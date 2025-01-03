@@ -1,20 +1,14 @@
 <script lang="ts">
     import Card from "../components/Card.svelte";
     import type Lib from "../../../lib/lib";
-    import type { LibManagerType } from "../../../lib/libManager";
+    import type { LibManagerType } from "../../../lib/libManager.svelte";
 
     import Delete from "svelte-material-icons/Delete.svelte";
     import Pencil from "svelte-material-icons/Pencil.svelte";
     import Update from "svelte-material-icons/Update.svelte";
-    import { showLibCodeEditor } from "../../editCodeModals";
+    import { showLibCodeEditor } from "../../editCodeModals.svelte";
     import { checkLibUpdate } from "../../../net/checkUpdates";
     import ListItem from "../components/ListItem.svelte";
-
-    export let startDrag: () => void;
-    export let dragDisabled: boolean;
-    export let library: Lib;
-    export let libManager: LibManagerType;
-    export let view: string;
 
     function deleteLib() {
         let conf = confirm(`Are you sure you want to delete ${library.headers.name}?`);
@@ -23,37 +17,54 @@
         libManager.deleteLib(library);
     }
 
-    $: component = view === 'grid' ? Card : ListItem;
+    interface Props {
+        startDrag: () => void;
+        dragDisabled: boolean;
+        library: Lib;
+        libManager: LibManagerType;
+        view: string;
+        dragAllowed: boolean;
+    }
 
-    export let dragAllowed: boolean;
+    let {
+        startDrag,
+        dragDisabled,
+        library,
+        libManager,
+        view,
+        dragAllowed
+    }: Props = $props();
+    let component = $derived(view === 'grid' ? Card : ListItem);
+
+    const SvelteComponent = $derived(component);
 </script>
 
-<svelte:component this={component} {dragDisabled} {startDrag} {dragAllowed}>
-    <svelte:fragment slot="header">
+<SvelteComponent {dragDisabled} {startDrag} {dragAllowed}>
+    {#snippet header()}
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {library?.headers.name}
             {#if library?.headers.version}
                 <span class="text-sm">v{library?.headers.version}</span>
             {/if}
         </h2>
-    </svelte:fragment>
-    <svelte:fragment slot="author">
+    {/snippet}
+    {#snippet author()}
         By {library?.headers.author}
-    </svelte:fragment>
-    <svelte:fragment slot="description">
+    {/snippet}
+    {#snippet description()}
         {library?.headers.description}
-    </svelte:fragment>
-    <svelte:fragment slot="buttons">
-        <button on:click={deleteLib}>
+    {/snippet}
+    {#snippet buttons()}
+        <button onclick={deleteLib}>
             <Delete size={28} />
         </button>
-        <button on:click={() => showLibCodeEditor(library, libManager)}>
+        <button onclick={() => showLibCodeEditor(library, libManager)}>
             <Pencil size={28} />
         </button>
         {#if library?.headers.downloadUrl}
-            <button on:click={() => checkLibUpdate(library)}>
+            <button onclick={() => checkLibUpdate(library)}>
                 <Update size={28} />
             </button>
         {/if}
-    </svelte:fragment>
-</svelte:component>
+    {/snippet}
+</SvelteComponent>

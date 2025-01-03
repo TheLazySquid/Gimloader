@@ -1,14 +1,14 @@
-import type { Gimloader } from "$src/gimloader";
-import type Lib from "$src/lib/lib";
+import type { Gimloader } from "../gimloader.svelte";
+import type Lib from "../lib/lib";
 import showErrorMessage from "$src/ui/showErrorMessage";
 import { confirmLibReload, log, parsePluginHeader } from "../util";
 
 export default class Plugin {    
     gimloader: Gimloader;
     script: string;
-    enabled: boolean;
-    headers: Record<string, any>;
-    return: any;
+    enabled: boolean = $state();
+    headers: Record<string, any> = $state();
+    return: any = $state();
 
     constructor(gimloader: Gimloader, script: string, enabled = true) {
         this.gimloader = gimloader;
@@ -50,7 +50,6 @@ export default class Plugin {
     
                     if(!libObj) {
                         this.enabled = false;
-                        this.gimloader.pluginManager.plugins.update();
                         rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
                         return;
                     }
@@ -97,7 +96,6 @@ export default class Plugin {
                     let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
                     this.enabled = false;
                     rej(err);
-                    this.gimloader.pluginManager.plugins.update();
                     return;
                 }
             }
@@ -110,7 +108,6 @@ export default class Plugin {
                 .then((returnVal) => {
                     this.return = returnVal;
                     this.enabled = true;
-                    this.gimloader.pluginManager.plugins.update();
             
                     log(`Loaded plugin: ${this.headers.name}`);
                     
@@ -140,7 +137,6 @@ export default class Plugin {
                 .catch((e: Error) => {
                     console.error(e);
                     this.enabled = false;
-                    this.gimloader.pluginManager.plugins.update();
                     let stack = e.stack.replaceAll(url, `blob:${this.headers.name}.js`);
                     let err = new Error(`Failed to enable plugin ${this.headers.name}:\n${stack}`);
                     rej(err);
@@ -153,7 +149,6 @@ export default class Plugin {
 
     disable(temp: boolean = false) {
         this.enabled = false;
-        this.gimloader.pluginManager.plugins.update();
         if(!this.gimloader.pluginManager.runPlugins) return;
 
         if(this.return) {
