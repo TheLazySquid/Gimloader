@@ -1,7 +1,7 @@
 <script lang="ts">
     import Card from "../components/Card.svelte";
     import type Lib from "../../../lib/lib";
-    import type { LibManagerType } from "../../../lib/libManager.svelte";
+    import type { LibManagerClass } from "../../../lib/libManager.svelte";
 
     import Delete from "svelte-material-icons/Delete.svelte";
     import Pencil from "svelte-material-icons/Pencil.svelte";
@@ -21,7 +21,7 @@
         startDrag: () => void;
         dragDisabled: boolean;
         library: Lib;
-        libManager: LibManagerType;
+        libManager: LibManagerClass;
         view: string;
         dragAllowed: boolean;
     }
