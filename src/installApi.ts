@@ -1,4 +1,4 @@
-import { Gimloader } from "./gimloader";
+import { Gimloader } from "./gimloader.svelte";
 import { parsePluginHeader } from "./util";
 
 export default function initInstallApi(loader: Gimloader) {

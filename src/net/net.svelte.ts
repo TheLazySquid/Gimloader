@@ -1,6 +1,6 @@
 import type Lib from "$src/lib/lib";
 import { confirmLibReload } from "$src/util";
-import type { Gimloader } from "../gimloader";
+import type { Gimloader } from "../gimloader.svelte";
 import { BlueboatIntercept, ColyseusIntercept } from "./clients";
 
 type NetType = 'Blueboat' | 'Colyseus' | 'Unknown';
@@ -44,7 +44,7 @@ export default class Net {
                 let libName = parts[0].trim();
                 let libUrl = parts[1]?.trim();
         
-                if(!this.gimloader.lib.getLib(libName)) {
+                if(!this.gimloader.libManager.getLib(libName)) {
                     missing.push({ libName, libUrl });
                 }
             }
@@ -89,11 +89,10 @@ export default class Net {
             }))
         
             let successes = results.filter(r => r.status === 'fulfilled') as PromiseFulfilledResult<string>[];
-            let libs = successes.map(s => this.gimloader.lib.createLib(s.value)).filter(l => l);
+            let libs = successes.map(s => this.gimloader.libManager.createLib(s.value)).filter(l => l);
             let needsReloads = await Promise.all(libs.map(l => l.enable()));
         
-            this.gimloader.lib.save();
-            this.gimloader.lib.libs.update();
+            this.gimloader.libManager.save();
 
             let reloadNeeders: Lib[] = libs.filter((_, i) => needsReloads[i]);
             if(reloadNeeders.length > 0) {
@@ -119,7 +118,7 @@ export default class Net {
                         rej(`Failed to download library from ${url}\nRecieved response status of ${resp.status}`);
                         return;
                     }
-                    this.gimloader.lib.createLib(resp.responseText);
+                    this.gimloader.libManager.createLib(resp.responseText);
                     res();
                 })
                 .catch(() => rej(`Failed to download library from ${url}`));

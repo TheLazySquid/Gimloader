@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type Plugin from "../../../pluginManager/plugin";
-    import type PluginManager from "../../../pluginManager/pluginManager";
+    import type Plugin from "../../../pluginManager/plugin.svelte";
+    import type PluginManager from "../../../pluginManager/pluginManager.svelte";
     import showErrorMessage from "../../showErrorMessage";
-    import { showPluginCodeEditor } from "../../editCodeModals";
+    import { showPluginCodeEditor } from "../../editCodeModals.svelte";
     import { checkPluginUpdate } from "../../../net/checkUpdates";
     import { Toggle, Modal } from "flowbite-svelte";
-    import type { LibManagerType } from "../../../lib/libManager";
+    import type { LibManagerType } from "../../../lib/libManager.svelte";
 
     import Card from "../components/Card.svelte";
     import Delete from "svelte-material-icons/Delete.svelte";
@@ -16,14 +16,15 @@
     import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
     import ListItem from '../components/ListItem.svelte'
 
-    export let startDrag: () => void;
-    export let dragDisabled: boolean;
-    export let pluginManager: PluginManager;
-    export let libManager: LibManagerType;
-    export let plugin: Plugin;
-    export let view: string;
-
-    let { plugins: pluginsStore } = pluginManager;
+    let {
+        startDrag,
+        dragDisabled,
+        pluginManager,
+        libManager,
+        plugin,
+        view,
+        dragAllowed
+    }: Props = $props();
 
     function deletePlugin(plugin: Plugin) {
         let conf = confirm(`Are you sure you want to delete ${plugin.headers.name}?`);
@@ -32,8 +33,7 @@
         pluginManager.deletePlugin(plugin);
     }
 
-    $: enabled = plugin?.enabled;
-    let loading = false;
+    let loading = $state(false);
 
     async function toggleEnabled() {
         if(enabled) {
@@ -55,11 +55,26 @@
         }
     }
 
-    let libInfoOpen = false;
+    let libInfoOpen = $state(false);
 
-    $: component = view === 'grid' ? Card : ListItem;
+    interface Props {
+        startDrag: () => void;
+        dragDisabled: boolean;
+        pluginManager: PluginManager;
+        libManager: LibManagerType;
+        plugin: Plugin;
+        view: string;
+        dragAllowed: boolean;
+    }
 
-    export let dragAllowed: boolean;
+    let enabled = $state(plugin?.enabled);
+    $effect(() => {
+        enabled = plugin?.enabled;
+    });
+
+    let component = $derived(view === 'grid' ? Card : ListItem);
+
+    const SvelteComponent = $derived(component);
 </script>
 
 {#if libInfoOpen}
@@ -69,51 +84,51 @@
     </Modal>
 {/if}
 
-<svelte:component this={component} {dragDisabled} {startDrag} {loading} {dragAllowed}>
-    <svelte:fragment slot="header">
+<SvelteComponent {dragDisabled} {startDrag} {loading} {dragAllowed}>
+    {#snippet header()}
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {plugin?.headers.name}
             {#if plugin?.headers.version}
                 <span class="text-sm">v{plugin?.headers.version}</span>
             {/if}
         </h2>
-    </svelte:fragment>
-    <svelte:fragment slot="toggle">
-        <button on:click={toggleEnabled}>
+    {/snippet}
+    {#snippet toggle()}
+        <button onclick={toggleEnabled}>
             <Toggle class="*:me-0" bind:checked={enabled} disabled></Toggle>
         </button>
-    </svelte:fragment>
-    <svelte:fragment slot="author">
+    {/snippet}
+    {#snippet author()}
         By {plugin?.headers.author}
-    </svelte:fragment>
-    <svelte:fragment slot="description">
+    {/snippet}
+    {#snippet description()}
         {plugin?.headers.description}
-    </svelte:fragment>
-    <svelte:fragment slot="buttons">
-        <button on:click={() => deletePlugin(plugin)}>
+    {/snippet}
+    {#snippet buttons()}
+        <button onclick={() => deletePlugin(plugin)}>
             <Delete size={28} />
         </button>
-        <button on:click={() => showPluginCodeEditor($pluginsStore, plugin, pluginManager)}>
+        <button onclick={() => showPluginCodeEditor(plugin, pluginManager)}>
             <Pencil size={28} />
         </button>
         {#if plugin?.return?.openSettingsMenu}
-            <button on:click={() => plugin.return.openSettingsMenu()}>
+            <button onclick={() => plugin.return.openSettingsMenu()}>
                 <Cog size={28} />
             </button>
         {:else if plugin?.headers.hasSettings !== "false"}
-            <Cog size={28} class="opacity-50" title={plugin.enabled ?
+            <Cog size={28} class="opacity-50" title={plugin?.enabled ?
                 "This plugin's settings menu is missing/invalid" :
                 'Plugins need to be enabled to open settings'} />
         {/if}
         {#if plugin?.headers.downloadUrl}
-            <button on:click={() => checkPluginUpdate(plugin)}>
+            <button onclick={() => checkPluginUpdate(plugin)}>
                 <Update size={28} />
             </button>
         {/if}
         {#if plugin?.headers.needsLib?.length || plugin?.headers.optionalLib?.length}
-            <button on:click={() => libInfoOpen = true}>
+            <button onclick={() => libInfoOpen = true}>
                 <BookSettings size={24} />
             </button>
         {/if}
-    </svelte:fragment>
-</svelte:component>
+    {/snippet}
+</SvelteComponent>

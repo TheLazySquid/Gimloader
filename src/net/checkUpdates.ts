@@ -1,7 +1,7 @@
-import type { Gimloader } from '$src/gimloader';
+import type { Gimloader } from '$src/gimloader.svelte';
 import type Lib from '$src/lib/lib';
 import { version } from '../../package.json';
-import type Plugin from '../pluginManager/plugin';
+import type Plugin from '../pluginManager/plugin.svelte';
 import { parseLibHeader, parsePluginHeader } from '../util';
 
 export const scriptUrl = "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js";
@@ -62,7 +62,6 @@ export async function checkPluginUpdate(plugin: Plugin) {
 
     if(conf) {
         plugin.edit(res.responseText, incomingHeaders);
-        GL.pluginManager.plugins.update();
     }
 }
 
@@ -95,8 +94,8 @@ export async function checkLibUpdate(lib: Lib) {
     }
 
     if(conf) {
-        GL.lib.deleteLib(lib);
-        GL.lib.createLib(res.responseText, incomingHeaders);
+        GL.libManager.deleteLib(lib);
+        GL.libManager.createLib(res.responseText, incomingHeaders);
     }
 }
 

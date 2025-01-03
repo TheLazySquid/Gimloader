@@ -1,4 +1,4 @@
-import type { Gimloader } from './gimloader'
+import type { Gimloader } from './gimloader.svelte'
 
 // spec: https://codeberg.org/gimhook/gimhook/src/commit/3a90857651be40eed84dd19a5bd9f9a5e736adda/docs/sdk/api.md
 // Several features were recently removed from gimhook which this polyfill actually adds back

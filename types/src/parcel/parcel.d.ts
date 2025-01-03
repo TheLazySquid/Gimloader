@@ -1,4 +1,4 @@
-import type { Gimloader } from "../gimloader";
+import type { Gimloader } from "../gimloader.svelte";
 import type { Intercept } from "../types";
 export default class Parcel extends EventTarget {
     gimloader: Gimloader;

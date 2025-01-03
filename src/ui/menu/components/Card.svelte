@@ -1,10 +1,29 @@
 <script lang="ts">
     import DotsGrid from "svelte-material-icons/DotsGrid.svelte";
 
-    export let startDrag: () => void;
-    export let dragDisabled: boolean;
-    export let loading = false;
-    export let dragAllowed = true;
+    interface Props {
+        startDrag: () => void;
+        dragDisabled: boolean;
+        loading?: boolean;
+        dragAllowed?: boolean;
+        header?: import('svelte').Snippet;
+        toggle?: import('svelte').Snippet;
+        author?: import('svelte').Snippet;
+        description?: import('svelte').Snippet;
+        buttons?: import('svelte').Snippet;
+    }
+
+    let {
+        startDrag,
+        dragDisabled,
+        loading = false,
+        dragAllowed = true,
+        header,
+        toggle,
+        author,
+        description,
+        buttons
+    }: Props = $props();
 
     function checkDrag() {
         if(dragAllowed) startDrag();
@@ -19,22 +38,22 @@
         </div>
     {/if}
     <div class="w-full flex gap-2 items-center leading-3">
-        <slot name="header" />
-        <slot name="toggle" />
+        {@render header?.()}
+        {@render toggle?.()}
     </div>
     <div class="overflow-ellipsis overflow-hidden whitespace-nowrap w-full text-base leading-4">
-        <slot name="author" />
+        {@render author?.()}
     </div>
     <div class="flex-grow text-sm pr-7 overflow-hidden overflow-ellipsis line-clamp-6">
-        <slot name="description" />
+        {@render description?.()}
     </div>
     <div class="flex flex-row-reverse items-end">
-        <slot name="buttons" />
+        {@render buttons?.()}
     </div>
     <div class="absolute right-3 top-1/2 transform -translate-y-1/2"
     style='cursor: {dragAllowed ? dragDisabled ? 'grab' : 'grabbing' : 'not-allowed'}'
     title={dragAllowed ? '' : 'Cannot rearrange while searching'}
-    class:opacity-50={!dragAllowed} on:pointerdown={checkDrag}>
+    class:opacity-50={!dragAllowed} onpointerdown={checkDrag}>
         <DotsGrid size={28} />
     </div>
 </div>

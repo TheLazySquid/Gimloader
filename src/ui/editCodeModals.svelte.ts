@@ -1,8 +1,7 @@
 import showModal from "./modal";
-import PluginManager from "../pluginManager/pluginManager"
-import Plugin from "../pluginManager/plugin";
+import PluginManager from "../pluginManager/pluginManager.svelte"
+import Plugin from "../pluginManager/plugin.svelte";
 import { parsePluginHeader } from "../util";
-import type { LibManagerType } from "$src/lib/libManager";
 import Lib from "$src/lib/lib";
 import { javascript } from "@codemirror/lang-javascript";
 import { basicSetup } from "codemirror";
@@ -11,6 +10,7 @@ import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorState } from "@codemirror/state";
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
+import type { LibManagerClass } from "$src/lib/libManager.svelte";
 
 function createEditorDiv(defaultText: string) {
     let editorDiv = document.createElement("div");
@@ -33,7 +33,7 @@ function createEditorDiv(defaultText: string) {
     return { editorDiv, editor };
 }
 
-export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginManager: PluginManager) {
+export function showPluginCodeEditor(plugin: Plugin, pluginManager: PluginManager) {
     let { editorDiv, editor } = createEditorDiv(plugin.script);
 
     showModal(editorDiv, {
@@ -53,7 +53,7 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
                     let headers = parsePluginHeader(code);
 
                     let canceled = false;
-                    for(let otherPlugin of pluginManager.plugins.value) {
+                    for(let otherPlugin of pluginManager.plugins) {
                         if(otherPlugin === plugin) continue;
 
                         if(otherPlugin.headers.name === headers.name) {
@@ -64,14 +64,13 @@ export function showPluginCodeEditor(plugins: Plugin[], plugin: Plugin, pluginMa
 
                     if(canceled) return;
 
-                    for(let otherPlugin of plugins) {
+                    for(let otherPlugin of pluginManager.plugins) {
                         if(otherPlugin === plugin || otherPlugin.headers.name !== headers.name) continue;
 
                         pluginManager.deletePlugin(otherPlugin);
                     }
 
                     plugin.edit(code, headers);
-                    pluginManager.plugins.update();
                 }
             }
         ]
@@ -107,7 +106,7 @@ export function createPlugin(pluginManager: PluginManager) {
         ]
     });
 }
-export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
+export function showLibCodeEditor(lib: Lib, libManager: LibManagerClass) {
     let { editorDiv, editor } = createEditorDiv(lib.script);
 
     showModal(editorDiv, {
@@ -131,7 +130,7 @@ export function showLibCodeEditor(lib: Lib, libManager: LibManagerType) {
     });
 }
 
-export function createLib(libManager: LibManagerType) {
+export function createLib(libManager: LibManagerClass) {
     const defaultCode = `/**
 * @name New Library
 * @description A new library

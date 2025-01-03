@@ -1,11 +1,15 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
 
-    export let title: string;
-    export let msg: string;
-    export let onClose: () => void;
+    interface Props {
+        title: string;
+        msg: string;
+        onClose: () => void;
+    }
+
+    let { title, msg, onClose }: Props = $props();
 </script>
 
-<Modal class="preflight" {title} open outsideclose on:close={onClose}>
+<Modal class="preflight" {title} open outsideclose onclose={onClose}>
     <pre>{msg}</pre>
 </Modal>

@@ -44,10 +44,10 @@ export default class Poller {
                 // create/edit the library/plugin
                 if(isLibrary) {
                     let headers = parseLibHeader(res.responseText);
-                    let existing = GL.lib.getLib(headers.name);
+                    let existing = GL.libManager.getLib(headers.name);
                     if(existing?.script === res.responseText) return;
 
-                    GL.lib.createLib(res.responseText, headers, true);
+                    GL.libManager.createLib(res.responseText, headers, true);
                     GL.notification?.open({ message: `Hot reloaded library ${headers.name}` })
                 } else {
                     let headers = parsePluginHeader(res.responseText);

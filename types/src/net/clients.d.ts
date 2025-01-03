@@ -1,5 +1,5 @@
-import type { Gimloader } from "$src/gimloader";
-import type Net from "./net";
+import type { Gimloader } from "$src/gimloader.svelte";
+import type Net from "./net.svelte";
 export declare class BlueboatIntercept extends EventTarget {
     room: any | null;
     blueboatLoaded: boolean;

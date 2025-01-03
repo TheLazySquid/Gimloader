@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Gimloader } from "../../gimloader";
+    import type { Gimloader } from "../../gimloader.svelte";
     import LibraryCardsList from "./libraries/LibraryCardsList.svelte";
     import PluginCardsList from "./plugins/PluginCardsList.svelte";
     import { Tabs, TabItem } from "flowbite-svelte";
@@ -15,8 +15,12 @@
     import Hotkeys from "./Hotkeys.svelte";
     import { focusTrapEnabled } from "./stores";
 
-    export let gimloader: Gimloader;
-    export let onClose: () => void;
+    interface Props {
+        gimloader: Gimloader;
+        onClose: () => void;
+    }
+
+    let { gimloader, onClose }: Props = $props();
 </script>
 
 <div class="h-full">
@@ -25,35 +29,35 @@
             size="xl" on:close={onClose} open outsideclose bind:focusTrapEnabled={$focusTrapEnabled}>
             <Tabs contentClass="bg-white">
                 <TabItem open>
-                    <div slot="title" class="flex items-center">
+                    <div class="flex items-center" slot="title">
                         <Wrench size={24} />
                         <span class="ml-2">Plugins</span>
                     </div>
                     <PluginCardsList {gimloader} />
                 </TabItem>
                 <TabItem>
-                    <div slot="title" class="flex items-center">
+                    <div class="flex items-center" slot="title">
                         <Book size={24} />
                         <span class="ml-2">Libraries</span>
                     </div>
                     <LibraryCardsList {gimloader} />
                 </TabItem>
                 <TabItem>
-                    <div slot="title" class="flex items-center">
+                    <div class="flex items-center" slot="title">
                         <KeyboardOutline size={24} />
                         <span class="ml-2">Hotkeys</span>
                     </div>
                     <Hotkeys hotkeyManager={gimloader.hotkeys} />
                 </TabItem>
                 <TabItem>
-                    <div slot="title" class="flex items-center">
+                    <div class="flex items-center" slot="title">
                         <Update size={24} />
                         <span class="ml-2">Updates</span>
                     </div>
                     <Updates {gimloader} />
                 </TabItem>
                 <TabItem>
-                    <div slot="title" class="flex items-center">
+                    <div class="flex items-center" slot="title">
                         <Cog size={24} />
                         <span class="ml-2">Settings</span>
                     </div>
@@ -77,7 +81,7 @@
         margin-top: 0 !important;
     }
 
-    .fixMargin div:has(> div[role="tabpanel"]) {
+    .fixMargin div:has(:global(> div[role="tabpanel"])) {
         display: flex;
         flex-direction: column;
     }
