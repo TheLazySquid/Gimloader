@@ -1,5 +1,5 @@
 import { SvelteMap, SvelteSet } from "svelte/reactivity";
-import type { IConfigurableHotkeyOptions, IHotkey } from "../types";
+import type { HotkeyTrigger, IConfigurableHotkeyOptions, IHotkey, IHotkeyTriggerKey } from "../types";
 
 const shiftKeyHeldKeys = `~!@#$%^&*()_+{}|:"<>?`;
 const normalKeys = "`1234567890-=[]\\;',./";
@@ -10,8 +10,9 @@ export class ConfigurableHotkey {
     title: string;
     preventDefault: boolean;
     callback: (event: KeyboardEvent) => void;
-    keys: SvelteSet<string>;
+    trigger: IHotkeyTriggerKey | SvelteSet<string> | null = $state();
     defaultKeys?: Set<string>;
+    default?: IHotkeyTriggerKey;
 
     constructor(manager: HotkeyManager, id: string, callback: (event: KeyboardEvent) => void,
         options: IConfigurableHotkeyOptions) {
@@ -20,21 +21,37 @@ export class ConfigurableHotkey {
         this.title = options.title;
         this.preventDefault = options.preventDefault ?? true;
         this.defaultKeys = options.defaultKeys;
+        this.default = options.default;
         this.callback = callback;
 
-        if(manager.savedHotkeys[id]) {
-            this.keys = new SvelteSet(manager.savedHotkeys[id]);
-        } else if(options.defaultKeys) {
-            this.keys = new SvelteSet(options.defaultKeys);
+        let saved = manager.savedHotkeys[id];
+        if(saved !== undefined) {
+            if(Array.isArray(saved)) {
+                this.trigger = new SvelteSet(saved);
+            } else if(saved !== null) {
+                this.trigger = Object.assign({}, saved);
+            } else {
+                this.trigger = null;
+            }
+        } else this.reset();
+    }
+
+    reset() {
+        if(this.defaultKeys) {
+            this.trigger = new SvelteSet(this.defaultKeys);
+        } else if(this.default) {
+            this.trigger = Object.assign({}, this.default);
+        } else {
+            this.trigger = null;
         }
     }
 }
 
 export default class HotkeyManager {
     pressedKeys: Set<string> = new Set();
-    hotkeys: Map<Set<string>, IHotkey> = new Map();
+    hotkeys: IHotkey[] = [];
     configurableHotkeys = new SvelteMap<string, ConfigurableHotkey>();
-    savedHotkeys: Record<string, string[]> = GM_getValue('configurableHotkeys', {});
+    savedHotkeys: Record<string, any> = GM_getValue('configurableHotkeys', {});
 
     constructor() {
         window.addEventListener('keydown', (event) => {
@@ -75,27 +92,49 @@ export default class HotkeyManager {
     }
 
     checkHotkeys(event: KeyboardEvent) {
-        for (let [hotkey, run] of this.hotkeys.entries()) {
-            if (this.setPressed(hotkey)) {
-                if(run.preventDefault) event.preventDefault();
-                run.callback(event);
+        for (let hotkey of this.hotkeys.values()) {
+            if (this.checkHotkey(event, hotkey)) {
+                if(hotkey.preventDefault) event.preventDefault();
+                hotkey.callback(event);
             }
         }
 
         for(let hotkey of this.configurableHotkeys.values()) {
-            if (this.setPressed(hotkey.keys)) {
+            if (this.checkHotkey(event, hotkey)) {
                 if(hotkey.preventDefault) event.preventDefault();
                 hotkey.callback(event);
             }
         }
     }
 
-    add(hotkey: Set<string>, callback: (event: KeyboardEvent) => void, preventDefault: boolean = true) {
-        this.hotkeys.set(hotkey, { callback, preventDefault });
+    checkHotkey(e: KeyboardEvent, hotkey: IHotkey | ConfigurableHotkey) {
+        if(!hotkey.trigger) return false;
+        if(hotkey.trigger instanceof Set || hotkey.trigger instanceof SvelteSet) {
+            return this.setPressed(hotkey.trigger);
+        }
+        return (
+            hotkey.trigger.key == e.code &&
+            !(hotkey.trigger.ctrl && !e.ctrlKey) &&
+            !(hotkey.trigger.alt && !e.altKey) &&
+            !(hotkey.trigger.shift && !e.shiftKey)
+        )
     }
 
-    remove(hotkey: Set<string>) {
-        this.hotkeys.delete(hotkey);
+    add(trigger: HotkeyTrigger, callback: (event: KeyboardEvent) => void, preventDefault: boolean = true) {
+        this.hotkeys.push({
+            trigger,
+            callback,
+            preventDefault
+        });
+    }
+
+    remove(trigger: HotkeyTrigger) {
+        for(let i = 0; i < this.hotkeys.length; i++) {
+            if(this.hotkeys[i].trigger === trigger) {
+                this.hotkeys.splice(i, 1);
+                return;
+            }
+        }
     }
 
     addConfigurable(pluginName: string, id: string, callback: (event: KeyboardEvent) => void, options: IConfigurableHotkeyOptions) {
@@ -121,7 +160,13 @@ export default class HotkeyManager {
     saveConfigurableHotkeys() {
         this.savedHotkeys = {};
         for(let [id, hotkey] of this.configurableHotkeys.entries()) {
-            this.savedHotkeys[id] = Array.from(hotkey.keys);
+            if(hotkey.trigger instanceof SvelteSet) {
+                this.savedHotkeys[id] = Array.from(hotkey.trigger);
+            } else if(hotkey.trigger !== null) {
+                this.savedHotkeys[id] = Object.assign({}, hotkey.trigger);
+            } else {
+                this.savedHotkeys[id] = null;
+            }
         }
 
         GM_setValue('configurableHotkeys', this.savedHotkeys);

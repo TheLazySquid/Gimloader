@@ -12,10 +12,6 @@ export interface IModalOptions {
     buttons: IModalButton[];
     onClosed: () => void;
 }
-export interface IHotkey {
-    callback: (event: KeyboardEvent) => void;
-    preventDefault: boolean;
-}
 export interface IModuleRequired {
     type: 'moduleRequired';
     id?: string;
@@ -42,4 +38,17 @@ export interface IConfigurableHotkeyOptions {
     title: string;
     preventDefault?: boolean;
     defaultKeys?: Set<string>;
+    default?: IHotkeyTriggerKey;
+}
+export interface IHotkeyTriggerKey {
+    key: string;
+    shift?: boolean;
+    alt?: boolean;
+    ctrl?: boolean;
+}
+export type HotkeyTrigger = IHotkeyTriggerKey | Set<string>;
+export interface IHotkey {
+    callback: (event: KeyboardEvent) => void;
+    preventDefault: boolean;
+    trigger: HotkeyTrigger;
 }

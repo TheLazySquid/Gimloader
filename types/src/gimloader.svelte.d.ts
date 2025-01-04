@@ -42,7 +42,6 @@ export declare class Gimloader extends EventTarget {
         showPluginButtons: boolean;
         setShowPluginButtons: typeof setShowPluginButtons;
     };
-    destroyed: boolean;
     constructor();
     addStyleSheets(): void;
     exposeValues(): void;
