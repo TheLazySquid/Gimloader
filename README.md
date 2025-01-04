@@ -39,4 +39,4 @@ Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have 
 
 ## Development
 
-Information on developing plugins can be found in [the wiki](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Development).
+Information on developing plugins can be found in [the wiki](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Development). Keep in mind that Gimloader is still being developed, and apis may change or be removed without warning.

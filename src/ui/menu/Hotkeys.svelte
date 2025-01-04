@@ -6,8 +6,9 @@
     import { onDestroy } from "svelte";
     import type { ConfigurableHotkey } from "../../hotkeyManager/hotkeyManager.svelte";
     import { SvelteSet } from "svelte/reactivity";
+    import type { IHotkeyTriggerKey } from "$src/types";
 
-    let { hotkeyManager }: { hotkeyManager: HotkeyManager} = $props();
+    let { hotkeyManager }: { hotkeyManager: HotkeyManager } = $props();
     let hotkeys = hotkeyManager.configurableHotkeys;
 
     let categories: Record<string, ConfigurableHotkey[]> = $derived.by(() => {
@@ -22,11 +23,9 @@
     });
 
     let configuring: ConfigurableHotkey | null = null;
-    let configureClear = true;
 
     function startConfigure(hotkey: ConfigurableHotkey) {
         configuring = hotkey;
-        configureClear = true;
         overrideKeydown(onKeydown);
     }
 
@@ -35,18 +34,18 @@
         e.preventDefault();
         e.stopPropagation();
 
-        if(configureClear) {
-            configuring.keys.clear();
-            configureClear = false;
-        }
-
         if(e.key == "Escape") {
-            configuring.keys.clear();
+            configuring.trigger = null;
             stopConfigure();
         } else if(e.key === "Enter") {
             stopConfigure();
         } else {
-            configuring.keys.add(e.key.toLowerCase());
+            configuring.trigger = {
+                key: e.code,
+                ctrl: e.ctrlKey,
+                alt: e.altKey,
+                shift: e.shiftKey
+            }
         }
     }
 
@@ -69,12 +68,7 @@
     }
 
     function reset(hotkey: ConfigurableHotkey, noSave = false) {
-        hotkey.keys.clear();
-        if(hotkey.defaultKeys) {
-            for(let key of hotkey.defaultKeys) {
-                hotkey.keys.add(key);
-            }
-        }
+        hotkey.reset();
 
         if(noSave) return;
         hotkeyManager.saveConfigurableHotkeys();
@@ -87,6 +81,19 @@
         }
 
         hotkeyManager.saveConfigurableHotkeys();
+    }
+
+    function formatTrigger(trigger: IHotkeyTriggerKey) {
+        let keys: string[] = [];
+        if(trigger.ctrl && !trigger.key.startsWith("Control")) keys.push("Ctrl");
+        if(trigger.alt && !trigger.key.startsWith("Alt")) keys.push("Alt");
+        if(trigger.shift && !trigger.key.startsWith("Shift")) keys.push("Shift");
+
+        if(trigger.key.startsWith("Key")) keys.push(trigger.key.slice(3));
+        else if(trigger.key.startsWith("Digit")) keys.push(trigger.key.slice(5));
+        else keys.push(trigger.key);
+
+        return keys.join(" + ");
     }
 
     onDestroy(stopOverrideKeydown);
@@ -106,10 +113,16 @@
                     {hotkey.title}
                 </div>
                 <Button id={hotkey.id} onclick={() => startConfigure(hotkey)}>
-                    {#if hotkey.keys.size === 0}
+                    {#if hotkey.trigger === null}
                         Not Bound
+                    {:else if hotkey.trigger instanceof SvelteSet}
+                        {#if hotkey.trigger.size === 0}
+                            Not Bound
+                        {:else}
+                            {Array.from(hotkey.trigger).map(renameKey).join(" + ")}
+                        {/if}
                     {:else}
-                        {Array.from(hotkey.keys).map(renameKey).join(" + ")}
+                        {formatTrigger(hotkey.trigger)}
                     {/if}
                 </Button>
                 <Popover title="Configure Hotkey" trigger="focus" on:show={onShow}>
