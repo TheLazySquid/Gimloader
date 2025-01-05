@@ -1,15 +1,7 @@
-import { Gimloader } from "./gimloader.svelte";
-import initInstallApi from "./installApi";
-import { onGimkit } from "./util";
+import Api from "./api/api";
 
-let loader = new Gimloader();
-window.GL = loader;
-unsafeWindow.GL = loader;
-
-if(!onGimkit) {
-    loader.pluginManager.init();
-}
-
-if(location.host === "thelazysquid.github.io" && location.pathname === "/gimloader/") {
-    initInstallApi(loader);
-}
+Object.defineProperty(unsafeWindow, "GL", {
+    value: Api,
+    writable: false,
+    configurable: false
+});
