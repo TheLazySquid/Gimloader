@@ -18,7 +18,7 @@ declare module '*.svelte' {
     export default component;
 }
 
-declare const GL: import('./src/api');
+declare const GL: import('./src/api/api').default;
 // /** @deprecated Use GL.stores */
 // declare const stores: any;
 // /** @deprecated No longer supported */
@@ -27,7 +27,7 @@ declare const GL: import('./src/api');
 // declare const gimhook: any;
 
 interface Window {
-    GL: import('./src/api');
+    GL: import('./src/api/api').default;
 //     /** @deprecated Use GL.stores */
 //     stores: any;
 //     /** @deprecated No longer supported */
