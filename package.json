@@ -57,7 +57,7 @@
     "codemirror": "^6.0.1",
     "colyseus.js": "^0.15.26",
     "debounce": "^2.1.0",
-    "events": "^3.3.0",
+    "eventemitter2": "^6.4.9",
     "flowbite": "^2.5.1",
     "flowbite-svelte": "^0.46.15",
     "svelte": "^5.16.0",

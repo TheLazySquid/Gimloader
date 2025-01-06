@@ -1,7 +1,7 @@
 import type { Room as BlueboatRoom } from "blueboat";
 import type { Room as ColyseusRoom } from "colyseus.js";
 import Parcel from "./parcel";
-import EventEmitter from "events";
+import EventEmitter from "eventemitter2";
 import { log } from "$src/utils";
 import Patcher from "./patcher";
 
@@ -26,6 +26,13 @@ class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
 
+    constructor() {
+        super({
+            wildcard: true,
+            delimiter: ':'
+        });
+    }
+
     init() {
         let me = this;
 
@@ -44,7 +51,6 @@ class Net extends EventEmitter {
                 Patcher.before(null, colyseus.room, "send", (_, args) => {
                     let [ channel, data ] = args;
                     me.emit(channel, data, (newData: any) => { args[1] = newData });
-                    me.emit('*', { channel, data }, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
@@ -52,8 +58,7 @@ class Net extends EventEmitter {
                 // intercept colyseus outgoing messages
                 Patcher.before(null, colyseus.room, "dispatchMessage", (_, args) => {
                     let [ channel, data ] = args;
-                    me.emit(`send:${channel}`, data, (newData: any) => { args[1] = newData });
-                    me.emit(`send:*`, { channel, data }, (newData: any) => { args[1] = newData });
+                    me.emit(['send', channel], data, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
@@ -80,7 +85,6 @@ class Net extends EventEmitter {
                 Patcher.before(null, room.onMessage, "call", (_, args) => {
                     let [ channel, data ] = args;
                     me.emit(channel, data, (newData: any) => { args[1] = newData });
-                    me.emit('*', { channel, data }, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
@@ -88,8 +92,7 @@ class Net extends EventEmitter {
                 // intercept outgoing messages
                 Patcher.before(null, room, "send", (_, args) => {
                     let [ channel, data ] = args;
-                    me.emit(`send:${channel}`, data, (newData: any) => { args[1] = newData });
-                    me.emit(`send:*`, { channel, data }, (newData: any) => { args[1] = newData });
+                    me.emit(['send', channel], data, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
