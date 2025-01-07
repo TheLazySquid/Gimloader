@@ -1,4 +1,5 @@
 import { splicer } from "$src/utils";
+import Storage from "./storage";
 
 interface HotkeyTrigger {
     key?: string;
@@ -55,7 +56,7 @@ class Hotkeys {
     hotkeys: DefaultHotkey[] = [];
     configurableHotkeys: ConfigurableHotkey[] = $state([]);
     pressedKeys = new Set<string>();
-    savedHotkeys: Record<string, any> = GM_getValue('configurableHotkeys', {});
+    savedHotkeys: Record<string, any> = Storage.getValue('configurableHotkeys', {});
 
     init() {
         window.addEventListener('keydown', (event) => {
