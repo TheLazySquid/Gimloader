@@ -1,4 +1,4 @@
-import { log, onGimkit } from "$src/utils";
+import { log, onGimkit, splicer } from "$src/utils";
 
 type RequireHookFn = (moduleName: string) => void;
 
@@ -230,10 +230,7 @@ export default class Parcel {
         let obj = { id, matcher, callback };
         this.lazyChecks.push(obj);
 
-        return () => {
-            let index = this.lazyChecks.indexOf(obj);
-            if(index !== -1) this.lazyChecks.splice(index, 1);
-        }
+        return splicer(this.lazyChecks, obj);
     }
 
     static stopLazy(id: string) {
