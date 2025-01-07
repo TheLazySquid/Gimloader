@@ -17,8 +17,6 @@ interface ModalOptions {
 }
 
 class BaseUIApi {
-
-
     /** Shows a customizable modal to the user */
     showModal(element: HTMLElement | ReactElement, options?: ModalOptions) {
 

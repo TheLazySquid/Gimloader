@@ -9,10 +9,14 @@ export function error(...args: any[]) {
 export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]) {
     for(let i = 0; i < schema.length; i++) {
         let [ name, type ] = schema[i];
+
+        // check whether the key argument is present
         if(args[i] === undefined) {
             error(fnName, 'called without argument', name);
             return false;
         }
+        if(type === "any") continue;
+
         if(typeof type === "object") {
             if(typeof args[i] !== "object") {
                 error(fnName, 'recieved', args[i], `for argument ${name}, expected type object`);

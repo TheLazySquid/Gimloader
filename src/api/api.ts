@@ -34,7 +34,7 @@ class Api {
         this.hotkeys = Object.freeze(new ScopedHotkeysApi(id));
         this.net = Object.freeze(new NetApi() as NetType);
         this.UI = Object.freeze(new ScopedUIApi());
-        this.storage = Object.freeze(new ScopedStorageApi());
+        this.storage = Object.freeze(new ScopedStorageApi(id));
         this.patcher = Object.freeze(new ScopedPatcherApi(id));
     }
 
