@@ -1,5 +1,5 @@
-import type { Matcher } from "$src/core/parcel";
-import Parcel from "$src/core/parcel";
+import type { Matcher } from "$core/parcel";
+import Parcel from "$core/parcel";
 import { validate } from "$src/utils";
 
 class BaseParcelApi {

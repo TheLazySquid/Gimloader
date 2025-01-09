@@ -1,7 +1,7 @@
 import { splicer } from "$src/utils";
 import Storage from "./storage";
 
-interface HotkeyTrigger {
+export interface HotkeyTrigger {
     key?: string;
     keys?: string[];
     ctrl?: boolean;

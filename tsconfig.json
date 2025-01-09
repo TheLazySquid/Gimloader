@@ -10,9 +10,10 @@
         "baseUrl": ".",
         "paths": {
             "$assets/*": ["./assets/*"],
-            "$src/*": ["./src/*"]
+            "$src/*": ["./src/*"],
+            "$core/*": ["./src/core/*"]
         },
         "verbatimModuleSyntax": true
     },
-    "include": ["./src/**/*.ts", "main.d.ts"]
+    "include": ["./src/**/*.*", "main.d.ts"]
 }
