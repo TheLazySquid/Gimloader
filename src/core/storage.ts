@@ -22,4 +22,13 @@ export default class Storage {
     static deletePluginValue(id: string, key: string) {
         GM_deleteValue(`${id}-${key}`);
     }
+
+    static removeAllValues(pluginName: string) {
+        if(pluginName == "") throw new Error("pluginName cannot be empty");
+        let values = GM_listValues().filter(v => v.startsWith(`${pluginName}-`));
+
+        for(let value of values) {
+            GM_deleteValue(value);
+        }
+    }
 }

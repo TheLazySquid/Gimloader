@@ -1,3 +1,5 @@
+import type Lib from "$core/libManager/lib";
+
 export function log(...args: any[]) {
     console.log('%c[GL]', 'color:#5030f2', ...args);
 }
@@ -51,4 +53,57 @@ export function splicer(array: any[], obj: any) {
         let index = array.indexOf(obj);
         if(index !== -1) array.splice(index, 1);
     }
+}
+
+export function confirmLibReload(libs: Lib[]) {
+    let names = libs.map(l => l.headers.name);
+    let msg = names.slice(0, -1).join(', ');
+    if(names.length > 1) msg += ' and ';
+    msg += names.at(-1);
+    msg += names.length > 1 ? ' require' : ' requires';
+    msg += ' a reload to function properly. Reload now?';
+
+    return confirm(msg);
+}
+
+let keydownOverriding = false;
+let keydownCallback: (e: KeyboardEvent) => void;
+
+document.addEventListener("keydown", (e) => {
+    if(!keydownOverriding) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    keydownCallback(e);
+}, true);
+
+export function overrideKeydown(callback: (e: KeyboardEvent) => void) {
+    keydownOverriding = true;
+    keydownCallback = callback;
+}
+
+export function stopOverrideKeydown() {
+    keydownOverriding = false;
+}
+
+export function readUserFile(accept: string) {
+    return new Promise<string>((res, rej) => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = accept;
+    
+        input.addEventListener('change', () => {
+            let file = input.files?.[0];
+            if(!file) return rej('No file selected');
+
+            let reader = new FileReader();
+            reader.onload = () => {
+                res(reader.result as string);
+            }
+    
+            reader.readAsText(file);
+        });
+    
+        input.click();
+    })
 }

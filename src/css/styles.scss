@@ -1,0 +1,17 @@
+@use 'wrenchIcons.scss';
+@use 'ui.scss';
+@use 'preflight.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#dnd-action-dragged-el {
+    outline: none;
+}
+
+:root {
+    --text: black;
+    --bg-primary: white;
+    --bg-secondary: white;
+}

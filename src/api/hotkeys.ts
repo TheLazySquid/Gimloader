@@ -1,5 +1,5 @@
-import type { ConfigurableHotkeyOptions, HotkeyOptions } from "$src/core/hotkeys.svelte";
-import Hotkeys from "$src/core/hotkeys.svelte";
+import type { ConfigurableHotkeyOptions, HotkeyOptions } from "$core/hotkeys.svelte";
+import Hotkeys from "$core/hotkeys.svelte";
 import { error, validate } from "$src/utils";
 
 function validateHotkeyOptions(name: string, path: string, options: HotkeyOptions) {

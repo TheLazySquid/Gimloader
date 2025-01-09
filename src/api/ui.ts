@@ -1,25 +1,10 @@
+import type { ModalOptions } from "$core/ui/modal";
 import type { ReactElement } from "react";
-
-interface ModalButton {
-    text: string;
-    style?: "primary" | "danger" | "close";
-    onClick?: (event: MouseEvent) => boolean | void;
-}
-
-interface ModalOptions {
-    id: string;
-    title: string;
-    style: string;
-    className: string;
-    closeOnBackgroundClick: boolean;
-    buttons: ModalButton[];
-    onClosed: () => void;
-}
 
 class BaseUIApi {
     /** Shows a customizable modal to the user */
     showModal(element: HTMLElement | ReactElement, options?: ModalOptions) {
-
+        
     }
 }
 

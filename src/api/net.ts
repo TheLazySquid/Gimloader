@@ -1,5 +1,5 @@
-import type { Connection } from "$src/core/net";
-import Net from "$src/core/net";
+import type { Connection } from "$core/net/net";
+import Net from "$core/net/net";
 import { validate } from "$src/utils";
 import EventEmitter from "eventemitter2";
 
@@ -25,7 +25,7 @@ class NetApi extends EventEmitter {
     get room(): Connection["room"] { return Net.room };
 
     /** The userscript manager's xmlHttpRequest, which bypasses the CSP */
-    corsRequest = GM.xmlHttpRequest;
+    corsRequest = Net.corsRequest;
 
     /** Sends a message to the server on a specific channel */
     send(channel: string, message: any) {

@@ -1,0 +1,94 @@
+.gl-modalBG {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.15s;
+}
+
+.gl-modal {
+    min-width: 25%;
+    min-height: 200px;
+    max-height: 80%;
+    max-width: 80%;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-primary);
+    color: var(--text);
+    animation: zoomIn ease-out 0.15s;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .content {
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    > .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1rem;
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+
+            &.close {
+                background-color: transparent;
+                text-decoration: underline;
+            }
+
+            &.primary {
+                background-color: #178635;
+                color: white;
+            }
+            
+            &.danger {
+                background-color: #ff4d4f;
+                color: white;
+            }
+        }
+    }
+}
+
+.gl-errorMsg {
+    white-space: pre-line;
+    background-color: lightgray;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.3);
+    }
+    to {
+        transform: scale(1);
+    }
+}

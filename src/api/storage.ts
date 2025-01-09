@@ -1,4 +1,4 @@
-import Storage from "$src/core/storage";
+import Storage from "$core/storage";
 import { validate } from "$src/utils";
 
 class StorageApi {
