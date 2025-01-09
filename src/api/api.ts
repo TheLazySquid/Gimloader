@@ -5,6 +5,7 @@ import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
 import LibManager from "$src/core/libManager/libManager.svelte";
+import PluginManager from "$src/core/pluginManager/pluginManager.svelte";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -31,6 +32,9 @@ class Api {
     /** Require a library, if it exists */
     static lib = LibManager.get.bind(LibManager);
 
+    /** Require a plugin, if it exists and has been enabled */
+    static plugin = PluginManager.getExports.bind(PluginManager);
+
     constructor() {
         const id = "id";
 
@@ -41,6 +45,7 @@ class Api {
         this.storage = Object.freeze(new ScopedStorageApi(id));
         this.patcher = Object.freeze(new ScopedPatcherApi(id));
         this.lib = LibManager.get.bind(LibManager);
+        this.plugin = PluginManager.getExports.bind(PluginManager);
     }
 
     /** Functions used to modify Gimkit's internal modules */
@@ -66,6 +71,9 @@ class Api {
 
     /** Require a library, if it exists */
     lib: typeof LibManager.get;
+
+    /** Require a plugin, if it exists and has been enabled */
+    plugin: typeof PluginManager.getExports;
 }
 
 Object.freeze(Api);

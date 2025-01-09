@@ -41,7 +41,7 @@ export default class Lib {
                         this.headers.reloadRequired === '' ||
                         (this.headers.reloadRequired === 'ingame' && Net.type !== "None");
             
-                    this.library = returnVal;
+                    this.library = Object.freeze(returnVal);
                     this.enableSuccessCallbacks.forEach(cb => cb(!initial && needsReload));
                 })
                 .catch((e) => {

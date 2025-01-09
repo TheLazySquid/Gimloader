@@ -108,7 +108,7 @@ export default class Plugin {
             
             import(url)
                 .then((returnVal) => {
-                    this.return = returnVal;
+                    this.return = Object.freeze(returnVal);
                     this.enabled = true;
             
                     log(`Loaded plugin: ${this.headers.name}`);
