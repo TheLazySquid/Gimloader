@@ -12,6 +12,7 @@ export class LibManagerClass {
         let libScripts = GM_getValue('libs', []) as string[];
 
         let libs = [];
+
         // convert from the old, unordered version
         if(!Array.isArray(libScripts)) {
             libScripts = Object.values(libScripts);
@@ -23,6 +24,52 @@ export class LibManagerClass {
             libs.push(lib);
         }
         this.libs = libs;
+
+        GM_addValueChangeListener('libs', (_, __, value: string[], remote) => {
+            if(!remote) return;
+            let newLibs: Lib[] = [];
+    
+            for(let script of value) {
+                let lib = new Lib(script);
+                newLibs.push(lib);
+            }
+    
+            // check if any libraries were removed
+            for(let checkLib of this.libs) {
+                if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
+                    this.deleteLib(checkLib);
+                }
+            }
+    
+            // check if any libraries were added
+            for(let newLib of newLibs) {
+                if(!this.libs.some(lib => lib.headers.name === newLib.headers.name)) {
+                    this.createLib(newLib.script, newLib.headers, true);
+                }
+            }
+    
+            // check if any libraries were updated
+            for(let newLib of newLibs) {
+                let existing = this.libs.find(lib => lib.headers.name === newLib.headers.name);
+                if(existing.script !== newLib.script) {
+                    this.editLib(existing, newLib.script, newLib.headers);
+                }
+            }
+    
+            // move the libraries into the correct order
+            let newOrder = [];
+            for (let newLib of newLibs) {
+                let setLib = this.getLib(newLib.headers.name);
+                if (setLib) newOrder.push(setLib);
+            }
+    
+            this.libs = newOrder;
+        });
+    }
+
+    get(libName: string) {
+        let lib = this.libs.find(lib => lib.headers.name === libName);
+        return lib?.library ?? null;
     }
 
     getLib(libName: string): Lib {
@@ -115,70 +162,5 @@ export class LibManagerClass {
     }
 }
 
-export type GetLibType = (lib: string) => any;
-export interface LibType extends GetLibType {
-    get: GetLibType;
-    getLib: (libName: string) => Lib;
-};
-
-function makeLibManager(): [LibType, LibManagerClass] {
-    const libManager = new LibManagerClass();
-
-    const get = function(libName: string) {
-        let lib = libManager.libs.find(lib => lib.headers.name === libName);
-        return lib?.library ?? null;
-    }
-    
-    const lib: LibType = get as LibType;
-
-    Object.assign(lib, {
-        get,
-        getLib: (name: string) => libManager.getLib(name)
-    });
-
-    GM_addValueChangeListener('libs', (_, __, value: string[], remote) => {
-        if(!remote) return;
-        let newLibs: Lib[] = [];
-
-        for(let script of value) {
-            let lib = new Lib(script);
-            newLibs.push(lib);
-        }
-
-        // check if any libraries were removed
-        for(let checkLib of libManager.libs) {
-            if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
-                libManager.deleteLib(checkLib);
-            }
-        }
-
-        // check if any libraries were added
-        for(let newLib of newLibs) {
-            if(!libManager.libs.some(lib => lib.headers.name === newLib.headers.name)) {
-                libManager.createLib(newLib.script, newLib.headers, true);
-            }
-        }
-
-        // check if any libraries were updated
-        for(let newLib of newLibs) {
-            let existing = libManager.libs.find(lib => lib.headers.name === newLib.headers.name);
-            if(existing.script !== newLib.script) {
-                libManager.editLib(existing, newLib.script, newLib.headers);
-            }
-        }
-
-        // move the libraries into the correct order
-        let newOrder = [];
-        for (let newLib of newLibs) {
-            let setLib = lib.getLib(newLib.headers.name);
-            if (setLib) newOrder.push(setLib);
-        }
-
-        libManager.libs = newOrder;
-    })
-
-    return [lib, libManager];
-}
-
-const libManager = makeLibManager()[1];
+const libManager = new LibManagerClass();
 export default libManager;

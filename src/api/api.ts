@@ -4,6 +4,7 @@ import NetApi, { type NetType } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
+import LibManager from "$src/core/libManager/libManager.svelte";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -27,15 +28,19 @@ class Api {
     /** Functions for intercepting the arguments and return values of functions */
     static patcher = Object.freeze(new PatcherApi());
 
+    /** Require a library, if it exists */
+    static lib = LibManager.get.bind(LibManager);
+
     constructor() {
         const id = "id";
 
         this.parcel = Object.freeze(new ScopedParcelApi(id));
         this.hotkeys = Object.freeze(new ScopedHotkeysApi(id));
         this.net = Object.freeze(new NetApi() as NetType);
-        this.UI = Object.freeze(new ScopedUIApi());
+        this.UI = Object.freeze(new ScopedUIApi(id));
         this.storage = Object.freeze(new ScopedStorageApi(id));
         this.patcher = Object.freeze(new ScopedPatcherApi(id));
+        this.lib = LibManager.get.bind(LibManager);
     }
 
     /** Functions used to modify Gimkit's internal modules */
@@ -58,6 +63,9 @@ class Api {
 
     /** Functions for intercepting the arguments and return values of functions */
     patcher: Readonly<ScopedPatcherApi>
+
+    /** Require a library, if it exists */
+    lib: typeof LibManager.get;
 }
 
 Object.freeze(Api);

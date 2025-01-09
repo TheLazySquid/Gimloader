@@ -22,19 +22,32 @@ export default class UI {
         addPluginButtons();
     }
 
-    static async addStyles(id: string | null, styleString: string) {
+    static addStyles(id: string | null, styleString: string) {
         let style = document.createElement('style');
         style.innerHTML = styleString;
 
-        // wait for document to be ready
-        if(!document.head) await new Promise(res => document.addEventListener('DOMContentLoaded', res, { once: true }));
-        document.head.appendChild(style);
+        const add = () => document.head.appendChild(style);
 
-        if(id === null) return;
+        // wait for document to be ready
+        if(!document.head) document.addEventListener('DOMContentLoaded', add, { once: true });
+        else add();
+
+        if(id === null) return () => {};
 
         // add to map
         if(!this.styles.has(id)) this.styles.set(id, []);
         this.styles.get(id)?.push(style);
+
+        return () => {
+            let styles = this.styles.get(id);
+            if(styles) {
+                let index = styles.indexOf(style);
+                if(index !== -1) {
+                    styles.splice(index, 1);
+                    style.remove();
+                }
+            }
+        }
     }
 
     static removeStyles(id: string) {
