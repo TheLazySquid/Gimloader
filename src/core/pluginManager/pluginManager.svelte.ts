@@ -208,6 +208,11 @@ class PluginManager {
         this.plugins = [];
         this.saveFn();
     }
+
+    getExports(pluginName: string) {
+        let plugin = this.plugins.find(lib => lib.headers.name === pluginName);
+        return plugin?.return ?? null;
+    }
 }
 
 const pluginManager = new PluginManager();
