@@ -20,7 +20,7 @@ export interface ModalOptions {
 
 let openModals = new Set<string>();
 
-export default function showModal(content: HTMLElement | ReactElement, options?: Partial<ModalOptions>) {
+export default function showModal(content: HTMLElement | ReactElement, options: Partial<ModalOptions> = {}) {
     focusTrapEnabled.set(false);
 
     if(options?.id) {
