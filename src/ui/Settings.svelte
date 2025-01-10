@@ -3,9 +3,7 @@
     import { checkScriptUpdate } from "$core/net/checkUpdates";
     import { settings } from "$src/consts.svelte";
     import Storage from "$core/storage";
-
-    // TODO: Implement poller
-    // let pollEnabled = $state(gimloader.poller.enabled);
+    import Poller from "$core/poller.svelte";
 
     function saveAutoUpdate() {
         Storage.setValue('autoUpdate', settings.autoUpdate);
@@ -45,8 +43,8 @@
 </div>
 <h1 class="text-xl font-bold">Developer Settings</h1>
 <div class="flex items-center">
-    <!-- <Toggle bind:checked={pollEnabled} on:change={() => {
-        gimloader.poller.setEnabled(pollEnabled);
-    }} /> -->
+    <Toggle bind:checked={Poller.enabled} on:change={() => {
+        Poller.setEnabled(Poller.enabled);
+    }} />
     Poll for plugins/libraries being served locally
 </div>

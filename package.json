@@ -33,7 +33,6 @@
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
     "@types/tampermonkey": "^5.0.2",
-    "antd": "^5.17.0",
     "autoprefixer": "^10.4.20",
     "blueboat": "^0.3.42",
     "esbuild": "^0.23.1",
