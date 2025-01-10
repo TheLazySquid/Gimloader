@@ -6,6 +6,7 @@ import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
 import LibManager from "$src/core/libManager/libManager.svelte";
 import PluginManager from "$src/core/pluginManager/pluginManager.svelte";
+import GimkitInternals from "$src/core/internals";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -34,6 +35,16 @@ class Api {
 
     /** Require a plugin, if it exists and has been enabled */
     static plugin = PluginManager.getExports.bind(PluginManager);
+
+    /** A variety of gimkit internal objects available in 2d gamemodes */
+    static get stores() { return GimkitInternals.stores; }
+
+    /**
+     * Gimkit's notification object, only available when joining or playing a game
+     * 
+     * {@link https://ant.design/components/notification}
+     */
+    static get notification() { return GimkitInternals.notification; }  
 
     constructor() {
         const id = "id";
@@ -74,6 +85,16 @@ class Api {
 
     /** Require a plugin, if it exists and has been enabled */
     plugin: typeof PluginManager.getExports;
+
+    /** A variety of gimkit internal objects available in 2d gamemodes */
+    get stores() { return GimkitInternals.stores; }
+
+    /**
+     * Gimkit's notification object, only available when joining or playing a game
+     * 
+     * {@link https://ant.design/components/notification}
+     */
+    get notification() { return GimkitInternals.notification; }
 }
 
 Object.freeze(Api);

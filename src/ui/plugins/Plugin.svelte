@@ -1,7 +1,6 @@
 <script lang="ts">
     import type Plugin from "$core/pluginManager/plugin.svelte";
     import PluginManager from "$core/pluginManager/pluginManager.svelte";
-    import LibManager from "$core/libManager/libManager.svelte";
     import showErrorMessage from "../showErrorMessage";
     import { showPluginCodeEditor } from "../editCodeModals.svelte";
     import { checkPluginUpdate } from "$core/net/checkUpdates";

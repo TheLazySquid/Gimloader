@@ -1,4 +1,6 @@
 import { log, onGimkit, splicer } from "$src/utils";
+import Patcher from "$core/patcher";
+import PluginManager from "./pluginManager/pluginManager.svelte";
 
 type RequireHookFn = (moduleName: string) => void;
 
@@ -54,16 +56,16 @@ export default class Parcel {
         // When the page would navigate to a page that would normally break
         // navigate to a page that doesn't exist and from there set up Gimloader
         // and then load the page that would normally break
-        // this.interceptRequire(null, exports => exports?.AsyncNewTab, exports => {
-        //     GL.patcher.after(null, exports, "AsyncNewTab", (_, __, returnVal) => {
-        //         GL.patcher.before(null, returnVal, "openTab", (_, args) => {
-        //             let url = new URL(args[0]);
-        //             if(redirectedPages.includes(url.pathname)) {
-        //                 args[0] = "https://www.gimkit.com/gimloaderRedirect?to=" + encodeURIComponent(args[0]);
-        //             }
-        //         })
-        //     })
-        // })
+        this.getLazy(null, exports => exports?.AsyncNewTab, exports => {
+            Patcher.after(null, exports, "AsyncNewTab", (_, __, returnVal) => {
+                Patcher.before(null, returnVal, "openTab", (_, args) => {
+                    let url = new URL(args[0]);
+                    if(redirectedPages.includes(url.pathname)) {
+                        args[0] = "https://www.gimkit.com/gimloaderRedirect?to=" + encodeURIComponent(args[0]);
+                    }
+                });
+            });
+        });
 
         if(location.pathname === "/gimloaderRedirect") {
             let params = new URLSearchParams(location.search);
@@ -151,7 +153,7 @@ export default class Parcel {
 
     static setup() {
         if(!onGimkit) return;
-        // this.gimloader.pluginManager.init();
+        PluginManager.init();
 
         let requireHook = ((moduleName: string) => {
             if (moduleName in this._parcelModuleCache) {
