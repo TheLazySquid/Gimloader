@@ -1,6 +1,7 @@
 import { log, onGimkit, splicer } from "$src/utils";
 import Patcher from "$core/patcher";
 import PluginManager from "./pluginManager/pluginManager.svelte";
+import UI from "$core/ui/ui";
 
 type RequireHookFn = (moduleName: string) => void;
 
@@ -105,6 +106,8 @@ export default class Parcel {
         this.nukeDom();
         
         document.documentElement.innerHTML = doc.documentElement.innerHTML;
+
+        UI.addCoreStyles();
 
         // change url back to /host
         history.replaceState(null, '', to);

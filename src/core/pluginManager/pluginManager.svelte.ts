@@ -213,6 +213,16 @@ class PluginManager {
         let plugin = this.plugins.find(lib => lib.headers.name === pluginName);
         return plugin?.return ?? null;
     }
+
+    getHeaders(pluginName: string) {
+        let plugin = this.plugins.find(lib => lib.headers.name === pluginName);
+        if(!plugin.headers) return null;
+        return $state.snapshot(plugin.headers);
+    }
+
+    getPluginNames(): string[] {
+        return this.plugins.map(p => p.headers.name);
+    }
 }
 
 const pluginManager = new PluginManager();

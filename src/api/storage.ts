@@ -22,6 +22,9 @@ class StorageApi {
 
         return Storage.deletePluginValue(pluginName, key);
     }
+
+    /** @deprecated use {@link deleteValue} */
+    get removeValue() { return this.deleteValue };
 }
 
 class ScopedStorageApi {
@@ -36,14 +39,14 @@ class ScopedStorageApi {
 
     /** Sets a value which can be retrieved later, persisting through reloads */
     setValue(key: string, value: any) {
-        if(!validate("storage.getValue", arguments, ['key', 'string'])) return;
+        if(!validate("storage.setValue", arguments, ['key', 'string'])) return;
 
         Storage.setPluginValue(this.id, key, value);
     }
 
     /** Removes a value which has been saved */
     deleteValue(key: string) {
-        if(!validate("storage.getValue", arguments, ['key', 'string'])) return;
+        if(!validate("storage.deleteValue", arguments, ['key', 'string'])) return;
 
         Storage.deletePluginValue(this.id, key);
     }

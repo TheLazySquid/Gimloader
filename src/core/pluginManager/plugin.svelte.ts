@@ -1,4 +1,4 @@
-import type Lib from "$core/libManager/lib";
+import type Lib from "$src/core/libManager/lib.svelte";
 import { settings } from "$src/consts.svelte";
 import { parsePluginHeader } from "$src/parseHeader";
 import showErrorMessage from "$src/ui/showErrorMessage";
@@ -108,7 +108,7 @@ export default class Plugin {
             
             import(url)
                 .then((returnVal) => {
-                    this.return = Object.freeze(returnVal);
+                    this.return = returnVal;
                     this.enabled = true;
             
                     log(`Loaded plugin: ${this.headers.name}`);

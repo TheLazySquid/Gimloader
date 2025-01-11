@@ -1,6 +1,6 @@
 import { parseLibHeader } from '$src/parseHeader';
 import { confirmLibReload } from '$src/utils';
-import Lib from './lib';
+import Lib from './lib.svelte';
 import debounce from 'debounce';
 
 // The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
@@ -159,6 +159,22 @@ export class LibManagerClass {
 
         this.libs = [];
         this.saveFn();
+    }
+
+    getLibHeaders(name: string) {
+        let lib = this.getLib(name);
+        if(!lib) return null;
+        return $state.snapshot(lib.headers);
+    }
+
+    isEnabled(name: string) {
+        let lib = this.getLib(name);
+        if(!lib) return null;
+        return lib.enabling;
+    }
+
+    getLibNames(): string[] {
+        return this.libs.map(lib => lib.headers.name);
     }
 }
 

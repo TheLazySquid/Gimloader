@@ -80,7 +80,9 @@
         Hotkeys.saveConfigurableHotkeys();
     }
 
-    function formatTrigger(trigger: HotkeyTrigger) {
+    function formatTrigger(trigger: HotkeyTrigger | null) {
+        if(!trigger) return "Not Bound";
+
         let keys: string[] = [];
         if(trigger.key) {
             if(trigger.ctrl && !trigger.key.startsWith("Control")) keys.push("Ctrl");

@@ -1,4 +1,4 @@
-import type Lib from "$core/libManager/lib";
+import type Lib from "$src/core/libManager/lib.svelte";
 
 export function log(...args: any[]) {
     console.log('%c[GL]', 'color:#5030f2', ...args);
@@ -8,9 +8,18 @@ export function error(...args: any[]) {
     console.error('%c[GL]', 'color:#5030f2', ...args);
 }
 
+function typeMatches(val: any, type: string) {
+    if(!type.endsWith('?')) return typeof val === type;
+    else return typeof val === type.slice(0, -1);
+}
+
 export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]) {
     for(let i = 0; i < schema.length; i++) {
         let [ name, type ] = schema[i];
+
+        if(typeof type === "string" && type.endsWith("?") && args[i] === undefined) {
+            continue;
+        }
 
         // check whether the key argument is present
         if(args[i] === undefined) {
@@ -26,17 +35,17 @@ export function validate(fnName: string, args: IArguments, ...schema: [string, s
             }
 
             for(let key in type) {
-                if(args[i][key] === undefined) {
+                if(args[i][key] === undefined && !type[key].endsWith("?")) {
                     error(fnName, `called without argument ${name}.${key}`);
                     return false;
                 }
 
-                if(typeof args[i][key] !== type[key]) {
+                if(!typeMatches(args[i][key], type[key])) {
                     error(fnName, 'recieved', args[i][key], `for argument ${name}.${key}, expected type ${type[key]}`);
                 }
             }
         } else {
-            if(typeof args[i] !== type) {
+            if(!typeMatches(args[i], type)) {
                 error(fnName, 'recieved', args[i], `for argument ${name}, expected type ${type}`);
                 return false;
             }

@@ -14,7 +14,6 @@ class Poller {
     }
 
     setEnabled(enabled: boolean) {
-        console.log("Poller:", enabled);
         this.enabled = enabled;
         Storage.setValue("pollerEnabled", enabled);
 
