@@ -33,7 +33,7 @@ class ParcelApi extends BaseParcelApi {
     getLazy(id: string, matcher: Matcher, callback: (exports: any) => any, initial = true) {
         if(!validate("parcel.getLazy", arguments,
             ['id', 'string'], ['matcher', 'function'],
-            ['callback', 'function'], ['initial', 'boolean'])) return;
+            ['callback', 'function'], ['initial', 'boolean?'])) return;
         
         return Parcel.getLazy(id, matcher, callback, initial);
     }
@@ -44,6 +44,12 @@ class ParcelApi extends BaseParcelApi {
 
         Parcel.stopLazy(id);
     }
+
+    /** @deprecated Use {@link getLazy} instead */
+    get interceptRequire() { return this.getLazy };
+    
+    /** @deprecated Use {@link stopLazy} instead */
+    get stopIntercepts() { return this.stopLazy };
 }
 
 class ScopedParcelApi extends BaseParcelApi {
@@ -52,7 +58,7 @@ class ScopedParcelApi extends BaseParcelApi {
     /** Waits for a module to be loaded, then runs a callback */
     getLazy(matcher: Matcher, callback: (exports: any) => any, initial = true) {
         if(!validate("parcel.getLazy", arguments,
-            ['matcher', 'function'], ['callback', 'function'], ['initial', 'boolean'])) return;
+            ['matcher', 'function'], ['callback', 'function'], ['initial', 'boolean?'])) return;
 
         return Parcel.getLazy(this.id, matcher, callback, initial);
     }

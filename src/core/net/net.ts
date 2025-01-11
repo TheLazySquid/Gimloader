@@ -1,6 +1,7 @@
 import type { Room as BlueboatRoom } from "blueboat";
 import type { Room as ColyseusRoom } from "colyseus.js";
-import type Lib from "$core/libManager/lib";
+import type Lib from "$src/core/libManager/lib.svelte";
+import Internal from "$core/internals";
 import Parcel from "../parcel";
 import EventEmitter from "eventemitter2";
 import { confirmLibReload, log } from "$src/utils";
@@ -29,6 +30,13 @@ class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
 
+    loadedRes: () => void;
+    loaded = new Promise<void>((res) => this.loadedRes = res);
+    colyseusLoadRes: () => void;
+    colyseusLoaded = new Promise<void>((res) => this.colyseusLoadRes = res);
+    blueboatLoadRes: () => void;
+    blueboatLoaded = new Promise<void>((res) => this.blueboatLoadRes = res);
+
     constructor() {
         super({
             wildcard: true,
@@ -51,6 +59,8 @@ class Net extends EventEmitter {
             exports.OnJoinedRoom = function(colyseus: any) {
                 me.type = 'Colyseus';
                 me.room = colyseus.room;
+
+                me.waitForColyseusLoad();
                 
                 // intercept incoming messages
                 Patcher.before(null, colyseus.room, "send", (_, args) => {
@@ -85,6 +95,8 @@ class Net extends EventEmitter {
                 me.type = 'Blueboat';
 
                 log('Blueboat room intercepted');
+                me.loadedRes();
+                me.blueboatLoadRes();
 
                 // intercept incoming messages
                 Patcher.before(null, room.onMessage, "call", (_, args) => {
@@ -105,6 +117,43 @@ class Net extends EventEmitter {
                 return room;
             }
         });
+    }
+
+    waitForColyseusLoad() {
+        const message = Internal.stores.me.nonDismissMessage;
+        const loading = Internal.stores.loading;
+        const me = Internal.stores.me;
+        
+        const mobxMsg = message[Object.getOwnPropertySymbols(message)[0]];
+        const mobxLoading = loading[Object.getOwnPropertySymbols(loading)[0]];
+        const mobxMe = me[Object.getOwnPropertySymbols(me)[0]];
+
+        let title: string = message.title, description: string = message.description,
+            initial: boolean = loading.completedInitialLoad,
+            terrain: boolean = loading.loadedInitialTerrain,
+            devices: boolean = loading.loadedInitialDevices,
+            placement: boolean = me.completedInitialPlacement;
+
+        let stopObservers: (() => void)[] = [];
+        const check = () => {
+            if(title || description || !initial || !terrain || !devices || !placement) return;
+            for(let stop of stopObservers) stop();
+
+            this.loadedRes();
+            this.colyseusLoadRes();
+        }
+
+        // observe the values and re-check if they change
+        stopObservers.push(
+            mobxMsg.values_.get("title").observe_((a: any) => { title = a.newValue; check() }),
+            mobxMsg.values_.get("description").observe_((a: any) => { description = a.newValue; check() }),
+            mobxLoading.values_.get("completedInitialLoad").observe_((a: any) => { initial = a.newValue; check() }),
+            mobxLoading.values_.get("loadedInitialTerrain").observe_((a: any) => { terrain = a.newValue; check() }),
+            mobxLoading.values_.get("loadedInitialDevices").observe_((a: any) => { devices = a.newValue; check() }),
+            mobxMe.values_.get("completedInitialPlacement").observe_((a: any) => { placement = a.newValue; check() })
+        );
+
+        check();
     }
 
     send(channel: string, message: any) {

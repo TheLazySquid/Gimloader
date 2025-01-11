@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Lib from "$core/libManager/lib";
+    import type Lib from "$src/core/libManager/lib.svelte";
     import Card from "../components/Card.svelte";
     import LibManager from "$core/libManager/libManager.svelte";
 

@@ -42,7 +42,7 @@ export class ConfigurableHotkey {
 
         if(hotkeys.savedHotkeys[id]) {
             this.trigger = Object.assign({}, hotkeys.savedHotkeys[id]);
-        } else {
+        } else if(this.default) {
             this.trigger = Object.assign({}, this.default);
         }
     }
@@ -56,16 +56,19 @@ class Hotkeys {
     hotkeys: DefaultHotkey[] = [];
     configurableHotkeys: ConfigurableHotkey[] = $state([]);
     pressedKeys = new Set<string>();
+    pressed = new Set<string>();
     savedHotkeys: Record<string, any> = Storage.getValue('configurableHotkeys', {});
 
     init() {
         window.addEventListener('keydown', (event) => {
-            this.pressedKeys.add(event.code);
+            this.pressed.add(event.code);
+            this.pressedKeys.add(event.key.toLowerCase());
             this.checkHotkeys(event);
         });
 
         window.addEventListener('keyup', (event) => {
-            this.pressedKeys.delete(event.code);
+            this.pressed.delete(event.code);
+            this.pressedKeys.delete(event.key.toLowerCase());
         });
 
         window.addEventListener('blur', () => {
@@ -73,14 +76,14 @@ class Hotkeys {
         });
     }
 
-    addHotkey(id: string, options: HotkeyOptions, callback: Callback) {
+    addHotkey(id: any, options: HotkeyOptions, callback: Callback) {
         let obj = { ...options, id, callback };
         this.hotkeys.push(obj);
 
         return splicer(this.hotkeys, obj);
     }
 
-    removeHotkeys(id: string) {
+    removeHotkeys(id: any) {
         for(let i = 0; i < this.hotkeys.length; i++) {
             if(this.hotkeys[i].id === id) {
                 this.hotkeys.splice(i, 1);
@@ -106,6 +109,7 @@ class Hotkeys {
     }
 
     releaseAll() {
+        this.pressed.clear();
         this.pressedKeys.clear();
     }
 
@@ -132,7 +136,7 @@ class Hotkeys {
             if(!trigger.keys.includes(e.code)) return false;
 
             for(let key of trigger.keys) {
-                if(!this.pressedKeys.has(key)) return false;
+                if(!this.pressed.has(key)) return false;
             }
         }
 

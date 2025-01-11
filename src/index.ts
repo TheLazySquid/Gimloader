@@ -5,7 +5,6 @@ import Parcel from "$core/parcel";
 import UI from "$core/ui/ui";
 import GimkitInternals from "$core/internals";
 import Poller from "$src/core/poller.svelte";
-import styles from "./css/styles.scss";
 import initInstallApi from "./installApi";
 
 Object.defineProperty(unsafeWindow, "GL", {
@@ -22,5 +21,3 @@ GimkitInternals.init();
 Poller.init();
 
 initInstallApi();
-
-UI.addStyles(null, styles);

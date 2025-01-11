@@ -2,6 +2,7 @@ import type * as React from 'react';
 import type * as ReactDOM from 'react-dom/client';
 import Parcel from "$core/parcel";
 import { addPluginButtons } from './addPluginButtons';
+import styles from "../../css/styles.scss";
 
 export default class UI {
     static React: typeof React;
@@ -20,6 +21,7 @@ export default class UI {
         });
 
         addPluginButtons();
+        this.addCoreStyles();
     }
 
     static addStyles(id: string | null, styleString: string) {
@@ -58,5 +60,9 @@ export default class UI {
         }
 
         this.styles.delete(id);
+    }
+
+    static addCoreStyles() {
+        this.addStyles(null, styles);
     }
 }

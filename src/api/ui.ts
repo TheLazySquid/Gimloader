@@ -13,7 +13,7 @@ class BaseUIApi {
     }
 }
 
-class UIApi {
+class UIApi extends BaseUIApi {
     /** Adds a style to the DOM */
     addStyle(id: string, style: string) {
         if(!validate("UI.removeStyles", arguments, ['id', 'string'], ['style', 'string'])) return;
@@ -29,8 +29,8 @@ class UIApi {
     }
 }
 
-class ScopedUIApi {
-    constructor(private readonly id: string) {}
+class ScopedUIApi extends BaseUIApi {
+    constructor(private readonly id: string) { super() }
 
     /** Adds a style to the DOM */
     addStyle(style: string) {

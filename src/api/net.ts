@@ -13,7 +13,6 @@ class NetApi extends EventEmitter {
         });
 
         Net.onAny((channel, ...args) => {
-            console.log("Emitting on", channel);
             this.emit(channel, ...args);
         });
     }
@@ -32,6 +31,31 @@ class NetApi extends EventEmitter {
         if(!validate("net.send", arguments, ['channel', 'string'])) return;
         
         Net.send(channel, message);
+    }
+
+    /** A promise that is resolved when the game is loaded */
+    get loaded() { return Net.loaded };
+
+    /** A promise that is resolved when a colyseus (2d) game is loaded */
+    get colyseusLoaded() { return Net.colyseusLoaded };
+
+    /** A promise that is resolved when a blueboat (1d) game is loaded */
+    get blueboatLoaded() { return Net.blueboatLoaded };
+    
+    /** @deprecated Methods for both transports are now on the base net api */
+    get colyseus() { return this };
+    
+    /** @deprecated Methods for both transports are now on the base net api */
+    get blueboat() { return this };
+
+    /** @deprecated use net.on */
+    addEventListener(channel: string, callback: (...args: any[]) => void) {
+        this.on(channel, callback);
+    }
+    
+    /** @deprecated use net.off */
+    removeEventListener(channel: string, callback: (...args: any[]) => void) {
+        this.off(channel, callback);
     }
 }
 

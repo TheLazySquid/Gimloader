@@ -1,4 +1,4 @@
-import type Lib from "$core/libManager/lib";
+import type Lib from "$src/core/libManager/lib.svelte";
 import type Plugin from '../pluginManager/plugin.svelte';
 import { version } from "$src/consts.svelte";
 import { parseLibHeader, parsePluginHeader } from '$src/parseHeader';

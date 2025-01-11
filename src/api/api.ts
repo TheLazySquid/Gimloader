@@ -4,9 +4,13 @@ import NetApi, { type NetType } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
-import LibManager from "$src/core/libManager/libManager.svelte";
-import PluginManager from "$src/core/pluginManager/pluginManager.svelte";
-import GimkitInternals from "$src/core/internals";
+import LibManager from "$core/libManager/libManager.svelte";
+import PluginManager from "$core/pluginManager/pluginManager.svelte";
+import GimkitInternals from "$core/internals";
+import Net from "$core/net/net";
+import UI from "$core/ui/ui";
+import LibsApi from "./libs";
+import PluginsApi from "./plugins";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -30,21 +34,49 @@ class Api {
     /** Functions for intercepting the arguments and return values of functions */
     static patcher = Object.freeze(new PatcherApi());
 
-    /** Require a library, if it exists */
-    static lib = LibManager.get.bind(LibManager);
+    /** Methods for getting info on libraries */
+    static libs = Object.freeze(new LibsApi());
 
-    /** Require a plugin, if it exists and has been enabled */
-    static plugin = PluginManager.getExports.bind(PluginManager);
+    /** Get the exported values of a library */
+    static lib = this.libs.get;
 
-    /** A variety of gimkit internal objects available in 2d gamemodes */
-    static get stores() { return GimkitInternals.stores; }
+    /** Methods for getting info on plugins */
+    static plugins = Object.freeze(new PluginsApi());
+    
+    /** Gets the exported values of a plugin, if it has been enabled */
+    static plugin = this.plugins.get;
+
+    /** Gimkit's internal react instance */
+    static get React() { return UI.React };
+
+    /** Gimkit's internal reactDom instance */
+    static get ReactDOM() { return UI.ReactDOM };
+
+    /** A variety of Gimkit internal objects available in 2d gamemodes */
+    static get stores() { return GimkitInternals.stores };
 
     /**
      * Gimkit's notification object, only available when joining or playing a game
      * 
      * {@link https://ant.design/components/notification}
      */
-    static get notification() { return GimkitInternals.notification; }  
+    static get notification() { return GimkitInternals.notification };
+
+    /** @deprecated No longer supported */
+    static get contextMenu() { return { showContextMenu: () => {}, createReactContextMenu: () => {} } }; 
+
+    /** @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events */
+    static addEventListener(type: string, callback: () => void) {
+        if(type === "loadEnd") {
+            Net.loaded.then(callback);
+        }
+    }
+
+    /** @deprecated The api no longer emits events */
+    static removeEventListener() {}
+
+    /** @deprecated Use {@link plugins} instead */
+    static get pluginManager() { return this.plugins };
 
     constructor() {
         const id = "id";
@@ -80,21 +112,33 @@ class Api {
     /** Functions for intercepting the arguments and return values of functions */
     patcher: Readonly<ScopedPatcherApi>
 
-    /** Require a library, if it exists */
-    lib: typeof LibManager.get;
+    /** Methods for getting info on libraries */
+    libs = Api.libs;
 
-    /** Require a plugin, if it exists and has been enabled */
-    plugin: typeof PluginManager.getExports;
+    /** Get the exported values of a library */
+    lib = Api.lib;
+
+    /** Methods for getting info on plugins */
+    plugins = Api.plugins;
+    
+    /** Gets the exported values of a plugin, if it has been enabled */
+    plugin = Api.plugin;
+
+    /** Gimkit's internal react instance */
+    get React() { return UI.React };
+
+    /** Gimkit's internal reactDom instance */
+    get ReactDOM() { return UI.ReactDOM };
 
     /** A variety of gimkit internal objects available in 2d gamemodes */
-    get stores() { return GimkitInternals.stores; }
+    get stores() { return GimkitInternals.stores };
 
     /**
      * Gimkit's notification object, only available when joining or playing a game
      * 
      * {@link https://ant.design/components/notification}
      */
-    get notification() { return GimkitInternals.notification; }
+    get notification() { return GimkitInternals.notification };
 }
 
 Object.freeze(Api);

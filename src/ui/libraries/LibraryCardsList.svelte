@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Lib from "$core/libManager/lib";
+    import type Lib from "$src/core/libManager/lib.svelte";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import Library from "./Library.svelte";

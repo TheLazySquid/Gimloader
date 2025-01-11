@@ -5,7 +5,7 @@ import { parseLibHeader } from "$src/parseHeader";
 export default class Lib {
     script: string;
     library: any;
-    headers: Record<string, any> = {};
+    headers: Record<string, any> = $state();
     enabling: boolean = false;
     enableError?: Error;
     enableSuccessCallbacks: ((needsReload: boolean) => void)[] = [];
@@ -24,7 +24,7 @@ export default class Lib {
 
     async enable(initial: boolean = false) {
         if(this.enableError) return Promise.reject(this.enableError);
-        if(this.library) return Promise.resolve(true);
+        if(this.library) return Promise.resolve(false);
 
         if(!this.enabling) {
             this.enabling = true;
