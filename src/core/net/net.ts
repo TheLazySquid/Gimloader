@@ -30,13 +30,6 @@ class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
 
-    loadedRes: () => void;
-    loaded = new Promise<void>((res) => this.loadedRes = res);
-    colyseusLoadRes: () => void;
-    colyseusLoaded = new Promise<void>((res) => this.colyseusLoadRes = res);
-    blueboatLoadRes: () => void;
-    blueboatLoaded = new Promise<void>((res) => this.blueboatLoadRes = res);
-
     constructor() {
         super({
             wildcard: true,
@@ -95,8 +88,7 @@ class Net extends EventEmitter {
                 me.type = 'Blueboat';
 
                 log('Blueboat room intercepted');
-                me.loadedRes();
-                me.blueboatLoadRes();
+                me.emit('load:blueboat');
 
                 // intercept incoming messages
                 Patcher.before(null, room.onMessage, "call", (_, args) => {
@@ -139,8 +131,7 @@ class Net extends EventEmitter {
             if(title || description || !initial || !terrain || !devices || !placement) return;
             for(let stop of stopObservers) stop();
 
-            this.loadedRes();
-            this.colyseusLoadRes();
+            this.emit('load:colyseus');
         }
 
         // observe the values and re-check if they change

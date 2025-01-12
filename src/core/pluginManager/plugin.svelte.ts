@@ -6,12 +6,16 @@ import { confirmLibReload, log } from "$src/utils";
 import Net from "$core/net/net";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "./pluginManager.svelte";
+import { uuidRegex } from "$src/scopedApi";
 
 export default class Plugin {
     script: string;
     enabled: boolean = $state();
     headers: Record<string, any> = $state();
     return: any = $state();
+    blobUuid: string | null = null;
+    onStop: (() => void)[] = [];
+    openSettingsMenu: (() => void)[] = $state([]);
 
     constructor(script: string, enabled = true) {
         this.script = script;
@@ -35,7 +39,7 @@ export default class Plugin {
                         failed = true;
                         this.enabled = false;
                         rej(new Error(e));
-                    })
+                    });
 
                 if(failed) return;
             }
@@ -105,11 +109,19 @@ export default class Plugin {
             // create a blob from the script and import it
             let blob = new Blob([this.script], { type: 'application/javascript' });
             let url = URL.createObjectURL(blob);
+            this.blobUuid = url.match(uuidRegex)?.[0];
             
             import(url)
                 .then((returnVal) => {
                     this.return = returnVal;
                     this.enabled = true;
+                    
+                    if(returnVal.onStop && typeof returnVal.onStop === "function") {
+                        this.onStop.push(returnVal.onStop);
+                    }
+                    if(returnVal.openSettingsMenu && typeof returnVal.openSettingsMenu === "function") {
+                        this.openSettingsMenu.push(returnVal.openSettingsMenu);
+                    }
             
                     log(`Loaded plugin: ${this.headers.name}`);
                     
@@ -153,13 +165,13 @@ export default class Plugin {
         this.enabled = false;
         if(!PluginManager.runPlugins) return;
 
-        if(this.return) {
-            try {
-                this.return?.onStop?.();
-            } catch (e) {
-                console.error(`Error stopping plugin ${this.headers.name}:`, e);
-            }
+        try {
+            for(let stop of this.onStop) stop?.();
+        } catch (e) {
+            console.error(`Error stopping plugin ${this.headers.name}:`, e);
         }
+        this.onStop = [];
+        this.openSettingsMenu = [];
 
         if(!temp) {
             for(let lib of this.headers.needsLib) {

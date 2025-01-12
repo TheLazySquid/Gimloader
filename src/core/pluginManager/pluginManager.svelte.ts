@@ -100,7 +100,6 @@ class PluginManager {
             }
 
             this.plugins = newOrder;
-            // this.plugins = [];
         });
     }
 

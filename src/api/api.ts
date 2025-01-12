@@ -4,13 +4,15 @@ import NetApi, { type NetType } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
-import LibManager from "$core/libManager/libManager.svelte";
-import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import GimkitInternals from "$core/internals";
 import Net from "$core/net/net";
 import UI from "$core/ui/ui";
 import LibsApi from "./libs";
 import PluginsApi from "./plugins";
+import setupScoped from "$src/scopedApi";
+import Parcel from "$core/parcel";
+import Hotkeys from "$core/hotkeys.svelte";
+import Patcher from "$core/patcher";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -68,27 +70,50 @@ class Api {
     /** @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events */
     static addEventListener(type: string, callback: () => void) {
         if(type === "loadEnd") {
-            Net.loaded.then(callback);
+            Net.on('load:*', callback);
         }
     }
 
     /** @deprecated The api no longer emits events */
-    static removeEventListener() {}
+    static removeEventListener(type: string, callback: () => void) {
+        if(type === "loadEnd") {
+            Net.off('load:*', callback);
+        }
+    }
 
     /** @deprecated Use {@link plugins} instead */
     static get pluginManager() { return this.plugins };
 
     constructor() {
-        const id = "id";
+        const scoped = setupScoped();
+        this.onStop = scoped.onStop;
+        this.openSettingsMenu = scoped.openSettingsMenu;
 
-        this.parcel = Object.freeze(new ScopedParcelApi(id));
-        this.hotkeys = Object.freeze(new ScopedHotkeysApi(id));
+        this.parcel = Object.freeze(new ScopedParcelApi(scoped.id));
+        this.hotkeys = Object.freeze(new ScopedHotkeysApi(scoped.id));
         this.net = Object.freeze(new NetApi() as NetType);
-        this.UI = Object.freeze(new ScopedUIApi(id));
-        this.storage = Object.freeze(new ScopedStorageApi(id));
-        this.patcher = Object.freeze(new ScopedPatcherApi(id));
-        this.lib = LibManager.get.bind(LibManager);
-        this.plugin = PluginManager.getExports.bind(PluginManager);
+        this.UI = Object.freeze(new ScopedUIApi(scoped.id));
+        this.storage = Object.freeze(new ScopedStorageApi(scoped.id));
+        this.patcher = Object.freeze(new ScopedPatcherApi(scoped.id));
+        
+        const netOnAny = (channel: string, ...args: any[]) => {
+            this.net.emit(channel, ...args);
+        }
+
+        // emit events to the net object (not done there to allow for cleanup)
+        Net.onAny(netOnAny);
+        
+        const cleanup = () => {
+            Net.offAny(netOnAny);
+            this.net.removeAllListeners();
+            Parcel.stopLazy(scoped.id);
+            Hotkeys.removeHotkeys(scoped.id);
+            Hotkeys.removeConfigurableHotkeys(scoped.id);
+            UI.removeStyles(scoped.id);
+            Patcher.unpatchAll(scoped.id);
+        }
+        
+        this.onStop(cleanup);
     }
 
     /** Functions used to modify Gimkit's internal modules */
@@ -139,6 +164,16 @@ class Api {
      * {@link https://ant.design/components/notification}
      */
     get notification() { return GimkitInternals.notification };
+
+    /** Run a callback when the plugin or library is disabled */
+    onStop: (callback: () => void) => void;
+
+    /**
+     * Run a callback when the plugin's settings menu button is clicked
+     * 
+     * This function is not available for libraries
+     */
+    openSettingsMenu: (callback: () => void) => void;
 }
 
 Object.freeze(Api);

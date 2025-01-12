@@ -106,8 +106,8 @@
         <button onclick={() => showPluginCodeEditor(plugin)}>
             <Pencil size={28} />
         </button>
-        {#if plugin?.return?.openSettingsMenu}
-            <button onclick={() => plugin.return.openSettingsMenu()}>
+        {#if plugin.openSettingsMenu.length > 0}
+            <button onclick={() => plugin.openSettingsMenu.forEach(c => c())}>
                 <Cog size={28} />
             </button>
         {:else if plugin?.headers.hasSettings !== "false"}
