@@ -1,4 +1,4 @@
-import ErrorModal from "./ErrorModal.svelte";
+import ErrorModal from "./components/ErrorModal.svelte";
 import { mount, unmount } from "svelte";
 
 export default function showErrorMessage(msg: string, title: string = "Error") {

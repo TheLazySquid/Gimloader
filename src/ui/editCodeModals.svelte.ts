@@ -1,8 +1,7 @@
-import showModal from "./modal";
-import PluginManager from "../pluginManager/pluginManager.svelte"
-import Plugin from "../pluginManager/plugin.svelte";
-import { parsePluginHeader } from "../util";
-import Lib from "$src/lib/lib";
+import showModal from "$core/ui/modal";
+import Plugin from "$core/pluginManager/plugin.svelte";
+import { parsePluginHeader } from "$src/parseHeader";
+import Lib from "$src/core/libManager/lib.svelte";
 import { javascript } from "@codemirror/lang-javascript";
 import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";
@@ -10,7 +9,8 @@ import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorState } from "@codemirror/state";
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
-import type { LibManagerClass } from "$src/lib/libManager.svelte";
+import LibManager from "$core/libManager/libManager.svelte";
+import PluginManager from "$core/pluginManager/pluginManager.svelte";
 
 function createEditorDiv(defaultText: string) {
     let editorDiv = document.createElement("div");
@@ -33,7 +33,7 @@ function createEditorDiv(defaultText: string) {
     return { editorDiv, editor };
 }
 
-export function showPluginCodeEditor(plugin: Plugin, pluginManager: PluginManager) {
+export function showPluginCodeEditor(plugin: Plugin) {
     let { editorDiv, editor } = createEditorDiv(plugin.script);
 
     showModal(editorDiv, {
@@ -53,7 +53,7 @@ export function showPluginCodeEditor(plugin: Plugin, pluginManager: PluginManage
                     let headers = parsePluginHeader(code);
 
                     let canceled = false;
-                    for(let otherPlugin of pluginManager.plugins) {
+                    for(let otherPlugin of PluginManager.plugins) {
                         if(otherPlugin === plugin) continue;
 
                         if(otherPlugin.headers.name === headers.name) {
@@ -64,10 +64,10 @@ export function showPluginCodeEditor(plugin: Plugin, pluginManager: PluginManage
 
                     if(canceled) return;
 
-                    for(let otherPlugin of pluginManager.plugins) {
+                    for(let otherPlugin of PluginManager.plugins) {
                         if(otherPlugin === plugin || otherPlugin.headers.name !== headers.name) continue;
 
-                        pluginManager.deletePlugin(otherPlugin);
+                        PluginManager.deletePlugin(otherPlugin);
                     }
 
                     plugin.edit(code, headers);
@@ -77,7 +77,7 @@ export function showPluginCodeEditor(plugin: Plugin, pluginManager: PluginManage
     });
 }
 
-export function createPlugin(pluginManager: PluginManager) {
+export function createPlugin() {
     const defaultCode = `/**
 * @name New Plugin
 * @description A new plugin
@@ -100,13 +100,13 @@ export function createPlugin(pluginManager: PluginManager) {
                 style: "primary",
                 onClick() {
                     let code = editor.state.doc.toString();
-                    pluginManager.createPlugin(code);
+                    PluginManager.createPlugin(code);
                 }
             }
         ]
     });
 }
-export function showLibCodeEditor(lib: Lib, libManager: LibManagerClass) {
+export function showLibCodeEditor(lib: Lib) {
     let { editorDiv, editor } = createEditorDiv(lib.script);
 
     showModal(editorDiv, {
@@ -123,14 +123,14 @@ export function showLibCodeEditor(lib: Lib, libManager: LibManagerClass) {
                 style: "primary",
                 onClick() {
                     let code = editor.state.doc.toString();
-                    libManager.editLib(lib, code);
+                    LibManager.editLib(lib, code);
                 }
             }
         ]
     });
 }
 
-export function createLib(libManager: LibManagerClass) {
+export function createLib() {
     const defaultCode = `/**
 * @name New Library
 * @description A new library
@@ -154,7 +154,7 @@ export function createLib(libManager: LibManagerClass) {
                 style: "primary",
                 onClick() {
                     let code = editor.state.doc.toString();
-                    libManager.createLib(code);
+                    LibManager.createLib(code);
                 }
             }
         ]
