@@ -14,12 +14,13 @@ interface PluginInfo {
 class PluginManager {
     plugins: Plugin[] = $state([]);
     runPlugins: boolean;
+    destroyed = false;
 
     constructor(runPlugins: boolean = true) {
         this.runPlugins = runPlugins;
 
         // load plugins from storage
-        let pluginScripts = JSON.parse(GM_getValue('plugins', '[]')!);
+        let pluginScripts = JSON.parse(Storage.getValue('plugins', '[]')!);
         for(let plugin of pluginScripts) {
             let pluginObj = new Plugin(plugin.script, plugin.enabled);
             this.plugins.push(pluginObj);
@@ -104,11 +105,11 @@ class PluginManager {
     }
 
     saveFn() {
-        if((window as any).destroyed) return;
-        
+        if(this.destroyed) return;
+
         let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
     
-        GM_setValue('plugins', JSON.stringify(pluginObjs));
+        Storage.setValue('plugins', JSON.stringify(pluginObjs));
     }
 
     saveDebounced = debounce(this.saveFn, 100);

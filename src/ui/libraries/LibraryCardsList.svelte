@@ -8,6 +8,7 @@
     import { readUserFile } from "$src/utils";
     import LibManager from "$core/libManager/libManager.svelte";
     import { settings } from "$src/consts.svelte";
+    import Storage from "$core/storage";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
@@ -73,7 +74,7 @@
     }
 
     function setView(mode: string) {
-        GM_setValue('menuView', mode);
+        Storage.setValue('menuView', mode);
         settings.menuView = mode;
     }
 </script>

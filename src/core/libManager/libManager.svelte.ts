@@ -1,5 +1,6 @@
 import { parseLibHeader } from '$src/parseHeader';
 import { confirmLibReload } from '$src/utils';
+import Storage from '$core/storage';
 import Lib from './lib.svelte';
 import debounce from 'debounce';
 
@@ -7,9 +8,10 @@ import debounce from 'debounce';
 // If there is a better way to do this please let me know
 export class LibManagerClass {
     libs: Lib[] = $state();
+    destroyed = false;
 
     constructor() {
-        let libScripts = GM_getValue('libs', []) as string[];
+        let libScripts = Storage.getValue('libs', []) as string[];
 
         let libs = [];
 
@@ -77,14 +79,14 @@ export class LibManagerClass {
     }
 
     saveFn() {
-        if((window as any).destroyed) return;
-
+        if(this.destroyed) return;
+        
         let libStrs: string[] = [];
         for(let lib of this.libs) {
             libStrs.push(lib.script);
         }
 
-        GM_setValue('libs', libStrs);
+        Storage.setValue('libs', libStrs);
     }
 
     saveDebounced?: () => void;

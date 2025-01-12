@@ -148,7 +148,7 @@ class Hotkeys {
     saveConfigurableHotkeys() {
         this.savedHotkeys = {};
 
-        GM_setValue('configurableHotkeys', this.savedHotkeys);
+        Storage.setValue('configurableHotkeys', this.savedHotkeys);
     }
 }
 
