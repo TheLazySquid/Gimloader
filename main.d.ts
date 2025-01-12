@@ -23,6 +23,8 @@ declare const GL: import('./src/api/api').default;
 declare const stores: any;
 /** @deprecated Polyfills for Gimhook mods. Please use the built-in modding API */
 declare const gimhook: any;
+/** @deprecated No longer supported */
+declare const platformerPhysics: any;
 
 interface Window {
     GL: import('./src/api/api').default;
@@ -30,4 +32,6 @@ interface Window {
     stores: any;
     /** @deprecated Polyfills for Gimhook mods. Please use the built-in modding API */
     gimhook: any;
+    /** @deprecated No longer supported */
+    platformerPhysics: any;
 }
