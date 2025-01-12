@@ -1,18 +1,18 @@
-import { Gimloader } from "./gimloader.svelte";
-import { parsePluginHeader } from "./util";
+import { parsePluginHeader } from "$src/parseHeader";
+import PluginManager from "./core/pluginManager/pluginManager.svelte";
 
-export default function initInstallApi(loader: Gimloader) {
+export default function initInstallApi() {
     (unsafeWindow as any).GLInstall = async function (script: string) {
         let headers = parsePluginHeader(script);
-        let existingPlugin = loader.pluginManager.getPlugin(headers.name);
+        let existingPlugin = PluginManager.getPlugin(headers.name);
         if(existingPlugin) {
             existingPlugin.edit(script, headers);
         } else {
-            loader.pluginManager.createPlugin(script, false);
+            PluginManager.createPlugin(script, false);
         }
     };
 
     (unsafeWindow as any).GLGet = function (name: string) {
-        return loader.pluginManager.getPlugin(name)?.script;
+        return PluginManager.getPlugin(name)?.script;
     }
 }
