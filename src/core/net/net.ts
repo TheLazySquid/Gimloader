@@ -4,7 +4,7 @@ import type Lib from "$src/core/libManager/lib.svelte";
 import Internal from "$core/internals";
 import Parcel from "../parcel";
 import EventEmitter from "eventemitter2";
-import { confirmLibReload, log } from "$src/utils";
+import { confirmLibReload, log, splicer } from "$src/utils";
 import Patcher from "../patcher";
 import LibManager from "$core/libManager/libManager.svelte";
 import { settings } from "$src/consts.svelte";
@@ -27,10 +27,17 @@ interface NoConnection {
 
 export type Connection = BlueboatConnection | ColyseusConnection | NoConnection;
 
+interface LoadCallback {
+    callback: (type: Connection["type"]) => void;
+    id: string;
+}
+
 class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
+    loaded = false;
     is1dHost = false;
+    loadCallbacks: LoadCallback[] = [];
 
     constructor() {
         super({
@@ -91,6 +98,7 @@ class Net extends EventEmitter {
 
                 log('Blueboat room intercepted');
                 me.emit('load:blueboat');
+                me.onLoad("Blueboat");
 
                 // intercept incoming messages
                 Patcher.before(null, room.onMessage, "call", (_, args) => {
@@ -138,6 +146,7 @@ class Net extends EventEmitter {
             for(let stop of stopObservers) stop();
 
             this.emit('load:colyseus');
+            this.onLoad("Colyseus");
         }
 
         // observe the values and re-check if they change
@@ -250,6 +259,42 @@ class Net extends EventEmitter {
                 })
                 .catch(() => rej(`Failed to download library from ${url}`));
         })
+    }
+
+    onLoad(type: Connection["type"]) {
+        this.loaded = true;
+
+        for(let { callback } of this.loadCallbacks) {
+            try {
+                callback(type);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    }
+
+    pluginOnLoad(id: string, callback: (type: Connection["type"]) => void) {
+        if(this.loaded) {
+            callback(this.type);
+            return () => {};
+        }
+
+        let obj = {
+            callback,
+            id
+        };
+        
+        this.loadCallbacks.push(obj);
+        return splicer(this.loadCallbacks, obj);
+    }
+
+    pluginOffLoad(id: string) {
+        for(let i = 0; i < this.loadCallbacks.length; i++) {
+            if(this.loadCallbacks[i].id === id) {
+                this.loadCallbacks.splice(i, 1);
+                i--;
+            }
+        }
     }
 
     get isHost() {

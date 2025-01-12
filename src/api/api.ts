@@ -1,6 +1,7 @@
 import { HotkeysApi, ScopedHotkeysApi } from "./hotkeys";
 import { ParcelApi, ScopedParcelApi } from "./parcel";
-import NetApi, { type NetType } from "./net";
+import { NetApi, ScopedNetApi } from "./net";
+import type { NetType, ScopedNetType } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
@@ -94,7 +95,7 @@ class Api {
 
         this.parcel = Object.freeze(new ScopedParcelApi(scoped.id));
         this.hotkeys = Object.freeze(new ScopedHotkeysApi(scoped.id));
-        this.net = Object.freeze(new NetApi(false) as NetType);
+        this.net = Object.freeze(new ScopedNetApi(scoped.id) as ScopedNetType);
         this.UI = Object.freeze(new ScopedUIApi(scoped.id));
         this.storage = Object.freeze(new ScopedStorageApi(scoped.id));
         this.patcher = Object.freeze(new ScopedPatcherApi(scoped.id));
@@ -112,6 +113,7 @@ class Api {
             Parcel.stopLazy(scoped.id);
             Hotkeys.removeHotkeys(scoped.id);
             Hotkeys.removeConfigurableHotkeys(scoped.id);
+            Net.pluginOffLoad(scoped.id);
             UI.removeStyles(scoped.id);
             Patcher.unpatchAll(scoped.id);
         }
@@ -129,7 +131,7 @@ class Api {
      * Ways to interact with the current connection to the server,
      * and functions to send general requests
      */
-    net: Readonly<NetType>;
+    net: Readonly<ScopedNetType>;
 
     /** Functions for interacting with the DOM */
     UI: Readonly<ScopedUIApi>;

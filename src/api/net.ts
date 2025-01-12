@@ -3,20 +3,12 @@ import Net from "$core/net/net";
 import { validate } from "$src/utils";
 import EventEmitter from "eventemitter2";
 
-export type NetType = NetApi & Connection;
-
-class NetApi extends EventEmitter {
-    constructor(listen = true) {
+class BaseNetApi extends EventEmitter {
+    constructor() {
         super({
             wildcard: true,
             delimiter: ':'
         });
-
-        if(listen) {
-            Net.onAny((channel: string, ...args: any[]) => {
-                this.emit(channel, ...args);
-            });
-        }
     }
 
     /** Which type of server the client is currently connected to */
@@ -44,7 +36,7 @@ class NetApi extends EventEmitter {
     /** @deprecated Methods for both transports are now on the base net api */
     get blueboat() { return this };
     
-    private wrappedListeners = new Map<(...args: any[]) => void, (data: any) => void>();
+    private wrappedListeners = new WeakMap<(...args: any[]) => void, (data: any) => void>();
 
     /** @deprecated use net.on */
     addEventListener(channel: string, callback: (...args: any[]) => void) {
@@ -67,6 +59,48 @@ class NetApi extends EventEmitter {
     }
 }
 
+class NetApi extends BaseNetApi {
+    constructor() {
+        super();
+
+        Net.onAny((channel: string, ...args: any[]) => {
+            this.emit(channel, ...args);
+        });
+    }
+
+    /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+    onLoad(id: string, callback: (type: Connection["type"]) => void) {
+        if(!validate('Net.onLoad', arguments, ['id', 'string'], ['callback', 'function'])) return;
+
+        return Net.pluginOnLoad(id, callback);
+    }
+    
+    /** Cancels any calls to {@link onLoad} with the same id */
+    offLoad(id: string) {
+        if(!validate('Net.offLoad', arguments, ['id', 'string'])) return;
+
+        Net.pluginOffLoad(id);
+    }
+}
+
+class ScopedNetApi extends BaseNetApi {
+    constructor(private readonly id: string) { super() };
+    
+    /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+    onLoad(callback: (type: Connection["type"]) => void) {
+        if(!validate('Net.onLoad', arguments, ['callback', 'function'])) return;
+
+        return Net.pluginOnLoad(this.id, callback);
+    }
+}
+
+export type NetType = NetApi & Connection;
+export type ScopedNetType = ScopedNetApi & Connection;
+
+Object.freeze(BaseNetApi);
+Object.freeze(BaseNetApi.prototype);
 Object.freeze(NetApi);
 Object.freeze(NetApi.prototype);
-export default NetApi;
+Object.freeze(ScopedNetApi);
+Object.freeze(ScopedNetApi.prototype);
+export { NetApi, ScopedNetApi };
