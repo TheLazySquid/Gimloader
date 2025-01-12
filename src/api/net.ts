@@ -12,9 +12,7 @@ class NetApi extends EventEmitter {
             delimiter: ':'
         });
 
-        Net.onAny((channel, ...args) => {
-            this.emit(channel, ...args);
-        });
+
     }
 
     /** Which type of server the client is currently connected to */
@@ -32,15 +30,6 @@ class NetApi extends EventEmitter {
         
         Net.send(channel, message);
     }
-
-    /** A promise that is resolved when the game is loaded */
-    get loaded() { return Net.loaded };
-
-    /** A promise that is resolved when a colyseus (2d) game is loaded */
-    get colyseusLoaded() { return Net.colyseusLoaded };
-
-    /** A promise that is resolved when a blueboat (1d) game is loaded */
-    get blueboatLoaded() { return Net.blueboatLoaded };
     
     /** @deprecated Methods for both transports are now on the base net api */
     get colyseus() { return this };

@@ -1,6 +1,7 @@
 import Net from "$core/net/net";
 import { log } from "$src/utils";
 import { parseLibHeader } from "$src/parseHeader";
+import { uuidRegex } from "$src/scopedApi";
 
 export default class Lib {
     script: string;
@@ -11,6 +12,8 @@ export default class Lib {
     enableSuccessCallbacks: ((needsReload: boolean) => void)[] = [];
     enableFailCallbacks: ((e: any) => void)[] = [];
     usedBy = new Set<string>();
+    blobUuid: string | null = null;
+    onStop: (() => void)[] = [];
     
     constructor(script: string, headers?: Record<string, any>) {
         this.script = script;
@@ -30,9 +33,14 @@ export default class Lib {
             this.enabling = true;
             let blob = new Blob([this.script], { type: 'application/javascript' });
             let url = URL.createObjectURL(blob);
+            this.blobUuid = url.match(uuidRegex)?.[0];
     
             import(url)
                 .then((returnVal) => {
+                    if(returnVal.onStop && typeof returnVal.onStop === "function") {
+                        this.onStop.push(returnVal.onStop);
+                    }
+
                     if(returnVal.default) {
                         returnVal = returnVal.default;
                     }
@@ -75,10 +83,11 @@ export default class Lib {
     disable() {
         // call onStop if it exists
         try {
-            this.library?.onStop?.();
+            for(let stop of this.onStop) stop();
         } catch(e) {
             log(`Error stopping library ${this.headers.name}:`, e);
         }
+        this.onStop = [];
 
         // reset the library
         this.library = null;
