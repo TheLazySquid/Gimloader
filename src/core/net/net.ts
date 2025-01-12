@@ -8,6 +8,7 @@ import { confirmLibReload, log } from "$src/utils";
 import Patcher from "../patcher";
 import LibManager from "$core/libManager/libManager.svelte";
 import { settings } from "$src/consts.svelte";
+import GimkitInternals from "$core/internals";
 
 interface BlueboatConnection {
     type: "Blueboat";
@@ -29,6 +30,7 @@ export type Connection = BlueboatConnection | ColyseusConnection | NoConnection;
 class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
+    is1dHost = false;
 
     constructor() {
         super({
@@ -55,18 +57,18 @@ class Net extends EventEmitter {
 
                 me.waitForColyseusLoad();
                 
-                // intercept incoming messages
+                // intercept outgoing messages
                 Patcher.before(null, colyseus.room, "send", (_, args) => {
                     let [ channel, data ] = args;
-                    me.emit(channel, data, (newData: any) => { args[1] = newData });
+                    me.emit(['send', channel], data, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
 
-                // intercept colyseus outgoing messages
+                // intercept incoming messages
                 Patcher.before(null, colyseus.room, "dispatchMessage", (_, args) => {
                     let [ channel, data ] = args;
-                    me.emit(['send', channel], data, (newData: any) => { args[1] = newData });
+                    me.emit(channel, data, (newData: any) => { args[1] = newData });
 
                     if(args[1] === null) return true;
                 });
@@ -108,6 +110,10 @@ class Net extends EventEmitter {
 
                 return room;
             }
+        });
+
+        Parcel.getLazy(null, exports => exports?.default?.toString?.().includes("hasReceivedHostStaticState"), () => {
+            this.is1dHost = true;
         });
     }
 
@@ -244,6 +250,10 @@ class Net extends EventEmitter {
                 })
                 .catch(() => rej(`Failed to download library from ${url}`));
         })
+    }
+
+    get isHost() {
+        return this.is1dHost || (GimkitInternals.stores?.session?.amIGameOwner ?? false);
     }
 }
 

@@ -3,6 +3,7 @@ import Parcel from "$core/parcel";
 export default class GimkitInternals {
     static stores: any;
     static notification: any;
+    static platformerPhysics: any;
 
     static init() {
         // window.stores
@@ -15,5 +16,11 @@ export default class GimkitInternals {
         Parcel.getLazy(null, exports => exports?.default?.useNotification, exports => {
             this.notification = exports.default;
         });
+
+        // platformer physics
+        Parcel.getLazy(null, exports => exports?.CharacterPhysicsConsts, exports => {
+            this.platformerPhysics = exports.CharacterPhysicsConsts;
+            unsafeWindow.platformerPhysics = exports.CharacterPhysicsConsts;
+        })
     }
 }

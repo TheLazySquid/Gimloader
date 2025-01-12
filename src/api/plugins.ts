@@ -23,6 +23,11 @@ class PluginsApi {
     get(name: string) {
         return PluginManager.getExports(name);
     }
+
+    /** @deprecated Use {@link get} instead */
+    getPlugin(name: string) {
+        return { return: PluginManager.getExports(name) };
+    }
 }
 
 Object.freeze(PluginsApi);

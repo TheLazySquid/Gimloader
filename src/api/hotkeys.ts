@@ -22,8 +22,21 @@ function validateHotkeyOptions(name: string, path: string, options: HotkeyOption
 
 function keySetToCodes(keys: Set<string>) {
     let newKeys: string[] = [];
+    
+    let mapKeys = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
+        '{', '}', '|', ':', '"', '<', '>', '?'];
+    let mapped = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+        '[', ']', '\\', ';', "'", ',', '.', '/'];
+    let codes = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5',
+        'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal',
+        'BracketLeft', 'BracketRight', 'Backslash', 'Semicolon', 'Quote',
+        'Comma', 'Period', 'Slash'];
+
     for(let key of keys) {
-        if(key === "control") newKeys.push("ControlLeft");
+        let index = mapKeys.indexOf(key);
+        if(index === -1) index = mapped.indexOf(key);
+        if(index !== -1) newKeys.push(codes[index]);
+        else if(key === "control") newKeys.push("ControlLeft");
         else if(key === "shift") newKeys.push("ShiftLeft");
         else if(key === "alt") newKeys.push("AltLeft");
         else {

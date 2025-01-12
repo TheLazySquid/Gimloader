@@ -67,6 +67,9 @@ class Api {
     /** @deprecated No longer supported */
     static get contextMenu() { return { showContextMenu: () => {}, createReactContextMenu: () => {} } }; 
 
+    /** @deprecated No longer supported */
+    static get platformerPhysics() { return GimkitInternals.platformerPhysics };
+
     /** @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events */
     static addEventListener(type: string, callback: () => void) {
         if(type === "loadEnd") {
@@ -91,7 +94,7 @@ class Api {
 
         this.parcel = Object.freeze(new ScopedParcelApi(scoped.id));
         this.hotkeys = Object.freeze(new ScopedHotkeysApi(scoped.id));
-        this.net = Object.freeze(new NetApi() as NetType);
+        this.net = Object.freeze(new NetApi(false) as NetType);
         this.UI = Object.freeze(new ScopedUIApi(scoped.id));
         this.storage = Object.freeze(new ScopedStorageApi(scoped.id));
         this.patcher = Object.freeze(new ScopedPatcherApi(scoped.id));
