@@ -1,5 +1,3 @@
-import type { Room as BlueboatRoom } from "blueboat";
-import type { Room as ColyseusRoom } from "colyseus.js";
 import type Lib from "$src/core/libManager/lib.svelte";
 import Internal from "$core/internals";
 import Parcel from "../parcel";
@@ -12,12 +10,12 @@ import GimkitInternals from "$core/internals";
 
 interface BlueboatConnection {
     type: "Blueboat";
-    room: BlueboatRoom;
+    room: any;
 }
 
 interface ColyseusConnection {
     type: "Colyseus";
-    room: ColyseusRoom;
+    room: any;
 }
 
 interface NoConnection {
@@ -163,11 +161,8 @@ class Net extends EventEmitter {
     }
 
     send(channel: string, message: any) {
-        if(this.type === "Blueboat") {
-            // @ts-ignore I cannot for the life of me determine what the correct type should be
-            (this.room as BlueboatRoom).send(channel, message);
-        } else if(this.type === "Colyseus") {
-            (this.room as ColyseusRoom).send(channel, message);
+        if(this.room.type !== "None") {
+            this.room.send(channel, message);
         }
     }
 
