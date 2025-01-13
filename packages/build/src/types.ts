@@ -1,5 +1,5 @@
-import type { InputPluginOption, OutputOptions, RollupOptions } from "../$node_modules/rollup/dist/rollup.js";
-import type { BuildOptions, Plugin } from "../$node_modules/esbuild/lib/main.js";
+import type { InputPluginOption, OutputOptions, RollupOptions } from "rollup";
+import type { BuildOptions, Plugin } from "esbuild";
 
 export interface MandatoryConfig {
     /**
