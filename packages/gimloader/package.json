@@ -1,0 +1,30 @@
+{
+  "name": "gimloader",
+  "version": "1.0.0",
+  "description": "A plugin loader and manager for Gimkit",
+  "main": "index.js",
+  "type": "module",
+  "types": "index.d.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheLazySquid/Gimloader.git"
+  },
+  "keywords": [
+    "Gimkit",
+    "plugins"
+  ],
+  "author": "TheLazySquid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheLazySquid/Gimloader/issues"
+  },
+  "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
+  "devDependencies": {
+    "@types/react": "^19.0.5",
+    "@types/react-dom": "^19.0.3",
+    "blueboat": "^0.3.42",
+    "colyseus.js": "^0.15.26",
+    "eventemitter2": "^6.4.9"
+  }
+}

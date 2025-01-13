@@ -1,11 +1,10 @@
-name: Publish Package to npmjs
+name: Publish @gimloader/build package
 on:
   push:
     branches:
       - main
     paths:
-      - 'buildTools/**'
-
+      - 'packages/build/**'
   workflow_dispatch:
   
 jobs:
@@ -13,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./buildTools
+        working-directory: ./packages/build
     steps:
       - uses: actions/checkout@v4
       # Setup .npmrc file to publish to npm
