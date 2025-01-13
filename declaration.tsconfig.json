@@ -1,18 +1,18 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "outDir": "types",
+        "outFile": "packages/gimloader/types.d.ts",
         "declaration": true,
         "module": "ES2022",
         "moduleResolution": "Bundler",
-        "jsx": "react",
         "emitDeclarationOnly": true,
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
             "$assets/*": ["./assets/*"],
-            "$src/*": ["./src/*"]
+            "$src/*": ["./src/*"],
+            "$core/*": ["./src/core/*"]
         }
     },
-    "include": ["./src/api/**.ts", "main.d.ts"]
+    "include": ["./src/api/api.ts", "./main.d.ts"]
 }

@@ -10,13 +10,9 @@
     "watch": "node build.js -w",
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
-  "files": [
-    "types",
-    "index.d.ts"
-  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheLazySquid/GimLoader.git"
+    "url": "git+https://github.com/TheLazySquid/Gimloader.git"
   },
   "keywords": [
     "Gimkit",
@@ -25,9 +21,9 @@
   "author": "TheLazySquid",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TheLazySquid/GimLoader/issues"
+    "url": "https://github.com/TheLazySquid/Gimloader/issues"
   },
-  "homepage": "https://github.com/TheLazySquid/GimLoader#readme",
+  "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
   "devDependencies": {
     "@types/node": "^22.5.5",
     "@types/react": "^18.2.65",
