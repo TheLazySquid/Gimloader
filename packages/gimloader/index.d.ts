@@ -1,4 +1,4 @@
-import './shared';
+import './types/shared';
 
 declare const GL: import('src/api/api').default;
 export default GL;

@@ -184,16 +184,14 @@ declare module "src/core/internals" {
     }
 }
 declare module "src/core/net/net" {
-    import type { Room as BlueboatRoom } from "blueboat";
-    import type { Room as ColyseusRoom } from "colyseus.js";
     import EventEmitter from "eventemitter2";
     interface BlueboatConnection {
         type: "Blueboat";
-        room: BlueboatRoom;
+        room: any;
     }
     interface ColyseusConnection {
         type: "Colyseus";
-        room: ColyseusRoom;
+        room: any;
     }
     interface NoConnection {
         type: "None";
