@@ -1,5 +1,5 @@
-import { createEsbuildConfig, getConfig } from './getConfig';
-import { Config } from '../types';
+import type { Config } from '../types.js';
+import { createEsbuildConfig, getConfig } from './getConfig.js';
 import esbuild from 'esbuild';
 
 export default function build(): Promise<Config> {

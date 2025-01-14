@@ -1,10 +1,10 @@
 import { join } from 'path';
-import Poller from './poller';
+import Poller from './poller.js';
 import { watch } from 'chokidar';
 import fs from 'fs';
 import { readFile } from 'fs/promises';
-import parseHeader from '../parseHeader';
-import waitForEnter from './manual';
+import parseHeader from '../parseHeader.js';
+import waitForEnter from './manual.js';
 
 export default function serveFile(args: any) {
     let poller = new Poller();

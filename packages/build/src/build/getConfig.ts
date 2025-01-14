@@ -1,9 +1,9 @@
 import type { BuildOptions, Plugin } from 'esbuild';
-import type { GLConfig, Config } from '../types';
-import { readFileSync, existsSync } from 'fs';
+import type { GLConfig, Config } from '../types.js';
+import { existsSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
-import { createHeader } from './addHeaders';
+import { createHeader } from './addHeaders.js';
 
 let startTime = 0;
 

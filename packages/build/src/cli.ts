@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import build from './build/build';
-import serve from './serve/serve'
-import serveFile from './serve/servefile'
+import build from './build/build.js';
+import serve from './serve/serve.js';
+import serveFile from './serve/servefile.js';
 
 yargs(hideBin(process.argv))
     .scriptName('gl')

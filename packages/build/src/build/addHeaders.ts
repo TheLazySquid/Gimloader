@@ -1,4 +1,4 @@
-import type { Config, IPluginTypes } from '../types';
+import type { Config, IPluginTypes } from '../types.js';
 
 export function createHeader(config: Config) {
     let meta = `/**

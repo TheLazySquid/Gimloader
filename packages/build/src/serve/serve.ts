@@ -1,13 +1,12 @@
 import type { RollupWatcher } from 'rollup';
-import rollup from 'rollup';
 import esbuild, { BuildContext } from 'esbuild';
-import { createEsbuildWatchConfig, getConfig } from '../build/getConfig';
+import { createEsbuildWatchConfig, getConfig } from '../build/getConfig.js';
 import chokidar from 'chokidar';
 import { join } from 'path';
 import fs from 'fs/promises';
-import build from '../build/build';
-import Poller from './poller';
-import waitForEnter from './manual';
+import build from '../build/build.js';
+import Poller from './poller.js';
+import waitForEnter from './manual.js';
 
 export default function serve(args: any) {
     let watcher: RollupWatcher | null = null;
