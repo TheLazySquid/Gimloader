@@ -1,6 +1,6 @@
 import type { BuildOptions, Plugin } from 'esbuild';
-import type { GLConfig, Config, EsbuildConfig } from '../types';
-import { existsSync } from 'fs';
+import type { GLConfig, Config } from '../types';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
 import { createHeader } from './addHeaders';
@@ -33,7 +33,7 @@ function logRebuildPlugin(onBuild: () => void): Plugin {
     }
 }
 
-export function createEsbuildConfig(config: EsbuildConfig): BuildOptions {
+export function createEsbuildConfig(config: Config): BuildOptions {
     let plugins = config.plugins ?? [];
 
     return {
@@ -47,11 +47,13 @@ export function createEsbuildConfig(config: EsbuildConfig): BuildOptions {
         banner: {
             "js": createHeader(config)
         },
+        jsx: "transform",
+        jsxFactory: "GL.React.createElement",
         ...config.esbuildOptions
     }
 }
 
-export function createEsbuildWatchConfig(config: EsbuildConfig, onBuild: () => void) {
+export function createEsbuildWatchConfig(config: Config, onBuild: () => void) {
     let buildConfig = createEsbuildConfig(config);
 
     buildConfig.plugins!.push(logRebuildPlugin(onBuild))
@@ -68,17 +70,19 @@ export function getConfig() {
             return;
         }
 
-        const config: GLConfig = await import(`${pathToFileURL(configPath).href}?t=${Date.now()}`);
+        const imported: GLConfig = await import(`${pathToFileURL(configPath).href}?t=${Date.now()}`);
 
         // do some checks
-        if(!config.default) {
+        if(!imported.default) {
             rej("GL.config.js doesn't export a default value!");
             return;
         }
+
+        let config = imported.default;
     
         let mandatoryStrings = ['input', 'name', 'description', 'author'];
         for(let str of mandatoryStrings) {
-            let type = typeof config.default[str];
+            let type = typeof config[str];
             if(type === 'undefined') {
                 rej(`GL.config.js is missing the ${str} field!`);
                 return;
@@ -93,14 +97,14 @@ export function getConfig() {
         let optionalArrays = ['libs', 'optionalLibs', 'plugins'];
     
         for(let arr of optionalArrays) {
-            if(config.default[arr]) {
-                if(!Array.isArray(config.default[arr])) {
+            if(config[arr]) {
+                if(!Array.isArray(config[arr])) {
                     rej(`GL.config.js ${arr} field is not an array!`);
                     return;
                 }
             }
         }
     
-        res(config.default);
-    })
+        res(config);
+    });
 }

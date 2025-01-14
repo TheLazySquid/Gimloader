@@ -1,42 +1,6 @@
-import type { InputPluginOption, OutputOptions, RollupOptions } from "rollup";
 import type { BuildOptions, Plugin } from "esbuild";
 
-export interface MandatoryConfig {
-    /**
-     * The input file that will be compiled.
-     */
-    input: string;
-    /**
-     * The name of the plugin / library. This will be used as the name of the output file.
-     */
-    name: string;
-    /**
-     * A brief description of the plugin / library.
-     */
-    description: string;
-    /**
-     * The author of the plugin / library.
-     */
-    author: string;
-}
-
-export interface OptionalConfig extends MandatoryConfig {
-    /**
-     * The version of the plugin / library.
-     */
-    version?: string;
-    /**
-     * A URL to get the raw code of the plugin / library, used for updates.
-     */
-    downloadUrl?: string;
-    /**
-     * Whether the browser needs to be reloaded after the plugin is added.
-     * If set to "ingame" it will only reload if the user is currently in a game.
-     */
-    reloadRequired?: boolean | "ingame";
-}
-
-export interface IPluginTypes extends OptionalConfig {
+export interface IPluginTypes {
     /**
      * Whether the plugin / library is a library.
      */
@@ -57,39 +21,43 @@ export interface IPluginTypes extends OptionalConfig {
     hasSettings: boolean;
 }
 
-export interface LibraryTypes extends OptionalConfig {
+export interface LibraryTypes {
     /**
      * Whether the plugin / library is a library.
      */
     isLibrary: true;
 }
 
-export type SharedConfig = IPluginTypes | LibraryTypes;
-
-export type RollupConfig = SharedConfig & {
+export type Config = (IPluginTypes | LibraryTypes) & {
     /**
-     * Which bundler should be used
+     * The input file that will be compiled.
      */
-    bundler: "rollup" | undefined;
+    input: string;
     /**
-     * Rollup plugins to use when building the plugin / library.
+     * The name of the plugin / library. This will be used as the name of the output file.
      */
-    plugins?: InputPluginOption[];
+    name: string;
     /**
-     * Options to pass to rollup.
+     * A brief description of the plugin / library.
      */
-    rollupOptions?: RollupOptions;
+    description: string;
     /**
-     * Options to pass to rollup.write
+     * The author of the plugin / library.
      */
-    outputOptions?: OutputOptions;
-}
-
-export type EsbuildConfig = SharedConfig & {
+    author: string;
     /**
-     * Which bundler should be used
+     * The version of the plugin / library.
      */
-    bundler: "esbuild";
+    version?: string;
+    /**
+     * A URL to get the raw code of the plugin / library, used for updates.
+     */
+    downloadUrl?: string;
+    /**
+     * Whether the browser needs to be reloaded after the plugin is added.
+     * If set to "ingame" it will only reload if the user is currently in a game.
+     */
+    reloadRequired?: boolean | "ingame";
     /**
      * Esbuild plugins to use when building the plugin/library
      */
@@ -99,8 +67,6 @@ export type EsbuildConfig = SharedConfig & {
      */
     esbuildOptions?: BuildOptions;
 }
-
-export type Config = RollupConfig | EsbuildConfig;
 
 export interface GLConfig {
     default: Config;

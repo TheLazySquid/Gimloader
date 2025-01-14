@@ -1,0 +1,35 @@
+{
+  "name": "@gimloader/create",
+  "version": "1.0.0",
+  "description": "A command line tool to quickly set up a gimloader script",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheLazySquid/Gimloader.git"
+  },
+  "keywords": [
+    "Gimloader"
+  ],
+  "author": "TheLazySquid",
+  "license": "MIT",
+  "bin": "dist/index.js",
+  "bugs": {
+    "url": "https://github.com/TheLazySquid/Gimloader/issues"
+  },
+  "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
+  "dependencies": {
+    "@inquirer/prompts": "^7.2.2",
+    "chalk": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  }
+}

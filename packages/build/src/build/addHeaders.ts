@@ -47,14 +47,3 @@ export function createHeader(config: Config) {
    
     return meta;
 }
-
-export function addHeadersPlugin(config: Config) {
-    let meta = createHeader(config);
-
-    return {
-        name: 'addMeta',
-        renderChunk(code: string) {
-            return meta + code;
-        }
-    }
-}

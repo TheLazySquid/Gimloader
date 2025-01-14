@@ -1,24 +1,14 @@
 # @gimloader/build
 
-This is a package that provides a set of tools to help build more complex [Gimloader](https://github.com/TheLazySquid/Gimloader) plugins / libraries.
+This is a package that provides a preconfigured bundler to help build more complex [Gimloader](https://github.com/TheLazySquid/Gimloader) plugins and libraries.
 
-## Installation
+## Setup
 
-```bash
-npm i -g @gimloader/build
-```
+To get started, run `npm create @gimloader` in the directory you wish to create the plugin / library in. You can also install it globally by running `npm i -g @gimloader/build`, which you may want for commands such as servefile.
 
-## Usage
+## Config
 
-### Setup
-
-To get started, make an empty folder and run the following command in the terminal:
-
-```bash
-gl init
-```
-
-From there you will be given some options to choose from. This command will generate the file `GL.config.js`, which houses the configuration for the build tools. You can pick between [esbuild](https://esbuild.github.io/) and [Rollup](https://rollupjs.org/) for bundlers.
+Config is housed in the file GL.config.js in the root folder.
 
 ##### Mandatory Fields
 - `input`: The input file that will be compiled.
@@ -29,15 +19,7 @@ From there you will be given some options to choose from. This command will gene
 ##### Optional Fields
 - `version`: The version of the plugin / library.
 - `downloadUrl`: The download URL for the plugin / library, used by Gimloader for updates.
-- `bundler`: This decides which bundler is used. Set to esbuild to use esbuild, otherwise Rollup is used.
 - `reloadRequired`: Set to true if the plugin / library needs a reload to take effect, or set to "ingame" if it only needs a reload when in-game.
-
-##### Optional Fields (Rollup)
-- `plugins`: An array of Rollup plugins to use.
-- `rollupOptions`: Options to pass to Rollup.
-- `outputOptions`: Options to pass to Rollup's output.
-
-##### Optional Fields (Esbuild)
 - `plugins`: An array of Esbuild plugins to use
 - `esbuildOptions`: Options to pass to esbuild
 
@@ -50,12 +32,12 @@ From there you will be given some options to choose from. This command will gene
 
 ### Building
 
-Running `gl build` will compile the plugin / library and output it to `build/[plugin name].js`.
+Running `npx gl build` will compile the plugin / library and output it to `build/[plugin name].js`.
 
 ### Hot Reload
 
-Running `gl serve` will start a local server to host the plugin / library. If the "Poll for plugins/libraries being served locally" setting is enabled on Gimloader, it will automatically detect changes to the plugin / library and reload it. By default, the plugin will be built whenever you save its files, but passing --manual will change it to only build when pressing enter in the terminal.
+Running `npx gl serve` will start a local server to host the plugin / library. If the "Poll for plugins/libraries being served locally" setting is enabled on Gimloader, it will automatically detect changes to the plugin / library and reload it. By default, the plugin will be built whenever you save its files, but passing --manual will change it to only build when pressing enter in the terminal.
 
 ### Serving a single file
 
-You can run `gl servefile <file>` to serve a single javscript file, which will automatically reload when the file is changed. Similarly to `gl serve`, passing --manual will change it to only update when pressing enter in the terminal.
+You can run `npx gl servefile <file>` to serve a single javscript file, which will automatically reload when the file is changed. Similarly to `gl serve`, passing --manual will change it to only update when pressing enter in the terminal.

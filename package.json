@@ -24,6 +24,14 @@
     "url": "https://github.com/TheLazySquid/Gimloader/issues"
   },
   "homepage": "https://github.com/TheLazySquid/Gimloader#readme",
+  "overrides": {
+    "svelte": "$svelte"
+  },
+  "workspaces": [
+    "packages/create",
+    "packages/gimloader",
+    "packages/build"
+  ],
   "devDependencies": {
     "@types/node": "^22.5.5",
     "@types/react": "^18.2.65",

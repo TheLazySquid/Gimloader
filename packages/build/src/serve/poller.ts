@@ -1,4 +1,4 @@
-import express from 'express';
+import http from 'node:http';
 
 const port = 5822; // picked at random
 
@@ -6,15 +6,16 @@ export default class Poller {
     code: string | null = null;
     isLibrary = false;
     codeSent = false;
-    longPollRes: express.Response | null = null;
+    longPollRes: http.ServerResponse | null = null;
 
     updateCode(code: string) {
         if(code === this.code) return;
         this.code = code;
 
         if(this.longPollRes) {
-            this.longPollRes.setHeader('Is-Library', this.isLibrary.toString());
-            this.longPollRes.send(this.code);
+            this.longPollRes.setHeader('is-library', this.isLibrary.toString());
+            this.longPollRes.write(this.code);
+            this.longPollRes.end();
             this.codeSent = true;
             this.longPollRes = null;
         } else {
@@ -23,40 +24,42 @@ export default class Poller {
     }
 
     constructor() {
-        const app = express();
+        let lastUid = '';
 
-        // serve the file
-        app.get('/getCode', (_, res) => {
-            if(this.code) {
-                res.setHeader('Is-Library', this.isLibrary.toString());
-                res.type('js');
-                res.send(this.code);
-            } else {
-                res.status(500).send("No code available");
+        const server = http.createServer((req, res) => {
+            if(req.url === "/getCode") {
+                if(this.code) {
+                    res.setHeader('is-library', this.isLibrary.toString());
+                    res.setHeader('content-type', 'application/javascript');
+                    res.write(this.code);
+                } else {
+                    res.writeHead(500);
+                    res.write("No code available");
+                }
+                res.end();
+            } else if(req.url === "/getUpdate") {
+                let uid = req.headers.uid as string;
+
+                res.setHeader('content-type', 'application/javascript');
+                if((this.codeSent && uid === lastUid) || !this.code) {
+                    // disregard duplicate requests
+                    if(this.longPollRes) {
+                        this.longPollRes.writeHead(500);
+                        this.longPollRes.write("Another request is already pending");
+                    }
+                    
+                    this.longPollRes = res;
+                } else {
+                    res.setHeader('is-library', this.isLibrary.toString());
+                    res.write(this.code);
+                    res.end();
+                    this.codeSent = true;
+                }
+    
+                lastUid = uid;
             }
         });
 
-        let lastUid = '';
-        app.get('/getUpdate', (req, res) => {
-            let uid = req.headers.uid as string;
-
-            res.type('js');
-            if((this.codeSent && uid === lastUid) || !this.code) {
-                // disregard duplicate requests
-                if(this.longPollRes) {
-                    this.longPollRes.status(500).send("Another request is already pending");
-                }
-                
-                this.longPollRes = res;
-            } else {
-                res.setHeader('Is-Library', this.isLibrary.toString());
-                res.send(this.code);
-                this.codeSent = true;
-            }
-
-            lastUid = uid;
-        })
-
-        app.listen(port);
+        server.listen(port);
     }
 }

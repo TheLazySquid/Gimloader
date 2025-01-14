@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "outFile": "packages/gimloader/types.d.ts",
+        "outFile": "packages/gimloader/types/types.d.ts",
         "declaration": true,
         "module": "ES2022",
         "moduleResolution": "Bundler",
