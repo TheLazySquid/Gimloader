@@ -1,5 +1,4 @@
-import type { RollupWatcher } from 'rollup';
-import esbuild, { BuildContext } from 'esbuild';
+import esbuild, { type BuildContext } from 'esbuild';
 import { createEsbuildWatchConfig, getConfig } from '../build/getConfig.js';
 import chokidar from 'chokidar';
 import { join } from 'path';
@@ -9,7 +8,6 @@ import Poller from './poller.js';
 import waitForEnter from './manual.js';
 
 export default function serve(args: any) {
-    let watcher: RollupWatcher | null = null;
     let ctx: BuildContext | null = null;
 
     let poller = new Poller();
@@ -23,7 +21,6 @@ export default function serve(args: any) {
     }
 
     const makeWatcher = () => {
-        if(watcher) watcher.close();
         if(ctx) ctx.dispose();
 
         getConfig()
