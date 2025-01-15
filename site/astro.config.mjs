@@ -21,7 +21,7 @@ export default defineConfig({
                 slug: 'setup'
             }
         ],
-        favicon: '/Gimloader/icon.ico',
+        favicon: '/icon.ico',
         components: {
             ThemeProvider: './src/components/ThemeProvider.astro',
             ThemeSelect: './src/components/ThemeSelect.astro'
