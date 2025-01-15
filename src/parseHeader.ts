@@ -29,21 +29,7 @@ export function parseLibHeader(code: string) {
     return parseHeader(code, baseLibHeaders);
 }
 
-export default function parseHeader(code: string, headers: Record<string, any>) {
-    // parse headers for gimhook mods
-    if(code.startsWith("// gimhook: ")) {
-        try {
-            let gimhookHeader = JSON.parse(code.slice(11, code.indexOf('\n')).trim());
-            
-            if(gimhookHeader.name) headers.name = gimhookHeader.name;
-            if(gimhookHeader.description) headers.description = gimhookHeader.description;
-            if(gimhookHeader.author) headers.author = gimhookHeader.author;
-            if(gimhookHeader.version) headers.version = gimhookHeader.version;
-        } catch(e) {}
-
-        return headers;
-    }
-    
+export default function parseHeader(code: string, headers: Record<string, any>) {    
     // parse the JSDoc header at the start (if it exists)
     let closingIndex = code.indexOf('*/');
     if(!(code.trimStart().startsWith('/**')) || closingIndex === -1) {
