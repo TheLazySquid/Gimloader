@@ -9,6 +9,7 @@ import initInstallApi from "./installApi";
 import Storage from "$core/storage";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
+import { onGimkit } from "./utils";
 
 Object.defineProperty(unsafeWindow, "GL", {
     value: Api,
@@ -16,14 +17,16 @@ Object.defineProperty(unsafeWindow, "GL", {
     configurable: false
 });
 
-Parcel.init();
-UI.init();
-Net.init();
-Hotkeys.init();
-GimkitInternals.init();
-Poller.init();
-
-initInstallApi();
+if(onGimkit) {
+    Parcel.init();
+    UI.init();
+    Net.init();
+    Hotkeys.init();
+    GimkitInternals.init();
+    Poller.init();
+} else {
+    initInstallApi();
+}
 
 GM.registerMenuCommand("Wipe All Plugins and Libraries", () => {
     if(!confirm("Do you really want to delete all plugins and libraries? This will also reload the page.")) return;
