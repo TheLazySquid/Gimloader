@@ -1,6 +1,6 @@
 # Autosplitter
 
-Install the plugin by clicking [here](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js) while having Gimloader downloaded.
+Install the plugin by clicking [here](https://thelazysquid.github.io/Gimloader/install/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js) while having Gimloader downloaded.
 
 ## Features
 
@@ -12,7 +12,7 @@ The timer will automatically start timing when you begin summit one, and stop wh
 
 #### Running Individual Summits
 
-In order to run individual summits switch the dropdown from "Full Game" to the desired summit. If you are not running current patch, you will also be able to select between "Preboosts" and "No preboosts". Preboosts allows you to begin the summit with speed, while No preboosts will require you to be respawned at the start of the summit. In order to do this, you will need the [Savestates](../Savestates.js) plugin which can be downloaded by clicking [here](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js). When running preboosts, the run begins when crossing over the area where you would spawn, and when running preboosts the run begins upon the first input after teleporting to a summit.
+In order to run individual summits switch the dropdown from "Full Game" to the desired summit. If you are not running current patch, you will also be able to select between "Preboosts" and "No preboosts". Preboosts allows you to begin the summit with speed, while No preboosts will require you to be respawned at the start of the summit. In order to do this, you will need the [Savestates](../Savestates.js) plugin which can be downloaded by clicking [here](https://thelazysquid.github.io/Gimloader/install/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js). When running preboosts, the run begins when crossing over the area where you would spawn, and when running preboosts the run begins upon the first input after teleporting to a summit.
 
 ### Fishtopia
 

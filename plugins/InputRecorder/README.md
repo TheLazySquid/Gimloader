@@ -2,7 +2,7 @@
 
 ## Installation
 
-Click [here](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js) to install the plugin with Gimloader downloaded.
+Click [here](https://thelazysquid.github.io/Gimloader/install/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js) to install the plugin with Gimloader downloaded.
 
 ## Usage
 

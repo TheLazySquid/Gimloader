@@ -4,7 +4,7 @@ This plugin lets you customize a few things about the Gimkit UI. Most importantl
 
 ## Installation
 
-Click [here](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CustomUI/build/CustomUI.js) to install the plugin with Gimloader downloaded.
+Click [here](https://thelazysquid.github.io/Gimloader/install/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CustomUI/build/CustomUI.js) to install the plugin with Gimloader downloaded.
 
 ## Usage
 

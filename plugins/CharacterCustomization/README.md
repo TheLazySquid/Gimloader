@@ -6,7 +6,7 @@ This plugin lets you pick your Gim's skin and trail for any 2d gamemode. You can
 
 ## Installation
 
-Click on [this link](https://thelazysquid.github.io/gimloader/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js) to install the plugin with Gimloader downloaded.
+Click on [this link](https://thelazysquid.github.io/Gimloader/install/?installUrl=https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js) to install the plugin with Gimloader downloaded.
 
 ## Usage
 
