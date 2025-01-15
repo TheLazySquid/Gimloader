@@ -17,8 +17,12 @@ export default defineConfig({
         },
         sidebar: [
             {
-                label: 'How to Install',
-                slug: 'setup'
+                label: 'Usage',
+                items: [
+                    { slug: 'usage/installation' },
+                    { slug: 'usage/updating' },
+                    { slug: 'usage/plugins' }
+                ]
             }
         ],
         favicon: '/icon.ico',

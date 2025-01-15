@@ -137,12 +137,16 @@
                         </h1>
                         <p>
                             Follow the instructions
-                            <a href="/Gimloader/setup"
-                            class="underline text-blue-600"
-                            target="_blank" rel="noopener noreferrer">
+                            <a href="/Gimloader/usage/installation"
+                            class="underline text-blue-600" rel="noopener noreferrer">
                                 here
                             </a>
-                            to install it.
+                            to install it. If you already have Gimloader installed, follow the instructions
+                            <a href="/Gimloader/usage/updating"
+                            class="underline text-blue-600" rel="noopener noreferrer">
+                                here
+                            </a>
+                            to update it.
                         </p>
                     {/if}
                 {:else}
