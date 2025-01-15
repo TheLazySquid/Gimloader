@@ -9,7 +9,7 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://thelazysquid.github.io',
-    base: 'gimloader',
+    base: 'Gimloader',
     integrations: [starlight({
         title: 'Gimloader',
         social: {
@@ -21,7 +21,7 @@ export default defineConfig({
                 slug: 'setup'
             }
         ],
-        favicon: '/gimloader/icon.ico',
+        favicon: '/Gimloader/icon.ico',
         components: {
             ThemeProvider: './src/components/ThemeProvider.astro',
             ThemeSelect: './src/components/ThemeSelect.astro'

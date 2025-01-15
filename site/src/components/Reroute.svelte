@@ -3,6 +3,6 @@
     const installUrl = searchParams.get('installUrl');
 
     if(installUrl) {
-        location.href = `/gimloader/install${location.search}`;
+        location.href = `/Gimloader/install${location.search}`;
     }
 </script>

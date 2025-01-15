@@ -137,7 +137,7 @@
                         </h1>
                         <p>
                             Follow the instructions
-                            <a href="/gimloader/setup"
+                            <a href="/Gimloader/setup"
                             class="underline text-blue-600"
                             target="_blank" rel="noopener noreferrer">
                                 here
@@ -152,7 +152,7 @@
                     <p class="pt-3 text-xl">
                         This page is for installing Gimloader plugins from a link.
                         If you don't have a link to a plugin, there is nothing to do here.
-                        <a class="underline cursor-pointer" href="/gimloader">Go home?</a>
+                        <a class="underline cursor-pointer" href="/Gimloader">Go home?</a>
                     </p>
                 {/if}
             {/if}
