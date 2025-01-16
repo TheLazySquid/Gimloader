@@ -1,6 +1,7 @@
 import { splicer } from "$src/utils";
 import Storage from "./storage";
 
+/** @inline */
 export interface HotkeyTrigger {
     key?: string;
     keys?: string[];
@@ -9,10 +10,12 @@ export interface HotkeyTrigger {
     alt?: boolean;
 }
 
+/** @inline */
 export interface HotkeyOptions extends HotkeyTrigger {
     preventDefault?: boolean;
 }
 
+/** @inline */
 export interface ConfigurableHotkeyOptions {
     category: string;
     title: string;

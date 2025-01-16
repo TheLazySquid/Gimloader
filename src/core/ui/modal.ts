@@ -8,6 +8,7 @@ interface ModalButton {
     onClick?: (event: MouseEvent) => boolean | void;
 }
 
+/** @inline */
 export interface ModalOptions {
     id: string;
     title: string;

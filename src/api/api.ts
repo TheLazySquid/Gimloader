@@ -1,7 +1,7 @@
+import type { Connection } from "$core/net/net";
 import { HotkeysApi, ScopedHotkeysApi } from "./hotkeys";
 import { ParcelApi, ScopedParcelApi } from "./parcel";
 import { NetApi, ScopedNetApi } from "./net";
-import type { NetType, ScopedNetType } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
@@ -26,7 +26,7 @@ class Api {
      * Ways to interact with the current connection to the server,
      * and functions to send general requests
      */
-    static net = Object.freeze(new NetApi() as NetType);
+    static net = Object.freeze(new NetApi() as NetApi & Connection);
 
     /** Functions for interacting with the DOM */
     static UI = Object.freeze(new UIApi());
@@ -40,7 +40,7 @@ class Api {
     /** Methods for getting info on libraries */
     static libs = Object.freeze(new LibsApi());
 
-    /** Get the exported values of a library */
+    /** Gets the exported values of a library */
     static lib = this.libs.get;
 
     /** Methods for getting info on plugins */
@@ -65,27 +65,42 @@ class Api {
      */
     static get notification() { return GimkitInternals.notification };
 
-    /** @deprecated No longer supported */
+    /**
+     * @deprecated No longer supported
+     * @hidden
+     */
     static get contextMenu() { return { showContextMenu: () => {}, createReactContextMenu: () => {} } }; 
 
-    /** @deprecated No longer supported */
+    /**
+     * @deprecated No longer supported
+     * @hidden
+     */
     static get platformerPhysics() { return GimkitInternals.platformerPhysics };
 
-    /** @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events */
+    /**
+     * @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events
+     * @hidden
+     */
     static addEventListener(type: string, callback: () => void) {
         if(type === "loadEnd") {
             Net.on('load:*', callback);
         }
     }
 
-    /** @deprecated The api no longer emits events */
+    /**
+     * @deprecated The api no longer emits events
+     * @hidden
+     */
     static removeEventListener(type: string, callback: () => void) {
         if(type === "loadEnd") {
             Net.off('load:*', callback);
         }
     }
 
-    /** @deprecated Use {@link plugins} instead */
+    /**
+     * @deprecated Use {@link plugins} instead
+     * @hidden
+     */
     static get pluginManager() { return this.plugins };
 
     constructor() {
@@ -95,7 +110,7 @@ class Api {
 
         this.parcel = Object.freeze(new ScopedParcelApi(scoped.id));
         this.hotkeys = Object.freeze(new ScopedHotkeysApi(scoped.id));
-        this.net = Object.freeze(new ScopedNetApi(scoped.id) as ScopedNetType);
+        this.net = Object.freeze(new ScopedNetApi(scoped.id) as ScopedNetApi & Connection);
         this.UI = Object.freeze(new ScopedUIApi(scoped.id));
         this.storage = Object.freeze(new ScopedStorageApi(scoped.id));
         this.patcher = Object.freeze(new ScopedPatcherApi(scoped.id));
@@ -131,7 +146,7 @@ class Api {
      * Ways to interact with the current connection to the server,
      * and functions to send general requests
      */
-    net: Readonly<ScopedNetType>;
+    net: Readonly<ScopedNetApi & Connection>;
 
     /** Functions for interacting with the DOM */
     UI: Readonly<ScopedUIApi>;
@@ -145,14 +160,14 @@ class Api {
     /** Methods for getting info on libraries */
     libs = Api.libs;
 
-    /** Get the exported values of a library */
-    lib = Api.lib;
+    /** Gets the exported values of a library */
+    lib = Api.libs.get;
 
     /** Methods for getting info on plugins */
     plugins = Api.plugins;
     
     /** Gets the exported values of a plugin, if it has been enabled */
-    plugin = Api.plugin;
+    plugin = Api.plugins.get;
 
     /** Gimkit's internal react instance */
     get React() { return UI.React };

@@ -9,6 +9,7 @@ interface OldConfigurableOptions {
     defaultKeys?: Set<string>;
 }
 
+/** @inline */
 type KeyboardCallback = (e: KeyboardEvent) => void;
 
 function validateHotkeyOptions(name: string, path: string, options: HotkeyOptions) {
@@ -58,12 +59,18 @@ class BaseHotkeysApi {
     /** Which key codes are currently being pressed */
     get pressed() { return Hotkeys.pressed };
 
-    /** @deprecated Use {@link pressed} instead */
+    /**
+     * @deprecated Use {@link pressed} instead
+     * @hidden
+     */
     get pressedKeys() { return Hotkeys.pressedKeys };
 }
 
 class HotkeysApi extends BaseHotkeysApi {
-    /** Adds a hotkey with a given id */
+    /**
+     * Adds a hotkey with a given id
+     * @returns A function to remove the hotkey
+     */
     addHotkey(id: string, options: HotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addHotkey", arguments, ['id', 'string'],
             ['options', 'object'], ['callback', 'function'])) return;
@@ -79,7 +86,10 @@ class HotkeysApi extends BaseHotkeysApi {
         Hotkeys.removeHotkeys(id);
     }
 
-    /** Adds a hotkey which can be changed by the user */
+    /**
+     * Adds a hotkey which can be changed by the user
+     * @returns A function to remove the hotkey
+     */
     addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addConfigurableHotkey", arguments, ['id', 'string'],
             ['options', { category: 'string', title: 'string' }], ['callback', 'function'])) return;
@@ -96,7 +106,10 @@ class HotkeysApi extends BaseHotkeysApi {
         Hotkeys.removeConfigurableHotkeys(id);
     }
 
-    /** @deprecated Use {@link addHotkey} instead */
+    /**
+     * @deprecated Use {@link addHotkey} instead
+     * @hidden
+     */
     add(keys: Set<string>, callback: KeyboardCallback, preventDefault: boolean = false) {
         Hotkeys.addHotkey(keys, {
             keys: keySetToCodes(keys),
@@ -104,12 +117,18 @@ class HotkeysApi extends BaseHotkeysApi {
         }, callback);
     }
 
-    /** @deprecated Use {@link removeHotkeys} instead */
+    /**
+     * @deprecated Use {@link removeHotkeys} instead
+     * @hidden
+     */
     remove(keys: Set<string>) {
         Hotkeys.removeHotkeys(keys);
     }
 
-    /** @deprecated Use {@link addConfigurableHotkey} instead */
+    /**
+     * @deprecated Use {@link addConfigurableHotkey} instead
+     * @hidden
+     */
     addConfigurable(pluginName: string, hotkeyId: string, callback: KeyboardCallback, options: OldConfigurableOptions) {
         let opts: ConfigurableHotkeyOptions = {
             title: options.title,
@@ -121,7 +140,10 @@ class HotkeysApi extends BaseHotkeysApi {
         Hotkeys.addConfigurableHotkey(`${pluginName}-${hotkeyId}`, opts, callback);
     }
 
-    /** @deprecated Use {@link removeConfigurableHotkeys} instead */
+    /**
+     * @deprecated Use {@link removeConfigurableHotkeys} instead
+     * @hidden
+     */
     removeConfigurable(pluginName: string, hotkeyId: string) {
         Hotkeys.removeConfigurableHotkeys(`${pluginName}-${hotkeyId}`);
     }
@@ -130,7 +152,10 @@ class HotkeysApi extends BaseHotkeysApi {
 class ScopedHotkeysApi extends BaseHotkeysApi {
     constructor(private readonly id: string) { super() }
 
-    /** Adds a hotkey which will fire when certain keys are pressed */
+    /**
+     * Adds a hotkey which will fire when certain keys are pressed
+     * @returns A function to remove the hotkey
+     */
     addHotkey(options: HotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addHotkey", arguments,
             ['options', 'object'], ['callback', 'function'])) return;
@@ -138,7 +163,10 @@ class ScopedHotkeysApi extends BaseHotkeysApi {
         return Hotkeys.addHotkey(this.id, options, callback);
     }
     
-    /** Adds a hotkey which can be changed by the user */
+    /**
+     * Adds a hotkey which can be changed by the user
+     * @returns A function to remove the hotkey
+     */
     addConfigurableHotkey(options: ConfigurableHotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addConfigurableHotkey", arguments,
             ['options', 'object'], ['callback', 'function'])) return;

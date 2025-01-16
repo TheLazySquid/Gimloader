@@ -23,7 +23,10 @@ class StorageApi {
         return Storage.deletePluginValue(pluginName, key);
     }
 
-    /** @deprecated use {@link deleteValue} */
+    /**
+     * @deprecated use {@link deleteValue}
+     * @hidden
+     */
     get removeValue() { return this.deleteValue };
 }
 
