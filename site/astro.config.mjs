@@ -25,32 +25,43 @@ export default defineConfig({
                 ]
             },
             {
+                label: 'Development',
+                items: [
+                    { slug: 'development/overview' },
+                    { slug: 'development/internals' },
+                    { slug: 'development/structure' },
+                    { slug: 'development/api' },
+                    { slug: 'development/bundling' },
+                    { slug: 'development/nextsteps' }
+                ]
+            },
+            {
                 label: "Docs",
                 items: [
                     {
-                        label: 'Unscoped Api',
-                        items: [
-                            { slug: 'api/api', label: "Api" },
-                            { slug: 'api/parcel' },
-                            { slug: 'api/hotkeys' },
-                            { slug: 'api/net' },
-                            { slug: 'api/ui' },
-                            { slug: 'api/storage' },
-                            { slug: 'api/patcher' },
-                            { slug: 'api/libs' },
-                            { slug: 'api/plugins' },
-                        ]
-                    },
-                    {
                         label: 'Scoped Api',
                         items: [
-                            { slug: 'api/scopedapi', label: "Api" },
+                            { slug: 'api/scopedapi' },
                             { slug: 'api/scopedparcel' },
                             { slug: 'api/scopedhotkeys' },
                             { slug: 'api/scopednet' },
                             { slug: 'api/scopedui' },
                             { slug: 'api/scopedstorage' },
                             { slug: 'api/scopedpatcher' },
+                            { slug: 'api/libs' },
+                            { slug: 'api/plugins' },
+                        ]
+                    },
+                    {
+                        label: 'Unscoped Api',
+                        items: [
+                            { slug: 'api/api' },
+                            { slug: 'api/parcel' },
+                            { slug: 'api/hotkeys' },
+                            { slug: 'api/net' },
+                            { slug: 'api/ui' },
+                            { slug: 'api/storage' },
+                            { slug: 'api/patcher' },
                             { slug: 'api/libs' },
                             { slug: 'api/plugins' },
                         ]

@@ -97,9 +97,10 @@ for(let page of pages) {
         else title = "Scoped Api";
 
         if(page === "Api.md") {
-            text = "The api is accessible via the global variable `GL`.\n" + text;
+            text = "The api is accessible via the global variable `GL`. " +
+            "Scripts are also able to use a [scoped API](./scopedapi) which automatically handles cleanup by creating a `new GL()`\n" + text;
         } else {
-            text = "A scoped api can be created by calling `new GL()` within a plugin or library.\n" + text;
+            text = "A scoped api can be created with `new GL()` within a plugin or library.\n" + text;
         }
     } else {
         let name = page.toLowerCase().replace("scoped", "").replace(".md", "");

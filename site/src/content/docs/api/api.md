@@ -2,7 +2,7 @@
 title: Unscoped Api
 description: Documentation for the Unscoped Api
 ---
-The api is accessible via the global variable `GL`.
+The api is accessible via the global variable `GL`. Scripts are also able to use a [scoped API](./scopedapi) which automatically handles cleanup by creating a `new GL()`
 ## Properties
 
 
