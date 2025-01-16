@@ -5,6 +5,7 @@ class LibsApi {
     /** A list of all the libraries installed */
     get list() { return LibManager.getLibNames() };
 
+    /** Gets whether or not a plugin is installed and enabled */
     isEnabled(name: string) {
         if(!validate("libs.isEnabled", arguments, ['name', 'string'])) return;
 

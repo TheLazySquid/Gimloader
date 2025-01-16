@@ -1,3 +1,7 @@
 .social-icons::after {
     display: none;
 }
+
+table code {
+    white-space: nowrap;
+}

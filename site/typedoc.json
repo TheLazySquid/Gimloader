@@ -1,0 +1,16 @@
+{
+    "plugin": [
+        "typedoc-plugin-merge-modules",
+        "typedoc-plugin-markdown"
+    ],
+    "out": "./tmp",
+    "entryPoints": ["../src/api/**.ts"],
+    "mergeModulesRenameDefaults": true,
+    "readme": "none",
+    "tsconfig": "../tsconfig.json",
+    "disableSources": true,
+    "hideBreadcrumbs": true,
+    "hidePageHeader": true,
+    "parametersFormat": "table",
+    "excludeExternals": true
+}

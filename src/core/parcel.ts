@@ -14,6 +14,7 @@ interface ModuleObject {
     exports: any;
 }
 
+/** @inline */
 export type Matcher = (exports: any, id: string) => boolean;
 
 interface LazyCheck {

@@ -23,6 +23,39 @@ export default defineConfig({
                     { slug: 'usage/updating' },
                     { slug: 'usage/plugins' }
                 ]
+            },
+            {
+                label: "Docs",
+                items: [
+                    {
+                        label: 'Unscoped Api',
+                        items: [
+                            { slug: 'api/api', label: "Api" },
+                            { slug: 'api/parcel' },
+                            { slug: 'api/hotkeys' },
+                            { slug: 'api/net' },
+                            { slug: 'api/ui' },
+                            { slug: 'api/storage' },
+                            { slug: 'api/patcher' },
+                            { slug: 'api/libs' },
+                            { slug: 'api/plugins' },
+                        ]
+                    },
+                    {
+                        label: 'Scoped Api',
+                        items: [
+                            { slug: 'api/scopedapi', label: "Api" },
+                            { slug: 'api/scopedparcel' },
+                            { slug: 'api/scopedhotkeys' },
+                            { slug: 'api/scopednet' },
+                            { slug: 'api/scopedui' },
+                            { slug: 'api/scopedstorage' },
+                            { slug: 'api/scopedpatcher' },
+                            { slug: 'api/libs' },
+                            { slug: 'api/plugins' },
+                        ]
+                    }
+                ]
             }
         ],
         favicon: '/icon.ico',

@@ -29,7 +29,10 @@ class BaseParcelApi {
 }
 
 class ParcelApi extends BaseParcelApi {
-    /** Waits for a module to be loaded, then runs a callback */
+    /** 
+     * Waits for a module to be loaded, then runs a callback
+     * @returns A function to cancel waiting for the module
+     */
     getLazy(id: string, matcher: Matcher, callback: (exports: any) => any, initial = true) {
         if(!validate("parcel.getLazy", arguments,
             ['id', 'string'], ['matcher', 'function'],
@@ -45,17 +48,26 @@ class ParcelApi extends BaseParcelApi {
         Parcel.stopLazy(id);
     }
 
-    /** @deprecated Use {@link getLazy} instead */
+    /**
+     * @deprecated Use {@link getLazy} instead
+     * @hidden
+     */
     get interceptRequire() { return this.getLazy };
     
-    /** @deprecated Use {@link stopLazy} instead */
+    /**
+     * @deprecated Use {@link stopLazy} instead
+     * @hidden
+     */
     get stopIntercepts() { return this.stopLazy };
 }
 
 class ScopedParcelApi extends BaseParcelApi {
     constructor(private readonly id: string) { super() }
     
-    /** Waits for a module to be loaded, then runs a callback */
+    /** 
+     * Waits for a module to be loaded, then runs a callback
+     * @returns A function to cancel waiting for the module
+     */
     getLazy(matcher: Matcher, callback: (exports: any) => any, initial = true) {
         if(!validate("parcel.getLazy", arguments,
             ['matcher', 'function'], ['callback', 'function'], ['initial', 'boolean?'])) return;

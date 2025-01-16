@@ -29,36 +29,28 @@ class BaseNetApi extends EventEmitter {
         
         Net.send(channel, message);
     }
-    
-    /** @deprecated Methods for both transports are now on the base net api */
-    get colyseus() { return this };
-    
-    /** @deprecated Methods for both transports are now on the base net api */
-    get blueboat() { return this };
-    
-    private wrappedListeners = new WeakMap<(...args: any[]) => void, (data: any) => void>();
-
-    /** @deprecated use net.on */
-    addEventListener(channel: string, callback: (...args: any[]) => void) {
-        let listener = this.wrappedListeners.get(callback);
-        if(!listener) {
-            listener = (data: any) => {
-                callback(new CustomEvent(channel, { detail: data }));
-            };
-        }
-
-        this.on(channel, listener);
-    }
-    
-    /** @deprecated use net.off */
-    removeEventListener(channel: string, callback: (...args: any[]) => void) {
-        let listener = this.wrappedListeners.get(callback);
-        if(!listener) return;
-
-        this.off(channel, listener);
-    }
 }
 
+/**
+ * The net api extends [EventEmitter2](https://github.com/EventEmitter2/EventEmitter2)
+ * and uses wildcards with ":" as a delimiter.
+ * 
+ * The following events are emitted:
+ * 
+ * ```ts
+ * // fired when data is recieved on a certain channel
+ * net.on(CHANNEL, (data, editFn) => {})
+ * 
+ * // fired when data is sent on a certain channel
+ * net.on(send:CHANNEL, (data, editFn) => {})
+ * 
+ * // fired when the game loads with a certain type
+ * net.on(load:TYPE, (type) => {})
+ * 
+ * // you can also use wildcards, eg
+ * net.on("send:*", () => {})
+ * ```
+ */
 class NetApi extends BaseNetApi {
     constructor() {
         super();
@@ -68,7 +60,10 @@ class NetApi extends BaseNetApi {
         });
     }
 
-    /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+    /**
+     * Runs a callback when the game is loaded, or runs it immediately if the game has already loaded
+     * @returns A function to cancel waiting for load
+     */
     onLoad(id: string, callback: (type: Connection["type"]) => void) {
         if(!validate('Net.onLoad', arguments, ['id', 'string'], ['callback', 'function'])) return;
 
@@ -81,21 +76,82 @@ class NetApi extends BaseNetApi {
 
         Net.pluginOffLoad(id);
     }
+
+    /**
+     * @deprecated Methods for both transports are now on the base net api
+     * @hidden
+     */
+    get colyseus() { return this };
+
+    /**
+     * @deprecated Methods for both transports are now on the base net api
+     * @hidden
+     */
+    get blueboat() { return this };
+    
+    /** @hidden */
+    private wrappedListeners = new WeakMap<(...args: any[]) => void, (data: any) => void>();
+
+    /**
+     * @deprecated use net.on
+     * @hidden
+     */
+    addEventListener(channel: string, callback: (...args: any[]) => void) {
+        let listener = this.wrappedListeners.get(callback);
+        if(!listener) {
+            listener = (data: any) => {
+                callback(new CustomEvent(channel, { detail: data }));
+            };
+        }
+
+        this.on(channel, listener);
+    }
+    
+    /**
+     * @deprecated use net.off
+     * @hidden
+     */
+    removeEventListener(channel: string, callback: (...args: any[]) => void) {
+        let listener = this.wrappedListeners.get(callback);
+        if(!listener) return;
+
+        this.off(channel, listener);
+    }
 }
 
+/**
+ * The net api extends [EventEmitter2](https://github.com/EventEmitter2/EventEmitter2)
+ * and uses wildcards with ":" as a delimiter.
+ * 
+ * The following events are emitted:
+ * 
+ * ```ts
+ * // fired when data is recieved on a certain channel
+ * net.on(CHANNEL, (data, editFn) => {})
+ * 
+ * // fired when data is sent on a certain channel
+ * net.on(send:CHANNEL, (data, editFn) => {})
+ * 
+ * // fired when the game loads with a certain type
+ * net.on(load:TYPE, (type) => {})
+ * 
+ * // you can also use wildcards, eg
+ * net.on("send:*", () => {})
+ * ```
+ */
 class ScopedNetApi extends BaseNetApi {
     constructor(private readonly id: string) { super() };
     
-    /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+    /**
+     * Runs a callback when the game is loaded, or runs it immediately if the game has already loaded
+     * @returns A function to cancel waiting for load
+     */
     onLoad(callback: (type: Connection["type"]) => void) {
         if(!validate('Net.onLoad', arguments, ['callback', 'function'])) return;
 
         return Net.pluginOnLoad(this.id, callback);
     }
 }
-
-export type NetType = NetApi & Connection;
-export type ScopedNetType = ScopedNetApi & Connection;
 
 Object.freeze(BaseNetApi);
 Object.freeze(BaseNetApi.prototype);

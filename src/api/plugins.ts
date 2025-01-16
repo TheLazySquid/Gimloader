@@ -24,7 +24,10 @@ class PluginsApi {
         return PluginManager.getExports(name);
     }
 
-    /** @deprecated Use {@link get} instead */
+    /** 
+     * @deprecated Use {@link get} instead
+     * @hidden
+     */
     getPlugin(name: string) {
         return { return: PluginManager.getExports(name) };
     }
