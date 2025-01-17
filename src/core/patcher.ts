@@ -62,6 +62,9 @@ export default class Patcher {
             }
     
             Object.setPrototypeOf(object[property], Object.getPrototypeOf(patches.original));
+
+            // copy toString from the original
+            object[property].toString = () => patches.original.toString();
         }
     }
 
