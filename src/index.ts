@@ -9,7 +9,8 @@ import initInstallApi from "./installApi";
 import Storage from "$core/storage";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
-import { onGimkit } from "./utils";
+import { log, onGimkit } from "./utils";
+import { version } from "./consts.svelte";
 
 Object.defineProperty(unsafeWindow, "GL", {
     value: Api,
@@ -27,6 +28,8 @@ if(onGimkit) {
 } else {
     initInstallApi();
 }
+
+log(`Gimloader v${version} loaded`);
 
 GM.registerMenuCommand("Wipe All Plugins and Libraries", () => {
     if(!confirm("Do you really want to delete all plugins and libraries? This will also reload the page.")) return;

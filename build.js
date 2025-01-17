@@ -48,7 +48,7 @@ const meta = `// ==UserScript==
 // @description A plugin loader for Gimkit
 // @namespace   https://github.com/TheLazySquid/Gimloader
 // @match       https://www.gimkit.com/*
-// @match       https://thelazysquid.github.io/gimloader*
+// @match       https://thelazysquid.github.io/Gimloader*
 // @run-at      document-start
 // @iconURL     https://www.gimkit.com/favicon.png
 // @author      TheLazySquid

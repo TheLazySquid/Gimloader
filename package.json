@@ -8,7 +8,8 @@
   "scripts": {
     "build": "node build.js",
     "watch": "node build.js -w",
-    "buildTypes": "tsc -p declaration.tsconfig.json"
+    "buildTypes": "tsc -p declaration.tsconfig.json",
+    "postinstall": "patch-package"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "autoprefixer": "^10.4.20",
     "esbuild": "^0.23.1",
     "esbuild-svelte": "^0.9.0",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.41",
     "postcss-load-config": "^6.0.1",
     "postcss-minify": "^1.1.0",
