@@ -69,7 +69,10 @@ export default defineConfig({
                 ]
             }
         ],
-        favicon: '/icon.ico',
+        favicon: '/logo.svg',
+        logo: {
+            src: './public/logo.svg'
+        },
         components: {
             ThemeProvider: './src/components/ThemeProvider.astro',
             ThemeSelect: './src/components/ThemeSelect.astro'
