@@ -39,7 +39,7 @@ for(let page of pages) {
     while(match = linkRegex.exec(text)) {
         let index = match.index + 2;
         let end = text.indexOf("Api", index);
-        text = text.slice(0, index) + text.slice(index, end).toLowerCase() + text.slice(end);
+        text = text.slice(0, index) + './' + text.slice(index, end).toLowerCase() + text.slice(end);
     }
 
     text = text.replaceAll("Api.md", "");

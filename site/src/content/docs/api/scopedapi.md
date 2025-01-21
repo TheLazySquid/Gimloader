@@ -9,7 +9,7 @@ A scoped api can be created with `new GL()` within a plugin or library.
 
 ### hotkeys
 
-> **hotkeys**: `Readonly`\<[`ScopedHotkeysApi`](scopedhotkeys)\>
+> **hotkeys**: `Readonly`\<[`ScopedHotkeysApi`](./scopedhotkeys)\>
 
 Functions to listen for key combinations
 
@@ -35,7 +35,7 @@ Gets the exported values of a library
 
 ### libs
 
-> **libs**: `Readonly`\<[`LibsApi`](libs)\> = `Api.libs`
+> **libs**: `Readonly`\<[`LibsApi`](./libs)\> = `Api.libs`
 
 Methods for getting info on libraries
 
@@ -43,7 +43,7 @@ Methods for getting info on libraries
 
 ### net
 
-> **net**: `Readonly`\<[`ScopedNetApi`](scopednet) & `Connection`\>
+> **net**: `Readonly`\<[`ScopedNetApi`](./scopednet) & `Connection`\>
 
 Ways to interact with the current connection to the server,
 and functions to send general requests
@@ -90,7 +90,7 @@ This function is not available for libraries
 
 ### parcel
 
-> **parcel**: `Readonly`\<[`ScopedParcelApi`](scopedparcel)\>
+> **parcel**: `Readonly`\<[`ScopedParcelApi`](./scopedparcel)\>
 
 Functions used to modify Gimkit's internal modules
 
@@ -98,7 +98,7 @@ Functions used to modify Gimkit's internal modules
 
 ### patcher
 
-> **patcher**: `Readonly`\<[`ScopedPatcherApi`](scopedpatcher)\>
+> **patcher**: `Readonly`\<[`ScopedPatcherApi`](./scopedpatcher)\>
 
 Functions for intercepting the arguments and return values of functions
 
@@ -124,7 +124,7 @@ Gets the exported values of a plugin, if it has been enabled
 
 ### plugins
 
-> **plugins**: `Readonly`\<[`PluginsApi`](plugins)\> = `Api.plugins`
+> **plugins**: `Readonly`\<[`PluginsApi`](./plugins)\> = `Api.plugins`
 
 Methods for getting info on plugins
 
@@ -132,7 +132,7 @@ Methods for getting info on plugins
 
 ### storage
 
-> **storage**: `Readonly`\<[`ScopedStorageApi`](scopedstorage)\>
+> **storage**: `Readonly`\<[`ScopedStorageApi`](./scopedstorage)\>
 
 Functions for persisting data between reloads
 
@@ -140,7 +140,7 @@ Functions for persisting data between reloads
 
 ### UI
 
-> **UI**: `Readonly`\<[`ScopedUIApi`](scopedui)\>
+> **UI**: `Readonly`\<[`ScopedUIApi`](./scopedui)\>
 
 Functions for interacting with the DOM
 
