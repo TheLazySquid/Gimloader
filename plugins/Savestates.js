@@ -2,12 +2,14 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.2.5
+ * @version 0.3.0
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  */
+const api = new GL();
+const DLDUtils = api.lib("DLDUtils");
 
 const summitCoords = [{
     "x": 38.25554275512695,
@@ -36,18 +38,11 @@ const defaultState =  '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"di
 
 let stateLoadCallbacks = [];
 
-let hotkeyEquivs = [')', '!', '@', '#', '$', '%', '^'];
-let summitHotkeys = [];
-for(let i = 0; i <= 6; i++) {
-    // shift + alt + 0-6
-    summitHotkeys.push(new Set(['shift', 'alt', hotkeyEquivs[i]]));
-}
-
 const tp = (summit) => {
-    let physics = GL.stores.phaser.mainCharacter.physics;
+    let physics = api.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
 
-    GL.lib("DLDUtils").cancelRespawn();
+    DLDUtils.cancelRespawn();
     
     rb.setTranslation(summitCoords[summit], true);
     physics.state = JSON.parse(defaultState);
@@ -55,59 +50,61 @@ const tp = (summit) => {
     stateLoadCallbacks.forEach(cb => cb(summit));
 }
 
-let lastPos = GL.storage.getValue("Savestates", "lastPos", null);
-let lastState = GL.storage.getValue("Savestates", "lastState", null);
+let lastPos = api.storage.getValue("lastPos", null);
+let lastState = api.storage.getValue("lastState", null);
 
 let gameLoaded = false;
 
 const saveState = () => {
     if(!gameLoaded) return;
-    let physics = GL.stores.phaser.mainCharacter.physics;
+    let physics = api.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
 
     lastPos = rb.translation();
     lastState = JSON.stringify(physics.state);
 
     // save to storage
-    GL.storage.setValue("Savestates", "lastPos", lastPos);
-    GL.storage.setValue("Savestates", "lastState", lastState);
+    api.storage.setValue("lastPos", lastPos);
+    api.storage.setValue("lastState", lastState);
 
-    GL.notification.open({ message: "State Saved", duration: 0.75 })
+    api.notification.open({ message: "State Saved", duration: 0.75 });
 }
 
 const loadState = () => {
     if(!gameLoaded) return;
-    let physics = GL.stores.phaser.mainCharacter.physics;
+    let physics = api.stores.phaser.mainCharacter.physics;
     let rb = physics.getBody().rigidBody;
 
     if(!lastPos || !lastState) return;
 
-    GL.lib("DLDUtils").cancelRespawn();
+    api.lib("DLDUtils").cancelRespawn();
     rb.setTranslation(lastPos, true);
     physics.state = JSON.parse(lastState);
 
-    GL.notification.open({ message: "State Loaded", duration: 0.75 })
+    api.notification.open({ message: "State Loaded", duration: 0.75 })
 
     stateLoadCallbacks.forEach(cb => cb("custom"));
 }
 
-GL.addEventListener("loadEnd", () => { 
+api.net.onLoad(() => { 
     gameLoaded = true;   
     // add hotkeys for summits
-    for(let i = 0; i < summitHotkeys.length; i++) {
-        let hotkey = summitHotkeys[i];
-        
-        GL.hotkeys.add(hotkey, () => tp(i));
+    for(let i = 0; i <= 6; i++) {        
+        api.hotkeys.addHotkey({
+            key: `Digit${i}`,
+            shift: true,
+            alt: true
+        }, () => tp(i));
     }
 
     // optional command line integration
-    let commandLine = GL.lib("CommandLine");
+    let commandLine = api.lib("CommandLine");
     if(commandLine) {
         commandLine.addCommand("summit", [
             {"number": ["0", "1", "2", "3", "4", "5", "6"]}
         ], (summit) => {
             tp(parseInt(summit));
-        })
+        });
         
         commandLine.addCommand("save", [], saveState);
         commandLine.addCommand("load", [], loadState);
@@ -115,18 +112,24 @@ GL.addEventListener("loadEnd", () => {
 });
 
 // saving
-GL.hotkeys.addConfigurable("Savestates", "saveState", saveState, {
+api.hotkeys.addConfigurableHotkey({
     category: "Savestates",
     title: "Save Current State",
-    defaultKeys: new Set(['alt', ','])
-});
+    default: {
+        key: "Comma",
+        alt: true
+    }
+}, saveState);
 
 // loading
-GL.hotkeys.addConfigurable("Savestates", "loadState", loadState, {
+api.hotkeys.addConfigurableHotkey({
     category: "Savestates",
     title: "Load Last State",
-    defaultKeys: new Set(['alt', '.'])
-});
+    default: {
+        key: "Period",
+        alt: true
+    }
+}, loadState);
 
 export function onStateLoaded(callback) {
     stateLoadCallbacks.push(callback);
@@ -138,18 +141,13 @@ export function offStateLoaded(callback) {
 
 export function onStop() {
     for(let hotkey of summitHotkeys) {
-        GL.hotkeys.remove(hotkey);
+        api.hotkeys.remove(hotkey);
     }
 
-    let commandLine = GL.lib("CommandLine");
+    let commandLine = api.lib("CommandLine");
     if(commandLine) {
         commandLine.removeCommand("summit");
         commandLine.removeCommand("save");
         commandLine.removeCommand("load");
     }
-
-    GL.hotkeys.removeConfigurable("Savestates", "saveState");
-    GL.hotkeys.removeConfigurable("Savestates", "loadState");
-    GL.patcher.unpatchAll("Savestates");
-    GL.parcel.stopIntercepts("Savestates");
 }
