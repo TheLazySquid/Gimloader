@@ -15,9 +15,13 @@
     let diffedScript = $state('');
 
     onMount(() => {
-        window.addEventListener("load", () => {
+        if(document.readyState === "complete") {
             GLInstallMissing = (window as any).GLInstall === undefined;
-        });
+        } else {
+            window.addEventListener("load", () => {
+                GLInstallMissing = (window as any).GLInstall === undefined;
+            });
+        }
     });
 
     async function fetchScript() {
