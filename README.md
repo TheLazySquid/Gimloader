@@ -5,7 +5,7 @@ This is a Gimkit plugin loader and manager, based on a trick first used in [Gimh
 ## Installation
 
 1. Install [ViolentMonkey](https://violentmonkey.github.io/get-it/) for your browser.
-2. Click on [this link](https://raw.githubusercontent.com/TheLazySquid/GimLoader/main/build/bundle.user.js)
+2. Click on [this link](https://raw.githubusercontent.com/TheLazySquid/GimLoader/main/build/bundle.user.js) and hit install.
 3. Go to [gimkit.com/join](https://www.gimkit.com/join) and there should be a wrench icon next to the join button.
 
 ![UI Preview](/images/UIPreview.png)
@@ -33,10 +33,6 @@ These buttons can be disabled in the settings section.
 
 Once in the mod menu, you can create or import plugins with the two buttons at the top. There are some example plugins [here](/plugins/). Some plugins depend on libraries, which you can manage in the libraries tab. Some plugins may also add hotkeys that you can change, which will be in the hotkeys tab.
 
-## Gimhook Compatibility
-
-Gimloader has a polyfill to allow for Gimhook mods to work with it. If you have a Gimhook mod that doesn't work with Gimloader, please open an issue.
-
 ## Development
 
-Information on developing plugins can be found in [the wiki](https://github.com/TheLazySquid/Gimloader/wiki/Plugin-Development). Keep in mind that Gimloader is still being developed, and apis may change or be removed without warning.
+Documentation for the Gimloader api as well as some basics on making plugins can be found at https://thelazysquid.github.io/Gimloader.
