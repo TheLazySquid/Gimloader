@@ -5,3 +5,7 @@
 table code {
     white-space: nowrap;
 }
+
+.site-title {
+    --sl-nav-gap: 5px;
+}

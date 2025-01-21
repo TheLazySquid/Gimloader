@@ -1,6 +1,7 @@
 ---
 title: Development Overview
 description: An overview of developing Gimloader scripts
+prev: false
 ---
 
 ## Introduction

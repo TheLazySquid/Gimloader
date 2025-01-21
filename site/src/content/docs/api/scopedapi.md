@@ -1,6 +1,7 @@
 ---
 title: Scoped Api
 description: Documentation for the Scoped Api
+prev: false
 ---
 A scoped api can be created with `new GL()` within a plugin or library.
 

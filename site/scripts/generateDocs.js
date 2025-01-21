@@ -116,9 +116,11 @@ for(let page of pages) {
         title = title.replace("Scoped", "Scoped ");
     }
 
+    let prevNone = page === "ScopedApi.md" ? "\nprev: false" : "";
+
     text = `---
 title: ${title}
-description: Documentation for the ${title}
+description: Documentation for the ${title}${prevNone}
 ---
 ${text}`;
 
