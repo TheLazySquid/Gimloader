@@ -9,7 +9,7 @@ The api is accessible via the global variable `GL`. Scripts are also able to use
 
 ### hotkeys
 
-> `static` **hotkeys**: `Readonly`\<[`HotkeysApi`](./hotkeys)\>
+> `static` **hotkeys**: `Readonly`\<[`HotkeysApi`](/Gimloader/api/hotkeys)\>
 
 Functions to listen for key combinations
 
@@ -35,7 +35,7 @@ Gets the exported values of a library
 
 ### libs
 
-> `static` **libs**: `Readonly`\<[`LibsApi`](./libs)\>
+> `static` **libs**: `Readonly`\<[`LibsApi`](/Gimloader/api/libs)\>
 
 Methods for getting info on libraries
 
@@ -43,7 +43,7 @@ Methods for getting info on libraries
 
 ### net
 
-> `static` **net**: `Readonly`\<[`NetApi`](./net) & `Connection`\>
+> `static` **net**: `Readonly`\<[`NetApi`](/Gimloader/api/net) & `Connection`\>
 
 Ways to interact with the current connection to the server,
 and functions to send general requests
@@ -52,7 +52,7 @@ and functions to send general requests
 
 ### parcel
 
-> `static` **parcel**: `Readonly`\<[`ParcelApi`](./parcel)\>
+> `static` **parcel**: `Readonly`\<[`ParcelApi`](/Gimloader/api/parcel)\>
 
 Functions used to modify Gimkit's internal modules
 
@@ -60,7 +60,7 @@ Functions used to modify Gimkit's internal modules
 
 ### patcher
 
-> `static` **patcher**: `Readonly`\<[`PatcherApi`](./patcher)\>
+> `static` **patcher**: `Readonly`\<[`PatcherApi`](/Gimloader/api/patcher)\>
 
 Functions for intercepting the arguments and return values of functions
 
@@ -86,7 +86,7 @@ Gets the exported values of a plugin, if it has been enabled
 
 ### plugins
 
-> `static` **plugins**: `Readonly`\<[`PluginsApi`](./plugins)\>
+> `static` **plugins**: `Readonly`\<[`PluginsApi`](/Gimloader/api/plugins)\>
 
 Methods for getting info on plugins
 
@@ -94,7 +94,7 @@ Methods for getting info on plugins
 
 ### storage
 
-> `static` **storage**: `Readonly`\<[`StorageApi`](./storage)\>
+> `static` **storage**: `Readonly`\<[`StorageApi`](/Gimloader/api/storage)\>
 
 Functions for persisting data between reloads
 
@@ -102,7 +102,7 @@ Functions for persisting data between reloads
 
 ### UI
 
-> `static` **UI**: `Readonly`\<[`UIApi`](./ui)\>
+> `static` **UI**: `Readonly`\<[`UIApi`](/Gimloader/api/ui)\>
 
 Functions for interacting with the DOM
 

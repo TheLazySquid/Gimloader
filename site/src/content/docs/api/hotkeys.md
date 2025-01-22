@@ -28,20 +28,20 @@ Adds a hotkey which can be changed by the user
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `id` | `string` |
-| `options` | \{ `category`: `string`; `default`: \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \}; `preventDefault`: `boolean`; `title`: `string`; \} |
-| `options.category` | `string` |
-| `options.default`? | \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \} |
-| `options.default.alt`? | `boolean` |
-| `options.default.ctrl`? | `boolean` |
-| `options.default.key`? | `string` |
-| `options.default.keys`? | `string`[] |
-| `options.default.shift`? | `boolean` |
-| `options.preventDefault`? | `boolean` |
-| `options.title` | `string` |
-| `callback` | (`e`) => `void` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | - |
+| `options` | \{ `category`: `string`; `default`: \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \}; `preventDefault`: `boolean`; `title`: `string`; \} | - |
+| `options.category` | `string` | - |
+| `options.default`? | \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \} | - |
+| `options.default.alt`? | `boolean` | - |
+| `options.default.ctrl`? | `boolean` | - |
+| `options.default.key`? | `string` | Should be a keyboardevent [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
+| `options.default.keys`? | `string`[] | Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
+| `options.default.shift`? | `boolean` | - |
+| `options.preventDefault`? | `boolean` | - |
+| `options.title` | `string` | - |
+| `callback` | (`e`) => `void` | - |
 
 #### Returns
 
@@ -63,17 +63,17 @@ Adds a hotkey with a given id
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `id` | `string` |
-| `options` | \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `preventDefault`: `boolean`; `shift`: `boolean`; \} |
-| `options.alt`? | `boolean` |
-| `options.ctrl`? | `boolean` |
-| `options.key`? | `string` |
-| `options.keys`? | `string`[] |
-| `options.preventDefault`? | `boolean` |
-| `options.shift`? | `boolean` |
-| `callback` | (`e`) => `void` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | - |
+| `options` | \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `preventDefault`: `boolean`; `shift`: `boolean`; \} | - |
+| `options.alt`? | `boolean` | - |
+| `options.ctrl`? | `boolean` | - |
+| `options.key`? | `string` | Should be a keyboardevent [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
+| `options.keys`? | `string`[] | Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
+| `options.preventDefault`? | `boolean` | - |
+| `options.shift`? | `boolean` | - |
+| `callback` | (`e`) => `void` | - |
 
 #### Returns
 

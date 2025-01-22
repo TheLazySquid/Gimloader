@@ -23,7 +23,7 @@ const api = new GL();
 
 api.net.onLoad(() => {
     api.hotkeys.addHotkey({ key: "KeyQ" }, () => {
-        GL.notification.open({ message: "Q pressed!" });
+        api.notification.open({ message: "Q pressed!" });
     });
 });
 ```
