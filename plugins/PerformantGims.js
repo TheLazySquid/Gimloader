@@ -2,14 +2,16 @@
  * @name PerformantGims
  * @description Replaces configurable gims with images of them. Looks like crap, runs really fast.
  * @author TheLazySquid
- * @version 0.2.1
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PerformantGims.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @reloadRequired ingame
  * @hasSettings true
  */
 
-let settings = GL.lib("QuickSettings")("PerformantGims", [
+const api = new GL();
+
+let settings = api.lib("QuickSettings")("PerformantGims", [
     {
         type: "heading",
         text: "Performant Gims Settings"
@@ -23,19 +25,16 @@ let settings = GL.lib("QuickSettings")("PerformantGims", [
     }
 ]);
 
-let authId = GL.stores?.phaser?.mainCharacter?.id;
-GL.net.colyseus.addEventListener("AUTH_ID", (e) => {
-    authId = e.detail;
-});
+api.openSettingsMenu(settings.openSettingsMenu);
 
 function shouldApply(character) {
     if(settings.applyTo === "Everything") return true;
     else if(settings.applyTo === "Sentries") return character.type === "sentry";
-    console.log(character.id, authId);
-    return character.id !== authId;
+
+    return character.id !== api.stores.network.authId;
 }
 
-GL.parcel.interceptRequire("PerformantGims", exports => exports?.default?.toString?.().includes('this,"applyEditStyles"'), exports => {
+api.parcel.getLazy(exports => exports?.default?.toString?.().includes('this,"applyEditStyles"'), exports => {
     let normalSkin = exports.default;
 
     delete exports.default;
@@ -44,13 +43,12 @@ GL.parcel.interceptRequire("PerformantGims", exports => exports?.default?.toStri
         latestSkinId = "character_default_cyan"
 
         constructor(props) {
-            if(!shouldApply(props.character)) {
+            if(!props.character || !shouldApply(props.character)) {
                 return new normalSkin(props);
             }
             this.character = props.character;
             this.scene = props.scene;
         }
-
         updateSkin(A) {
             A.id = A.id.replace("character_", "");
             let load = this.scene.load.image(`gim-${A.id}`, `https://www.gimkit.com/assets/map/characters/spine/preview/${A.id}.png`);
@@ -77,9 +75,11 @@ GL.parcel.interceptRequire("PerformantGims", exports => exports?.default?.toStri
         }
         applyEditStyles() {}
     }
-})
 
-GL.parcel.interceptRequire("PerformantGims", exports => exports?.ANIMATION_TRACKS?.BODY, exports => {
+    api.onStop(() => exports.default = normalSkin);
+});
+
+api.parcel.getLazy(exports => exports?.ANIMATION_TRACKS?.BODY, exports => {
     let normalAnimation = exports.default;
 
     delete exports.default;
@@ -93,10 +93,6 @@ GL.parcel.interceptRequire("PerformantGims", exports => exports?.ANIMATION_TRACK
         update() {}
         onSkinChanged() {}
     }
-})
 
-export function onStop() {
-    GL.patcher.unpatchAll("PerformantGims");
-}
-
-export const openSettingsMenu = settings.openSettingsMenu;
+    api.onStop(() => exports.default = normalAnimation);
+});
