@@ -24,22 +24,26 @@ interface LazyCheck {
 }
 
 const scriptSelector = 'script[src*="index"]:not([nomodule])';
-const redirectedPages = ['/host', '/settings'];
+const redirectedPages = ['/host'];
 
-async function decachedImport(url: string) {
-    let src = new URL(url, location.origin).href;
-
-    let res = await fetch(src);
-    let text = await res.text();
-
-    // nasty hack to prevent the browser from caching other scripts
-    text = text.replaceAll('import(', 'window.decachedImport(');
-    text = text.replaceAll('import.meta.url', `'${src}'`)
-
-    let blob = new Blob([text], { type: 'application/javascript' });
-    let blobUrl = URL.createObjectURL(blob);
-
-    return import(blobUrl);
+function decachedImport(url: string) {
+    return new Promise(async (res, rej) => {
+        let src = new URL(url, location.origin).href;
+    
+        let resp = await fetch(src);
+        let text = await resp.text();
+    
+        // nasty hack to prevent the browser from caching other scripts
+        text = text.replaceAll('import(', 'window.decachedImport(');
+        text = text.replaceAll('import.meta.url', `'${src}'`)
+    
+        let blob = new Blob([text], { type: 'application/javascript' });
+        let blobUrl = URL.createObjectURL(blob);
+    
+        import(blobUrl)
+            .then(res, rej)
+            .finally(() => URL.revokeObjectURL(blobUrl));
+    });
 }
 
 Object.defineProperty(unsafeWindow, "decachedImport", {
@@ -84,10 +88,11 @@ export default class Parcel {
                     this.reloadExistingScripts(existingScripts);
                 }
 
-                if(document.readyState === "complete") setTimeout(run);
+                if(document.readyState === "complete") run();
                 else window.addEventListener('load', run)
+            } else {
+                this.setup();
             }
-            else setTimeout(() => this.setup());
         }
     }
 
@@ -123,7 +128,6 @@ export default class Parcel {
         this._parcelModuleCache = {};
         this._parcelModules = {};
     }
-
 
     static async reloadExistingScripts(existingScripts: NodeListOf<HTMLScriptElement>) {
         // nuke the dom
