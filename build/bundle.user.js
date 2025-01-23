@@ -5,11 +5,11 @@
 // @match       https://www.gimkit.com/*
 // @match       https://thelazysquid.github.io/Gimloader*
 // @run-at      document-start
-// @iconURL     https://www.gimkit.com/favicon.png
+// @icon        https://thelazysquid.github.io/Gimloader/icon.svg
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     1.0.0
+// @version     1.0.1
 // @grant       unsafeWindow
 // @grant       GM_getValue
 // @grant       GM_setValue
