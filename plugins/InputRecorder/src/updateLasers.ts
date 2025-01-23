@@ -1,14 +1,15 @@
+import GL from 'gimloader';
 let lasers: any[] = [];
 
-GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
-    for(let i = 0; i < packet.detail.changes.length; i++) {
-        let device = packet.detail.changes[i];
+GL.net.on("DEVICES_STATES_CHANGES", (packet: any) => {
+    for(let i = 0; i < packet.changes.length; i++) {
+        let device = packet.changes[i];
         if(lasers.some(l => l.id === device[0])) {
-            packet.detail.changes.splice(i, 1)
+            packet.changes.splice(i, 1)
             i -= 1;
         }
     }
-})
+});
 
 export function stopUpdatingLasers() {
     lasers = [];

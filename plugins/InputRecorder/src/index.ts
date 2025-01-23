@@ -1,19 +1,12 @@
-/// <reference types="gimloader" />
-
+import GL from 'gimloader';
 import Recorder from './recorder';
-import { Ghost } from './ghosts';
-
-(window as any).createGhost = () => {
-    let ghost = new Ghost();
-    let state = GL.net.colyseus.room.state;
-    state.characters.set("197823782908137123", ghost);
-    state.characters.$callbacks[128].forEach(c => c(ghost, "197823782908137123"));
-}
 
 let recorder: Recorder;
 
-let toggleRecordHotkey = new Set(["alt", "r"]);
-GL.hotkeys.add(toggleRecordHotkey, () => {
+GL.hotkeys.addHotkey({
+    key: "KeyR",
+    alt: true
+}, () => {
     if(!recorder) return;
 
     if(recorder.playing) {
@@ -26,10 +19,12 @@ GL.hotkeys.add(toggleRecordHotkey, () => {
     }
 
     recorder.toggleRecording();
-}, true);
+});
 
-let playbackHotkey = new Set(["alt", "b"]);
-GL.hotkeys.add(playbackHotkey, () => {
+GL.hotkeys.addHotkey({
+    key: "KeyB",
+    alt: true
+}, () => {
     if(!recorder) return;
 
     if(recorder.recording) {
@@ -58,19 +53,12 @@ GL.hotkeys.add(playbackHotkey, () => {
 
         input.click();
     }
-}, true);
+});
 
-GL.addEventListener("loadEnd", () => {
+GL.net.onLoad(() => {
     recorder = new Recorder(GL.stores.phaser.scene.worldManager.physics);
-})
+});
 
 export function getRecorder() {
     return recorder;
-}
-
-export function onStop() {
-    GL.parcel.stopIntercepts("InputRecorder")
-    GL.patcher.unpatchAll("InputRecorder")
-    GL.hotkeys.remove(toggleRecordHotkey)
-    GL.hotkeys.remove(playbackHotkey)
 }
