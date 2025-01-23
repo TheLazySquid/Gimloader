@@ -50,7 +50,7 @@ const meta = `// ==UserScript==
 // @match       https://www.gimkit.com/*
 // @match       https://thelazysquid.github.io/Gimloader*
 // @run-at      document-start
-// @iconURL     https://thelazysquid.github.io/Gimloader/icon.svg
+// @icon        https://thelazysquid.github.io/Gimloader/icon.svg
 // @author      TheLazySquid
 // @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
 // @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
