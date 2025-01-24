@@ -20,6 +20,7 @@ export interface HotkeyOptions extends HotkeyTrigger {
 /** @inline */
 export interface ConfigurableHotkeyOptions {
     category: string;
+    /** There should be no duplicate titles within a category */
     title: string;
     preventDefault?: boolean;
     default?: HotkeyTrigger;
@@ -36,16 +37,20 @@ export class ConfigurableHotkey {
     callback: Callback;
     trigger: HotkeyTrigger | null = $state(null);
     default?: HotkeyTrigger;
+    pluginName?: string;
 
-    constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions) {
+    constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string) {
         this.id = id;
         this.category = options.category;
         this.title = options.title;
         this.preventDefault = options.preventDefault ?? true;
         this.default = options.default;
         this.callback = callback;
+        this.pluginName = pluginName;
 
-        if(hotkeys.savedHotkeys[id]) {
+        if(hotkeys.savedHotkeys[id] === null) {
+            this.trigger = null;
+        } else if(hotkeys.savedHotkeys[id]) {
             this.trigger = Object.assign({}, hotkeys.savedHotkeys[id]);
         } else if(this.default) {
             this.trigger = Object.assign({}, this.default);
@@ -53,7 +58,8 @@ export class ConfigurableHotkey {
     }
 
     reset() {
-        this.trigger = Object.assign({}, this.default);
+        if(this.default) this.trigger = Object.assign({}, this.default);
+        else this.trigger = null;
     }
 }
 
@@ -97,16 +103,25 @@ class Hotkeys {
         }
     }
     
-    addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback) {
-        let obj = new ConfigurableHotkey(id, callback, options);
+    addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback, pluginName?: string) {
+        let obj = new ConfigurableHotkey(id, callback, options, pluginName);
         this.configurableHotkeys.push(obj);
 
         return splicer(this.configurableHotkeys, obj);
     }
 
-    removeConfigurableHotkeys(id: string) {
+    removeConfigurableHotkey(id: string) {
         for(let i = 0; i < this.configurableHotkeys.length; i++) {
             if(this.configurableHotkeys[i].id === id) {
+                this.configurableHotkeys.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+    removeConfigurableFromPlugin(pluginName: string) {
+        for(let i = 0; i < this.configurableHotkeys.length; i++) {
+            if(this.configurableHotkeys[i].pluginName === pluginName) {
                 this.configurableHotkeys.splice(i, 1);
                 i--;
             }
@@ -151,7 +166,9 @@ class Hotkeys {
     }
 
     saveConfigurableHotkeys() {
-        this.savedHotkeys = {};
+        for(let hotkey of this.configurableHotkeys) {
+            this.savedHotkeys[hotkey.id] = hotkey.trigger;
+        }
 
         Storage.setValue('configurableHotkeys', this.savedHotkeys);
     }

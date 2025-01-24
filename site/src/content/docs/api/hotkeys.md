@@ -30,7 +30,7 @@ Adds a hotkey which can be changed by the user
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `id` | `string` | - |
+| `id` | `string` | A unique id for the hotkey, such as `myplugin-myhotkey` |
 | `options` | \{ `category`: `string`; `default`: \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \}; `preventDefault`: `boolean`; `title`: `string`; \} | - |
 | `options.category` | `string` | - |
 | `options.default`? | \{ `alt`: `boolean`; `ctrl`: `boolean`; `key`: `string`; `keys`: `string`[]; `shift`: `boolean`; \} | - |
@@ -40,7 +40,7 @@ Adds a hotkey which can be changed by the user
 | `options.default.keys`? | `string`[] | Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
 | `options.default.shift`? | `boolean` | - |
 | `options.preventDefault`? | `boolean` | - |
-| `options.title` | `string` | - |
+| `options.title` | `string` | There should be no duplicate titles within a category |
 | `callback` | (`e`) => `void` | - |
 
 #### Returns
@@ -100,9 +100,9 @@ prevent keyup events from being registered, such as an alert
 
 ***
 
-### removeConfigurableHotkeys()
+### removeConfigurableHotkey()
 
-> **removeConfigurableHotkeys**(`id`): `void`
+> **removeConfigurableHotkey**(`id`): `void`
 
 Removes a configurable hotkey with a given id
 

@@ -39,7 +39,7 @@ Adds a hotkey which can be changed by the user
 | `options.default.keys`? | `string`[] | Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) |
 | `options.default.shift`? | `boolean` | - |
 | `options.preventDefault`? | `boolean` | - |
-| `options.title` | `string` | - |
+| `options.title` | `string` | There should be no duplicate titles within a category |
 | `callback` | (`e`) => `void` | - |
 
 #### Returns

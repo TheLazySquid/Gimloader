@@ -35,13 +35,18 @@ export function validate(fnName: string, args: IArguments, ...schema: [string, s
             }
 
             for(let key in type) {
-                if(args[i][key] === undefined && !type[key].endsWith("?")) {
-                    error(fnName, `called without argument ${name}.${key}`);
-                    return false;
+                if(args[i][key] === undefined) {
+                    if(type[key].endsWith("?")) {
+                        continue;
+                    } else {
+                        error(fnName, `called without argument ${name}.${key}`);
+                        return false;
+                    }
                 }
 
                 if(!typeMatches(args[i][key], type[key])) {
                     error(fnName, 'recieved', args[i][key], `for argument ${name}.${key}, expected type ${type[key]}`);
+                    return false;
                 }
             }
         } else {

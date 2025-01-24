@@ -127,7 +127,7 @@ class Api {
             this.net.removeAllListeners();
             Parcel.stopLazy(scoped.id);
             Hotkeys.removeHotkeys(scoped.id);
-            Hotkeys.removeConfigurableHotkeys(scoped.id);
+            Hotkeys.removeConfigurableFromPlugin(scoped.id);
             Net.pluginOffLoad(scoped.id);
             UI.removeStyles(scoped.id);
             Patcher.unpatchAll(scoped.id);
