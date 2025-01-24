@@ -88,11 +88,13 @@ class HotkeysApi extends BaseHotkeysApi {
 
     /**
      * Adds a hotkey which can be changed by the user
+     * @param id A unique id for the hotkey, such as `myplugin-myhotkey`
      * @returns A function to remove the hotkey
      */
     addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addConfigurableHotkey", arguments, ['id', 'string'],
-            ['options', { category: 'string', title: 'string' }], ['callback', 'function'])) return;
+            ['options', { category: 'string', title: 'string', preventDefault: 'boolean?' }],
+            ['callback', 'function'])) return;
         if(options.default && !validateHotkeyOptions("hotkeys.addConfigurableHotkey",
             "options.default", options.default)) return;
 
@@ -100,10 +102,10 @@ class HotkeysApi extends BaseHotkeysApi {
     }
 
     /** Removes a configurable hotkey with a given id */
-    removeConfigurableHotkeys(id: string) {
-        if(!validate("hotkeys.removeConfigurableHotkeys", arguments, ['id', 'string'])) return;
+    removeConfigurableHotkey(id: string) {
+        if(!validate("hotkeys.removeConfigurableHotkey", arguments, ['id', 'string'])) return;
 
-        Hotkeys.removeConfigurableHotkeys(id);
+        Hotkeys.removeConfigurableHotkey(id);
     }
 
     /**
@@ -145,7 +147,7 @@ class HotkeysApi extends BaseHotkeysApi {
      * @hidden
      */
     removeConfigurable(pluginName: string, hotkeyId: string) {
-        Hotkeys.removeConfigurableHotkeys(`${pluginName}-${hotkeyId}`);
+        Hotkeys.removeConfigurableHotkey(`${pluginName}-${hotkeyId}`);
     }
 }
 
@@ -169,11 +171,12 @@ class ScopedHotkeysApi extends BaseHotkeysApi {
      */
     addConfigurableHotkey(options: ConfigurableHotkeyOptions, callback: KeyboardCallback) {
         if(!validate("hotkeys.addConfigurableHotkey", arguments,
-            ['options', 'object'], ['callback', 'function'])) return;
+            ['options', { category: 'string', title: 'string', preventDefault: 'boolean?' }],
+            ['callback', 'function'])) return;
         if(options.default && !validateHotkeyOptions("hotkeys.addConfigurableHotkey",
             "options.default", options.default)) return;
 
-        return Hotkeys.addConfigurableHotkey(this.id, options, callback);
+        return Hotkeys.addConfigurableHotkey(`${this.id}-${options.category}-${options.title}`, options, callback, this.id);
     }
 }
 
