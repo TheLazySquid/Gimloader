@@ -2,35 +2,36 @@
  * @name DLDUtils
  * @description Allows plugins to move characters without the server's permission
  * @author TheLazySquid
- * @version 0.2.7
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @isLibrary true
- * @reloadRequired ingame
  */
+
+const api = new GL();
 
 const respawnHeight = 621.093;
 const floorHeight = 638.37;
 let lastCheckpointReached = 0;
 let canRespawn = false;
 
-GL.addEventListener("loadEnd", () => {
-    let savestates = GL.pluginManager.getPlugin("Savestates");
+api.net.onLoad(() => {
+    let savestates = api.plugin("Savestates");
     if(savestates?.return) {
         savestates.return.onStateLoaded((summit) => {
             if(typeof summit === "number") {
                 lastCheckpointReached = summit;
                 if(summit <= 1) canRespawn = false;
             }
-        })
+        });
     }
 
-    GL.net.colyseus.room.state.session.gameSession.listen("phase", (phase) => {
+    api.net.room.state.session.gameSession.listen("phase", (phase) => {
         if(phase === "results") {
             canRespawn = false;
             lastCheckpointReached = 0;
         }
-    })
-})
+    });
+});
 
 export function cancelRespawn() {
     canRespawn = false;
@@ -57,7 +58,7 @@ const checkpointCoords = [{
 }, {
     x: 401.2699890136719,
     y: 285.739990234375
-}]
+}];
 
 let doLaserRespawn = true;
 
@@ -75,24 +76,24 @@ const enable = () => {
     let maxHurtFrames = 1;
     
     // disable the physics state from the server
-    let lasers = GL.stores.phaser.scene.worldManager.devices.allDevices.filter(d => d.laser);
-    let states = GL.stores.world.devices.states;
-    let body = GL.stores.phaser.mainCharacter.physics.getBody();
+    let lasers = api.stores.phaser.scene.worldManager.devices.allDevices.filter(d => d.laser);
+    let states = api.stores.world.devices.states;
+    let body = api.stores.phaser.mainCharacter.physics.getBody();
     let shape = body.collider.shape;
     
     // override the physics update to manually check for laser collisions
-    let physics = GL.stores.phaser.scene.worldManager.physics;
+    let physics = api.stores.phaser.scene.worldManager.physics;
     let showHitLaser = true;
-    GL.patcher.before("DLDUtils", physics, "physicsStep", () => {
+    api.patcher.before(physics, "physicsStep", () => {
         // Ignore running out of energy
-        if(GL.stores.me.movementSpeed === 0) GL.stores.me.movementSpeed = 310;
+        if(api.stores.me.movementSpeed === 0) api.stores.me.movementSpeed = 310;
     });
 
     let wasOnLastFrame = false;
     let startImmunityActive = false;
 
-    GL.patcher.after("DLDUtils", physics, "physicsStep", () => {
-        if(GL.net.colyseus.room.state.session.gameSession.phase === "results") return;
+    api.patcher.after(physics, "physicsStep", () => {
+        if(api.net.room.state.session.gameSession.phase === "results") return;
         if(!showHitLaser || !doLaserRespawn || startImmunityActive) return;
 
         // all the lasers always have the same state
@@ -146,8 +147,8 @@ const enable = () => {
             if(hurtFrames >= maxHurtFrames) {
                 hurtFrames = 0;
                 moveCharToPos(checkpointCoords[lastCheckpointReached].x, checkpointCoords[lastCheckpointReached].y);
-                GL.stores.me.isRespawning = true;
-                setTimeout(() => GL.stores.me.isRespawning = false, 1000);
+                api.stores.me.isRespawning = true;
+                setTimeout(() => api.stores.me.isRespawning = false, 1000);
             }
         } else hurtFrames = 0;
 
@@ -176,14 +177,14 @@ const enable = () => {
             canRespawn = false;
             setTimeout(() => {
                 moveCharToPos(checkpointCoords[lastCheckpointReached].x, checkpointCoords[lastCheckpointReached].y);
-                GL.stores.me.isRespawning = true;
-                setTimeout(() => GL.stores.me.isRespawning = false, 1000);
+                api.stores.me.isRespawning = true;
+                setTimeout(() => api.stores.me.isRespawning = false, 1000);
             }, 300);
         }
     })
 
     // move the player to the initial position
-    let rb = GL.stores.phaser.mainCharacter.physics.getBody().rigidBody;
+    let rb = api.stores.phaser.mainCharacter.physics.getBody().rigidBody;
     rb.setTranslation({
         "x": 33.87,
         "y": 638.38
@@ -198,41 +199,27 @@ const enable = () => {
     physics.bodies.activeBodies.disableBody = () => {};
 }
 
-// obviously not perfect, but I can't think of a good way to check;
+// obviously not perfect, but I can't think of a good way to check
 function isDLD() {
-    let tileManager = GL.stores.phaser.scene.tileManager;
+    let tileManager = api.stores.phaser.scene.tileManager;
     let layer = tileManager.layerManager.layers.get("terrain-3");
 
     // confirm that this is DLD
     return layer.tiles.size === 1955;
 }
 
-GL.addEventListener("loadEnd", () => {
+api.net.onLoad(() => {
     if(!isDLD()) return;
 
     enable();
 });
 
-GL.parcel.interceptRequire("DLDUtils", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {  
-    // prevent colyseus from complaining that nothing is registered
-    GL.patcher.instead("DLDUtils", exports, "default", (_, args) => {
-        args[0].onMessage("PHYSICS_STATE", (packet) => {
-            if(isDLD()) return;
-            
-            let mc = GL.stores.phaser.mainCharacter;
-            mc?.physics.setServerPosition({
-                packet: packet.packetId,
-                x: packet.x,
-                y: packet.y,
-                jsonState: JSON.parse(packet.physicsState || "{}"),
-                teleport: packet.teleport
-            })
-        })
-    })
-})
+api.net.on("PHYSICS_STATE", (_, editFn) => {
+    if(isDLD()) editFn(null);
+});
 
 export function moveCharToPos(x, y) {
-    let rb = GL.stores?.phaser?.mainCharacter?.physics?.getBody().rigidBody
+    let rb = api.stores?.phaser?.mainCharacter?.physics?.getBody().rigidBody
     if(!rb) return;
 
     rb.setTranslation({ x, y }, true);
@@ -258,9 +245,4 @@ function lineIntersects(start1, end1, start2, end2) {
     let s = numerator2 / denominator;
 
     return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-}
-
-export function onStop() {
-    GL.parcel.stopIntercepts("DLDUtils");
-    GL.patcher.unpatchAll("DLDUtils");
 }
