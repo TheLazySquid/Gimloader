@@ -2,8 +2,7 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author TheLazySquid
- * @version 0.3.0
- * @reloadRequired ingame
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Savestates.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
@@ -32,7 +31,7 @@ const summitCoords = [{
 }, {
     "x": 401.2699890136719,
     "y": 285.739990234375
-}]
+}];
 
 const defaultState =  '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}'
 
@@ -108,6 +107,12 @@ api.net.onLoad(() => {
         
         commandLine.addCommand("save", [], saveState);
         commandLine.addCommand("load", [], loadState);
+    
+        api.onStop(() => {
+            commandLine.removeCommand("summit");
+            commandLine.removeCommand("save");
+            commandLine.removeCommand("load");
+        });
     }
 });
 
@@ -137,17 +142,4 @@ export function onStateLoaded(callback) {
 
 export function offStateLoaded(callback) {
     stateLoadCallbacks = stateLoadCallbacks.filter(cb => cb !== callback);
-}
-
-export function onStop() {
-    for(let hotkey of summitHotkeys) {
-        api.hotkeys.remove(hotkey);
-    }
-
-    let commandLine = api.lib("CommandLine");
-    if(commandLine) {
-        commandLine.removeCommand("summit");
-        commandLine.removeCommand("save");
-        commandLine.removeCommand("load");
-    }
 }
