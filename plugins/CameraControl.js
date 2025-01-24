@@ -2,14 +2,16 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author TheLazySquid & Blackhole927
- * @version 0.4.0
+ * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CameraControl.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  */
 
-let settings = GL.lib("QuickSettings")("CameraControl", [
+const api = new GL();
+
+let settings = api.lib("QuickSettings")("CameraControl", [
     {
         type: "heading",
         text: "CameraControl Settings"
@@ -38,17 +40,30 @@ let settings = GL.lib("QuickSettings")("CameraControl", [
         default: true
     }
 ]);
+api.openSettingsMenu(settings.openSettingsMenu);
 
 let freecamming = false;
 let freecamPos = {x: 0, y: 0};
 let scrollMomentum = 0;
 let changedZoom = false;
 
-let stopProps = [new Set(["arrowleft"]), new Set(["arrowright"]), new Set(["arrowup"]), new Set(["arrowdown"])];
+let stopDefaultArrows = false;
+let stopKeys = ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"];
+for(let key of stopKeys) {
+    api.hotkeys.addHotkey({
+        key,
+        preventDefault: false
+    }, (e) => {
+        if(stopDefaultArrows) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+    });
+}
 
 let updateFreecam = null;
 let updateScroll = (dt) => {
-    let camera = GL.stores?.phaser?.scene?.cameras?.cameras?.[0];
+    let camera = api.stores?.phaser?.scene?.cameras?.cameras?.[0];
     if(!camera) return;
     
     scrollMomentum *= Math.pow(.97, dt);
@@ -64,24 +79,21 @@ let updateScroll = (dt) => {
     }
 }
 
-const patchFrame = () => {
-    if(GL.net.type !== "Colyseus") return;
-    let worldManager = GL.stores.phaser.scene.worldManager;
+api.net.onLoad((type) => {
+    if(type !== "Colyseus") return;
+    let worldManager = api.stores.phaser.scene.worldManager;
 
     // whenever a frame passes
-    GL.patcher.after("CameraControl", worldManager, "update", (_, args) => {
+    api.patcher.after(worldManager, "update", (_, args) => {
         updateFreecam?.(args[0]);
         updateScroll(args[0]);
     });
-}
-
-if(GL.net.type === "Colyseus") patchFrame()
-GL.addEventListener("loadEnd", patchFrame);
+});
 
 let scene, camera;
 
 const getCanvasZoom = () => {
-    let transform = GL.stores.phaser.scene.game.canvas.style.transform;
+    let transform = api.stores.phaser.scene.game.canvas.style.transform;
     if(!transform) return 1;
     return parseFloat(transform.split("(")[1].replace(")", ""));
 }
@@ -107,7 +119,7 @@ function onPointermove(e) {
 
 function onWheel(e) {
     if(!freecamming || !settings.mouseControls) {
-        if(settings.shiftToZoom && !GL.hotkeys.pressedKeys.has("shift")) return;
+        if(settings.shiftToZoom && !api.hotkeys.pressed.has("ShiftLeft")) return;
         scrollMomentum -= e.deltaY / 65000;
         return;
     }
@@ -133,13 +145,13 @@ function onWheel(e) {
     changedZoom = true;
 }
 
-GL.addEventListener("loadEnd", () => {
-    scene = GL.stores?.phaser?.scene;
+api.net.onLoad(() => {
+    scene = api.stores?.phaser?.scene;
     camera = scene?.cameras?.cameras?.[0];
     if(!scene) return;
     
     // disable the camera zoom being reset when changing the screen size
-    GL.patcher.before("CameraControl", GL.stores.phaser.scene.cameraHelper, "resize", () => {
+    api.patcher.before(api.stores.phaser.scene.cameraHelper, "resize", () => {
         return changedZoom;
     });
 
@@ -154,25 +166,30 @@ function stopFreecamming() {
 
     camera.useBounds = true;
     let charObj = scene.characterManager.characters
-        .get(GL.stores.phaser.mainCharacter.id).body
+        .get(api.stores.phaser.mainCharacter.id).body;
 
     scene.cameraHelper.startFollowingObject({ object: charObj })
     updateFreecam = null;
-
-    for(let key of stopProps) {
-        GL.hotkeys.remove(key);
-    }
+    stopDefaultArrows = false;
 
     window.removeEventListener('pointermove', onPointermove);
 }
 
-GL.parcel.interceptRequire("CameraControl", (exports) => exports?.AmIAiming, (exports) => {
-    GL.patcher.before("CameraControl", exports, "AmIAiming", () => {
+api.parcel.getLazy((exports) => exports?.AmIAiming, (exports) => {
+    api.patcher.before(exports, "AmIAiming", () => {
         if(disableAim) return true;
-    })
+    });
 });
 
-GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
+api.hotkeys.addConfigurableHotkey({
+    category: "Camera Control",
+    title: "Enable Freecam",
+    stopPropagation: false,
+    default: {
+        key: "KeyF",
+        shift: true
+    }
+}, () => {
     if(!scene || !camera) return;
     
     if(freecamming) {
@@ -183,54 +200,44 @@ GL.hotkeys.addConfigurable("CameraControl", "freecam", () => {
         scene.cameraHelper.stopFollow();
         camera.useBounds = false;
         freecamPos = {x: camera.midPoint.x, y: camera.midPoint.y};
-
-        for(let key of stopProps) {
-            GL.hotkeys.add(key, (e) => {
-                e.stopImmediatePropagation();
-            }, true)
-        }
+        stopDefaultArrows = true;
 
         // move the camera
         updateFreecam = (dt) => {
             let moveAmount = 0.8 / camera.zoom * dt;
-            let pressed = GL.hotkeys.pressedKeys;
-            if(pressed.has("control")) moveAmount *= 5;
+            let pressed = api.hotkeys.pressed;
+            if(pressed.has("ControlLeft")) moveAmount *= 5;
 
-            if(pressed.has("arrowleft")) freecamPos.x -= moveAmount;
-            if(pressed.has("arrowright")) freecamPos.x += moveAmount;
-            if(pressed.has("arrowup")) freecamPos.y -= moveAmount;
-            if(pressed.has("arrowdown")) freecamPos.y += moveAmount;
+            if(pressed.has("ArrowLeft")) freecamPos.x -= moveAmount;
+            if(pressed.has("ArrowRight")) freecamPos.x += moveAmount;
+            if(pressed.has("ArrowUp")) freecamPos.y -= moveAmount;
+            if(pressed.has("ArrowDown")) freecamPos.y += moveAmount;
 
             scene.cameraHelper.goTo(freecamPos);
         };
 
         // show the cursor
         disableAim = true;
-        GL.stores.phaser.scene.game.canvas.style.cursor = "default";
+        api.stores.phaser.scene.game.canvas.style.cursor = "default";
 
         window.addEventListener('pointermove', onPointermove);
     }
 
     freecamming = !freecamming;
-}, {
-    category: "Camera Control",
-    title: "Enable Freecam",
-    stopPropagation: false,
-    defaultKeys: new Set(["shift", "f"])
 })
 
 // optional command line integration
-let commandLine = GL.lib("CommandLine");
+let commandLine = api.lib("CommandLine");
 if(commandLine) {
     commandLine.addCommand("setzoom", [
         {"amount": "number"}
     ], (zoom) => {
-        let scene = GL.stores?.phaser?.scene;
+        let scene = api.stores?.phaser?.scene;
         let camera = scene?.cameras?.cameras?.[0];
         if(!scene || !camera) return;
 
         camera.zoom = parseFloat(zoom);
-    })
+    });
 }
 
 let zoomToggled = false;
@@ -238,7 +245,7 @@ let initialZoom = 1;
 const onDown = () => {
     if(!settings.toggleZoomFactor) return;
     
-    let scene = GL.stores?.phaser?.scene;
+    let scene = api.stores?.phaser?.scene;
     let camera = scene?.cameras?.cameras?.[0];
     if(!scene || !camera) return;
 
@@ -252,18 +259,13 @@ const onDown = () => {
     zoomToggled = !zoomToggled;
 }
 
-GL.hotkeys.addConfigurable("CameraControl", "zoomToggle", onDown, {
+api.hotkeys.addConfigurableHotkey({
     category: "Camera Control",
     title: "Quick Zoom Toggle",
     stopPropagation: false
-});
+}, onDown);
 
-export function onStop() {
-    GL.hotkeys.removeConfigurable("CameraControl", "freecam");
-    GL.hotkeys.removeConfigurable("CameraControl", "zoomToggle");
-    GL.patcher.unpatchAll("CameraControl");
-    GL.parcel.stopIntercepts("CameraControl");
-
+api.onStop(() => {
     if(commandLine) {
         commandLine.removeCommand("setzoom");
     }
@@ -272,10 +274,11 @@ export function onStop() {
     window.removeEventListener('mousedown', setPointerDown);
     window.removeEventListener('mouseup', setPointerUp);
 
+    let cam = GL.stores?.phaser.scene.cameras.main;
+    if(cam) cam.zoom = 1;
+
     // stop freecamming
     if(freecamming) {
         stopFreecamming();
     }
-}
-
-export const openSettingsMenu = settings.openSettingsMenu;
+});
