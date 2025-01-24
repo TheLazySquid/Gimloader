@@ -2,65 +2,25 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.3.4
- * @reloadRequired ingame
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
- * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
- * @hasSettings true
  */
 
-let settings = GL.lib("QuickSettings")("BringBackBoosts", [
-    {
-        type: "heading",
-        text: "BringBackBoosts Settings"
-    },
-    {
-        type: "boolean",
-        id: "useOriginalPhysics",
-        title: "Use Release Physics",
-        default: false
-    }
-]);
+const api = new GL();
 
-settings.listen("useOriginalPhysics", (value) => {
-    if(!GL.platformerPhysics) return;
-    if(value) {
-        GL.platformerPhysics.movement.air = originalAirMovement;
-    } else {
-        GL.platformerPhysics.movement.air = defaultAirMovement;
-    }
-})
-
-const defaultAirMovement = {
-    accelerationSpeed: 0.08125,
-    decelerationSpeed: 0.08125,
-    maxAccelerationSpeed: 0.14130434782608697
-}
-const originalAirMovement = {
-    accelerationSpeed: 0.121875,
-    decelerationSpeed: 0.08125,
-    maxAccelerationSpeed: 0.155
-}
-
-GL.addEventListener("loadEnd", () => {
-    if(settings.useOriginalPhysics) {
-        GL.platformerPhysics.movement.air = originalAirMovement;
-    }
-})
-
-// WARNING: The code used in this has been taken from minified Gimkit code and therefore is nearly unreadable. Proceed with caution.
+// The code used in this has been taken from minified Gimkit code and therefore is nearly unreadable.
 var r, g;
 
-GL.parcel.interceptRequire("Boosts", (exports) => exports?.default?.toString?.().includes(`physics.state.forces.some`), (exports) => {
+api.parcel.getLazy((exports) => exports?.default?.toString?.().includes(`physics.state.forces.some`), (exports) => {
     r = exports;
 })
 
-GL.parcel.interceptRequire("Boosts", (exports) => exports?.isPlatformer && exports?.isEditingPlatformerAndPreferTopDownControls, (exports) => {
+api.parcel.getLazy((exports) => exports?.isPlatformer && exports?.isEditingPlatformerAndPreferTopDownControls, (exports) => {
     g = exports;
 })
 
-GL.parcel.interceptRequire("Boosts", (exports) => exports?.CalculateMovementVelocity, exports => {
+api.parcel.getLazy((exports) => exports?.CalculateMovementVelocity, exports => {
     let nativeCalcVel = exports.CalculateMovementVelocity;
 
     var o = { CharacterPhysicsConsts: GL.platformerPhysics },
@@ -127,10 +87,8 @@ GL.parcel.interceptRequire("Boosts", (exports) => exports?.CalculateMovementVelo
         }
     }
 
-    GL.patcher.instead("Boosts", exports, "CalculateMovementVelocity", (_, args) => {
+    api.patcher.instead(exports, "CalculateMovementVelocity", (_, args) => {
         if(!r || !g) return nativeCalcVel(...args);
         return C(...args);
-    })
-})
-
-export const openSettingsMenu = settings.openSettingsMenu;
+    });
+});
