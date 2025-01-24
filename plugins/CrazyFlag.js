@@ -2,12 +2,13 @@
  * @name CrazyFlag
  * @description Make the flags in capture the flag or creative swing like crazy!
  * @author TheLazySquid
- * @version 1.0.1
+ * @version 1.1.0
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @hasSettings true
  */
+const api = new GL();
 
-let settings = GL.lib("QuickSettings")("CrazyFlag", [
+let settings = api.lib("QuickSettings")("CrazyFlag", [
     { type: "heading", text: "Crazy Flag Settings" },
     {
         type: "number",
@@ -24,6 +25,7 @@ let settings = GL.lib("QuickSettings")("CrazyFlag", [
         min: 0
     }
 ]);
+api.openSettingsMenu(settings.openSettingsMenu);
 
 let flagConsts;
 
@@ -36,13 +38,12 @@ function applySettings() {
 settings.listen("swingSpeed", applySettings);
 settings.listen("swingAmount", applySettings);
 
-GL.parcel.interceptRequire("CrazyFlag", exports => exports?.Consts?.FlagSwingInterval, exports => {
+api.parcel.getLazy(exports => exports?.Consts?.FlagSwingInterval, exports => {
+    let defaults = Object.assign({}, exports.Consts);
     flagConsts = exports.Consts;
     applySettings();
+
+    api.onStop(() => {
+        Object.assign(flagConsts, defaults);
+    });
 });
-
-export function onStop() {
-    GL.parcel.stopIntercepts("CrazyFlag");
-}
-
-export const openSettingsMenu = settings.openSettingsMenu;
