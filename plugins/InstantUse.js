@@ -2,37 +2,24 @@
  * @name InstantUse
  * @description Instantly use nearby devices without any wait
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js
  */
 
-let hotkey = new Set(['enter'])
+const api = new GL();
 
-GL.hotkeys.add(hotkey, () => {
-    let devices = GL?.stores?.phaser?.scene?.worldManager?.devices?.devicesInView
-    let body = GL?.stores?.phaser?.mainCharacter?.body
+api.hotkeys.addHotkey({
+    key: "Enter",
+    preventDefault: false
+}, () => {
+    let devices = api.stores?.phaser?.scene?.worldManager?.devices;
+    let body = api.stores?.phaser?.mainCharacter?.body;
     if(!devices || !body) return
 
-    let closest = null;
-    let closestDistance = Infinity;
-
-    // find the closest interactible device
-    for(let device of devices) {
-        if(device.interactiveZones.zones.length == 0) continue
-        let distance = Math.pow(device.x - body.x, 2) + Math.pow(device.y - body.y, 2)
-        
-        if(distance < closestDistance) {
-            closest = device
-            closestDistance = distance
-        }
-    }
+    let device = devices.interactives.findClosestInteractiveDevice(devices.devicesInView, body.x, body.y);
 
     // trigger it
-    if(closest) {
-        closest.interactiveZones?.onInteraction?.()
+    if(device) {
+        device.interactiveZones?.onInteraction?.()
     }
-}, false)
-
-export function onStop() {
-    GL.hotkeys.remove(hotkey)
-}
+});
