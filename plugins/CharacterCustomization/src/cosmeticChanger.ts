@@ -1,56 +1,44 @@
+import GL from 'gimloader';
 // @ts-ignore
 import atlas from '../assets/gim_atlas.txt';
 // @ts-ignore
 import json from '../assets/gim_json.txt';
 
 export default class CosmeticChanger {
-    skinType: string = GL.storage.getValue("CharacterCustomization", "skinType",  "default");
-    trailType: string = GL.storage.getValue("CharacterCustomization", "trailType",  "default");
-    skinId: string = GL.storage.getValue("CharacterCustomization", "skinId",  "");
-    trailId: string = GL.storage.getValue("CharacterCustomization", "trailId",  "");
-    selectedStyles: Record<string, string> = GL.storage.getValue("CharacterCustomization", "selectedStyles",  {});
+    skinType: string = GL.storage.getValue("skinType",  "default");
+    trailType: string = GL.storage.getValue("trailType",  "default");
+    skinId: string = GL.storage.getValue("skinId",  "");
+    trailId: string = GL.storage.getValue("trailId",  "");
+    selectedStyles: Record<string, string> = GL.storage.getValue("selectedStyles",  {});
 
-    normalSkin: string = "";
+    normalSkin: any;
     allowNextSkin: boolean = false;
 
     normalTrail: string = "";
     allowNextTrail: boolean = false;
-
-    authId: string = GL.stores?.phaser?.mainCharacter?.id ?? "";
-
     customSkinFile: File | null = null;
     skinUrl: string | null = null;
 
-    originalImgFileClass: any;
+    stopped = false;
 
     constructor() {
         this.initCustomSkinFile();
 
-        GL.addEventListener("loadEnd", () => {
-            if(GL.net.type !== "Colyseus") return;
+        GL.net.onLoad((type) => {
+            if(type !== "Colyseus") return;
             this.loadCustomSkin();
-        })
-
-        if(GL.net.type === "Colyseus") {
-            this.loadCustomSkin();
-        }
+        });
 
         let me = this;
 
-        // get the main character ID
-        GL.net.colyseus.addEventListener("AUTH_ID", (e: any) => {
-            this.authId = e.detail;
-        })
-
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
         if(skin) {
-            this.normalSkin = skin.skinId;
+            this.normalSkin = { id: skin.skinId, editStyles: Object.assign({}, skin.editStyles) };
 
             this.patchSkin(skin);
         } else {
             // Intercept the class to get the starting skin ID
-            GL.parcel.interceptRequire("CharacterCustomization",
-            (exports) => exports?.default?.toString?.().includes("this.latestSkinId"),
+            GL.parcel.getLazy((exports) => exports?.default?.toString?.().includes("this.latestSkinId"),
             (exports) => {
                 let Skin = exports.default;
     
@@ -59,14 +47,15 @@ export default class CosmeticChanger {
                     constructor(scene: any) {
                         super(scene);
     
-                        if(this.character.id === me.authId) {
+                        if(!me.stopped && this.character.id === me.authId) {
                             me.patchSkin(this);
                         }
                     }
                 }
     
                 exports.default = NewSkin;
-            })
+                GL.onStop(() => exports.default = Skin);
+            });
         }
 
         let characterTrail = GL.stores?.phaser?.mainCharacter?.characterTrail;
@@ -76,8 +65,7 @@ export default class CosmeticChanger {
             this.patchTrail(characterTrail);
         } else {
             // Intercept the class to get the starting trail ID
-            GL.parcel.interceptRequire("CharacterCustomization",
-            (exports) => exports?.CharacterTrail,
+            GL.parcel.getLazy((exports) => exports?.CharacterTrail,
             (exports) => {
                 let CharacterTrail = exports.CharacterTrail;
 
@@ -86,15 +74,22 @@ export default class CosmeticChanger {
                     constructor(scene: any) {
                         super(scene);
 
-                        if(this.character.id === me.authId) {
+                        if(!me.stopped && this.character.id === me.authId) {
                             me.patchTrail(this);
                         }
                     }
                 }
 
                 exports.CharacterTrail = NewCharacterTrail;
-            })
+                GL.onStop(() => exports.CharacterTrail = CharacterTrail);
+            });
         }
+
+        GL.onStop(() => this.reset());
+    }
+
+    get authId() {
+        return GL.stores?.network.authId;
     }
 
     loadCustomSkin() {
@@ -123,9 +118,9 @@ export default class CosmeticChanger {
                 super(loader, key, url, config);
             }
         }
+        GL.onStop(() => fileTypes.ImageFile = imgFile);
 
         fileTypes.ImageFile = newImgFile;
-        this.originalImgFileClass = imgFile;
 
         let load = GL.stores.phaser.scene.load;
         let jsonRes = load.spineJson("customSkin-data", jsonUrl);
@@ -156,8 +151,8 @@ export default class CosmeticChanger {
     }
 
     async initCustomSkinFile() {
-        let file = GL.storage.getValue("CharacterCustomization", "customSkinFile");
-        let fileName = GL.storage.getValue("CharacterCustomization", "customSkinFileName");
+        let file = GL.storage.getValue("customSkinFile");
+        let fileName = GL.storage.getValue("customSkinFileName");
         if(!file || !fileName) return;
 
         // stolen from some stackoverflow post
@@ -177,7 +172,7 @@ export default class CosmeticChanger {
             skin.updateSkin({ id: this.skinId, editStyles: this.selectedStyles });
         }
 
-        GL.patcher.before("CharacterCustomization", skin, "updateSkin", (_, args) => {
+        GL.patcher.before(skin, "updateSkin", (_, args) => {
             if(this.allowNextSkin) {
                 this.allowNextSkin = false;
             } else {
@@ -186,7 +181,7 @@ export default class CosmeticChanger {
                 // cancel the update if we're using a custom skin
                 if(this.skinType !== "default") return true;
             }
-        })
+        });
     }
 
     patchTrail(trail: any) {
@@ -194,7 +189,7 @@ export default class CosmeticChanger {
             trail.updateAppearance(this.formatTrail(this.trailId));
         }
 
-        GL.patcher.before("CharacterCustomization", trail, "updateAppearance", (_, args) => {
+        GL.patcher.before(trail, "updateAppearance", (_, args) => {
             if(this.allowNextTrail) {
                 this.allowNextTrail = false;
             } else {
@@ -203,7 +198,7 @@ export default class CosmeticChanger {
                 // cancel the update if we're using a custom trail
                 if(this.trailType === "id") return true;
             }
-        })
+        });
     }
 
     async setSkin(skinType: string, skinId: string, customSkinFile: File | null, selectedStyles: Record<string, string>) {
@@ -213,17 +208,17 @@ export default class CosmeticChanger {
         this.selectedStyles = selectedStyles;
 
         // save items to local storage
-        GL.storage.setValue("CharacterCustomization", "skinType", skinType);
-        GL.storage.setValue("CharacterCustomization", "skinId", skinId);
-        GL.storage.setValue("CharacterCustomization", "selectedStyles", selectedStyles);
+        GL.storage.setValue("skinType", skinType);
+        GL.storage.setValue("skinId", skinId);
+        GL.storage.setValue("selectedStyles", selectedStyles);
         if(!customSkinFile) {
-            GL.storage.removeValue("CharacterCustomization", "customSkinFile");
-            GL.storage.removeValue("CharacterCustomization", "customSkinFileName");
+            GL.storage.deleteValue("customSkinFile");
+            GL.storage.deleteValue("customSkinFileName");
         } else {
             let reader = new FileReader();
             reader.onload = () => {
-                GL.storage.setValue("CharacterCustomization", "customSkinFile", reader.result as string);
-                GL.storage.setValue("CharacterCustomization", "customSkinFileName", customSkinFile.name);
+                GL.storage.setValue("customSkinFile", reader.result as string);
+                GL.storage.setValue("customSkinFileName", customSkinFile.name);
             }
             reader.readAsDataURL(customSkinFile);
         }
@@ -274,8 +269,8 @@ export default class CosmeticChanger {
         this.trailId = trailId;
 
         // save items to local storage
-        GL.storage.setValue("ChracterCustomization", "trailType", trailType);
-        GL.storage.setValue("ChracterCustomization", "trailId", trailId);
+        GL.storage.setValue("trailType", trailType);
+        GL.storage.setValue("trailId", trailId);
 
         let characterTrail = GL.stores?.phaser?.mainCharacter?.characterTrail;
         if(characterTrail) {
@@ -290,9 +285,12 @@ export default class CosmeticChanger {
     }
 
     reset() {
+        this.stopped = true;
+
         let characterTrail = GL.stores?.phaser?.mainCharacter?.characterTrail;
         if(characterTrail) {
             characterTrail.updateAppearance(this.normalTrail);
+            characterTrail.currentAppearanceId = this.normalTrail;
         }
 
         let skin = GL.stores?.phaser?.mainCharacter?.skin;
@@ -302,10 +300,6 @@ export default class CosmeticChanger {
 
         if(this.skinUrl) {
             URL.revokeObjectURL(this.skinUrl);
-        }
-
-        if(this.originalImgFileClass) {
-            (window as any).Phaser.Loader.FileTypes.ImageFile = this.originalImgFileClass;
         }
     }
 }

@@ -1,9 +1,8 @@
-/// <reference types="gimloader" />
+import GL from 'gimloader';
 // @ts-ignore
 import UI from './UI.svelte';
 import CosmeticChanger from './cosmeticChanger';
 
-let hotkey = new Set(['alt', 'c']);
 let cosmeticChanger = new CosmeticChanger();
 
 function showUI() {
@@ -41,16 +40,8 @@ function showUI() {
     });
 }
 
-GL.hotkeys.add(hotkey, showUI);
-
-export function openSettingsMenu() {
-    showUI();
-}
-
-export function onStop() {
-    cosmeticChanger.reset();
-
-    GL.hotkeys.remove(hotkey);
-    GL.parcel.stopIntercepts("CharacterCustomization");
-    GL.patcher.unpatchAll("CharacterCustomization");
-}
+GL.hotkeys.addHotkey({
+    key: "KeyC",
+    alt: true
+}, showUI);
+GL.openSettingsMenu(() => showUI());
