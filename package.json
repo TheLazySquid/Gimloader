@@ -8,8 +8,7 @@
   "scripts": {
     "build": "node build.js",
     "watch": "node build.js -w",
-    "buildTypes": "tsc -p declaration.tsconfig.json",
-    "postinstall": "patch-package"
+    "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "repository": {
     "type": "git",
