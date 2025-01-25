@@ -1,7 +1,5 @@
-/// <reference types='gimloader' />
-
+import GL from 'gimloader';
 import VisualCoordinates from "./lines/visualCoordinates";
-import { onceOrIfLoaded } from "./util";
 import Settings from "./Settings";
 // @ts-ignore
 import styles from './styles.scss';
@@ -9,7 +7,7 @@ import Velocity from "./lines/velocity";
 import PhysicsCoordinates from "./lines/physicsCoordinates";
 import FPS from "./lines/fps";
 
-GL.UI.addStyles("InfoLines", styles);
+GL.UI.addStyles(styles);
 
 export class InfoLines {
     lines = [
@@ -19,10 +17,10 @@ export class InfoLines {
         new FPS()
     ]
     element: HTMLElement;
-    position: string = GL.storage.getValue("InfoLines", "position", "top right");
+    position: string = GL.storage.getValue("position", "top right");
 
     constructor() {
-        onceOrIfLoaded(() => {
+        GL.net.onLoad(() => {
             this.create();
         });
     }
@@ -55,18 +53,11 @@ export class InfoLines {
 }
 
 let infoLines = new InfoLines();
-
-export function onStop() {
-    GL.UI.removeStyles("InfoLines");
-    GL.patcher.unpatchAll("InfoLines");
-
-    infoLines.destroy();
-}
-
-export function openSettingsMenu() {
+GL.onStop(() => infoLines.destroy());
+GL.openSettingsMenu(() => {
     GL.UI.showModal(GL.React.createElement(Settings, { infoLines }), {
         title: "InfoLines settings",
         id: "infoLinesSettings",
         buttons: [{ text: "Close", "style": "close" }]
     });
-}
+});

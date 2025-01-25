@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import BaseLine, { Settings } from "../baseLine";
 
 export default class PhysicsCoordinates extends BaseLine {

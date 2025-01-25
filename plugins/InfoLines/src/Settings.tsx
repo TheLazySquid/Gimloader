@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import type { InfoLines } from "./index";
 
 export default function Settings({ infoLines }: { infoLines: InfoLines }) {
@@ -11,7 +12,7 @@ export default function Settings({ infoLines }: { infoLines: InfoLines }) {
             Position
             <select value={position} onChange={(e) => {
                 setPosition(e.target.value);
-                GL.storage.setValue("InfoLines", "position", e.target.value);
+                GL.storage.setValue("position", e.target.value);
                 if(infoLines.element) infoLines.element.className = e.target.value;
             }}>
                 <option value="top left">Top Left</option>
@@ -25,7 +26,7 @@ export default function Settings({ infoLines }: { infoLines: InfoLines }) {
             <div>
                 <input type="checkbox" checked={line.enabled} onChange={(e) => {
                     line.enabled = e.target.checked;
-                    GL.storage.setValue("InfoLines", line.name, line.enabled);
+                    GL.storage.setValue(line.name, line.enabled);
 
                     if(line.enabled) line.enable();
                     else line.disable();
@@ -40,7 +41,7 @@ export default function Settings({ infoLines }: { infoLines: InfoLines }) {
                 <input type="range" min={setting.min} step={1}
                 max={setting.max} value={setting.value} onChange={(e) => {
                     setting.value = parseInt(e.target.value);
-                    GL.storage.setValue("InfoLines", id, setting.value);
+                    GL.storage.setValue(id, setting.value);
 
                     if(line.enabled) line.onSettingsChange?.();
 
