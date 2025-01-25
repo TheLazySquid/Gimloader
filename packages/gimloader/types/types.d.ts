@@ -1,39 +1,22 @@
-declare module "src/core/patcher" {
-    export type PatcherAfterCallback = (thisVal: any, args: IArguments, returnVal: any) => any;
-    export type PatcherBeforeCallback = (thisVal: any, args: IArguments) => boolean | void;
-    export type PatcherInsteadCallback = (thisVal: any, args: IArguments) => void;
-    type Patch = {
-        callback: PatcherBeforeCallback;
-        point: 'before';
-    } | {
-        callback: PatcherAfterCallback;
-        point: 'after';
-    } | {
-        callback: PatcherInsteadCallback;
-        point: 'instead';
-    };
-    export default class Patcher {
-        static patches: Map<object, Map<string, {
-            original: any;
-            patches: Patch[];
-        }>>;
-        static unpatchers: Map<string, (() => void)[]>;
-        static applyPatches(object: object, property: string): void;
-        static addPatch(object: object, property: string, patch: Patch): void;
-        static getRemovePatch(id: string | null, object: object, property: string, patch: Patch): () => void;
-        static after(id: string | null, object: object, property: string, callback: PatcherAfterCallback): () => void;
-        static before(id: string | null, object: object, property: string, callback: PatcherBeforeCallback): () => void;
-        static instead(id: string | null, object: object, property: string, callback: PatcherInsteadCallback): () => void;
-        static unpatchAll(id: string): void;
-    }
-}
-declare module "src/ui/showErrorMessage" {
-    export default function showErrorMessage(msg: string, title?: string): void;
+declare module "src/utils" {
+    import type Lib from "src/core/libManager/lib.svelte";
+    export function log(...args: any[]): void;
+    export function error(...args: any[]): void;
+    export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]): boolean;
+    export const onGimkit: boolean;
+    export function splicer(array: any[], obj: any): () => void;
+    export function confirmLibReload(libs: Lib[]): boolean;
+    export function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
+    export function stopOverrideKeydown(): void;
+    export function readUserFile(accept: string): Promise<string>;
 }
 declare module "src/parseHeader" {
     export function parsePluginHeader(code: string): Record<string, any>;
     export function parseLibHeader(code: string): Record<string, any>;
     export default function parseHeader(code: string, headers: Record<string, any>): Record<string, any>;
+}
+declare module "src/ui/showErrorMessage" {
+    export default function showErrorMessage(msg: string, title?: string): void;
 }
 declare module "src/core/storage" {
     export default class Storage {
@@ -79,15 +62,6 @@ declare module "src/core/libManager/libManager.svelte" {
     const libManager: LibManagerClass;
     export default libManager;
 }
-declare module "src/scopedApi" {
-    export const uuidRegex: RegExp;
-    interface ScopedInfo {
-        id: string;
-        onStop: (cb: () => void) => void;
-        openSettingsMenu?: (cb: () => void) => void;
-    }
-    export default function setupScoped(): ScopedInfo;
-}
 declare module "src/core/pluginManager/plugin.svelte" {
     export default class Plugin {
         script: string;
@@ -131,6 +105,126 @@ declare module "src/core/pluginManager/pluginManager.svelte" {
     const pluginManager: PluginManager;
     export default pluginManager;
 }
+declare module "src/scopedApi" {
+    export const uuidRegex: RegExp;
+    interface ScopedInfo {
+        id: string;
+        onStop: (cb: () => void) => void;
+        openSettingsMenu?: (cb: () => void) => void;
+    }
+    export default function setupScoped(): ScopedInfo;
+}
+declare module "src/core/libManager/lib.svelte" {
+    export default class Lib {
+        script: string;
+        library: any;
+        headers: Record<string, any>;
+        enabling: boolean;
+        enableError?: Error;
+        enableSuccessCallbacks: ((needsReload: boolean) => void)[];
+        enableFailCallbacks: ((e: any) => void)[];
+        usedBy: Set<string>;
+        blobUuid: string | null;
+        onStop: (() => void)[];
+        constructor(script: string, headers?: Record<string, any>);
+        enable(initial?: boolean): Promise<boolean>;
+        addUsed(pluginName: string): void;
+        removeUsed(pluginName: string): void;
+        disable(): void;
+    }
+}
+declare module "src/core/patcher" {
+    /** @inline */
+    export type PatcherAfterCallback = (thisVal: any, args: IArguments, returnVal: any) => any;
+    /** @inline */
+    export type PatcherBeforeCallback = (thisVal: any, args: IArguments) => boolean | void;
+    /** @inline */
+    export type PatcherInsteadCallback = (thisVal: any, args: IArguments) => void;
+    type Patch = {
+        callback: PatcherBeforeCallback;
+        point: 'before';
+    } | {
+        callback: PatcherAfterCallback;
+        point: 'after';
+    } | {
+        callback: PatcherInsteadCallback;
+        point: 'instead';
+    };
+    export default class Patcher {
+        static patches: Map<object, Map<string, {
+            original: any;
+            patches: Patch[];
+        }>>;
+        static unpatchers: Map<string, (() => void)[]>;
+        static applyPatches(object: object, property: string): void;
+        static addPatch(object: object, property: string, patch: Patch): void;
+        static getRemovePatch(id: string | null, object: object, property: string, patch: Patch): () => void;
+        static after(id: string | null, object: object, property: string, callback: PatcherAfterCallback): () => void;
+        static before(id: string | null, object: object, property: string, callback: PatcherBeforeCallback): () => void;
+        static instead(id: string | null, object: object, property: string, callback: PatcherInsteadCallback): () => void;
+        static unpatchAll(id: string): void;
+    }
+}
+declare module "src/core/hotkeys.svelte" {
+    /** @inline */
+    export interface HotkeyTrigger {
+        /** Should be a keyboardevent [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
+        key?: string;
+        /** Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
+        keys?: string[];
+        ctrl?: boolean;
+        shift?: boolean;
+        alt?: boolean;
+    }
+    /** @inline */
+    export interface HotkeyOptions extends HotkeyTrigger {
+        preventDefault?: boolean;
+    }
+    /** @inline */
+    export interface ConfigurableHotkeyOptions {
+        category: string;
+        /** There should be no duplicate titles within a category */
+        title: string;
+        preventDefault?: boolean;
+        default?: HotkeyTrigger;
+    }
+    type Callback = (e: KeyboardEvent) => void;
+    type DefaultHotkey = HotkeyOptions & {
+        callback: Callback;
+        id: string;
+    };
+    export class ConfigurableHotkey {
+        id: string;
+        category: string;
+        title: string;
+        preventDefault: boolean;
+        callback: Callback;
+        trigger: HotkeyTrigger | null;
+        default?: HotkeyTrigger;
+        pluginName?: string;
+        constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string);
+        reset(): void;
+    }
+    class Hotkeys {
+        hotkeys: DefaultHotkey[];
+        configurableHotkeys: ConfigurableHotkey[];
+        pressedKeys: Set<string>;
+        pressed: Set<string>;
+        savedHotkeys: Record<string, any>;
+        init(): void;
+        addHotkey(id: any, options: HotkeyOptions, callback: Callback): () => void;
+        removeHotkeys(id: any): void;
+        addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback, pluginName?: string): () => void;
+        removeConfigurableHotkey(id: string): void;
+        removeConfigurableFromPlugin(pluginName: string): void;
+        releaseAll(): void;
+        checkHotkeys(e: KeyboardEvent): void;
+        checkTrigger(e: KeyboardEvent, trigger: HotkeyTrigger): boolean;
+        saveConfigurableHotkeys(): void;
+    }
+    const hotkeys: Hotkeys;
+    export default hotkeys;
+}
 declare module "src/core/ui/addPluginButtons" {
     export function setShowPluginButtons(value: boolean): void;
     export function addPluginButtons(): void;
@@ -153,6 +247,7 @@ declare module "src/core/parcel" {
         id: string;
         exports: any;
     }
+    /** @inline */
     export type Matcher = (exports: any, id: string) => boolean;
     interface LazyCheck {
         id: string;
@@ -223,89 +318,6 @@ declare module "src/core/net/net" {
     const net: Net;
     export default net;
 }
-declare module "src/core/libManager/lib.svelte" {
-    export default class Lib {
-        script: string;
-        library: any;
-        headers: Record<string, any>;
-        enabling: boolean;
-        enableError?: Error;
-        enableSuccessCallbacks: ((needsReload: boolean) => void)[];
-        enableFailCallbacks: ((e: any) => void)[];
-        usedBy: Set<string>;
-        blobUuid: string | null;
-        onStop: (() => void)[];
-        constructor(script: string, headers?: Record<string, any>);
-        enable(initial?: boolean): Promise<boolean>;
-        addUsed(pluginName: string): void;
-        removeUsed(pluginName: string): void;
-        disable(): void;
-    }
-}
-declare module "src/utils" {
-    import type Lib from "src/core/libManager/lib.svelte";
-    export function log(...args: any[]): void;
-    export function error(...args: any[]): void;
-    export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]): boolean;
-    export const onGimkit: boolean;
-    export function splicer(array: any[], obj: any): () => void;
-    export function confirmLibReload(libs: Lib[]): boolean;
-    export function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
-    export function stopOverrideKeydown(): void;
-    export function readUserFile(accept: string): Promise<string>;
-}
-declare module "src/core/hotkeys.svelte" {
-    export interface HotkeyTrigger {
-        key?: string;
-        keys?: string[];
-        ctrl?: boolean;
-        shift?: boolean;
-        alt?: boolean;
-    }
-    export interface HotkeyOptions extends HotkeyTrigger {
-        preventDefault?: boolean;
-    }
-    export interface ConfigurableHotkeyOptions {
-        category: string;
-        title: string;
-        preventDefault?: boolean;
-        default?: HotkeyTrigger;
-    }
-    type Callback = (e: KeyboardEvent) => void;
-    type DefaultHotkey = HotkeyOptions & {
-        callback: Callback;
-        id: string;
-    };
-    export class ConfigurableHotkey {
-        id: string;
-        category: string;
-        title: string;
-        preventDefault: boolean;
-        callback: Callback;
-        trigger: HotkeyTrigger | null;
-        default?: HotkeyTrigger;
-        constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions);
-        reset(): void;
-    }
-    class Hotkeys {
-        hotkeys: DefaultHotkey[];
-        configurableHotkeys: ConfigurableHotkey[];
-        pressedKeys: Set<string>;
-        pressed: Set<string>;
-        savedHotkeys: Record<string, any>;
-        init(): void;
-        addHotkey(id: any, options: HotkeyOptions, callback: Callback): () => void;
-        removeHotkeys(id: any): void;
-        addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback): () => void;
-        removeConfigurableHotkeys(id: string): void;
-        releaseAll(): void;
-        checkHotkeys(e: KeyboardEvent): void;
-        checkTrigger(e: KeyboardEvent, trigger: HotkeyTrigger): boolean;
-        saveConfigurableHotkeys(): void;
-    }
-    const hotkeys: Hotkeys;
-    export default hotkeys;
-}
 declare module "src/api/hotkeys" {
     import type { ConfigurableHotkeyOptions, HotkeyOptions } from "src/core/hotkeys.svelte";
     interface OldConfigurableOptions {
@@ -314,6 +326,7 @@ declare module "src/api/hotkeys" {
         preventDefault?: boolean;
         defaultKeys?: Set<string>;
     }
+    /** @inline */
     type KeyboardCallback = (e: KeyboardEvent) => void;
     class BaseHotkeysApi {
         /**
@@ -323,33 +336,61 @@ declare module "src/api/hotkeys" {
         releaseAll(): void;
         /** Which key codes are currently being pressed */
         get pressed(): Set<string>;
-        /** @deprecated Use {@link pressed} instead */
+        /**
+         * @deprecated Use {@link pressed} instead
+         * @hidden
+         */
         get pressedKeys(): Set<string>;
     }
     class HotkeysApi extends BaseHotkeysApi {
-        /** Adds a hotkey with a given id */
+        /**
+         * Adds a hotkey with a given id
+         * @returns A function to remove the hotkey
+         */
         addHotkey(id: string, options: HotkeyOptions, callback: KeyboardCallback): () => void;
         /** Removes all hotkeys with a given id */
         removeHotkeys(id: string): void;
-        /** Adds a hotkey which can be changed by the user */
+        /**
+         * Adds a hotkey which can be changed by the user
+         * @param id A unique id for the hotkey, such as `myplugin-myhotkey`
+         * @returns A function to remove the hotkey
+         */
         addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: KeyboardCallback): () => void;
         /** Removes a configurable hotkey with a given id */
-        removeConfigurableHotkeys(id: string): void;
-        /** @deprecated Use {@link addHotkey} instead */
+        removeConfigurableHotkey(id: string): void;
+        /**
+         * @deprecated Use {@link addHotkey} instead
+         * @hidden
+         */
         add(keys: Set<string>, callback: KeyboardCallback, preventDefault?: boolean): void;
-        /** @deprecated Use {@link removeHotkeys} instead */
+        /**
+         * @deprecated Use {@link removeHotkeys} instead
+         * @hidden
+         */
         remove(keys: Set<string>): void;
-        /** @deprecated Use {@link addConfigurableHotkey} instead */
+        /**
+         * @deprecated Use {@link addConfigurableHotkey} instead
+         * @hidden
+         */
         addConfigurable(pluginName: string, hotkeyId: string, callback: KeyboardCallback, options: OldConfigurableOptions): void;
-        /** @deprecated Use {@link removeConfigurableHotkeys} instead */
+        /**
+         * @deprecated Use {@link removeConfigurableHotkeys} instead
+         * @hidden
+         */
         removeConfigurable(pluginName: string, hotkeyId: string): void;
     }
     class ScopedHotkeysApi extends BaseHotkeysApi {
         private readonly id;
         constructor(id: string);
-        /** Adds a hotkey which will fire when certain keys are pressed */
+        /**
+         * Adds a hotkey which will fire when certain keys are pressed
+         * @returns A function to remove the hotkey
+         */
         addHotkey(options: HotkeyOptions, callback: KeyboardCallback): () => void;
-        /** Adds a hotkey which can be changed by the user */
+        /**
+         * Adds a hotkey which can be changed by the user
+         * @returns A function to remove the hotkey
+         */
         addConfigurableHotkey(options: ConfigurableHotkeyOptions, callback: KeyboardCallback): () => void;
     }
     export { HotkeysApi, ScopedHotkeysApi };
@@ -373,19 +414,31 @@ declare module "src/api/parcel" {
         queryAll(matcher: Matcher): any[];
     }
     class ParcelApi extends BaseParcelApi {
-        /** Waits for a module to be loaded, then runs a callback */
+        /**
+         * Waits for a module to be loaded, then runs a callback
+         * @returns A function to cancel waiting for the module
+         */
         getLazy(id: string, matcher: Matcher, callback: (exports: any) => any, initial?: boolean): () => void;
         /** Cancels any calls to getLazy with the same id */
         stopLazy(id: string): void;
-        /** @deprecated Use {@link getLazy} instead */
+        /**
+         * @deprecated Use {@link getLazy} instead
+         * @hidden
+         */
         get interceptRequire(): (id: string, matcher: Matcher, callback: (exports: any) => any, initial?: boolean) => () => void;
-        /** @deprecated Use {@link stopLazy} instead */
+        /**
+         * @deprecated Use {@link stopLazy} instead
+         * @hidden
+         */
         get stopIntercepts(): (id: string) => void;
     }
     class ScopedParcelApi extends BaseParcelApi {
         private readonly id;
         constructor(id: string);
-        /** Waits for a module to be loaded, then runs a callback */
+        /**
+         * Waits for a module to be loaded, then runs a callback
+         * @returns A function to cancel waiting for the module
+         */
         getLazy(matcher: Matcher, callback: (exports: any) => any, initial?: boolean): () => void;
     }
     export { ParcelApi, ScopedParcelApi };
@@ -405,31 +458,88 @@ declare module "src/api/net" {
         corsRequest: <TContext = any>(details: Tampermonkey.Request<TContext>) => Promise<Tampermonkey.Response<TContext>>;
         /** Sends a message to the server on a specific channel */
         send(channel: string, message: any): void;
-        /** @deprecated Methods for both transports are now on the base net api */
-        get colyseus(): this;
-        /** @deprecated Methods for both transports are now on the base net api */
-        get blueboat(): this;
-        private wrappedListeners;
-        /** @deprecated use net.on */
-        addEventListener(channel: string, callback: (...args: any[]) => void): void;
-        /** @deprecated use net.off */
-        removeEventListener(channel: string, callback: (...args: any[]) => void): void;
     }
+    /**
+     * The net api extends [EventEmitter2](https://github.com/EventEmitter2/EventEmitter2)
+     * and uses wildcards with ":" as a delimiter.
+     *
+     * The following events are emitted:
+     *
+     * ```ts
+     * // fired when data is recieved on a certain channel
+     * net.on(CHANNEL, (data, editFn) => {})
+     *
+     * // fired when data is sent on a certain channel
+     * net.on(send:CHANNEL, (data, editFn) => {})
+     *
+     * // fired when the game loads with a certain type
+     * net.on(load:TYPE, (type) => {})
+     *
+     * // you can also use wildcards, eg
+     * net.on("send:*", () => {})
+     * ```
+     */
     class NetApi extends BaseNetApi {
         constructor();
-        /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+        /**
+         * Runs a callback when the game is loaded, or runs it immediately if the game has already loaded
+         * @returns A function to cancel waiting for load
+         */
         onLoad(id: string, callback: (type: Connection["type"]) => void): () => void;
         /** Cancels any calls to {@link onLoad} with the same id */
         offLoad(id: string): void;
+        /**
+         * @deprecated Methods for both transports are now on the base net api
+         * @hidden
+         */
+        get colyseus(): this;
+        /**
+         * @deprecated Methods for both transports are now on the base net api
+         * @hidden
+         */
+        get blueboat(): this;
+        /** @hidden */
+        private wrappedListeners;
+        /**
+         * @deprecated use net.on
+         * @hidden
+         */
+        addEventListener(channel: string, callback: (...args: any[]) => void): void;
+        /**
+         * @deprecated use net.off
+         * @hidden
+         */
+        removeEventListener(channel: string, callback: (...args: any[]) => void): void;
     }
+    /**
+     * The net api extends [EventEmitter2](https://github.com/EventEmitter2/EventEmitter2)
+     * and uses wildcards with ":" as a delimiter.
+     *
+     * The following events are emitted:
+     *
+     * ```ts
+     * // fired when data is recieved on a certain channel
+     * net.on(CHANNEL, (data, editFn) => {})
+     *
+     * // fired when data is sent on a certain channel
+     * net.on(send:CHANNEL, (data, editFn) => {})
+     *
+     * // fired when the game loads with a certain type
+     * net.on(load:TYPE, (type) => {})
+     *
+     * // you can also use wildcards, eg
+     * net.on("send:*", () => {})
+     * ```
+     */
     class ScopedNetApi extends BaseNetApi {
         private readonly id;
         constructor(id: string);
-        /** Runs a callback when the game is loaded, or runs it immediately if the game has already loaded */
+        /**
+         * Runs a callback when the game is loaded, or runs it immediately if the game has already loaded
+         * @returns A function to cancel waiting for load
+         */
         onLoad(callback: (type: Connection["type"]) => void): () => void;
     }
-    export type NetType = NetApi & Connection;
-    export type ScopedNetType = ScopedNetApi & Connection;
     export { NetApi, ScopedNetApi };
 }
 declare module "src/ui/stores" {
@@ -442,6 +552,7 @@ declare module "src/core/ui/modal" {
         style?: "primary" | "danger" | "close";
         onClick?: (event: MouseEvent) => boolean | void;
     }
+    /** @inline */
     export interface ModalOptions {
         id: string;
         title: string;
@@ -461,7 +572,10 @@ declare module "src/api/ui" {
         showModal(element: HTMLElement | ReactElement, options?: Partial<ModalOptions>): void;
     }
     class UIApi extends BaseUIApi {
-        /** Adds a style to the DOM */
+        /**
+         * Adds a style to the DOM
+         * @returns A function to remove the styles
+         */
         addStyles(id: string, style: string): () => void;
         /** Remove all styles with a given id */
         removeStyles(id: string): void;
@@ -469,7 +583,10 @@ declare module "src/api/ui" {
     class ScopedUIApi extends BaseUIApi {
         private readonly id;
         constructor(id: string);
-        /** Adds a style to the DOM */
+        /**
+         * Adds a style to the DOM
+         * @returns A function to remove the styles
+         */
         addStyles(style: string): () => void;
     }
     export { UIApi, ScopedUIApi };
@@ -482,7 +599,10 @@ declare module "src/api/storage" {
         setValue(pluginName: string, key: string, value: any): void;
         /** Removes a value which has been saved */
         deleteValue(pluginName: string, key: string): void;
-        /** @deprecated use {@link deleteValue} */
+        /**
+         * @deprecated use {@link deleteValue}
+         * @hidden
+         */
         get removeValue(): (pluginName: string, key: string) => void;
     }
     class ScopedStorageApi {
@@ -500,14 +620,21 @@ declare module "src/api/storage" {
 declare module "src/api/patcher" {
     import type { PatcherAfterCallback, PatcherBeforeCallback, PatcherInsteadCallback } from "src/core/patcher";
     class PatcherApi {
-        /** Runs a callback after a function on an object has been run */
+        /**
+         * Runs a callback after a function on an object has been run
+         * @returns A function to remove the patch
+         */
         after(id: string, object: any, method: string, callback: PatcherAfterCallback): () => void;
         /**
          * Runs a callback before a function on an object has been run.
          * Return true from the callback to prevent the function from running
+         * @returns A function to remove the patch
          */
         before(id: string, object: any, method: string, callback: PatcherBeforeCallback): () => void;
-        /** Runs a function instead of a function on an object */
+        /**
+         * Runs a function instead of a function on an object
+         * @returns A function to remove the patch
+         */
         instead(id: string, object: any, method: string, callback: PatcherInsteadCallback): () => void;
         /** Removes all patches with a given id */
         unpatchAll(id: string): void;
@@ -515,14 +642,21 @@ declare module "src/api/patcher" {
     class ScopedPatcherApi {
         private readonly id;
         constructor(id: string);
-        /** Runs a callback after a function on an object has been run */
+        /**
+         * Runs a callback after a function on an object has been run
+         * @returns A function to remove the patch
+         */
         after(object: any, method: string, callback: PatcherAfterCallback): () => void;
         /**
          * Runs a callback before a function on an object has been run.
          * Return true from the callback to prevent the function from running
+         * @returns A function to remove the patch
          */
         before(object: any, method: string, callback: PatcherBeforeCallback): () => void;
-        /** Runs a function instead of a function on an object */
+        /**
+         * Runs a function instead of a function on an object
+         * @returns A function to remove the patch
+         */
         instead(object: any, method: string, callback: PatcherInsteadCallback): () => void;
     }
     export { PatcherApi, ScopedPatcherApi };
@@ -531,6 +665,7 @@ declare module "src/api/libs" {
     class LibsApi {
         /** A list of all the libraries installed */
         get list(): string[];
+        /** Gets whether or not a plugin is installed and enabled */
         isEnabled(name: string): boolean;
         /** Gets the headers of a library, such as version, author, and description */
         getHeaders(name: string): {
@@ -553,7 +688,10 @@ declare module "src/api/plugins" {
         };
         /** Gets the exported values of a plugin, if it has been enabled */
         get(name: string): any;
-        /** @deprecated Use {@link get} instead */
+        /**
+         * @deprecated Use {@link get} instead
+         * @hidden
+         */
         getPlugin(name: string): {
             return: any;
         };
@@ -561,9 +699,10 @@ declare module "src/api/plugins" {
     export default PluginsApi;
 }
 declare module "src/api/api" {
+    import type { Connection } from "src/core/net/net";
     import { HotkeysApi, ScopedHotkeysApi } from "src/api/hotkeys";
     import { ParcelApi, ScopedParcelApi } from "src/api/parcel";
-    import type { NetType, ScopedNetType } from "src/api/net";
+    import { NetApi, ScopedNetApi } from "src/api/net";
     import { UIApi, ScopedUIApi } from "src/api/ui";
     import { StorageApi, ScopedStorageApi } from "src/api/storage";
     import { PatcherApi, ScopedPatcherApi } from "src/api/patcher";
@@ -578,7 +717,7 @@ declare module "src/api/api" {
          * Ways to interact with the current connection to the server,
          * and functions to send general requests
          */
-        static net: Readonly<NetType>;
+        static net: Readonly<NetApi & Connection>;
         /** Functions for interacting with the DOM */
         static UI: Readonly<UIApi>;
         /** Functions for persisting data between reloads */
@@ -587,7 +726,7 @@ declare module "src/api/api" {
         static patcher: Readonly<PatcherApi>;
         /** Methods for getting info on libraries */
         static libs: Readonly<LibsApi>;
-        /** Get the exported values of a library */
+        /** Gets the exported values of a library */
         static lib: (name: string) => any;
         /** Methods for getting info on plugins */
         static plugins: Readonly<PluginsApi>;
@@ -605,18 +744,33 @@ declare module "src/api/api" {
          * {@link https://ant.design/components/notification}
          */
         static get notification(): any;
-        /** @deprecated No longer supported */
+        /**
+         * @deprecated No longer supported
+         * @hidden
+         */
         static get contextMenu(): {
             showContextMenu: () => void;
             createReactContextMenu: () => void;
         };
-        /** @deprecated No longer supported */
+        /**
+         * @deprecated No longer supported
+         * @hidden
+         */
         static get platformerPhysics(): any;
-        /** @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events */
+        /**
+         * @deprecated The api no longer emits events. Use GL.net.loaded to listen to load events
+         * @hidden
+         */
         static addEventListener(type: string, callback: () => void): void;
-        /** @deprecated The api no longer emits events */
+        /**
+         * @deprecated The api no longer emits events
+         * @hidden
+         */
         static removeEventListener(type: string, callback: () => void): void;
-        /** @deprecated Use {@link plugins} instead */
+        /**
+         * @deprecated Use {@link plugins} instead
+         * @hidden
+         */
         static get pluginManager(): Readonly<PluginsApi>;
         constructor();
         /** Functions used to modify Gimkit's internal modules */
@@ -627,7 +781,7 @@ declare module "src/api/api" {
          * Ways to interact with the current connection to the server,
          * and functions to send general requests
          */
-        net: Readonly<ScopedNetType>;
+        net: Readonly<ScopedNetApi & Connection>;
         /** Functions for interacting with the DOM */
         UI: Readonly<ScopedUIApi>;
         /** Functions for persisting data between reloads */
@@ -636,7 +790,7 @@ declare module "src/api/api" {
         patcher: Readonly<ScopedPatcherApi>;
         /** Methods for getting info on libraries */
         libs: Readonly<LibsApi>;
-        /** Get the exported values of a library */
+        /** Gets the exported values of a library */
         lib: (name: string) => any;
         /** Methods for getting info on plugins */
         plugins: Readonly<PluginsApi>;
