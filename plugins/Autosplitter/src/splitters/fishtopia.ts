@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import { boatChannels, fishtopiaSplits } from "../constants";
 import SplitsUI from "../ui/splits";
 import { SplitsAutosplitter } from "./autosplitter";
@@ -13,9 +14,9 @@ export default class FishtopiaAutosplitter extends SplitsAutosplitter {
     constructor() {
         super("Fishtopia");
 
-        let gameSession = GL.net.colyseus.room.state.session.gameSession;
+        let gameSession = GL.net.room.state.session.gameSession;
 
-        GL.net.colyseus.room.state.session.listen("loadingPhase", (val: boolean) => {
+        GL.net.room.state.session.listen("loadingPhase", (val: boolean) => {
             if(val) return;
 
             if(gameSession.phase === "game") {
@@ -32,8 +33,8 @@ export default class FishtopiaAutosplitter extends SplitsAutosplitter {
             }
         });
 
-        GL.net.colyseus.addEventListener("send:MESSAGE_FOR_DEVICE", (e: any) => {
-            let id = e.detail?.deviceId;
+        GL.net.on("send:MESSAGE_FOR_DEVICE", (e: any) => {
+            let id = e.deviceId;
             if(!id) return;
             let device = GL.stores.phaser.scene.worldManager.devices.getDeviceById(id);
             let channel = device?.options?.channel;
@@ -44,18 +45,15 @@ export default class FishtopiaAutosplitter extends SplitsAutosplitter {
             if(this.usedChannels.has(channel)) return;
             this.usedChannels.add(channel);
 
-            const onMoved = (e: any) => {
-                if(e.detail.teleport) {
+            GL.net.once("PHYSICS_STATE", (e: any) => {
+                if(e.teleport) {
                     this.timer.split();
-                    GL.net.colyseus.removeEventListener("PHYSICS_STATE", onMoved);
                 }
-            }
-
-            GL.net.colyseus.addEventListener("PHYSICS_STATE", onMoved);
+            });
         });
 
         let id = GL.stores.phaser.mainCharacter.id;
-        GL.net.colyseus.room.state.characters.get(id).inventory.slots.onChange((_: any, key: string) => {
+        GL.net.room.state.characters.get(id).inventory.slots.onChange((_: any, key: string) => {
             if(key === "gim-fish") {
                 this.timer.split();
                 this.timer.stop();

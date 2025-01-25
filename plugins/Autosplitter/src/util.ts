@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import { DLDData, SplitsData } from "./types";
 
 export function getGamemodeData(gamemode: string) {
@@ -28,7 +29,7 @@ const DLDDefaults: DLDData = {
 }
 
 export function getDLDData(): DLDData {
-    let data = GL.storage.getValue("Autosplitter", "DLDData", {});
+    let data = GL.storage.getValue("DLDData", {});
     return Object.assign(DLDDefaults, data);
 }
 
@@ -45,12 +46,12 @@ const splitsDefaults: SplitsData = {
 }
 
 export function getFishtopiaData(): SplitsData {
-    let data = GL.storage.getValue("Autosplitter", "FishtopiaData", {});
+    let data = GL.storage.getValue("FishtopiaData", {});
     return Object.assign(splitsDefaults, data);
 }
 
 export function getOneWayOutData(): SplitsData {
-    let data = GL.storage.getValue("Autosplitter", "OneWayOutData", {});
+    let data = GL.storage.getValue("OneWayOutData", {});
     return Object.assign(splitsDefaults, data);
 }
 
@@ -88,13 +89,6 @@ export function readFile() {
 
         input.click();
     });
-}
-
-export function onceOrIfLoaded(callback: () => void) {
-    if(GL.net.type === "Colyseus") callback();
-    GL.addEventListener("loadEnd", () => {
-        if(GL.net.type === "Colyseus") callback();
-    }, { once: true })
 }
 
 export function fmtMs(ms: number) {
@@ -148,7 +142,7 @@ export function inBox(coords: Coords, box: Box) {
 export function onPhysicsStep(callback: () => void) {
     let worldManager = GL.stores.phaser.scene.worldManager;
         
-    GL.patcher.after("Autosplitter", worldManager.physics, "physicsStep", () => {
+    GL.patcher.after(worldManager.physics, "physicsStep", () => {
         callback();
     });
 }
@@ -156,7 +150,7 @@ export function onPhysicsStep(callback: () => void) {
 export function onFrame(callback: () => void) {
     let worldManager = GL.stores.phaser.scene.worldManager;
         
-    GL.patcher.after("Autosplitter", worldManager, "update", () => {
+    GL.patcher.after(worldManager, "update", () => {
         callback();
     });
 }

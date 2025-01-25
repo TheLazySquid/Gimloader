@@ -1,9 +1,10 @@
 <script lang="ts">
+    import GL from 'gimloader';
     import type { DLDData } from "../types";
 
     export let data: DLDData;
 
-    let hasInputRecorder = GL.pluginManager.isEnabled("InputRecorder");
+    let hasInputRecorder = GL.plugins.isEnabled("InputRecorder");
 </script>
 
 <div class="row">

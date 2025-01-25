@@ -1,3 +1,5 @@
+import GL from 'gimloader';
+import GLGlobal from 'gimloader/global';
 import { resetCoordinates, summitCoords, summitStartCoords } from "../constants";
 import BasicTimer from "../timers/basic";
 import SplitsTimer from "../timers/splits";
@@ -22,8 +24,8 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
         super("DLD");
 
         this.category = "Current Patch";
-        if(GL.pluginManager.isEnabled("BringBackBoosts")) {
-            let bbbSettings = GL.storage.getValue("BringBackBoosts", "QS-Settings", {})
+        if(GL.plugins.isEnabled("BringBackBoosts")) {
+            let bbbSettings = GLGlobal.storage.getValue("BringBackBoosts", "QS-Settings", {})
             if(bbbSettings.useOriginalPhysics) {
                 this.category = "Original Physics";
             } else {
@@ -52,7 +54,7 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
             this.hasMoved = false;
         });
 
-        let savestates = GL.pluginManager.getPlugin("Savestates")?.return;
+        let savestates = GL.plugin("Savestates");
         if(savestates) {
             savestates.onStateLoaded(this.onStateLoadedBound);
         }
@@ -187,7 +189,7 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
     }
 
     getRecorder() {
-        let inputRecorder = GL.pluginManager.getPlugin("InputRecorder")?.return;
+        let inputRecorder = GL.plugin("InputRecorder");
         if(!inputRecorder) return;
 
         return inputRecorder.getRecorder();
@@ -276,7 +278,7 @@ export default class DLDAutosplitter extends SplitsAutosplitter {
     destroy() {
         this.ui.remove();
 
-        let savestates = GL.pluginManager.getPlugin("Savestates")?.return;
+        let savestates = GL.plugin("Savestates");
         if(savestates) {
             savestates.offStateLoaded(this.onStateLoadedBound);
         }

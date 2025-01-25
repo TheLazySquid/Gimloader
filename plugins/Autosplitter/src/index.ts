@@ -1,4 +1,4 @@
-import { onceOrIfLoaded } from "./util";
+import GL from 'gimloader';
 // @ts-ignore
 import Settings from './settings/Settings.svelte';
 // @ts-ignore
@@ -6,18 +6,14 @@ import styles from './styles.scss';
 import { Autosplitter } from "./splitters/autosplitter";
 import FishtopiaAutosplitter from "./splitters/fishtopia";
 import DLDAutosplitter from "./splitters/DLD";
-import OneWayOutAutosplitter from "./splitters/oneWayOut";
+import OneWayOutAutosplitter from "./splitters/OneWayOut";
 
-GL.UI.addStyles("Autosplitter", styles);
-
-let isDestroyed = false;
+GL.UI.addStyles(styles);
 
 let autosplitter: Autosplitter;
 let gamemodeDetector = GL.lib("GamemodeDetector");
 
-onceOrIfLoaded(() => {
-    if(isDestroyed) return;
-
+GL.net.onLoad(() => {
     let gamemode = gamemodeDetector.currentGamemode();
     if(gamemode === "Don't Look Down") {
         autosplitter = new DLDAutosplitter();
@@ -26,16 +22,9 @@ onceOrIfLoaded(() => {
     } else if(gamemode === "One Way Out") {
         autosplitter = new OneWayOutAutosplitter();
     }
-})
+});
 
-export function onStop() {
-    isDestroyed = true;
-    autosplitter?.destroy();
-    GL.UI.removeStyles("Autosplitter");
-    GL.patcher.unpatchAll("Autosplitter");
-}
-
-export function openSettingsMenu() {
+GL.openSettingsMenu(() => {
     let div = document.createElement("div");
     // @ts-ignore
     let settings = new Settings({
@@ -54,4 +43,4 @@ export function openSettingsMenu() {
             autosplitter?.reset();
         }
     });
-}
+});

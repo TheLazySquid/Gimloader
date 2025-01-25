@@ -1,13 +1,11 @@
-import typescript from '@rollup/plugin-typescript'
-import { string } from 'rollup-plugin-string';
-import sass from 'rollup-plugin-sass';
-import svelte from 'rollup-plugin-svelte';
-import resolve from '@rollup/plugin-node-resolve';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import svelte from "esbuild-svelte";
+import { sveltePreprocess } from "svelte-preprocess";
+import { sassPlugin } from "esbuild-sass-plugin";
 import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
+/** @type {import('@gimloader/build').Config} */
 export default {
     input: 'src/index.ts',
     name: 'Autosplitter',
@@ -18,23 +16,17 @@ export default {
     libs: ["GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js"],
     hasSettings: true,
     plugins: [
-        sass(),
-        string({ include: ['**/*.css', '**/*.svg'] }),
-        typescript({
-            jsx: 'react',
-            target: 'esnext'
-        }),
         svelte({
-            emitCss: false,
+            preprocess: sveltePreprocess(),
             compilerOptions: {
-                css: 'injected'
-            },
-            preprocess: vitePreprocess()
+                css: "injected"
+            }
         }),
-        resolve({
-            browser: true,
-            exportConditions: ['svelte'],
-            extensions: ['.svelte', '.js', '.ts', '.json']
-        })
-    ]
+        sassPlugin({ type: "css-text" })
+    ],
+    esbuildOptions: {
+        loader: {
+            ".svg": "text"
+        }
+    }
 };
