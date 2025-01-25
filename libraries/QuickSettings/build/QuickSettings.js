@@ -2,11 +2,14 @@
  * @name QuickSettings
  * @description Easily make simple settings menus
  * @author TheLazySquid
- * @version 0.2.1
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @isLibrary true
  */
 
+
+// node_modules/gimloader/global.js
+var global_default = GL;
 
 // node_modules/svelte/src/runtime/internal/utils.js
 function noop() {
@@ -2279,7 +2282,7 @@ function instance3($$self, $$props, $$invalidate) {
   $$self.$$.update = () => {
     if ($$self.$$.dirty & /*name, settings*/
     5) {
-      $: GL.storage.setValue(name, "QS-Settings", settings);
+      $: global_default.storage.setValue(name, "QS-Settings", settings);
     }
   };
   return [
@@ -2307,7 +2310,7 @@ var Settings_default = Settings;
 // src/index.ts
 function QuickSettings(name, els) {
   if (!Array.isArray(els)) throw new Error("Elements isn't an array");
-  let settings = GL.storage.getValue(name, "QS-Settings", {});
+  let settings = global_default.storage.getValue(name, "QS-Settings", {});
   for (let el of els) {
     if (el.type === "heading") continue;
     if (!settings.hasOwnProperty(el.id)) {
@@ -2330,7 +2333,7 @@ function QuickSettings(name, els) {
         settings
       }
     });
-    GL.UI.showModal(div, {
+    global_default.UI.showModal(div, {
       buttons: [{ text: "Close", style: "primary" }],
       // @ts-ignore
       onClosed: () => component.$destroy()

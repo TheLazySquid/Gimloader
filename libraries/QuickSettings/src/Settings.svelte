@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { NumberEl, QSElement } from "./types";
+    import GL from 'gimloader/global';
     import Toggle from "svelte-toggle";
 
     export let name: string;

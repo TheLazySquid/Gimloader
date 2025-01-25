@@ -2,16 +2,18 @@
  * @name MobxUtils
  * @description Some simple utilities for react injection with MobX
  * @author TheLazySquid
- * @version 0.1.2
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/MobxUtils.js
  * @isLibrary true
  * @reloadRequired true
  */
 
+const api = new GL();
+
 let observerIntercepts = [];
 
-GL.parcel.interceptRequire("MobxUtils", exports => exports && Object.keys(exports).length === 1 && exports?.observer, exports => {
-    GL.patcher.before("MobxUtils", exports, 'observer', (_, args) => {
+api.parcel.getLazy(exports => exports && Object.keys(exports).length === 1 && exports?.observer, exports => {
+    api.patcher.before(exports, 'observer', (_, args) => {
         // this is our only good way of telling apart functions
         let str = args[0].toString();
         for(let intercept of observerIntercepts) {
@@ -20,8 +22,8 @@ GL.parcel.interceptRequire("MobxUtils", exports => exports && Object.keys(export
                 if(newVal) args[0] = newVal;
             }
         }
-    })
-})
+    });
+});
 
 export function interceptObserver(id, match, callback) {
     observerIntercepts.push({ match, callback, id });
@@ -29,9 +31,4 @@ export function interceptObserver(id, match, callback) {
 
 export function stopIntercepts(id) {
     observerIntercepts = observerIntercepts.filter(intercept => intercept.id !== id);
-}
-
-export function onStop() {
-    GL.parcel.stopIntercepts("MobxUtils");
-    GL.patcher.unpatchAll("MobxUtils");
 }
