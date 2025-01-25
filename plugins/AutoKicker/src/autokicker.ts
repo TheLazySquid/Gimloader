@@ -1,6 +1,5 @@
+import GL from 'gimloader';
 import { IBlacklistedName } from "./types";
-
-const toggleUIHotkey = new Set(['alt', 'k'])
 
 export default class AutoKicker {
     myId: string;
@@ -21,10 +20,12 @@ export default class AutoKicker {
 
     constructor() {
         this.loadSettings();
+
+        GL.onStop(() => this.dispose());
     }
 
     loadSettings() {
-        let settings = GL.storage.getValue("AutoKicker", "Settings", {});
+        let settings = GL.storage.getValue("Settings", {});
 
         this.kickDuplicateNames = settings.kickDuplicateNames ?? false;
         this.kickSkinless = settings.kickSkinless ?? false;
@@ -34,7 +35,7 @@ export default class AutoKicker {
     }
 
     saveSettings() {
-        GL.storage.setValue("AutoKicker", "Settings", {
+        GL.storage.setValue("Settings", {
             kickDuplicateNames: this.kickDuplicateNames,
             kickSkinless: this.kickSkinless,
             blacklist: this.blacklist,
@@ -46,7 +47,7 @@ export default class AutoKicker {
     start() {                
         if(GL.net.type === "Colyseus") {
             this.myId = GL.stores.phaser.mainCharacter.id;
-            let chars = GL.net.colyseus.room.serializer.state.characters
+            let chars = GL.net.room.serializer.state.characters;
 
             this.unOnAdd = chars.onAdd((e: any) => {
                 if(!e || e.id === this.myId) return;
@@ -76,13 +77,13 @@ export default class AutoKicker {
                 this.scanPlayersColyseus();
             })
         } else {
-            GL.net.blueboat.addEventListener("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
+            GL.net.on("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
         }
     }
 
     boundBlueboatMsg = this.onBlueboatMsg.bind(this);
     onBlueboatMsg(e: any) {
-        this.lastLeaderboard = e.detail.items;
+        this.lastLeaderboard = e.items;
 
         this.scanPlayersBlueboat();
     }
@@ -113,7 +114,7 @@ export default class AutoKicker {
         if(GL.net.type !== "Colyseus") return;
 
         if(value) {
-            for(let [id, char] of GL.net.colyseus.room.serializer.state.characters.entries()) {
+            for(let [id, char] of GL.net.room.serializer.state.characters.entries()) {
                 if(id === this.myId) continue;
                 if(this.idleKickTimeouts.has(id)) continue;
 
@@ -170,7 +171,7 @@ export default class AutoKicker {
     }
 
     scanPlayersColyseus() {
-        let characters = GL.net.colyseus.room.state.characters;
+        let characters = GL.net.room.state.characters;
         let nameCount = new Map<string, number>();
 
         // tally name counts
@@ -237,9 +238,9 @@ export default class AutoKicker {
         if(this.kicked.has(id)) return;
         this.kicked.add(id);
 
-        let char = GL.net.colyseus.room.state.characters.get(id)!;
+        let char = GL.net.room.state.characters.get(id)!;
         
-        GL.net.colyseus.send("KICK_PLAYER", { characterId: id });
+        GL.net.send("KICK_PLAYER", { characterId: id });
         GL.notification.open({ message: `Kicked ${char.name} for ${reason}` })
     }
 
@@ -249,14 +250,12 @@ export default class AutoKicker {
 
         let playername = this.lastLeaderboard.find((e: any) => e.id === id)?.name;
 
-        GL.net.blueboat.send("KICK_PLAYER", id);
+        GL.net.send("KICK_PLAYER", id);
         GL.notification.open({ message: `Kicked ${playername} for ${reason}` })
     }
 
     dispose() {
         this.unOnAdd?.();
-        GL.net.blueboat.removeEventListener("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
-
-        GL.hotkeys.remove(toggleUIHotkey);
+        GL.net.off("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
     }
 }

@@ -1,5 +1,4 @@
-/// <reference types="gimloader" />
-
+import GL from 'gimloader';
 // @ts-ignore
 import styles from './styles.scss';
 import AutoKicker from "./autokicker";
@@ -7,7 +6,7 @@ import UI from './ui';
 
 let autoKicker = new AutoKicker();
 let ui: HTMLElement | null = null;
-let uiShown = GL.storage.getValue("AutoKicker", "uiShown", true);
+let uiShown = GL.storage.getValue("uiShown", true);
 
 const checkStart = () => {
     if(GL.net.isHost) {
@@ -20,39 +19,29 @@ const checkStart = () => {
 
         if(!uiShown) {
             ui.style.display = "none";
-            if(autoKicker.kickDuplicateNames || autoKicker.kickSkinless || autoKicker.blacklist.length > 0 || 
-            autoKicker.kickIdle) {
+            if(autoKicker.kickDuplicateNames || autoKicker.kickSkinless ||
+                autoKicker.blacklist.length > 0 || autoKicker.kickIdle) {
                 GL.notification.open({ message: "AutoKicker is running!" });
             }
         }
     }
 }
 
-GL.hotkeys.addConfigurable("AutoKicker", "toggleUI", () => {
+GL.hotkeys.addConfigurableHotkey({
+    category: "Auto Kicker",
+    title: "Toggle UI",
+    preventDefault: false,
+    default: {
+        key: "KeyK",
+        alt: true
+    }
+}, () => {
     if(!ui) return;
     uiShown = !uiShown;
     if(uiShown) ui.style.display = "block";
     else ui.style.display = "none";
-    GL.storage.setValue("AutoKicker", "uiShown", uiShown);
-}, {
-    category: "Auto Kicker",
-    title: "Toggle UI",
-    preventDefault: false,
-    defaultKeys: new Set(["alt", "k"])
+    GL.storage.setValue("uiShown", uiShown);
 })
 
-if(GL.net.type === "Colyseus") {
-    if(GL.stores) checkStart();
-    else GL.addEventListener("loadEnd", checkStart);
-} else if(GL.net.type === "Blueboat") {
-    checkStart();
-} else {
-    GL.addEventListener("loadEnd", checkStart);
-}
-
-GL.UI.addStyles("AutoKicker", styles);
-
-export function onStop() {
-    GL.UI.removeStyles("AutoKicker");
-    autoKicker.dispose();
-}
+GL.net.onLoad(checkStart);
+GL.UI.addStyles(styles);

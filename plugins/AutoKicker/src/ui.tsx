@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import { IBlacklistedName } from "./types";
 import type AutoKicker from "./autokicker";
 
