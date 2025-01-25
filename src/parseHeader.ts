@@ -9,7 +9,8 @@ export function parsePluginHeader(code: string) {
         downloadUrl: null,
         needsLib: [],
         optionalLib: [],
-        hasSettings: "false"
+        hasSettings: "false",
+        webpage: null
     };
 
     return parseHeader(code, basePluginHeaders);
@@ -23,7 +24,8 @@ export function parseLibHeader(code: string) {
         version: null,
         downloadUrl: null,
         isLibrary: "false",
-        reloadRequired: "false"
+        reloadRequired: "false",
+        webpage: null
     }
 
     return parseHeader(code, baseLibHeaders);

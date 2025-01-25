@@ -5,6 +5,8 @@ import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import GimkitInternals from "$core/internals";
 import Storage from "$core/storage";
 
+console.log("HERE");
+
 class Poller {
     enabled: boolean = $state(Storage.getValue("pollerEnabled", false));
     uid = Math.random().toString(36).substring(2);
@@ -37,9 +39,9 @@ class Poller {
                 let isLibrary = false;
                 let headers = res.responseHeaders.replaceAll('\r\n', '\n').split('\n');
                 for(let header of headers) {
-                    let [key, value] = header.split(': ');
+                    let [key, value] = header.split(':');
                     if(key === 'is-library') {
-                        isLibrary = value === 'true';
+                        isLibrary = value.trim() !== 'false';
                         break;
                     }
                 }
