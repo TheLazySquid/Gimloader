@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import { IFrameInfo, ISharedValues } from "../types";
 import { initOverlay, showHitbox, hideHitbox } from "./overlay";
 import TASTools from "./tools";
@@ -6,7 +7,7 @@ import { save } from "./util";
 import controller from '../assets/controller.svg';
 import { getLaserOffset, setLaserOffset } from "./updateLasers";
 
-let frames: IFrameInfo[] = GL.storage.getValue("DLDTAS", "frames", []);
+let frames: IFrameInfo[] = GL.storage.getValue("frames", []);
 let values: ISharedValues = { frames, currentFrame: 0 }
 
 export function createUI(physicsManager: any) {
@@ -222,7 +223,6 @@ export function createUI(physicsManager: any) {
     let props = ["left", "right", "up"]
 
     window.addEventListener("mouseup", () => dragging = false)
-    let closePopup: Function;
 
     for (let i = 0; i < rows; i++) {
         let row = document.createElement("tr")
@@ -268,34 +268,6 @@ export function createUI(physicsManager: any) {
         }
 
         updateTable();
-
-        // add a context menu
-        row.addEventListener("contextmenu", (e) => {
-            if(closePopup) closePopup();
-
-            e.preventDefault();
-            e.stopPropagation();
-            closePopup = GL.contextMenu.showContextMenu({ menu: { items: [
-                {
-                    key: '1',
-                    label: 'Delete',
-                    onClick: () => {
-                        frames.splice(i + rowOffset, 1)
-                        updateTable()
-                        closePopup();
-                    }
-                },
-                {
-                    key: '2',
-                    label: 'Insert Frame Before',
-                    onClick: () => {
-                        frames.splice(i + rowOffset, 0, { right: false, left: false, up: false })
-                        updateTable()
-                        closePopup();
-                    }
-                }
-            ] } }, e.clientX, e.clientY)
-        }, { capture: true })
 
         div.querySelector("table")?.appendChild(row)
     }

@@ -1,22 +1,24 @@
+import GL from 'gimloader';
 import { ISharedValues } from "../types";
 
 let lasers: any[] = [];
-let laserOffset: number = GL.storage.getValue("DLDTAS", "laserOffset", 0);
+let laserOffset: number = GL.storage.getValue("laserOffset", 0);
 
-GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
-    for(let i = 0; i < packet.detail.changes.length; i++) {
-        let device = packet.detail.changes[i];
+GL.net.on("DEVICES_STATES_CHANGES", (packet: any) => {
+    for(let i = 0; i < packet.changes.length; i++) {
+        let device = packet.changes[i];
         if(lasers.some(l => l.id === device[0])) {
-            packet.detail.changes.splice(i, 1)
+            packet.changes.splice(i, 1)
             i -= 1;
         }
     }
 })
 
-let laserHotkey = new Set(['alt', 'l']);
-
 export function initLasers(values: ISharedValues) {
-    GL.hotkeys.add(laserHotkey, () => {
+    GL.hotkeys.addHotkey({
+        key: "KeyL",
+        alt: true
+    }, () => {
         GL.hotkeys.releaseAll();
 
         let offset = prompt(`Enter the laser offset in frames, from 0 to 65 (currently ${laserOffset})`)
@@ -31,7 +33,7 @@ export function initLasers(values: ISharedValues) {
 
         setLaserOffset(parsed);
         updateLasers(values.currentFrame);
-    }, true)
+    });
 }
 
 export function getLaserOffset() {
@@ -40,7 +42,7 @@ export function getLaserOffset() {
 
 export function setLaserOffset(offset: number) {
     laserOffset = offset;
-    GL.storage.getValue("DLDTAS", "laserOffset", offset);
+    GL.storage.getValue("laserOffset", offset);
 }
 
 export function updateLasers(frame: number) {

@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import { ISharedValues, Keycodes } from "../types"
 import { defaultState, generatePhysicsInput } from "./util";
 import { initLasers, updateLasers } from "./updateLasers";
@@ -24,12 +25,14 @@ export default class TASTools {
             // only rerender, rather than running the physics loop
             GL.stores.phaser.mainCharacter.physics.postUpdate(dt);
         }
+        GL.onStop(() => physicsManager.physicsStep = this.nativeStep);
 
         this.physics = GL.stores.phaser.mainCharacter.physics;
         this.rb = this.physics.getBody().rigidBody;
         this.inputManager = GL.stores.phaser.scene.inputManager;
 
         this.getPhysicsInput = this.inputManager.getPhysicsInput;
+        GL.onStop(() => this.inputManager.getPhysicsInput = this.getPhysicsInput);
 
         this.reset();
         initLasers(this.values);

@@ -1,3 +1,5 @@
+import GL from 'gimloader';
+
 let canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -7,7 +9,9 @@ let ctx = canvas.getContext("2d")!;
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-})
+});
+
+GL.onStop(() => canvas.remove());
 
 let propHitboxes: any[] = [];
 
@@ -47,6 +51,12 @@ export function initOverlay() {
             }
         }
     }
+
+    GL.onStop(() => {
+        for(let prop of propHitboxes) {
+            prop.destroy();
+        }
+    });
 
     setInterval(render, 1000 / 15);
 }
