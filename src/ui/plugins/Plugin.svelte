@@ -5,13 +5,13 @@
     import { showPluginCodeEditor } from "../editCodeModals.svelte";
     import { checkPluginUpdate } from "$core/net/checkUpdates";
     import { Toggle, Modal } from "flowbite-svelte";
-
     import Card from "../components/Card.svelte";
     import Delete from "svelte-material-icons/Delete.svelte";
     import Pencil from "svelte-material-icons/Pencil.svelte";
     import BookSettings from "svelte-material-icons/BookSettings.svelte";
     import Update from "svelte-material-icons/Update.svelte";
     import Cog from "svelte-material-icons/Cog.svelte";
+    import ScriptTextOutline from 'svelte-material-icons/ScriptTextOutline.svelte';
     import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
     import ListItem from '../components/ListItem.svelte'
 
@@ -124,6 +124,11 @@
             <button onclick={() => libInfoOpen = true}>
                 <BookSettings size={24} />
             </button>
+        {/if}
+        {#if plugin?.headers.webpage}
+            <a href={plugin.headers.webpage} target="_blank">
+                <ScriptTextOutline size={28} />
+            </a>
         {/if}
     {/snippet}
 </SvelteComponent>

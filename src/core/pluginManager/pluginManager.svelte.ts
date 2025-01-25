@@ -20,7 +20,7 @@ class PluginManager {
         this.runPlugins = runPlugins;
 
         // load plugins from storage
-        let pluginScripts = JSON.parse(Storage.getValue('plugins', '[]')!);
+        let pluginScripts = JSON.parse(Storage.getValue('plugins', '[]'));
         for(let plugin of pluginScripts) {
             let pluginObj = new Plugin(plugin.script, plugin.enabled);
             this.plugins.push(pluginObj);
@@ -110,6 +110,7 @@ class PluginManager {
         let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
     
         Storage.setValue('plugins', JSON.stringify(pluginObjs));
+        console.trace("Saving plugins");
     }
 
     saveDebounced = debounce(this.saveFn, 100);

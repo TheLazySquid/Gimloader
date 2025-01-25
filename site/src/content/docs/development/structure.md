@@ -14,6 +14,7 @@ All scripts must begin with a header to declare things such as name, description
 | author | Yes | No | Who made the script |
 | version | No | No | What version the script is on, used for updates |
 | downloadUrl | No | No | Where a raw version of the script be found, used for updates |
+| webpage | No | No | A webpage where users can get more information about the script. |
 | reloadRequired | No | No | Whether the page needs to reload after a script is installed for it to work. Set to `true` for always, set to `ingame` for only when a game is currently active |
 | hasSettings | No | Yes | Whether a plugin has a settings menu, used to show it does when it's disabled |
 | needsLib | No | Yes | Any libraries the plugin needs to be enabled to work. Formatted like `[Name] \| [Url]`, can be repeated |
@@ -33,7 +34,8 @@ All scripts must begin with a header to declare things such as name, description
  * @description Does something awesome
  * @author Joe
  * @version 1.5.0
- * @downloadUrl https://raw.githubusercontent.com/Joe/GimloaderPlugins/main/plugins/ScriptName.js
+ * @downloadUrl https://raw.githubusercontent.com/Joe/GimloaderPlugins/main/plugins/ScriptName/ScriptName.js
+ * @webpage https://github.com/Joe/GimloaderPlugins/tree/main/plugins/ScriptName/README.md
  * @reloadRequired ingame
  * @hasSettings true
  * @isLibrary false

@@ -30,6 +30,7 @@ Configuration for the bundler is housed at `GL.config.js`. The following options
 | author | Yes | No | Who made the script |
 | version | No | No | The version of the script, used for updates |
 | downloadUrl | No | No | Where a raw version of the script be found, used for updates |
+| webpage | No | No | A webpage where users can get more information about the script. |
 | reloadRequired | No | No | Whether the page needs to reload after a script is installed for it to work. Set to `true` for always, set to `ingame` for only when a game is currently active. |
 | hasSettings | No | Yes | Whether a plugin has a settings menu, used to show it does when it's disabled |
 | libs | No | Yes | An array of libraries the plugin needs to be enabled to work, formatted like `[Name] \| [Url]` |

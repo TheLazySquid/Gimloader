@@ -2,10 +2,10 @@
     import type Lib from "$src/core/libManager/lib.svelte";
     import Card from "../components/Card.svelte";
     import LibManager from "$core/libManager/libManager.svelte";
-
     import Delete from "svelte-material-icons/Delete.svelte";
     import Pencil from "svelte-material-icons/Pencil.svelte";
     import Update from "svelte-material-icons/Update.svelte";
+    import ScriptTextOutline from 'svelte-material-icons/ScriptTextOutline.svelte';
     import { showLibCodeEditor } from "../editCodeModals.svelte";
     import { checkLibUpdate } from "$core/net/checkUpdates";
     import ListItem from "../components/ListItem.svelte";
@@ -63,6 +63,11 @@
             <button onclick={() => checkLibUpdate(library)}>
                 <Update size={28} />
             </button>
+        {/if}
+        {#if library?.headers.webpage}
+            <a href={library.headers.webpage} target="_blank">
+                <ScriptTextOutline size={28} />
+            </a>
         {/if}
     {/snippet}
 </SvelteComponent>

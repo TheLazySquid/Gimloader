@@ -54,6 +54,10 @@ export type Config = (IPluginTypes | LibraryTypes) & {
      */
     downloadUrl?: string;
     /**
+     * A webpage where users can get more information about the plugin / library.
+     */
+    webpage?: string;
+    /**
      * Whether the browser needs to be reloaded after the plugin is added.
      * If set to "ingame" it will only reload if the user is currently in a game.
      */

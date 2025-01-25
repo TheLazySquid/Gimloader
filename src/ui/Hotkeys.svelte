@@ -82,7 +82,6 @@
 
     function formatTrigger(trigger: HotkeyTrigger | null) {
         if(!trigger) return "Not Bound";
-        console.log(trigger);
 
         let keys: string[] = [];
         if(trigger.key) {
