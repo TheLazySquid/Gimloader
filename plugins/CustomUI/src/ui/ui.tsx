@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import type UIChanger from "../uiChanger";
 import ThemePreview from "./themePreview";
 import defaultThemes from '../defaultThemes.json';

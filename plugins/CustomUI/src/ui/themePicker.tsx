@@ -1,3 +1,4 @@
+import GL from 'gimloader';
 import defaultThemes from '../defaultThemes.json';
 import ThemePreview from './themePreview';
 import { Theme } from '../types';

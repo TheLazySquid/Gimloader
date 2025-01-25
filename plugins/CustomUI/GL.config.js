@@ -1,13 +1,9 @@
-import typescript from '@rollup/plugin-typescript';
-import babel from '@rollup/plugin-babel';
-import { string } from 'rollup-plugin-string';
-import sass from 'rollup-plugin-sass';
-import json from '@rollup/plugin-json';
-
+import { sassPlugin } from "esbuild-sass-plugin";
 import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
+/** @type { import('@gimloader/build').Config } */
 export default {
     input: 'src/index.ts',
     name: 'CustomUI',
@@ -15,18 +11,5 @@ export default {
     author: 'TheLazySquid',
     version: pkg.version,
     hasSettings: true,
-    plugins: [
-        json(),
-        sass(),
-        string({ include: ['**/*.css', '**/*.svg'] }),
-        babel({ include: ['src/**/*.jsx', 'src/**/*.tsx'], babelHelpers: 'bundled' }),
-        typescript({
-            jsx: 'react',
-            target: 'esnext',
-            compilerOptions: {
-                resolveJsonModule: true,
-                allowSyntheticDefaultImports: true
-            }
-        }),
-    ]
+    plugins: [sassPlugin({ type: "css-text" })]
 }

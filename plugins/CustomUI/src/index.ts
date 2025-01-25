@@ -1,4 +1,4 @@
-/// <reference types='gimloader' />
+import GL from 'gimloader';
 // @ts-ignore
 import styles from './styles.scss';
 import UI from './ui/ui';
@@ -6,14 +6,9 @@ import UIChanger from './uiChanger';
 
 let uiChanger = new UIChanger();
 
-GL.UI.addStyles("CustomUI", styles);
+GL.UI.addStyles(styles);
 
-export function onStop() {
-    GL.UI.removeStyles("CustomUI");
-    uiChanger.stop();
-}
-
-export function openSettingsMenu() {
+GL.openSettingsMenu(() => {
     let confirmFunc: () => void;
     let onConfirm = (callback: () => void) => {
         confirmFunc = callback;
@@ -35,4 +30,4 @@ export function openSettingsMenu() {
             }
         }]
     })
-}
+});
