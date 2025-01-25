@@ -1,25 +1,13 @@
 import type { IFrame, IPreviousFrame } from "./types";
+import GL from 'gimloader';
 import { defaultState, downloadFile, getFrameState, makeFrameState, updateDeviceState, uploadFile } from "./util";
 import { currentFrame } from "./stores";
 
 let active = false;
 
 // Ignore any and all (pitiful) attempts from the server to get us to go to where we should be
-GL.parcel.interceptRequire("2dMovementTAS", exports => exports?.default?.toString?.().includes("[MOVEMENT]"), exports => {  
-    // prevent colyseus from complaining that nothing is registered
-    GL.patcher.instead("2dMovementTAS", exports, "default", (_, args) => {
-        args[0].onMessage("PHYSICS_STATE", (packet: any) => {
-            if(active) return;
-            let mc = GL.stores.phaser.mainCharacter;
-            mc?.physics.setServerPosition({
-                packet: packet.packetId,
-                x: packet.x,
-                y: packet.y,
-                jsonState: JSON.parse(packet.physicsState || "{}"),
-                teleport: packet.teleport
-            })
-        })
-    })
+GL.net.on("PHYSICS_STATE", (_, editFn) => {
+    if(active) editFn(null);
 });
 
 (window as any).expectedPoses = [];
@@ -48,7 +36,7 @@ export default class TASTools {
 
         active = true;
 
-        let mcState = GL.net.colyseus.room.state.characters.get(GL.stores.phaser.mainCharacter.id);
+        let mcState = GL.net.room.state.characters.get(GL.stores.phaser.mainCharacter.id);
         mcState.$callbacks.movementSpeed = [];
 
         for(let slot of mcState.inventory.slots.values()) {
@@ -80,8 +68,8 @@ export default class TASTools {
         let allDevices = GL.stores.phaser.scene.worldManager.devices.allDevices;
         this.tagEnergyDisplay = allDevices.find((d: any) => d.options?.text == "0/10,000 <item-image item=\"energy\" />");
 
-        GL.net.colyseus.addEventListener("DEVICES_STATES_CHANGES", (packet: any) => {
-            packet.detail.changes.splice(0, packet.detail.changes.length);
+        GL.net.on("DEVICES_STATES_CHANGES", (packet: any) => {
+            packet.changes.splice(0, packet.changes.length);
         });
 
         this.setEnergy(940);
@@ -399,7 +387,7 @@ export default class TASTools {
             startPos: this.startPos,
             frames: this.frames
         }
-        GL.storage.setValue("2dMovementTAS", "save", val);
+        GL.storage.setValue("save", val);
         return val;
     }
 

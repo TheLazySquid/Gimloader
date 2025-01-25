@@ -1,4 +1,5 @@
 import type { EasyAccessWritable, IFrame } from './types';
+import GL from 'gimloader';
 // @ts-ignore
 import AnglePicker from './ui/AnglePicker.svelte';
 

@@ -1,12 +1,10 @@
-import typescript from '@rollup/plugin-typescript';
-import { string } from 'rollup-plugin-string';
-import svelte from 'rollup-plugin-svelte';
-import resolve from '@rollup/plugin-node-resolve';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import svelte from 'esbuild-svelte';
+import { sveltePreprocess } from 'svelte-preprocess';
 import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
+/** @type {import('@gimloader/build').Config} */
 export default {
     input: 'src/index.ts',
     name: '2dMovementTAS',
@@ -16,21 +14,11 @@ export default {
     reloadRequired: 'ingame',
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js",
     plugins: [
-        string({ include: ['**/*.css', '**/*.svg'] }),
-        typescript({
-            target: 'esnext'
-        }),
         svelte({
-            emitCss: false,
+            preprocess: sveltePreprocess(),
             compilerOptions: {
-                css: 'injected'
-            },
-            preprocess: vitePreprocess()
-        }),
-        resolve({
-            browser: true,
-            exportConditions: ['svelte'],
-            extensions: ['.svelte', '.js', '.ts', '.json']
+                css: "injected"
+            }
         })
     ]
 };

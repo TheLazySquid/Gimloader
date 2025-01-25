@@ -1,10 +1,11 @@
 <script lang="ts">
     import type { IFrame } from "../types";
+    import GL from 'gimloader';
     import { uploadFile } from "../util";
     import Ui from "./UI.svelte";
 
     let begun = false;
-    let save = GL.storage.getValue("2dMovementTAS", "save");
+    let save = GL.storage.getValue("save");
 
     let frames: IFrame[] = [];
     let startPos: { x: number, y: number } | undefined;
