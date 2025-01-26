@@ -4,64 +4,61 @@ import Storage from '$core/storage';
 import Lib from './lib.svelte';
 import debounce from 'debounce';
 
-// The only reason this is done this way is because I really want to have lib() and lib.get() to be the same function
-// If there is a better way to do this please let me know
+interface LibInfo {
+    script: string;
+    name: string;
+}
+
 export class LibManagerClass {
     libs: Lib[] = $state();
     destroyed = false;
 
-    constructor() {
-        let libScripts = Storage.getValue('libs', []) as string[];
+    init() {
+        let libInfo = Storage.getValue('libs', []);
+
+        // convert from the old script-only version
+        if(typeof libInfo[0] === "string") {
+            libInfo = libInfo.map((s: string) => ({ script: s, name: "" }));
+        }
 
         let libs = [];
-
-        // convert from the old, unordered version
-        if(!Array.isArray(libScripts)) {
-            libScripts = Object.values(libScripts);
-        }
     
-        for(let script of libScripts) {
-            let lib = new Lib(script);
+        for(let info of libInfo) {
+            let lib = new Lib(info.script);
     
             libs.push(lib);
         }
         this.libs = libs;
 
-        GM_addValueChangeListener('libs', (_, __, value: string[], remote) => {
+        GM_addValueChangeListener('libs', (_, __, newInfos: LibInfo[], remote) => {
             if(!remote) return;
-            let newLibs: Lib[] = [];
-    
-            for(let script of value) {
-                let lib = new Lib(script);
-                newLibs.push(lib);
-            }
-    
-            // check if any libraries were removed
-            for(let checkLib of this.libs) {
-                if(!newLibs.some(newLib => newLib.headers.name === checkLib.headers.name)) {
-                    this.deleteLib(checkLib);
-                }
-            }
     
             // check if any libraries were added
-            for(let newLib of newLibs) {
-                if(!this.libs.some(lib => lib.headers.name === newLib.headers.name)) {
-                    this.createLib(newLib.script, newLib.headers, true);
+            for(let info of newInfos) {
+                if(!this.getLib(info.name)) {
+                    this.createLib(info.script);
+                }
+            }
+
+            // check if any libraries were removed
+            for(let lib of this.libs) {
+                if(!newInfos.some(i => i.name === lib.headers.name)) {
+                    this.deleteLib(lib);
                 }
             }
     
             // check if any libraries were updated
-            for(let newLib of newLibs) {
-                let existing = this.libs.find(lib => lib.headers.name === newLib.headers.name);
-                if(existing.script !== newLib.script) {
-                    this.editLib(existing, newLib.script, newLib.headers);
+            for(let info of newInfos) {
+                let existing = this.getLib(info.name);
+                if(existing.script !== info.script) {
+                    this.editLib(existing, info.script);
                 }
             }
     
             // move the libraries into the correct order
             let newOrder = [];
-            for (let newLib of newLibs) {
-                let setLib = this.getLib(newLib.headers.name);
+            for (let info of newInfos) {
+                let setLib = this.getLib(info.name);
                 if (setLib) newOrder.push(setLib);
             }
     
@@ -81,12 +78,12 @@ export class LibManagerClass {
     saveFn() {
         if(this.destroyed) return;
         
-        let libStrs: string[] = [];
+        let libInfo: LibInfo[] = [];
         for(let lib of this.libs) {
-            libStrs.push(lib.script);
+            libInfo.push({ script: lib.script, name: lib.headers.name });
         }
 
-        Storage.setValue('libs', libStrs);
+        Storage.setValue('libs', libInfo);
     }
 
     saveDebounced?: () => void;

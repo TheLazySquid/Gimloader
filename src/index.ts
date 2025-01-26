@@ -19,6 +19,7 @@ Object.defineProperty(unsafeWindow, "GL", {
 });
 
 if(onGimkit) {
+    LibManager.init();
     Parcel.init();
     UI.init();
     Net.init();
@@ -34,7 +35,7 @@ log(`Gimloader v${version} loaded`);
 GM.registerMenuCommand("Wipe All Plugins and Libraries", () => {
     if(!confirm("Do you really want to delete all plugins and libraries? This will also reload the page.")) return;
 
-    Storage.setValue("plugins", '[]');
+    Storage.setValue("plugins", []);
     Storage.setValue("libs", []);
     LibManager.destroyed = true;
     PluginManager.destroyed = true;

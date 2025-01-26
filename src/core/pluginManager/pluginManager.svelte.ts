@@ -6,28 +6,41 @@ import Plugin from "./plugin.svelte";
 import Net from "$core/net/net";
 import Storage from "$core/storage";
 
-interface PluginInfo {
+export interface PluginInfo {
     script: string;
+    name: string;
     enabled: boolean;
 }
 
 class PluginManager {
     plugins: Plugin[] = $state([]);
-    runPlugins: boolean;
     destroyed = false;
 
-    constructor(runPlugins: boolean = true) {
-        this.runPlugins = runPlugins;
+    getPluginInfo(): PluginInfo[] {
+        // load plugins from storage
+        let pluginInfo = Storage.getValue('plugins', []);
+        if(typeof pluginInfo === 'string') pluginInfo = JSON.parse(pluginInfo);
+
+        // port from old version
+        for(let plugin of pluginInfo) {
+            if(!plugin.name) {
+                let headers = parsePluginHeader(plugin.script);
+                plugin.name = headers.name;
+            }
+        }
+    
+        return pluginInfo;
+    }
+    
+    async init() {    
+        let pluginInfo = this.getPluginInfo();
 
         // load plugins from storage
-        let pluginScripts = JSON.parse(Storage.getValue('plugins', '[]'));
-        for(let plugin of pluginScripts) {
-            let pluginObj = new Plugin(plugin.script, plugin.enabled);
+        for(let info of pluginInfo) {
+            let pluginObj = new Plugin(info.script, info.enabled);
             this.plugins.push(pluginObj);
         }
-    }
 
-    async init() {    
         let results = await Promise.allSettled(this.plugins.map(p => p.enabled && p.enable(true)));
         let fails = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
 
@@ -35,68 +48,60 @@ class PluginManager {
             let msg = fails.map(f => f.reason).join('\n');
             showErrorMessage(msg, `Failed to enable ${fails.length} plugins`);
 
-            this.save(this.plugins);
+            this.save();
         }
 
         log('All plugins loaded');
 
         // when a plugin is remotely deleted, installed or enabled/disabled reflect that here
-        GM_addValueChangeListener('plugins', (_, __, newVal, remote) => {
+        GM_addValueChangeListener('plugins', (_, __, newInfos: PluginInfo[], remote) => {
             if(!remote) return;
-            let newPluginInfos: PluginInfo[] = JSON.parse(newVal);
-            let newPlugins = newPluginInfos.map(p => new Plugin(p.script, p.enabled));
 
-            // check for scripts that were added
-            for(let newPlugin of newPlugins) {
-                if(!this.getPlugin(newPlugin.headers.name)) {
-                    newPlugin.enable()
-                        .then(() => this.save())
-                        .catch((e: Error) => {
-                            showErrorMessage(e.message, `Failed to enable plugin ${newPlugin.headers.name}`);
-                        });
-
-                    this.plugins.push(newPlugin);
+            // check for plugins that were added
+            for(let info of newInfos) {
+                if(!this.getPlugin(info.name)) {
+                    this.createPlugin(info.script, false);
                 }
             }
 
             // check for plugins that were removed
             for(let plugin of this.plugins) {
-                if(!newPlugins.find(p => p.headers.name === plugin.headers.name)) {
+                if(!newInfos.find(i => i.name === plugin.headers.name)) {
                     this.deletePlugin(plugin);
                 }
             }
 
             // check if any scripts were updated
-            for(let plugin of newPlugins) {
-                let oldPlugin = this.getPlugin(plugin.headers.name);
+            for(let info of newInfos) {
+                let oldPlugin = this.getPlugin(info.name);
                 if(!oldPlugin) continue;
 
-                if(oldPlugin.script !== plugin.script) {
-                    oldPlugin.edit(plugin.script, plugin.headers);
-                    log(`Updated plugin: ${plugin.headers.name}`)
+                if(oldPlugin.script !== info.script) {
+                    oldPlugin.edit(info.script);
+                    log(`Updated plugin: ${info.name}`)
                 }
             }
 
             // check if any plugins were enabled/disabled
-            for(let plugin of newPlugins) {
-                let oldPlugin = this.getPlugin(plugin.headers.name);
-                if(!oldPlugin) continue;
+            for(let info of newInfos) {
+                let plugin = this.getPlugin(info.name);
+                if(!plugin) continue;
 
-                if(oldPlugin.enabled !== plugin.enabled) {
-                    if(plugin.enabled) {
-                        oldPlugin.enable()
+                if((plugin.enabled || plugin.enabling) !== info.enabled) {
+                    if(info.enabled) {
+                        plugin.enable()
                             .catch((e: Error) => {
-                                showErrorMessage(e.message, `Failed to enable plugin ${oldPlugin.headers.name}`);
+                                showErrorMessage(e.message, `Failed to enable plugin ${info.name}`);
                             });
                     }
-                    else oldPlugin.disable();
+                    else plugin.disable();
                 }
             }
 
             // move the plugins into the correct order
             let newOrder = [];
-            for (let newPlugin of newPlugins) {
-                let plugin = this.getPlugin(newPlugin.headers.name);
+            for (let info of newInfos) {
+                let plugin = this.getPlugin(info.name);
                 if (plugin) newOrder.push(plugin);
             }
 
@@ -107,16 +112,18 @@ class PluginManager {
     saveFn() {
         if(this.destroyed) return;
 
-        let pluginObjs = this.plugins.map(p => ({ script: p.script, enabled: p.enabled }));
+        let pluginObjs: PluginInfo[] = this.plugins.map(p => ({
+            script: p.script,
+            name: p.headers.name,
+            enabled: p.enabled
+        }));
     
-        Storage.setValue('plugins', JSON.stringify(pluginObjs));
-        console.trace("Saving plugins");
+        Storage.setValue('plugins', pluginObjs);
     }
 
     saveDebounced = debounce(this.saveFn, 100);
 
-    save(newPlugins?: Plugin[]) {
-        if(newPlugins) this.plugins = newPlugins;
+    save() {
         this.saveDebounced();
     }
 
@@ -136,7 +143,7 @@ class PluginManager {
             let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
             if(!conf) return;
 
-            this.deletePlugin(existing);
+            existing.disable();
         }
 
         let plugin = new Plugin(script, false);
@@ -144,38 +151,21 @@ class PluginManager {
 
         if(saveFirst) this.save();
 
-        if(plugin.headers.needsLib.length > 0) {
-            let failed = false;
-            await Net.downloadLibraries(plugin.headers.needsLib, plugin.headers.name)
-                .catch((e) => {
-                    failed = true;
-                    if(!e) return;
-                    showErrorMessage(e, `Some libraries were unable to be downloaded`);
-                });
-            if(failed) return;
-            await plugin.enable()
-                .catch((e: Error) => {
-                    showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
-                });
-        } else {
-            await plugin.enable()
-                .catch((e: Error) => {
-                    showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
-                });
-        }
+        await plugin.enable()
+            .catch((e: Error) => {
+                showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
+            });
 
         this.save();
     }
 
     deletePlugin(plugin: Plugin) {
-        if(plugin.enabled) plugin.disable();
-        let newPlugins = this.plugins.filter(p => p !== plugin);
+        plugin.disable();
+        this.plugins = this.plugins.filter(p => p !== plugin);
         
-        if(window.GL) {
-            Storage.removeAllValues(plugin.headers.name);
-        }
+        Storage.removeAllValues(plugin.headers.name);
         
-        this.save(newPlugins);
+        this.save();
 
         log(`Deleted plugin: ${plugin.headers.name}`);
     }

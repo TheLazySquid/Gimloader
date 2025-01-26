@@ -8,11 +8,18 @@ import UI from "$core/ui/ui";
 import Hotkeys from '$core/hotkeys.svelte';
 import { settings } from '$src/consts.svelte';
 
+let open = false;
 function openPluginManager() {
+    if(open) return;
+    open = true;
+
     let component = mount(MenuUI, {
         target: document.body,
         props: {
-            onClose: () => unmount(component)
+            onClose: () => {
+                open = false;
+                unmount(component)
+            }
         }
     });
 }
