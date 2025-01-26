@@ -2,10 +2,10 @@
  * @name PerformantGims
  * @description Replaces configurable gims with images of them. Looks like crap, runs really fast.
  * @author TheLazySquid
- * @version 0.3.1
+ * @version 0.3.2
  * @reloadRequired ingame
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PerformantGims.js
- * @webpage https://thelazysquid.github.io/Gimloader/plugin/performantgims
+ * @webpage https://thelazysquid.github.io/Gimloader/plugins/performantgims
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @hasSettings true
  */
