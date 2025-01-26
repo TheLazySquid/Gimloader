@@ -85,6 +85,20 @@ class Hotkeys {
         window.addEventListener('blur', () => {
             this.releaseAll();
         });
+
+        GM_addValueChangeListener('configurableHotkeys', (_, __, saved, remote) => {
+            if(!remote) return;
+
+            // check if any were changed
+            for(let id in saved) {
+                let existing = this.configurableHotkeys.find(h => h.id === id);
+                if(existing && existing.trigger != saved[id]) {
+                    existing.trigger = saved[id];
+                }
+            }
+
+            this.savedHotkeys = saved;
+        });
     }
 
     addHotkey(id: any, options: HotkeyOptions, callback: Callback) {
