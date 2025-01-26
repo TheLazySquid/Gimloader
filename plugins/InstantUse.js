@@ -2,7 +2,8 @@
  * @name InstantUse
  * @description Instantly use nearby devices without any wait
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
+ * @webpage https://thelazysquid.github.io/Gimloader/plugin/instantuse
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InstantUse.js
  */
 

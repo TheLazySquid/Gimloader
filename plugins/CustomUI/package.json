@@ -1,6 +1,6 @@
 {
   "name": "customui",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Allows you to customize various things about the Gimkit UI",
   "author": "TheLazySquid",
   "main": "src/index.ts",
@@ -12,7 +12,7 @@
     "gimloader": "^1.0.2"
   },
   "devDependencies": {
-    "@gimloader/build": "^1.0.0",
+    "@gimloader/build": "^1.0.1",
     "esbuild-sass-plugin": "^3.3.1"
   }
 }

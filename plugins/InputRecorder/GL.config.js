@@ -11,5 +11,6 @@ export default {
     version: pkg.version,
     reloadRequired: 'ingame',
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InputRecorder/build/InputRecorder.js",
+    webpage: 'https://thelazysquid.github.io/Gimloader/plugins/inputrecorder',
     libs: ["DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js"]
 }

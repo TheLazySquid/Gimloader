@@ -2,7 +2,8 @@
  * @name IdleForXp
  * @description Automatically performs actions to let you gain XP while idle
  * @author TheLazySquid
- * @version 0.2.0
+ * @version 0.2.1
+ * @webpage https://thelazysquid.github.io/Gimloader/plugin/idleforxp
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/IdleForXp.js
  */
 const api = new GL();

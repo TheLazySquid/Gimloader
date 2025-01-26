@@ -13,6 +13,7 @@ export default {
     author: 'TheLazySquid',
     version: pkg.version,
     downloadUrl: 'https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js',
+    webpage: 'https://thelazysquid.github.io/Gimloader/plugins/autosplitter',
     libs: ["GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js"],
     hasSettings: true,
     plugins: [

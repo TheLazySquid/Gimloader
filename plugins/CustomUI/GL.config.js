@@ -10,6 +10,7 @@ export default {
     description: 'Allows you to customize various things about the Gimkit UI',
     author: 'TheLazySquid',
     version: pkg.version,
+    webpage: 'https://thelazysquid.github.io/Gimloader/plugins/customui',
     hasSettings: true,
     plugins: [sassPlugin({ type: "css-text" })]
 }

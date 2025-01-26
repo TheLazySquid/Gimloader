@@ -2,8 +2,9 @@
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
  * @author TheLazySquid
- * @version 0.1.1
+ * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/InfoLines/build/InfoLines.js
+ * @webpage https://thelazysquid.github.io/Gimloader/plugins/infolines
  * @hasSettings true
  */
 

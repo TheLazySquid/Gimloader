@@ -11,5 +11,6 @@ export default {
     author: "TheLazySquid",
     version: pkg.version,
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/AutoKicker/build/AutoKicker.js",
+    webpage: 'https://thelazysquid.github.io/Gimloader/plugins/autokicker',
     plugins: [sassPlugin({ type: "css-text" })]
 }

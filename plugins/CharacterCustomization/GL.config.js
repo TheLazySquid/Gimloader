@@ -12,6 +12,7 @@ export default {
     author: "TheLazySquid",
     version: pkg.version,
     downloadUrl: "https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/CharacterCustomization/build/CharacterCustomization.js",
+    webpage: 'https://thelazysquid.github.io/Gimloader/plugins/charactercustomization',
     hasSettings: true,
     plugins: [
         svelte({

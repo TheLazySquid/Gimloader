@@ -1,6 +1,6 @@
 {
   "name": "infolines",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Displays a configurable list of info on the screen",
   "author": "TheLazySquid",
   "main": "src/index.ts",
@@ -12,7 +12,7 @@
     "gimloader": "^1.0.1"
   },
   "devDependencies": {
-    "@gimloader/build": "^1.0.0",
+    "@gimloader/build": "^1.0.1",
     "esbuild-sass-plugin": "^3.3.1"
   }
 }

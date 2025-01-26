@@ -2,8 +2,9 @@
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
  * @author TheLazySquid
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/2dMovementTAS/build/2dMovementTAS.js
+ * @webpage https://thelazysquid.github.io/Gimloader/plugins/movementtas
  * @reloadRequired ingame
  */
 

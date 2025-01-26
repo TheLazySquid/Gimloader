@@ -1,9 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 import svelte from '@astrojs/svelte';
-
 import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
@@ -11,64 +10,97 @@ export default defineConfig({
     site: 'https://thelazysquid.github.io',
     base: 'Gimloader',
     integrations: [starlight({
-        title: 'Gimloader',
-        social: {
-            github: 'https://github.com/TheLazySquid/Gimloader',
-        },
-        sidebar: [
+        plugins: [starlightSidebarTopics([
             {
                 label: 'Usage',
+                link: '/usage/installation',
                 items: [
-                    { slug: 'usage/installation' },
-                    { slug: 'usage/updating' },
-                    { slug: 'usage/plugins' }
+                    {
+                        label: "Using Gimloader",
+                        items: [
+                            'usage/installation',
+                            'usage/updating',
+                            'usage/plugins'
+                        ]
+                    },
+                    {
+                        label: "Official Plugins",
+                        items: [
+                            'plugins/cameracontrol',
+                            'plugins/charactercustomization',
+                            'plugins/savestates',
+                            'plugins/performantgims',
+                            'plugins/idleforxp',
+                            'plugins/infolines',
+                            'plugins/autokicker',
+                            'plugins/quickreset',
+                            'plugins/instantuse',
+                            'plugins/crazyflag',
+                            'plugins/autosplitter',
+                            'plugins/bringbackboosts',
+                            'plugins/dldtas',
+                            'plugins/inputrecorder',
+                            'plugins/customui',
+                            'plugins/movementtas',
+                        ]
+                    }
                 ]
             },
             {
                 label: 'Development',
-                items: [
-                    { slug: 'development/overview' },
-                    { slug: 'development/internals' },
-                    { slug: 'development/structure' },
-                    { slug: 'development/api' },
-                    { slug: 'development/bundling' },
-                    { slug: 'development/nextsteps' }
-                ]
-            },
-            {
-                label: "Docs",
+                link: '/development/overview',
                 items: [
                     {
-                        label: 'Scoped Api',
+                        label: 'Development',
                         items: [
-                            { slug: 'api/scopedapi' },
-                            { slug: 'api/scopedparcel' },
-                            { slug: 'api/scopedhotkeys' },
-                            { slug: 'api/scopednet' },
-                            { slug: 'api/scopedui' },
-                            { slug: 'api/scopedstorage' },
-                            { slug: 'api/scopedpatcher' },
-                            { slug: 'api/libs' },
-                            { slug: 'api/plugins' },
+                            'development/overview',
+                            'development/internals',
+                            'development/structure',
+                            'development/api',
+                            'development/bundling',
+                            'development/nextsteps'
                         ]
                     },
                     {
-                        label: 'Unscoped Api',
+                        label: "Docs",
                         items: [
-                            { slug: 'api/api' },
-                            { slug: 'api/parcel' },
-                            { slug: 'api/hotkeys' },
-                            { slug: 'api/net' },
-                            { slug: 'api/ui' },
-                            { slug: 'api/storage' },
-                            { slug: 'api/patcher' },
-                            { slug: 'api/libs' },
-                            { slug: 'api/plugins' },
+                            {
+                                label: 'Scoped Api',
+                                items: [
+                                    'api/scopedapi',
+                                    'api/scopedparcel',
+                                    'api/scopedhotkeys',
+                                    'api/scopednet',
+                                    'api/scopedui',
+                                    'api/scopedstorage',
+                                    'api/scopedpatcher',
+                                    'api/libs',
+                                    'api/plugins',
+                                ]
+                            },
+                            {
+                                label: 'Unscoped Api',
+                                items: [
+                                    'api/api',
+                                    'api/parcel',
+                                    'api/hotkeys',
+                                    'api/net',
+                                    'api/ui',
+                                    'api/storage',
+                                    'api/patcher',
+                                    'api/libs',
+                                    'api/plugins',
+                                ]
+                            }
                         ]
                     }
                 ]
             }
-        ],
+        ])],
+        title: 'Gimloader',
+        social: {
+            github: 'https://github.com/TheLazySquid/Gimloader',
+        },
         favicon: '/icon.svg',
         logo: {
             src: './public/icon.svg'

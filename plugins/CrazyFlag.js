@@ -2,7 +2,8 @@
  * @name CrazyFlag
  * @description Make the flags in capture the flag or creative swing like crazy!
  * @author TheLazySquid
- * @version 1.1.0
+ * @version 1.1.1
+ * @webpage https://thelazysquid.github.io/Gimloader/plugin/crazyflag
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  * @hasSettings true
  */

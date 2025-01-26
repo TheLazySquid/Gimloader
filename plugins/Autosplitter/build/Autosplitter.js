@@ -2,8 +2,9 @@
  * @name Autosplitter
  * @description Automatically times speedruns for various gamemodes
  * @author TheLazySquid
- * @version 0.5.0
+ * @version 0.5.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/Autosplitter/build/Autosplitter.js
+ * @webpage https://thelazysquid.github.io/Gimloader/plugins/autosplitter
  * @needsLib GamemodeDetector | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/GamemodeDetector.js
  * @hasSettings true
  */

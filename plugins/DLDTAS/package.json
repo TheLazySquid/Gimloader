@@ -1,6 +1,6 @@
 {
   "name": "platformertas",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A TAS tool for Gimkit platformer modes",
   "main": "build/PlatformerTAS.js",
   "type": "module",
@@ -18,7 +18,7 @@
     "gimloader": "^1.0.2"
   },
   "devDependencies": {
-    "@gimloader/build": "^1.0.0",
+    "@gimloader/build": "^1.0.1",
     "esbuild-sass-plugin": "^3.3.1"
   }
 }

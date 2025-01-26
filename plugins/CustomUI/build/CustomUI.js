@@ -2,7 +2,8 @@
  * @name CustomUI
  * @description Allows you to customize various things about the Gimkit UI
  * @author TheLazySquid
- * @version 0.3.0
+ * @version 0.3.1
+ * @webpage https://thelazysquid.github.io/Gimloader/plugins/customui
  * @hasSettings true
  */
 

@@ -26,7 +26,7 @@
     "gimloader": "^1.0.1"
   },
   "devDependencies": {
-    "@gimloader/build": "^1.0.0",
+    "@gimloader/build": "^1.0.1",
     "compress-json": "^3.1.0",
     "esbuild-svelte": "^0.9.0",
     "svelte": "^4.2.19",
