@@ -3,7 +3,7 @@ import PluginManager from "./core/pluginManager/pluginManager.svelte";
 import Storage from "$core/storage";
 
 export default function initInstallApi() {
-    (unsafeWindow as any).GLInstall = async function (script: string) {
+    (unsafeWindow as any).GLInstall = function (script: string) {
         let headers = parsePluginHeader(script);
         let plugins = PluginManager.getPluginInfo();
 
