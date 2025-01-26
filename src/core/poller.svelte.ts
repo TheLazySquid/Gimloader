@@ -5,8 +5,6 @@ import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import GimkitInternals from "$core/internals";
 import Storage from "$core/storage";
 
-console.log("HERE");
-
 class Poller {
     enabled: boolean = $state(Storage.getValue("pollerEnabled", false));
     uid = Math.random().toString(36).substring(2);

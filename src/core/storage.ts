@@ -4,6 +4,7 @@ export default class Storage {
     }
 
     static setValue(key: string, value: any) {
+        console.log("Setting", key);
         GM_setValue(key, value);
     }
 

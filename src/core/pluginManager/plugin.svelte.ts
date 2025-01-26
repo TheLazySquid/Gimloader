@@ -11,11 +11,13 @@ import { uuidRegex } from "$src/scopedApi";
 export default class Plugin {
     script: string;
     enabled: boolean = $state();
+    enabling: boolean = false;
     headers: Record<string, any> = $state();
     return: any = $state();
     blobUuid: string | null = null;
     onStop: (() => void)[] = [];
     openSettingsMenu: (() => void)[] = $state([]);
+    enablingPromise: Promise<void> | null = null;
 
     constructor(script: string, enabled = true) {
         this.script = script;
@@ -25,16 +27,14 @@ export default class Plugin {
     }
 
     async enable(initial: boolean = false, temp: boolean = false) {
-        return new Promise<void>(async (res, rej) => {
-            if(!PluginManager.runPlugins) {
-                this.enabled = true;
-                res();
-                return;
-            }
+        if(this.enablingPromise) return this.enablingPromise;
 
+        this.enablingPromise = new Promise<void>(async (res, rej) => {
+            this.enabling = true;
+            
             if(settings.autoDownloadMissingLibs) {
                 let failed = false;
-                await Net.downloadLibraries(this.headers.needsLib)
+                await Net.downloadLibraries(this.headers.needsLib, this.headers.name)
                     .catch((e) => {
                         failed = true;
                         this.enabled = false;
@@ -158,12 +158,18 @@ export default class Plugin {
                 .finally(() => {
                     URL.revokeObjectURL(url);
                 })
-        })
+        });
+        this.enablingPromise.finally(() => {
+            this.enablingPromise = null
+            this.enabling = false;
+        });
+
+        return this.enablingPromise;
     }
 
     disable(temp: boolean = false) {
         this.enabled = false;
-        if(!PluginManager.runPlugins) return;
+        if(!this.enabled) return;
 
         try {
             for(let stop of this.onStop) stop?.();
@@ -174,7 +180,7 @@ export default class Plugin {
         this.openSettingsMenu = [];
 
         if(!temp) {
-            for(let lib of this.headers.needsLib) {
+            for(let lib of this.headers.needsLib.concat(this.headers.optionalLib)) {
                 let libName = lib.split('|')[0].trim();
                 let libObj = LibManager.getLib(libName);
                 if(libObj) libObj.removeUsed(this.headers.name);
@@ -184,7 +190,9 @@ export default class Plugin {
         this.return = null;
     }
 
-    edit(script: string, headers: Record<string, string>) {
+    edit(script: string, headers?: Record<string, string>) {
+        if(!headers) headers = parsePluginHeader(script);
+
         let enabled = this.enabled;
         if(enabled) this.disable(true);
         this.script = script;
