@@ -2,7 +2,7 @@
  * @name IdleForXp
  * @description Automatically performs actions to let you gain XP while idle
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.2.3
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/idleforxp
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/IdleForXp.js
  */
@@ -43,6 +43,6 @@ api.net.onLoad((type) => {
     if(type != "Colyseus") return;
     
     GL.notification.open({ message: "IdleForXp is active" });
-    setInterval(answerQuestion, 3000);
+    setInterval(answerQuestion, 30000);
     api.onStop(() => clearInterval(answerQuestion));
 });
