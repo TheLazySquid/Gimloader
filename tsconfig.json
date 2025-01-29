@@ -10,8 +10,10 @@
         "baseUrl": ".",
         "paths": {
             "$assets/*": ["./assets/*"],
-            "$src/*": ["./src/*"],
-            "$core/*": ["./src/core/*"]
+            "$content/*": ["./src/content/*"],
+            "$core/*": ["./src/content/core/*"],
+            "$bg/*": ["./src/background/*"],
+            "$types/*": ["./src/types/*"]
         },
         "verbatimModuleSyntax": true
     },
