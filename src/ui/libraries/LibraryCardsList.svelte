@@ -80,7 +80,7 @@
 </script>
 
 <div class="flex flex-col">
-    <div class="flex items-center mb-[3px]">
+    <div class="flex items-center mb-[2px]">
         <button onclick={() => createLib()}>
             <PlusBoxOutline size={32} />
         </button>

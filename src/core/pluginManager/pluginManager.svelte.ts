@@ -3,7 +3,6 @@ import debounce from "debounce";
 import { log } from "$src/utils";
 import { parsePluginHeader } from "$src/parseHeader";
 import Plugin from "./plugin.svelte";
-import Net from "$core/net/net";
 import Storage from "$core/storage";
 
 export interface PluginInfo {

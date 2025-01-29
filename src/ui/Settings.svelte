@@ -1,16 +1,11 @@
 <script lang="ts">
     import { Toggle } from "flowbite-svelte";
-    import { checkScriptUpdate } from "$core/net/checkUpdates";
     import { settings } from "$src/consts.svelte";
     import Storage from "$core/storage";
     import Poller from "$core/poller.svelte";
 
     function saveAutoUpdate() {
-        Storage.setValue('autoUpdate', settings.autoUpdate);
-
-        if(settings.autoUpdate) {
-            checkScriptUpdate(false);
-        }
+        Storage.setValue('autoUpdatePlugins', settings.autoUpdatePlugins);
     }
 
     function saveAutoDownloadLibs() {
@@ -20,8 +15,8 @@
 
 <h1 class="text-xl font-bold">General Settings</h1>
 <div class="flex items-center mb-2">
-    <Toggle bind:checked={settings.autoUpdate} on:change={saveAutoUpdate} />
-    Automatically check for updates
+    <Toggle bind:checked={settings.autoUpdatePlugins} on:change={saveAutoUpdate} />
+    Automatically check for plugin updates
 </div>
 <div class="flex items-center mb-2">
     <Toggle bind:checked={settings.showPluginButtons} on:change={() => {

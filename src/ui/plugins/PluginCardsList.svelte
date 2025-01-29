@@ -17,7 +17,6 @@
     import ViewList from 'svelte-material-icons/ViewList.svelte';
     import Storage from "$core/storage";
 
-
     const flipDurationMs = 300;
 
     let searchValue = $state("");
@@ -120,7 +119,7 @@
 </script>
 
 <div class="flex flex-col">
-    <div class="flex items-center mb-[3px]">
+    <div class="flex items-center mb-[2px]">
         <button onclick={() => createPlugin()}>
             <PlusBoxOutline size={32} />
         </button>
