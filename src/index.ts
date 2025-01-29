@@ -11,6 +11,7 @@ import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { log, onGimkit } from "./utils";
 import { version } from "./consts.svelte";
+import UpdateChecker from "$core/updateChecker";
 
 Object.defineProperty(unsafeWindow, "GL", {
     value: Api,
@@ -26,6 +27,7 @@ if(onGimkit) {
     Hotkeys.init();
     GimkitInternals.init();
     Poller.init();
+    UpdateChecker.init();
 } else {
     initInstallApi();
 }
