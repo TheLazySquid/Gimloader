@@ -3,10 +3,6 @@ import sveltePlugin from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
 import postcss from 'postcss';
 import postcssLoadConfig from 'postcss-load-config';
-import fs from 'fs';
-
-const pkg = JSON.parse(fs.readFileSync("package.json"));
-const version = pkg.version;
 
 import { compileAsync } from "sass";
 import path from "path";
@@ -43,34 +39,12 @@ function importStyles() {
     }
 }
 
-const meta = `// ==UserScript==
-// @name        Gimloader
-// @description A plugin loader for Gimkit
-// @namespace   https://github.com/TheLazySquid/Gimloader
-// @match       https://www.gimkit.com/*
-// @match       https://thelazysquid.github.io/Gimloader*
-// @run-at      document-start
-// @icon        https://thelazysquid.github.io/Gimloader/icon.svg
-// @author      TheLazySquid
-// @updateURL   https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @downloadURL https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/build/bundle.user.js
-// @version     ${version}
-// @grant       unsafeWindow
-// @grant       GM_getValue
-// @grant       GM_setValue
-// @grant       GM_deleteValue
-// @grant       GM_listValues
-// @grant       GM.registerMenuCommand
-// @grant       GM.xmlHttpRequest
-// @grant       GM_addValueChangeListener
-// ==/UserScript==`
-
 let config = {
-    entryPoints: ["src/index.ts"],
+    entryPoints: ["src/content/index.ts", "src/background/index.ts"],
     mainFields: ["svelte", "browser", "module", "main"],
-    conditions: ["svelte", "browser"],
+    conditions: ["svelte", "browser", "production"],
     bundle: true,
-    outfile: "build/bundle.user.js",
+    outdir: "extension/dist",
     plugins: [
         sveltePlugin({
             preprocess: sveltePreprocess(),
@@ -84,10 +58,7 @@ let config = {
         ".svg": "text",
         ".css": "empty"
     },
-    banner: {
-        "js": meta
-    },
-    minify: true
+    // minify: true
 }
 
 
