@@ -69,7 +69,6 @@ export default class Plugin {
                 if(needsReload.length > 0) {
                     let reload = confirmLibReload(needsReload);
                     if(reload) {
-                        PluginManager.saveFn();
                         location.reload();
                     }
                 }
@@ -117,7 +116,6 @@ export default class Plugin {
                             let reload = confirm(`${this.headers.name} requires a reload to function properly. Reload now?`);
                             if(reload) {
                                 // call the save function directly, rather than the debounced one
-                                PluginManager.saveFn();
                                 location.reload();
                             }
                         }

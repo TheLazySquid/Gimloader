@@ -1,20 +1,21 @@
 <script lang="ts">
     import type Plugin from "$core/pluginManager/plugin.svelte";
     import PluginManager from "$core/pluginManager/pluginManager.svelte";
-    import showErrorMessage from "../showErrorMessage";
     import { showPluginCodeEditor } from "../editCodeModals.svelte";
     import { checkPluginUpdate } from "$core/net/checkUpdates";
     import { Toggle, Modal } from "flowbite-svelte";
     import Card from "../components/Card.svelte";
+    import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
+    import ListItem from '../components/ListItem.svelte'
+    import { Tooltip } from "flowbite-svelte";
+
     import Delete from "svelte-material-icons/Delete.svelte";
     import Pencil from "svelte-material-icons/Pencil.svelte";
     import BookSettings from "svelte-material-icons/BookSettings.svelte";
     import Update from "svelte-material-icons/Update.svelte";
     import Cog from "svelte-material-icons/Cog.svelte";
     import ScriptTextOutline from 'svelte-material-icons/ScriptTextOutline.svelte';
-    import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
-    import ListItem from '../components/ListItem.svelte'
-    import Port from "$shared/port";
+    import AlertCircleOutline from 'svelte-material-icons/AlertCircleOutline.svelte';
 
     let {
         startDrag,
@@ -68,7 +69,7 @@
     </Modal>
 {/if}
 
-<SvelteComponent {dragDisabled} {startDrag} {loading} {dragAllowed}>
+<SvelteComponent {dragDisabled} {startDrag} {loading} {dragAllowed} error={plugin?.errored}>
     {#snippet header()}
         <h2 class="overflow-ellipsis overflow-hidden whitespace-nowrap flex-grow text-xl font-bold">
             {plugin?.headers.name}
@@ -118,6 +119,14 @@
             <a href={plugin.headers.webpage} target="_blank">
                 <ScriptTextOutline size={28} />
             </a>
+        {/if}
+        {#if plugin?.errored}
+            <button>
+                <AlertCircleOutline size={28} color="#f05252" />
+            </button>
+            <Tooltip trigger="hover" class="z-50">
+                An error occured when this plugin was enabling.
+            </Tooltip>
         {/if}
     {/snippet}
 </SvelteComponent>
