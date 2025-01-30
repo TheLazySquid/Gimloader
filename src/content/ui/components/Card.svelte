@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
     import DotsGrid from "svelte-material-icons/DotsGrid.svelte";
 
     interface Props {
@@ -6,11 +7,12 @@
         dragDisabled: boolean;
         loading?: boolean;
         dragAllowed?: boolean;
-        header?: import('svelte').Snippet;
-        toggle?: import('svelte').Snippet;
-        author?: import('svelte').Snippet;
-        description?: import('svelte').Snippet;
-        buttons?: import('svelte').Snippet;
+        error?: boolean;
+        header?: Snippet;
+        toggle?: Snippet;
+        author?: Snippet;
+        description?: Snippet;
+        buttons?: Snippet;
     }
 
     let {
@@ -18,6 +20,7 @@
         dragDisabled,
         loading = false,
         dragAllowed = true,
+        error,
         header,
         toggle,
         author,
@@ -30,8 +33,8 @@
     }
 </script>
 
-<div class="border border-gray-500 p-3 h-full relative bg-white min-h-[150px] flex flex-col
-    preflight rounded-xl">
+<div class="{error ? 'border-2 border-red-500' : 'border border-gray-500'}
+h-full relative bg-white min-h-[150px] rounded-xl preflight flex flex-col p-3">
     {#if loading}
         <div class="absolute bottom-0 left-0 z-0 overflow-hidden w-full rounded-bl-xl rounded-br-xl h-6 animWrap">
             <div class="loadAnim w-40 bg-primary-500 h-1 z-0 mt-5"></div>

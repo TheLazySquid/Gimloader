@@ -159,13 +159,11 @@ class PluginManager {
     async setEnabled(name: Plugin | string, enabled: boolean, emit = true) {
         let plugin = typeof name === "string" ? this.getPlugin(name) : name;
         if(!plugin) return;
-
+        
         if(enabled) {
+            plugin.enabled = true;
+            if(emit) Port.send("pluginToggled", { name: plugin.headers.name, enabled: true });
             await plugin.launch()
-                .then(() => {
-                    plugin.enabled = true;
-                    if(emit) Port.send("pluginToggled", { name: plugin.headers.name, enabled: true });
-                })
                 .catch((e) => {
                     if(!e?.message) return;
                     showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);

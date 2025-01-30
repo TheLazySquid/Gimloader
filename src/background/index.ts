@@ -15,6 +15,7 @@ chrome.runtime.onConnectExternal.addListener(async (port) => {
         let { type, message } = data;
         let state = await statePromise;
 
+
         // if any of the handlers return a match, forward to other tabs
         if(
             storageOnUpdate(state, type, message) ||
