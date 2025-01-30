@@ -1,5 +1,5 @@
 import type Lib from "$content/core/libManager/lib.svelte";
-import { parsePluginHeader } from "$content/parseHeader";
+import { parsePluginHeader } from "$shared/parseHeader";
 import showErrorMessage from "$content/ui/showErrorMessage";
 import { confirmLibReload, log } from "$content/utils";
 import Net from "$content/core/net/net";

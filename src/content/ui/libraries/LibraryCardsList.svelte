@@ -15,7 +15,7 @@
     import ViewModule from 'svelte-material-icons/ViewModule.svelte';
     import ViewList from 'svelte-material-icons/ViewList.svelte';
     import Search from "../components/Search.svelte";
-    import Port from "$core/port";
+    import Port from "$shared/port";
 
     const flipDurationMs = 300;
 

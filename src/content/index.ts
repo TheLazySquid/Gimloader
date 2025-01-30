@@ -5,7 +5,7 @@ import Parcel from "$content/core/parcel";
 import UI from "$content/core/ui/ui";
 import GimkitInternals from "$content/core/internals";
 import { log } from "./utils";
-import Port from "$core/port";
+import Port from "$shared/port";
 import Storage from "$content/core/storage.svelte";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";

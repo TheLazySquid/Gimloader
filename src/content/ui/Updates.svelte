@@ -3,7 +3,7 @@
     import LibManager from "$core/libManager/libManager.svelte";
     import Net from "$core/net/net";
     import { checkLibUpdate, checkPluginUpdate, compareVersions } from "$core/net/checkUpdates";
-    import { parseLibHeader, parsePluginHeader } from "$content/parseHeader";
+    import { parseLibHeader, parsePluginHeader } from "$shared/parseHeader";
     import showErrorMessage from "./showErrorMessage";
     import { Progressbar } from "flowbite-svelte";
     import Update from 'svelte-material-icons/Update.svelte';

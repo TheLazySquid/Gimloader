@@ -1,11 +1,11 @@
 import showErrorMessage from "$content/ui/showErrorMessage";
 import debounce from "debounce";
 import { log } from "$content/utils";
-import { parsePluginHeader } from "$content/parseHeader";
+import { parsePluginHeader } from "$shared/parseHeader";
 import Plugin from "./plugin.svelte";
 import Storage from "$content/core/storage.svelte";
 import type { PluginInfo } from "$types/state";
-import Port from "../port";
+import Port from "$shared/port";
 
 class PluginManager {
     plugins: Plugin[] = $state([]);
@@ -32,29 +32,9 @@ class PluginManager {
         if(fails.length > 0) {
             let msg = fails.map(f => f.reason).join('\n');
             showErrorMessage(msg, `Failed to enable ${fails.length} plugins`);
-
-            this.save();
         }
 
         log('All plugins loaded');
-    }
-
-    saveFn() {
-        if(this.destroyed) return;
-
-        let pluginObjs: PluginInfo[] = this.plugins.map(p => ({
-            script: p.script,
-            name: p.headers.name,
-            enabled: p.enabled
-        }));
-    
-        // Storage.setValue('plugins', pluginObjs);
-    }
-
-    saveDebounced = debounce(this.saveFn, 100);
-
-    save() {
-        this.saveDebounced();
     }
 
     getPlugin(name: string) {
@@ -94,7 +74,7 @@ class PluginManager {
         plugin.stop();
         this.plugins = this.plugins.filter(p => p !== plugin);
 
-        if(emit) Port.send("pluginDelete", { name });
+        if(emit) Port.send("pluginDelete", { name: plugin.headers.name });
         
         Storage.deletePluginValues(plugin.headers.name);
         

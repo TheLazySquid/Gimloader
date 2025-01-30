@@ -13,7 +13,8 @@
             "$content/*": ["./src/content/*"],
             "$core/*": ["./src/content/core/*"],
             "$bg/*": ["./src/background/*"],
-            "$types/*": ["./src/types/*"]
+            "$types/*": ["./src/types/*"],
+            "$shared/*": ["./src/shared/*"]
         },
         "verbatimModuleSyntax": true
     },

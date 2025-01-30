@@ -14,7 +14,7 @@
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
     import ViewModule from 'svelte-material-icons/ViewModule.svelte';
     import ViewList from 'svelte-material-icons/ViewList.svelte';
-    import Port from "$core/port";
+    import Port from "$shared/port";
 
 
     const flipDurationMs = 300;

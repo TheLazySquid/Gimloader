@@ -14,7 +14,7 @@
     import ScriptTextOutline from 'svelte-material-icons/ScriptTextOutline.svelte';
     import PluginLibrariesInfo from "./PluginLibrariesInfo.svelte";
     import ListItem from '../components/ListItem.svelte'
-    import Port from "$core/port";
+    import Port from "$shared/port";
 
     let {
         startDrag,

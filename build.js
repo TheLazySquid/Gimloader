@@ -40,7 +40,7 @@ function importStyles() {
 }
 
 let config = {
-    entryPoints: ["src/content/index.ts", "src/background/index.ts"],
+    entryPoints: ["src/content/index.ts", "src/background/index.ts", "src/installApi/index.ts"],
     mainFields: ["svelte", "browser", "module", "main"],
     conditions: ["svelte", "browser", "production"],
     bundle: true,
