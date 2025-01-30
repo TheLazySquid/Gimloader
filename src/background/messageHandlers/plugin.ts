@@ -18,6 +18,7 @@ export function pluginOnUpdate(state: State, type: string, message: any) {
             return true;
         case "pluginDelete":
             state.plugins = state.plugins.filter(p => p.name !== message.name);
+            console.log(state.plugins, message.name);
             saveDebounced('plugins');
             return true;
         case "pluginToggled":

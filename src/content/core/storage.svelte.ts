@@ -1,4 +1,4 @@
-import Port from "$core/port";
+import Port from "$shared/port";
 import type { PluginStorage, Settings } from "$types/state";
 
 const defaultSettings: Settings = {

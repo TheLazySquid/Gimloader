@@ -6,7 +6,7 @@
     import { SvelteSet } from "svelte/reactivity";
     import Hotkeys, { type ConfigurableHotkey } from "$core/hotkeys.svelte";
     import type { HotkeyTrigger } from "$types/hotkeys";
-    import Port from "$core/port";
+    import Port from "$shared/port";
 
     let hotkeys = Hotkeys.configurableHotkeys;
 

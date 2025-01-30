@@ -1,6 +1,6 @@
 import Net from "$content/core/net/net";
 import { log } from "$content/utils";
-import { parseLibHeader } from "$content/parseHeader";
+import { parseLibHeader } from "$shared/parseHeader";
 import { uuidRegex } from "$content/scopedApi";
 
 export default class Lib {
