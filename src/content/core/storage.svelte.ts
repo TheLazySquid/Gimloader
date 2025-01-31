@@ -1,4 +1,4 @@
-import Port from "$shared/port";
+import Port from "$shared/port.svelte";
 import type { PluginStorage, Settings } from "$types/state";
 
 const defaultSettings: Settings = {

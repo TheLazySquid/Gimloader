@@ -1,7 +1,7 @@
 import { splicer } from "$content/utils";
 import type { ConfigurableHotkeyOptions, HotkeyOptions, HotkeyTrigger } from "$types/hotkeys";
 import type { ConfigurableHotkeysState } from "$types/state";
-import Port from "$shared/port";
+import Port from "$shared/port.svelte";
 
 type Callback = (e: KeyboardEvent) => void;
 type DefaultHotkey = HotkeyOptions & { callback: Callback, id: string };

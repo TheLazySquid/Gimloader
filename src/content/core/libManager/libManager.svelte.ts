@@ -1,7 +1,7 @@
 import { parseLibHeader } from '$shared/parseHeader';
 import Lib from './lib.svelte';
 import type { LibraryInfo } from '$types/state';
-import Port from '$shared/port';
+import Port from '$shared/port.svelte';
 import { confirmLibReload } from '$content/utils';
 
 export class LibManagerClass {
