@@ -1,5 +1,5 @@
 import { parsePluginHeader } from "$shared/parseHeader";
-import Port from "$shared/port";
+import Port from "$shared/port.svelte";
 import { plugins } from "./pluginsState";
 
 (window as any).GLInstall = function (script: string) {

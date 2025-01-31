@@ -7,11 +7,16 @@ class Port extends EventEmitter {
     port: chrome.runtime.Port;
     firstMessage = true;
     firstMessageCallback: (state: State) => void;
+    disconnected = $state(false);
 
     init(callback: (state: State) => void) {      
         this.firstMessageCallback = callback;
         this.port = chrome.runtime.connect(extensionId);  
+
         this.port.onMessage.addListener(this.onMessage.bind(this));
+        this.port.onDisconnect.addListener(() => {
+            this.disconnected = true;
+        });
     }
 
     onMessage(data: any) {

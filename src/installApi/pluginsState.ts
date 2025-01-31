@@ -1,5 +1,5 @@
 import type { PluginInfo } from "$types/state";
-import Port from "$shared/port";
+import Port from "$shared/port.svelte";
 
 export let plugins: PluginInfo[] = [];
 Port.init((data) => {

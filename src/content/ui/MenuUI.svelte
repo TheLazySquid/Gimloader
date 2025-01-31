@@ -13,6 +13,7 @@
     import Updates from "./Updates.svelte";
     import Settings from "./Settings.svelte";
     import Hotkeys from "./Hotkeys.svelte";
+    import Port from "$shared/port.svelte";
 
     interface Props {
         onClose: () => void;
@@ -22,9 +23,16 @@
 </script>
 
 <div class="h-full">
-    <div class="preflight fadeBg fixMargin">
+    <div class="preflight fadeBg fixMargin changeModalButtonIndex">
         <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"
             size="xl" on:close={onClose} open outsideclose focusTrapEnabled={$focusTrapEnabled}>
+            {#if Port.disconnected}
+                <div class="z-50 absolute top-[-16px] left-0 w-full h-full bg-gray-500
+                    rounded-lg opacity-70 flex flex-col items-center justify-center">
+                    <h2 class="text-3xl text-white">Connection lost with extension</h2>
+                    <div class="xl text-white">You may have disabled or reloaded the Gimloader extension. Please reload the page.</div>
+                </div>
+            {/if}
             <Tabs contentClass="bg-white">
                 <TabItem open>
                     <div class="flex items-center" slot="title">
@@ -93,5 +101,9 @@
 
     .fixMargin div[role="tabpanel"] > div {
         height: 100%;
+    }
+
+    .changeModalButtonIndex :global(div[role="document"] > button) {
+        z-index: 100;
     }
 </style>

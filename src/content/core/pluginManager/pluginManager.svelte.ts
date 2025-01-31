@@ -5,7 +5,7 @@ import { parsePluginHeader } from "$shared/parseHeader";
 import Plugin from "./plugin.svelte";
 import Storage from "$content/core/storage.svelte";
 import type { PluginInfo } from "$types/state";
-import Port from "$shared/port";
+import Port from "$shared/port.svelte";
 
 class PluginManager {
     plugins: Plugin[] = $state([]);
