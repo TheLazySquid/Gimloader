@@ -2,13 +2,56 @@
  * @name BringBackBoosts
  * @description Restores boosts in Don't Look Down. Will cause you to desync, so others cannot see you move.
  * @author TheLazySquid
- * @version 0.4.2
+ * @version 0.4.3
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/BringBackBoosts.js
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/bringbackboosts
  * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
+ * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
+ * @hasSettings true
  */
 
 const api = new GL();
+
+let settings = api.lib("QuickSettings")("BringBackBoosts", [
+    {
+        type: "heading",
+        text: "BringBackBoosts Settings"
+    },
+    {
+        type: "boolean",
+        id: "useOriginalPhysics",
+        title: "Use Release Physics",
+        default: false
+    }
+]);
+api.openSettingsMenu(settings.openSettingsMenu);
+
+settings.listen("useOriginalPhysics", (value) => {
+    if(!GL.platformerPhysics) return;
+    if(value) {
+        GL.platformerPhysics.movement.air = originalAirMovement;
+    } else {
+        GL.platformerPhysics.movement.air = defaultAirMovement;
+    }
+});
+
+const defaultAirMovement = {
+    accelerationSpeed: 0.08125,
+    decelerationSpeed: 0.08125,
+    maxAccelerationSpeed: 0.14130434782608697
+}
+const originalAirMovement = {
+    accelerationSpeed: 0.121875,
+    decelerationSpeed: 0.08125,
+    maxAccelerationSpeed: 0.155
+}
+
+api.net.onLoad((type) => {
+    if(type != "Colyseus") return;
+    if(settings.useOriginalPhysics) {
+        GL.platformerPhysics.movement.air = originalAirMovement;
+    }
+});
 
 // The code used in this has been taken from minified Gimkit code and therefore is nearly unreadable.
 var r, g;
