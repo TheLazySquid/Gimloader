@@ -36,6 +36,7 @@ export default defineConfig({
                             'plugins/quickreset',
                             'plugins/instantuse',
                             'plugins/crazyflag',
+                            'plugins/toggleterraintype',
                             'plugins/uncappedsettings',
                             'plugins/autosplitter',
                             'plugins/bringbackboosts',
