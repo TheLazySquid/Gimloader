@@ -1,9 +1,12 @@
-import type { PluginInfo } from "$types/state";
+import type { PluginInfo, Settings } from "$types/state";
 import Port from "$shared/port.svelte";
 
 export let plugins: PluginInfo[] = [];
+export let settings: Partial<Settings> = {};
+
 Port.init((data) => {
     plugins.push(...data.plugins);
+    Object.assign(settings, data.settings);
 
     // keep the plugins synchronised
     Port.on("pluginEdit", ({ name, script, newName }) => {
@@ -29,5 +32,9 @@ Port.init((data) => {
 
     Port.on("pluginsDeleteAll", () => {
         plugins.splice(0, plugins.length);
+    });
+
+    Port.on("settingUpdate", ({ key, value }) => {
+        settings[key] = value;
     });
 });
