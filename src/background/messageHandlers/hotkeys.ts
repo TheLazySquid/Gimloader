@@ -1,17 +1,24 @@
 import type { State } from "$types/state";
 import { saveDebounced } from "$bg/state";
+import Server from "$bg/server";
 
-export function hotkeysOnUpdate(state: State, type: string, message: any) {
-    switch(type) {
-        case "hotkeyUpdate":
-            state.hotkeys[message.id] = message.trigger;
-            saveDebounced('hotkeys');
-            return true
-        case "hotkeysUpdate":
-            state.hotkeys = message.hotkeys;
-            saveDebounced('hotkeys');
-            return true;
+export default class HotkeysHandler {
+    static init() {
+        Server.on("hotkeyUpdate", this.onHotkeyUpdate.bind(this));
+        Server.on("hotkeysUpdate", this.onHotkeysUpdate.bind(this));
     }
 
-    return false;
+    static save() {
+        saveDebounced('hotkeys');
+    }
+
+    static onHotkeyUpdate(state: State, message: any) {
+        state.hotkeys[message.id] = message.trigger;
+        this.save;
+    }
+
+    static onHotkeysUpdate(state: State, message: any) {
+        state.hotkeys = message.hotkeys;
+        this.save();
+    }
 }

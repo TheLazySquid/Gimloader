@@ -23,7 +23,6 @@ Net.init();
 GimkitInternals.init();
 
 Port.init((state) => {
-    console.log(state.plugins);
     Storage.init(state.pluginStorage, state.settings);
     LibManager.init(state.libraries);
     PluginManager.init(state.plugins);
