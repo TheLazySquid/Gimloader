@@ -1,9 +1,8 @@
 import showErrorMessage from "$content/ui/showErrorMessage";
-import debounce from "debounce";
 import { log } from "$content/utils";
 import { parsePluginHeader } from "$shared/parseHeader";
 import Plugin from "./plugin.svelte";
-import Storage from "$content/core/storage.svelte";
+import Storage from "$core/storage.svelte";
 import type { PluginInfo } from "$types/state";
 import Port from "$shared/port.svelte";
 
@@ -59,7 +58,19 @@ class PluginManager {
         let plugin = new Plugin(script, true);
         this.plugins.unshift(plugin);
 
-        if(emit) Port.send("pluginCreate", { name: headers.name, script });
+        if(emit) {
+            if(Storage.settings.autoDownloadMissingLibs) {
+                let res = await Port.sendAndRecieve("downloadLibraries", { libraries: headers.needsLib });
+                if(res.error) {
+                    showErrorMessage(res.error, "Failed to automatically download libraries");
+                }
+
+                Port.send("pluginCreate", { name: headers.name, script });
+                if(!res.allDownloaded) return;
+            } else {
+                Port.send("pluginCreate", { name: headers.name, script });
+            }
+        }
 
         plugin.launch()
             .catch((e: Error) => {
@@ -100,7 +111,7 @@ class PluginManager {
                         let msg = fails.map(f => f.reason).join('\n');
                         showErrorMessage(msg, `Failed to enable ${results.length} plugins`);
                     }
-                })
+                });
         } else {
             for(let plugin of this.plugins) {
                 if(plugin.enabled) plugin.stop();
@@ -123,21 +134,33 @@ class PluginManager {
         return this.plugins.map(p => p.headers.name);
     }
 
-    editPlugin(name: Plugin | string, script: string, emit = true) {
+    async editPlugin(name: Plugin | string, script: string, emit = true) {
         let plugin = typeof name === "string" ? this.getPlugin(name) : name;
         if(!plugin) return;
 
         let headers = parsePluginHeader(script);
 
-        // message other windows
-        if(emit) Port.send("pluginEdit", { name: plugin.headers.name, script, newName: headers.name });
-
-        if(plugin.enabled) plugin.stop(true);
+        if(plugin.enabled) plugin.stop();
         plugin.script = script;
         plugin.headers = headers;
 
+        // message other windows
+        if(emit) {
+            if(Storage.settings.autoDownloadMissingLibs) {
+                let res = await Port.sendAndRecieve("downloadLibraries", { libraries: headers.needsLib });
+                if(res.error) {
+                    showErrorMessage(res.error, "Failed to automatically download libraries");
+                }
+
+                Port.send("pluginEdit", { name: plugin.headers.name, script, newName: headers.name });
+                if(!res.allDownloaded) return;
+            } else {
+                Port.send("pluginEdit", { name: plugin.headers.name, script, newName: headers.name });
+            }
+        }
+
         if(plugin.enabled) {
-            plugin.launch(false, true)
+            plugin.launch(false)
                 .catch((e) => {
                     showErrorMessage(e.message, `Failed to enable plugin ${plugin.headers.name}`);
                 });

@@ -25,68 +25,65 @@ export default class Plugin {
         this.headers = parsePluginHeader(script);
     }
 
-    async launch(initial: boolean = false, temp: boolean = false) {
+    async launch(initial: boolean = false) {
         if(this.enablePromise) return this.enablePromise;
 
         this.enablePromise = new Promise<void>(async (res, rej) => {
-            // don't touch libraries if we only temporarily disabled the plugin
-            if(!temp) {
-                let libObjs: Lib[] = [];
-                let optionalLibObjs: Lib[] = [];
-    
-                // load required libs
-                for(let lib of this.headers.needsLib) {
-                    let libName = lib.split('|')[0].trim();
-                    let libObj = LibManager.getLib(libName);
-    
-                    if(!libObj) {
-                        this.errored = true;
-                        rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
-                        return;
-                    }
-    
-                    libObjs.push(libObj);
-                }
-    
-                // load optional libs
-                for(let lib of this.headers.optionalLib) {
-                    let libName = lib.split('|')[0].trim();
-                    let libObj = LibManager.getLib(libName);
-    
-                    if(!libObj) continue;
-                    optionalLibObjs.push(libObj);
-                }
-    
-                let [results, optionalResults] = await Promise.all([
-                    Promise.allSettled(libObjs.map(lib => lib.enable(initial))),
-                    Promise.allSettled(optionalLibObjs.map(lib => lib.enable(initial)))
-                ]);
+            let libObjs: Lib[] = [];
+            let optionalLibObjs: Lib[] = [];
 
-                let needsReload = libObjs.filter((_, i) => results[i].status == "fulfilled" && results[i].value);
-                needsReload = needsReload.concat(optionalLibObjs.filter((_, i) =>
-                    optionalResults[i].status == "fulfilled" && optionalResults[i].value));
+            // load required libs
+            for(let lib of this.headers.needsLib) {
+                let libName = lib.split('|')[0].trim();
+                let libObj = LibManager.getLib(libName);
 
-                if(needsReload.length > 0) {
-                    let reload = confirmLibReload(needsReload);
-                    if(reload) {
-                        location.reload();
-                    }
-                }
-    
-                // log errors with optional libs, but don't fail the plugin
-                for(let result of optionalResults) {
-                    if(result.status === 'rejected') {
-                        log(`Failed to enable optional library for plugin ${this.headers.name}:`, result.reason);
-                    }
-                }
-    
-                let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
-                if(failed.length > 0) {
-                    let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
+                if(!libObj) {
                     this.errored = true;
-                    rej(err);
+                    rej(new Error(`Plugin ${this.headers.name} requires library ${libName} which is not installed`));
                     return;
                 }
+
+                libObjs.push(libObj);
+            }
+
+            // load optional libs
+            for(let lib of this.headers.optionalLib) {
+                let libName = lib.split('|')[0].trim();
+                let libObj = LibManager.getLib(libName);
+
+                if(!libObj) continue;
+                optionalLibObjs.push(libObj);
+            }
+
+            let [results, optionalResults] = await Promise.all([
+                Promise.allSettled(libObjs.map(lib => lib.enable(initial))),
+                Promise.allSettled(optionalLibObjs.map(lib => lib.enable(initial)))
+            ]);
+
+            let needsReload = libObjs.filter((_, i) => results[i].status == "fulfilled" && results[i].value);
+            needsReload = needsReload.concat(optionalLibObjs.filter((_, i) =>
+                optionalResults[i].status == "fulfilled" && optionalResults[i].value));
+
+            if(needsReload.length > 0) {
+                let reload = confirmLibReload(needsReload);
+                if(reload) {
+                    location.reload();
+                }
+            }
+
+            // log errors with optional libs, but don't fail the plugin
+            for(let result of optionalResults) {
+                if(result.status === 'rejected') {
+                    log(`Failed to enable optional library for plugin ${this.headers.name}:`, result.reason);
+                }
+            }
+
+            let failed = results.filter(r => r.status === 'rejected') as PromiseRejectedResult[];
+            if(failed.length > 0) {
+                let err = new Error(`Failed to enable plugin ${this.headers.name} due to errors while enabling libraries:\n${failed.map(f => f.reason).join('\n')}`);
+                this.errored = true;
+                rej(err);
+                return;
             }
         
             // create a blob from the script and import it
@@ -144,7 +141,7 @@ export default class Plugin {
         return this.enablePromise;
     }
 
-    stop(temp: boolean = false) {
+    stop() {
         if(!this.enabled) return;
         this.errored = false;
 
@@ -158,12 +155,10 @@ export default class Plugin {
         this.enablePromise = null;
 
         // remove ourselves from all the libraries we were using
-        if(!temp) {
-            for(let lib of this.headers.needsLib.concat(this.headers.optionalLib)) {
-                let libName = lib.split('|')[0].trim();
-                let libObj = LibManager.getLib(libName);
-                if(libObj) libObj.removeUsed(this.headers.name);
-            }
+        for(let lib of this.headers.needsLib.concat(this.headers.optionalLib)) {
+            let libName = lib.split('|')[0].trim();
+            let libObj = LibManager.getLib(libName);
+            if(libObj) libObj.removeUsed(this.headers.name);
         }
 
         this.return = null;

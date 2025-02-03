@@ -1,7 +1,7 @@
 import type { LibraryInfo, PluginInfo, State } from "$types/state";
 import debounce from "debounce";
 
-export let statePromise = chrome.storage.local.get<State>({
+export let state = chrome.storage.local.get<State>({
     plugins: [],
     libraries: [],
     pluginStorage: {},
@@ -30,20 +30,18 @@ const removeDupes = (items: PluginInfo[] | LibraryInfo[]) => {
     }
 }
 
-statePromise.then((state) => {
+state.then((state) => {
     removeDupes(state.plugins);
     removeDupes(state.libraries);
 });
 
 let debounced: Record<string, () => void> = {};
 
-export async function saveDebounced(key: keyof State) {
-    let state = await statePromise;
-
+export function saveDebounced(key: keyof State) {
     // debounce just to be safe
     if(!debounced[key]) {
-        debounced[key] = debounce(() => {
-            chrome.storage.local.set({ [key]: state[key] })
+        debounced[key] = debounce(async () => {
+            chrome.storage.local.set({ [key]: (await state)[key] })
         }, 100);
     }
 

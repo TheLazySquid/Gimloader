@@ -1,31 +1,31 @@
+import Server from "$bg/server";
 import type { State } from "$types/state";
 import { saveDebounced } from "../state";
 
-export function storageOnUpdate(state: State, type: string, message: any) {
-    switch(type) {
-        // update plugin storage
-        case "pluginValueUpdate":
-            if(!state.pluginStorage[message.id]) state.pluginStorage[message.id] = {};
-            state.pluginStorage[message.id][message.key] = message.value;
-            saveDebounced('pluginStorage');
-            return true;
-
-        case "pluginValueDelete":
-            delete state.pluginStorage[message.id]?.[message.key];
-            saveDebounced('pluginStorage');
-            return true;
-
-        case "pluginValuesDelete":
-            delete state.pluginStorage[message.id];
-            saveDebounced('pluginStorage');
-            return true;
-
-        // update settings
-        case "settingUpdate":
-            state.settings[message.key] = message.value;
-            saveDebounced('settings');
-            return true;
+export default class StorageHandler {
+    static init() {
+        Server.on("pluginValueUpdate", this.onPluginValueUpdate.bind(this));
+        Server.on("pluginValueDelete", this.onPluginValueDelete.bind(this));
+        Server.on("pluginValuesDelete", this.onPluginValuesDelete.bind(this));
+    }
+    
+    static save() {
+        saveDebounced('pluginStorage');
     }
 
-    return false;
+    static onPluginValueUpdate(state: State, message: any) {
+        if(!state.pluginStorage[message.id]) state.pluginStorage[message.id] = {};
+        state.pluginStorage[message.id][message.key] = message.value;
+        this.save();
+    }
+
+    static onPluginValueDelete(state: State, message: any) {
+        delete state.pluginStorage[message.id]?.[message.key];
+        this.save();
+    }
+
+    static onPluginValuesDelete(state: State, message: any) {
+        delete state.pluginStorage[message.id];
+        this.save();
+    }
 }
