@@ -18,14 +18,16 @@ class Port extends EventEmitter {
         chrome.runtime = {};
 
         this.port.onMessage.addListener(this.onMessage.bind(this));
-        this.port.onDisconnect.addListener(() => {
-            this.disconnected = true;
-        });
 
         // remind chrome that we're still alive every 10 seconds so it doesn't kill the service worker
-        setInterval(() => {
+        let pingInterval = setInterval(() => { 
             this.send("ping");
         }, 10000);
+
+        this.port.onDisconnect.addListener(() => {
+            this.disconnected = true;
+            clearInterval(pingInterval);
+        });
     }
 
     onMessage(data: any) {
