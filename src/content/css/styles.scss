@@ -1,6 +1,6 @@
 @use 'wrenchIcons.scss';
 @use 'ui.scss';
-@use 'preflight.scss';
+@use '../../shared/preflight.scss';
 
 @tailwind base;
 @tailwind components;
