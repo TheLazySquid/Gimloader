@@ -1,7 +1,7 @@
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import LibManager from "$core/libManager/libManager.svelte";
 
-export const uuidRegex = new RegExp('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+export const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
 
 interface ScopedInfo {
     id: string;
@@ -13,10 +13,9 @@ export default function setupScoped(): ScopedInfo {
     let stack = new Error().stack;
 
     // get the uuid of the blob that called this function
-    let index = stack.lastIndexOf('\n');
-    if(index === -1) index = 0;
-    let lastLine = stack.slice(index);
-    let match = lastLine.match(uuidRegex);
+    let matches = stack.matchAll(uuidRegex);
+    let match: RegExpExecArray;
+    for(let newMatch of matches) match = newMatch;
     if(!match) throw new Error("new GL() needs to be called by a plugin!");
 
     let uuid = match[0];
