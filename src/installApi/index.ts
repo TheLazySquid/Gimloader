@@ -1,6 +1,8 @@
 import { parsePluginHeader } from "$shared/parseHeader";
 import Port from "$shared/port.svelte";
-import { plugins, settings } from "./state";
+import state from "$shared/bareState.svelte";
+
+state.init();
 
 (window as any).GLInstall = function (script: string) {
     return new Promise<void>(async (res, rej) => {
@@ -9,10 +11,10 @@ import { plugins, settings } from "./state";
         }
 
         let headers = parsePluginHeader(script);
-        let existing = plugins.find(p => p.name === headers.name);
+        let existing = state.plugins.find(p => p.name === headers.name);
     
         // try to download libraries (ignore errors)
-        if(settings.autoDownloadMissingLibs) {
+        if(state.settings.autoDownloadMissingLibs) {
             await Port.sendAndRecieve("downloadLibraries", { libraries: headers.needsLib });
         }
     
@@ -20,7 +22,7 @@ import { plugins, settings } from "./state";
             existing.script = script;
             Port.send("pluginEdit", { name: existing.name, script });
         } else {
-            plugins.push({ name: headers.name, script, enabled: true });
+            state.plugins.push({ name: headers.name, script, enabled: true });
             Port.send("pluginCreate", { name: headers.name, script });
         }
 
@@ -29,5 +31,5 @@ import { plugins, settings } from "./state";
 };
 
 (window as any).GLGet = function (name: string) {
-    return plugins.find(p => p.name === name)?.script;
+    return state.plugins.find(p => p.name === name)?.script;
 }
