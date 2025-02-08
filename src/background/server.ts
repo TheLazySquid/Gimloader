@@ -23,22 +23,25 @@ class Server {
     messageListeners = new Map<string, MessageCallback>();
 
     init() {
-        chrome.runtime.onConnectExternal.addListener((port) => {
-            this.open.add(port);
-            port.onDisconnect.addListener(() => this.open.delete(port));
-
-            state.then((state) => port.postMessage(state));
-
-            port.onMessage.addListener((message) => {
-                this.onPortMessage(port, message);
-            });
-        });
+        chrome.runtime.onConnectExternal.addListener(this.onConnect.bind(this));
+        chrome.runtime.onConnect.addListener(this.onConnect.bind(this));
 
         HotkeysHandler.init();
         LibrariesHandler.init();
         PluginsHandler.init();
         StorageHandler.init();
         SettingsHandler.init();
+    }
+
+    onConnect(port: Port) {
+        this.open.add(port);
+        port.onDisconnect.addListener(() => this.open.delete(port));
+
+        state.then((state) => port.postMessage(state));
+
+        port.onMessage.addListener((message) => {
+            this.onPortMessage(port, message);
+        });
     }
 
     async onPortMessage(port: Port, msg: Message) {
