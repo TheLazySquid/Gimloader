@@ -1,12 +1,12 @@
 <script lang="ts">
+    import type ConfigurableHotkey from "$core/hotkeys/configurable.svelte";
+    import type { HotkeyTrigger } from "$types/hotkeys";
     import { Button, Popover } from "flowbite-svelte";
     import Undo from 'svelte-material-icons/Undo.svelte';
     import { overrideKeydown, stopOverrideKeydown } from '$content/utils';
     import { onDestroy } from "svelte";
     import { SvelteSet } from "svelte/reactivity";
-    import Hotkeys, { type ConfigurableHotkey } from "$core/hotkeys.svelte";
-    import type { HotkeyTrigger } from "$types/hotkeys";
-    import Port from "$shared/port.svelte";
+    import Hotkeys from "$core/hotkeys/hotkeys.svelte";
 
     let hotkeys = Hotkeys.configurableHotkeys;
 

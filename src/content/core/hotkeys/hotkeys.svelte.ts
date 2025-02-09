@@ -1,46 +1,13 @@
-import { splicer } from "$content/utils";
 import type { ConfigurableHotkeyOptions, HotkeyOptions, HotkeyTrigger } from "$types/hotkeys";
 import type { ConfigurableHotkeysState } from "$types/state";
+import ConfigurableHotkey from "./configurable.svelte";
+import { splicer } from "$content/utils";
 import Port from "$shared/port.svelte";
 
 type Callback = (e: KeyboardEvent) => void;
 type DefaultHotkey = HotkeyOptions & { callback: Callback, id: string };
 
-export class ConfigurableHotkey {
-    id: string;
-    category: string;
-    title: string;
-    preventDefault: boolean;
-    callback: Callback;
-    trigger: HotkeyTrigger | null = $state(null);
-    default?: HotkeyTrigger;
-    pluginName?: string;
-
-    constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string) {
-        this.id = id;
-        this.category = options.category;
-        this.title = options.title;
-        this.preventDefault = options.preventDefault ?? true;
-        this.default = options.default;
-        this.callback = callback;
-        this.pluginName = pluginName;
-
-        if(hotkeys.savedHotkeys[id] === null) {
-            this.trigger = null;
-        } else if(hotkeys.savedHotkeys[id]) {
-            this.trigger = Object.assign({}, hotkeys.savedHotkeys[id]);
-        } else if(this.default) {
-            this.trigger = Object.assign({}, this.default);
-        }
-    }
-
-    reset() {
-        if(this.default) this.trigger = Object.assign({}, this.default);
-        else this.trigger = null;
-    }
-}
-
-class Hotkeys {
+export default new class Hotkeys {
     hotkeys: DefaultHotkey[] = [];
     configurableHotkeys: ConfigurableHotkey[] = $state([]);
     pressedKeys = new Set<string>();
@@ -178,6 +145,3 @@ class Hotkeys {
         }
     }
 }
-
-const hotkeys = new Hotkeys();
-export default hotkeys;

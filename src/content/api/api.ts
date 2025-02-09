@@ -12,7 +12,7 @@ import LibsApi from "./libs";
 import PluginsApi from "./plugins";
 import setupScoped from "$content/scopedApi";
 import Parcel from "$content/core/parcel";
-import Hotkeys from "$core/hotkeys.svelte";
+import Hotkeys from "$core/hotkeys/hotkeys.svelte";
 import Patcher from "$content/core/patcher";
 
 class Api {
