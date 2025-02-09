@@ -3,7 +3,7 @@ import EventEmitter from "eventemitter2";
 
 const extensionId = "ngbhofnofkggjbpkpnogcdfdgjkpmgka";
 
-class Port extends EventEmitter {
+export default new class Port extends EventEmitter {
     port: chrome.runtime.Port;
     firstMessage = true;
     firstMessageCallback: (state: State) => void;
@@ -62,6 +62,3 @@ class Port extends EventEmitter {
         });
     }
 }
-
-const port = new Port();
-export default port;

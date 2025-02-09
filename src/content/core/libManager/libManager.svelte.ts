@@ -4,7 +4,7 @@ import type { LibraryInfo } from '$types/state';
 import Port from '$shared/port.svelte';
 import { confirmLibReload } from '$content/utils';
 
-export class LibManagerClass {
+export default new class LibManagerClass {
     libs: Lib[] = $state([]);
 
     init(libInfo: LibraryInfo[]) {
@@ -130,6 +130,3 @@ export class LibManagerClass {
         if(emit) Port.send("librariesArrange", { order });
     }
 }
-
-const libManager = new LibManagerClass();
-export default libManager;

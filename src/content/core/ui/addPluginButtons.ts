@@ -5,7 +5,7 @@ import Storage from "$content/core/storage.svelte";
 import Parcel from "$content/core/parcel";
 import Patcher from "$content/core/patcher";
 import UI from "$content/core/ui/ui";
-import Hotkeys from '$core/hotkeys.svelte';
+import Hotkeys from '$core/hotkeys/hotkeys.svelte';
 
 let open = false;
 function openPluginManager() {

@@ -9,7 +9,7 @@ const defaultSettings: Settings = {
     showPluginButtons: true
 }
 
-class Storage {
+export default new class Storage {
     settings: Settings = $state(defaultSettings);
     values: PluginStorage;
 
@@ -52,6 +52,3 @@ class Storage {
         if(emit) Port.send("pluginValuesDelete", { id });
     }
 }
-
-const storage = new Storage();
-export default storage;

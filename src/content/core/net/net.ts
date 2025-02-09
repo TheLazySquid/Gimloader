@@ -1,12 +1,10 @@
-import type Lib from "$content/core/libManager/lib.svelte";
 import Internal from "$content/core/internals";
 import Parcel from "../parcel";
 import EventEmitter from "eventemitter2";
-import { confirmLibReload, log, splicer } from "$content/utils";
+import { log, splicer } from "$content/utils";
 import Patcher from "../patcher";
 import LibManager from "$core/libManager/libManager.svelte";
 import GimkitInternals from "$content/core/internals";
-import Storage from "$core/storage.svelte";
 
 interface BlueboatConnection {
     type: "Blueboat";
@@ -30,7 +28,7 @@ interface LoadCallback {
     id: string;
 }
 
-class Net extends EventEmitter {
+export default new class Net extends EventEmitter {
     type: Connection["type"] = "None";
     room: Connection["room"] = null;
     loaded = false;
@@ -299,6 +297,3 @@ class Net extends EventEmitter {
         return this.is1dHost || (GimkitInternals.stores?.session?.amIGameOwner ?? false);
     }
 }
-
-const net = new Net();
-export default net;

@@ -1,5 +1,5 @@
 import Api from "./api/api";
-import Hotkeys from "$core/hotkeys.svelte";
+import Hotkeys from "$core/hotkeys/hotkeys.svelte";
 import Net from "$content/core/net/net";
 import Parcel from "$content/core/parcel";
 import UI from "$content/core/ui/ui";

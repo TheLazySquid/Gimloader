@@ -1,7 +1,7 @@
 import type { PluginInfo, Settings } from '$types/state';
 import Port from './port.svelte';
 
-class BareState {
+export default new class BareState {
     plugins: PluginInfo[] = $state([]);
     settings: Partial<Settings> = $state({});
 
@@ -50,6 +50,3 @@ class BareState {
         });
     }
 }
-
-const bareState = new BareState();
-export default bareState;

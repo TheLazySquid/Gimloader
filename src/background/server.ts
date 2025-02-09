@@ -17,7 +17,7 @@ interface Message {
 type UpdateCallback = (state: State, message: any) => void;
 type MessageCallback = (state: State, message: any, respond: (response?: any) => void) => void;
 
-class Server {
+export default new class Server {
     open = new Set<Port>();
     listeners = new Map<string, UpdateCallback>();
     messageListeners = new Map<string, MessageCallback>();
@@ -88,6 +88,3 @@ class Server {
         }
     }
 }
-
-const server = new Server();
-export default server;

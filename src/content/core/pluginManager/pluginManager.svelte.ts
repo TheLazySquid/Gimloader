@@ -6,7 +6,7 @@ import Storage from "$core/storage.svelte";
 import type { PluginInfo } from "$types/state";
 import Port from "$shared/port.svelte";
 
-class PluginManager {
+export default new class PluginManager {
     plugins: Plugin[] = $state([]);
     destroyed = false;
     
@@ -198,6 +198,3 @@ class PluginManager {
         }
     }
 }
-
-const pluginManager = new PluginManager();
-export default pluginManager;

@@ -1,5 +1,5 @@
-import type { ConfigurableHotkeyOptions, HotkeyOptions } from "$core/hotkeys.svelte";
-import Hotkeys from "$core/hotkeys.svelte";
+import type { HotkeyOptions, ConfigurableHotkeyOptions } from "$types/hotkeys";
+import Hotkeys from "$core/hotkeys/hotkeys.svelte";
 import { error, validate } from "$content/utils";
 
 interface OldConfigurableOptions {
