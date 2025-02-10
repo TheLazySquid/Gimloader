@@ -15,8 +15,21 @@ export let state = chrome.storage.local.get<State>({
     hotkeys: {}
 });
 
-// double check that there are no duplicate plugins or libraries
-const removeDupes = (items: PluginInfo[] | LibraryInfo[]) => {
+const sanitize = (items: PluginInfo[] | LibraryInfo[]) => {
+    // remove any non-objects that somehow snuck in
+    for(let i = 0; i < items.length; i++) {
+        if(
+            items[i] === null ||
+            typeof items[i] !== "object" ||
+            items[i].name === undefined ||
+            items[i].script === undefined
+        ) {
+            items.splice(i, 1);
+            i--;
+        }
+    }
+
+    // remove any duplicates
     for(let i = 0; i < items.length - 1; i++) {
         let name = items[i].name;
         for(let j = i + 1; j < items.length; j++) {
@@ -31,8 +44,9 @@ const removeDupes = (items: PluginInfo[] | LibraryInfo[]) => {
 }
 
 state.then((state) => {
-    removeDupes(state.plugins);
-    removeDupes(state.libraries);
+    sanitize(state.plugins);
+    sanitize(state.libraries);
+    console.log(state);
 });
 
 let debounced: Record<string, () => void> = {};

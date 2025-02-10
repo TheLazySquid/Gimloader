@@ -141,8 +141,6 @@ export default new class PluginManager {
         let headers = parsePluginHeader(script);
 
         if(plugin.enabled) plugin.stop();
-        plugin.script = script;
-        plugin.headers = headers;
 
         // message other windows
         if(emit) {
@@ -158,6 +156,9 @@ export default new class PluginManager {
                 Port.send("pluginEdit", { name: plugin.headers.name, script, newName: headers.name });
             }
         }
+
+        plugin.script = script;
+        plugin.headers = headers;
 
         if(plugin.enabled) {
             plugin.launch(false)
