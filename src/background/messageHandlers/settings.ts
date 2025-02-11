@@ -1,18 +1,20 @@
 import Server from "$bg/server";
 import { saveDebounced } from "$bg/state";
 import type { State } from "$types/state";
+import EventEmitter from "eventemitter2";
 
-export default class SettingsHandler {
-    static init() {
+export default new class SettingsHandler extends EventEmitter {
+    init() {
         Server.on("settingUpdate", this.onSettingUpdate.bind(this));   
     }
 
-    static save() {
+    save() {
         saveDebounced('settings');
     }
 
-    static onSettingUpdate(state: State, message: any) {
+    onSettingUpdate(state: State, message: any) {
         state.settings[message.key] = message.value;
         this.save();
+        this.emit(message.key, message.value);
     }
 }

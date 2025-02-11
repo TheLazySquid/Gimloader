@@ -1,5 +1,6 @@
 import Port from "$shared/port.svelte";
 import type { PluginStorage, Settings } from "$types/state";
+import { setShowPluginButtons } from "./ui/addPluginButtons";
 
 const defaultSettings: Settings = {
     pollerEnabled: false,
@@ -17,15 +18,25 @@ export default new class Storage {
         this.values = values;
         this.settings = settings;
 
+        if(this.settings.showPluginButtons) {
+            document.documentElement.classList.remove("noPluginButtons");
+        }
+
         Port.on("settingUpdate", ({ key, value }) => this.updateSetting(key, value, false));
         Port.on("pluginValueUpdate", ({ id, key, value }) => this.setPluginValue(id, key, value, false));
         Port.on("pluginValueDelete", ({ id, key }) => this.deletePluginValue(id, key, false));
         Port.on("pluginValuesDelete", ({ id }) => this.deletePluginValues(id, false));
     }
 
-    updateSetting(key: string, value: any, emit = true) {
+    updateSetting(key: string, value: any, emit = true) {        
         this.settings[key] = value;
         if(emit) Port.send("settingUpdate", { key, value });
+
+        switch(key) {
+            case "showPluginButtons":
+                setShowPluginButtons(value);
+                break;
+        }
     }
 
     getPluginValue(id: string, key: string, defaultVal?: any) {
