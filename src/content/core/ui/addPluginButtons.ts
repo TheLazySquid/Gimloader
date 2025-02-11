@@ -24,8 +24,6 @@ function openPluginManager() {
 }
 
 export function setShowPluginButtons(value: boolean) {
-    Storage.updateSetting("showPluginButtons", value);
-
     if(!value) {
         document.documentElement.classList.add("noPluginButtons");
     } else {
@@ -34,9 +32,7 @@ export function setShowPluginButtons(value: boolean) {
 }
 
 export function addPluginButtons() {
-    if(!Storage.settings.showPluginButtons) {
-        document.documentElement.classList.add("noPluginButtons");
-    }
+    document.documentElement.classList.add("noPluginButtons");
 
     // add a hotkey shift+p to open the plugin manager
     Hotkeys.addHotkey(null, {

@@ -20,7 +20,7 @@
     <Toggle bind:checked={Storage.settings.showPluginButtons} on:change={() => {
         if(!Storage.settings.showPluginButtons) {
             let conf = confirm("Are you sure you want to hide the buttons that open the Gimloader menu? " +
-                "The menu is still accessible by pressing Alt+P or by clicking on Violentmonkey's icon.");
+                "The menu is still accessible by pressing Alt+P.");
             if(!conf) {
                 Storage.settings.showPluginButtons = true;
                 return;
