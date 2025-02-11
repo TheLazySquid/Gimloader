@@ -10,6 +10,7 @@ import Storage from "$content/core/storage.svelte";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { version } from "../../package.json";
+import { fixRDT } from "$core/rdt";
 
 Object.defineProperty(window, "GL", {
     value: Api,
@@ -28,5 +29,7 @@ Port.init((state) => {
     PluginManager.init(state.plugins);
     Hotkeys.init(state.hotkeys);
 });
+
+fixRDT();
 
 log(`Gimloader v${version} loaded`);
