@@ -29,6 +29,7 @@ export default defineConfig({
                             'plugins/cameracontrol',
                             'plugins/charactercustomization',
                             'plugins/savestates',
+                            'plugins/physicssettings',
                             'plugins/performantgims',
                             'plugins/idleforxp',
                             'plugins/infolines',
