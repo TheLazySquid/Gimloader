@@ -1,13 +1,5 @@
 import type { HotkeyTrigger } from "./hotkeys";
 
-export interface State {
-    plugins: PluginInfo[];
-    libraries: LibraryInfo[];
-    pluginStorage: PluginStorage;
-    settings: Settings;
-    hotkeys: ConfigurableHotkeysState;
-}
-
 export interface PluginInfo {
     script: string;
     name: string;
@@ -29,4 +21,16 @@ export interface Settings {
     autoDownloadMissingLibs: boolean;
     menuView: 'grid' | 'list';
     showPluginButtons: boolean;
+}
+
+export interface SavedState {
+    plugins: PluginInfo[];
+    libraries: LibraryInfo[];
+    pluginStorage: PluginStorage;
+    settings: Settings;
+    hotkeys: ConfigurableHotkeysState;
+}
+
+export interface State extends SavedState {
+    availableUpdates: string[];
 }

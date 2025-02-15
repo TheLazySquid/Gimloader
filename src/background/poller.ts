@@ -1,5 +1,5 @@
 import SettingsHandler from './messageHandlers/settings';
-import { saveDebounced, state } from './state';
+import { saveDebounced, statePromise } from './state';
 import { parseLibHeader, parsePluginHeader } from '$shared/parseHeader';
 import Server from './server';
 
@@ -37,33 +37,33 @@ export default class Poller {
        
         if(res.status !== 200) return tryAgain();
         let text = await res.text();
-        let State = await state;
+        let state = await statePromise;
         if(!this.enabled) return;
 
         tryAgain();
 
         if(res.headers.get('is-library') === 'true') {
             let headers = parseLibHeader(text);
-            let lib = State.libraries.find(l => l.name === headers.name);
+            let lib = state.libraries.find(l => l.name === headers.name);
             if(lib) {
                 lib.script = text;
                 Server.send("libraryEdit", { name: lib.name, newName: lib.name, script: text });
             } else {
                 let obj = { script: text, name: headers.name };
-                State.libraries.push(obj);
+                state.libraries.push(obj);
                 Server.send("libraryCreate", obj);
             }
             
             saveDebounced('libraries');
         } else {
             let headers = parsePluginHeader(text);
-            let plugin = State.plugins.find(p => p.name === headers.name);
+            let plugin = state.plugins.find(p => p.name === headers.name);
             if(plugin) {
                 plugin.script = text;
                 Server.send("pluginEdit", { name: plugin.name, newName: plugin.name, script: text });
             } else {
                 let obj = { script: text, name: headers.name, enabled: true };
-                State.plugins.push(obj);
+                state.plugins.push(obj);
                 Server.send("pluginCreate", obj);
             }
             

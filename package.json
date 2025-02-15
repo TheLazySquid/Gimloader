@@ -63,6 +63,7 @@
     "flowbite": "^2.5.1",
     "flowbite-svelte": "^0.46.15",
     "svelte": "^5.16.0",
+    "svelte-5-french-toast": "^2.0.4",
     "svelte-dnd-action": "^0.9.56",
     "svelte-material-icons": "^3.0.5"
   }

@@ -4,7 +4,7 @@ import LibrariesHandler from "./messageHandlers/library";
 import PluginsHandler from "./messageHandlers/plugin";
 import SettingsHandler from "./messageHandlers/settings";
 import StorageHandler from "./messageHandlers/storage";
-import { state } from "./state";
+import { statePromise } from "./state";
 
 type Port = chrome.runtime.Port;
 
@@ -37,7 +37,7 @@ export default new class Server {
         this.open.add(port);
         port.onDisconnect.addListener(() => this.open.delete(port));
 
-        state.then((state) => port.postMessage(state));
+        statePromise.then((state) => port.postMessage(state));
 
         port.onMessage.addListener((message) => {
             this.onPortMessage(port, message);
@@ -55,7 +55,7 @@ export default new class Server {
             let callback = this.messageListeners.get(type);
             if(!callback) return;
     
-            callback(await state, message, (response?: void) => {
+            callback(await statePromise, message, (response?: void) => {
                 port.postMessage({ returnId, response });
             });
         } else {
@@ -63,7 +63,7 @@ export default new class Server {
             let callback = this.listeners.get(type);
             if(!callback) return;
     
-            callback(await state, message);
+            callback(await statePromise, message);
     
             // send the message to other connected ports
             for(let openPort of this.open) {

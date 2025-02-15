@@ -4,7 +4,7 @@ import { setShowPluginButtons } from "./ui/addPluginButtons";
 
 const defaultSettings: Settings = {
     pollerEnabled: false,
-    autoUpdate: false,
+    autoUpdate: true,
     autoDownloadMissingLibs: true,
     menuView: 'grid',
     showPluginButtons: true

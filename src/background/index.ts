@@ -1,9 +1,11 @@
 import Poller from "./poller";
 import Server from "./server";
-import { state } from "./state";
+import { statePromise } from "./state";
+import Updater from "./updater";
 
 Server.init();
+Updater.init();
 
-state.then((state) => {
+statePromise.then((state) => {
     Poller.init(state.settings.pollerEnabled);
 });
