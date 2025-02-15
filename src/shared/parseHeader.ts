@@ -1,5 +1,7 @@
-export function parsePluginHeader(code: string) {
-    const basePluginHeaders: Record<string, any> = {
+import type { LibHeaders, PluginHeaders } from "$types/headers";
+
+export function parsePluginHeader(code: string): PluginHeaders {
+    const basePluginHeaders: PluginHeaders = {
         name: "Unnamed Plugin",
         description: "No description provided",
         author: "Unknown Author",
@@ -13,14 +15,14 @@ export function parsePluginHeader(code: string) {
         webpage: null
     };
 
-    return parseHeader(code, basePluginHeaders);
+    return parseHeader<PluginHeaders>(code, basePluginHeaders);
 }
 
-export function parseLibHeader(code: string) {
-    const baseLibHeaders: Record<string, any> = {
+export function parseLibHeader(code: string): LibHeaders {
+    const baseLibHeaders: LibHeaders = {
         name: 'Unnamed Library',
-        author: 'Unknown Author',
         description: 'No description provided',
+        author: 'Unknown Author',
         version: null,
         downloadUrl: null,
         isLibrary: "false",
@@ -28,10 +30,10 @@ export function parseLibHeader(code: string) {
         webpage: null
     }
 
-    return parseHeader(code, baseLibHeaders);
+    return parseHeader<LibHeaders>(code, baseLibHeaders);
 }
 
-export default function parseHeader(code: string, headers: Record<string, any>) {    
+export function parseHeader<T>(code: string, headers: T): T {    
     // parse the JSDoc header at the start (if it exists)
     let closingIndex = code.indexOf('*/');
     if(!(code.trimStart().startsWith('/**')) || closingIndex === -1) {

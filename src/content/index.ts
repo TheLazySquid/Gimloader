@@ -11,6 +11,7 @@ import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { version } from "../../package.json";
 import { fixRDT } from "$core/rdt";
+import UpdateNotifier from "./core/updateNotifier.svelte";
 
 Object.defineProperty(window, "GL", {
     value: Api,
@@ -28,6 +29,7 @@ Port.init((state) => {
     LibManager.init(state.libraries);
     PluginManager.init(state.plugins);
     Hotkeys.init(state.hotkeys);
+    UpdateNotifier.init(state.availableUpdates);
 });
 
 fixRDT();
