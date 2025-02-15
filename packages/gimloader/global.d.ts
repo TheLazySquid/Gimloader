@@ -1,4 +1,4 @@
 import './types/shared';
 
-declare const GLApi: typeof import('src/api/api').default;
+declare const GLApi: typeof import('content/api/api').default;
 export default GLApi;

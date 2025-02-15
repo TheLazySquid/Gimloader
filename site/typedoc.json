@@ -4,7 +4,7 @@
         "typedoc-plugin-markdown"
     ],
     "out": "./tmp",
-    "entryPoints": ["../src/api/**.ts"],
+    "entryPoints": ["../src/content/api/**.ts"],
     "mergeModulesRenameDefaults": true,
     "readme": "none",
     "tsconfig": "../tsconfig.json",

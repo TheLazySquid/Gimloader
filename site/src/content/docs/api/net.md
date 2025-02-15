@@ -23,34 +23,6 @@ net.on(load:TYPE, (type) => {})
 net.on("send:*", () => {})
 ```
 
-## Properties
-
-### corsRequest()
-
-> **corsRequest**: \<`TContext`\>(`details`) => `Promise`\<`Response`\<`TContext`\>\> = `Net.corsRequest`
-
-The userscript manager's xmlHttpRequest, which bypasses the CSP
-
-Makes an xmlHttpRequest
-
-#### Type Parameters
-
-| Type Parameter | Default type |
-| ------ | ------ |
-| `TContext` | `any` |
-
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `details` | `Request`\<`TContext`\> |
-
-#### Returns
-
-`Promise`\<`Response`\<`TContext`\>\>
-
-#### Throws
-
 ## Accessors
 
 ### isHost

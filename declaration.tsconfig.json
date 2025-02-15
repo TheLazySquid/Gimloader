@@ -10,8 +10,11 @@
         "baseUrl": ".",
         "paths": {
             "$assets/*": ["./assets/*"],
-            "$src/*": ["./src/*"],
-            "$core/*": ["./src/core/*"]
+            "$content/*": ["./src/content/*"],
+            "$core/*": ["./src/content/core/*"],
+            "$bg/*": ["./src/background/*"],
+            "$types/*": ["./src/types/*"],
+            "$shared/*": ["./src/shared/*"]
         }
     },
     "include": ["./src/api/api.ts", "./main.d.ts"]
