@@ -14,6 +14,7 @@ export default defineConfig({
             {
                 label: 'Usage',
                 link: '/usage/installation',
+                id: 'usage',
                 items: [
                     {
                         label: "Using Gimloader",
@@ -52,6 +53,7 @@ export default defineConfig({
             {
                 label: 'Development',
                 link: '/development/overview',
+                id: 'development',
                 items: [
                     {
                         label: 'Development',

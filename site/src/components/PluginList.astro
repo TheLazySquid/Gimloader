@@ -1,0 +1,31 @@
+---
+import type { MDXInstance } from "astro";
+
+const plugins: MDXInstance<Record<string, any>>[] =
+    Object.values(import.meta.glob('../content/docs/plugins/**.mdx', { eager: true }));
+
+const capitalize = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+---
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>        
+        {plugins.map((p) => (
+            <tr>
+                <td>
+                    <a href={`/Gimloader/plugins/${p.file.split("/").pop()?.replace(".mdx", "")}`}>
+                        {p.frontmatter.title}
+                    </a>
+                </td>
+                <td>{capitalize(p.frontmatter.description.replace("A Gimloader plugin that ", ""))}</td>
+            </tr> 
+        ))}
+    </tbody>
+</table>
