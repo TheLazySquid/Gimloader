@@ -3,6 +3,7 @@ import Lib from './lib.svelte';
 import type { LibraryInfo } from '$types/state';
 import Port from '$shared/port.svelte';
 import { confirmLibReload } from '$content/utils';
+import toast from 'svelte-5-french-toast';
 
 export default new class LibManagerClass {
     libs: Lib[] = $state([]);
@@ -34,7 +35,7 @@ export default new class LibManagerClass {
         let headers = parseLibHeader(script);
         
         if(headers.isLibrary === "false") {
-            alert("That script doesn't appear to be a library! If it should be, please set the isLibrary header, and if not, please import it as a plugin.");
+            toast.error("That script doesn't appear to be a library! If it should be, please set the isLibrary header, and if not, please import it as a plugin.");
             return;
         }
 

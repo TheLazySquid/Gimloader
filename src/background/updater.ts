@@ -1,21 +1,17 @@
 import { parseLibHeader, parsePluginHeader } from "$shared/parseHeader";
 import type { ScriptHeaders } from "$types/headers";
-import type { State } from "$types/state";
+import type { LibraryInfo, PluginInfo, State } from "$types/state";
+import type { Update, UpdateResponse } from "$types/updater";
 import Server from "./server";
 import { saveDebounced, statePromise } from "./state";
 
-interface IUpdate {
-    type: "plugin" | "library";
-    name: string;
-    newName: string;
-    script: string;
-}
-
 export default class Updater {
-    static updates: IUpdate[] = [];
+    static updates: Update[] = [];
 
     static async init() {
         Server.onMessage("applyUpdates", this.applyUpdates.bind(this));
+        Server.onMessage("updateAll", this.updateAll.bind(this));
+        Server.onMessage("updateSingle", this.updateSingle.bind(this));
         
         let state = await statePromise;
         if(!state.settings.autoUpdate) return;
@@ -32,65 +28,71 @@ export default class Updater {
         this.checkUpdates();
     }
 
-    static async checkUpdates() {
-        let state = await statePromise;
-        let updaters: (() => Promise<void>)[] = [];
-
-        const checkUpdate = (headers: ScriptHeaders, type: "plugin" | "library") => {
-            return () => {
-                return new Promise<void>(async (res, rej) => {
-                    let text = await this.getText(headers.downloadUrl)
-                    if(!text) return rej();
+    static async checkUpdates(broadcast = true) {
+        return new Promise<void>(async (res) => {
+            let state = await statePromise;
+            let updaters: (() => Promise<void>)[] = [];
     
-                    let newHeaders = parsePluginHeader(text);
-                    if(!this.shouldUpdate(headers, newHeaders)) return res();
+            const checkUpdate = (headers: ScriptHeaders, type: "plugin" | "library") => {
+                return () => {
+                    return new Promise<void>(async (res) => {
+                        let text = await this.getText(headers.downloadUrl);
+                        if(!text) return res();
+                        
+                        // it doesn't matter whether we use parse lib or plugin header here
+                        let newHeaders = parsePluginHeader(text);
+                        if(!this.shouldUpdate(headers, newHeaders)) return res();
+        
+                        this.updates.push({
+                            type,
+                            name: headers.name,
+                            newName: newHeaders.name,
+                            script: text
+                        });
     
-                    this.updates.push({
-                        type,
-                        name: headers.name,
-                        newName: newHeaders.name,
-                        script: text
+                        res();
                     });
-
+                }
+            }
+    
+            for(let plugin of state.plugins) {
+                let headers = parsePluginHeader(plugin.script);
+                if(!headers.downloadUrl) continue;
+                updaters.push(checkUpdate(headers, "plugin"));
+            }
+    
+            for(let lib of state.libraries) {
+                let headers = parseLibHeader(lib.script);
+                if(!headers.downloadUrl) continue;
+                updaters.push(checkUpdate(headers, "library"));
+            }
+    
+            let finished = false;
+            
+            const advance = () => {
+                let update = updaters.shift();
+                if(!update) {
+                    if(finished) return;
+                    finished = true;
+    
+                    chrome.storage.local.set({ lastUpdateCheck: Date.now() });
+                    
+                    if(broadcast) {
+                        state.availableUpdates = this.updates.map(s => s.name);
+                        Server.send("availableUpdates", state.availableUpdates);
+                    }
                     res();
-                });
+                    return;
+                }
+    
+                update().finally(advance);
             }
-        }
-
-        for(let plugin of state.plugins) {
-            let headers = parsePluginHeader(plugin.script);
-            if(!headers.downloadUrl) continue;
-            updaters.push(checkUpdate(headers, "plugin"));
-        }
-
-        for(let lib of state.libraries) {
-            let headers = parseLibHeader(lib.script);
-            if(!headers.downloadUrl) continue;
-            updaters.push(checkUpdate(headers, "library"));
-        }
-
-        let finished = false;
-        
-        const advance = () => {
-            let update = updaters.shift();
-            if(!update) {
-                if(finished) return;
-                finished = true;
-
-                state.availableUpdates = this.updates.map(s => s.name);
-                Server.send("availableUpdates", state.availableUpdates);
-        
-                chrome.storage.local.set({ lastUpdateCheck: Date.now() });
-                return;
+    
+            let maxConcurrent = 5;
+            for(let i = 0; i < Math.min(maxConcurrent, updaters.length); i++) {
+                advance();
             }
-
-            update().finally(advance);
-        }
-
-        let maxConcurrent = 5;
-        for(let i = 0; i < Math.min(maxConcurrent, updaters.length); i++) {
-            advance();
-        }
+        });
     }
 
     static shouldUpdate(oldHeaders: ScriptHeaders, newHeaders: ScriptHeaders) {
@@ -119,39 +121,79 @@ export default class Updater {
                     if(!resp) return res(null);
                     if(resp.status !== 200) return res(null);
                     resp.text().then(res, () => res(null));
-                })
+                });
         });
     }
 
-    static applyUpdates(state: State, message: any, respond: () => void) {
-        if(message.apply) {
+    static applyUpdate(state: State, update: Update) {
+        let { type, ...message } = update;
+    
+        if(type === "plugin") {
+            let plugin = state.plugins.find(p => p.name === update.name);
+            if(!plugin) return;
+            plugin.name = update.newName;
+            plugin.script = update.script;
+
+            saveDebounced("plugins");
+            Server.send("pluginEdit", message);
+        } else {
+            let plugin = state.libraries.find(p => p.name === update.name);
+            if(!plugin) return;
+            plugin.name = update.newName;
+            plugin.script = update.script;
+
+            saveDebounced("libraries");
+            Server.send("libraryEdit", message);
+        }
+    }
+
+    static applyUpdates(state: State, apply: boolean) {
+        if(apply) {
             for(let update of this.updates) {
-                let { type, ...message } = update;
-    
-                if(type === "plugin") {
-                    let plugin = state.plugins.find(p => p.name === update.name);
-                    if(!plugin) continue;
-                    plugin.name = update.newName;
-                    plugin.script = update.script;
-    
-                    saveDebounced("plugins");
-                    Server.send("pluginEdit", message);
-                } else {
-                    let plugin = state.libraries.find(p => p.name === update.name);
-                    if(!plugin) continue;
-                    plugin.name = update.newName;
-                    plugin.script = update.script;
-    
-                    saveDebounced("libraries");
-                    Server.send("libraryEdit", message);
-                }
+                this.applyUpdate(state, update);
             }
         }
 
         this.updates = [];
         state.availableUpdates = [];
         Server.send("availableUpdates", []);
+    }
+
+    static onApplyUpdates(state: State, message: any, respond: () => void) {
+        this.applyUpdates(state, message.apply);
 
         respond();
+    }
+
+    static async updateAll(state: State, _: any, respond: (names: string[]) => void) {
+        await this.checkUpdates(false);
+        let names = this.updates.map(u => u.name);
+
+        this.applyUpdates(state, true);
+        respond(names);
+    }
+
+    static async updateSingle(state: State, message: any, respond: (updated: UpdateResponse) => void) {
+        let script: PluginInfo | LibraryInfo;
+        if(message.type === "plugin") script = state.plugins.find(p => p.name === message.name);
+        else script = state.libraries.find(l => l.name === message.name);
+
+        let headers = parsePluginHeader(script.script);
+        if(!headers.downloadUrl) return respond({ updated: false });
+
+        let text = await this.getText(headers.downloadUrl);
+        if(!text) return respond({ updated: false, failed: true });
+
+        let newHeaders = parsePluginHeader(text);
+        if(!this.shouldUpdate(headers, newHeaders)) return respond({ updated: false });
+
+        this.applyUpdate(state, {
+            type: message.type,
+            name: headers.name,
+            script: text,
+            newName: newHeaders.name
+        });
+
+        respond({ updated: true, version: newHeaders.version });
     }
 }

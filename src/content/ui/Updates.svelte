@@ -1,87 +1,32 @@
 <script lang="ts">
     import PluginManager from "$core/pluginManager/pluginManager.svelte";
     import LibManager from "$core/libManager/libManager.svelte";
-    import Net from "$core/net/net";
-    import { checkLibUpdate, checkPluginUpdate, compareVersions } from "$core/net/checkUpdates";
-    import { parseLibHeader, parsePluginHeader } from "$shared/parseHeader";
-    import showErrorMessage from "./showErrorMessage";
-    import { Progressbar } from "flowbite-svelte";
+    import { checkLibUpdate, checkPluginUpdate } from "$core/net/checkUpdates";
     import Update from 'svelte-material-icons/Update.svelte';
     import { version } from "../../../package.json";
-
-    let showingProgress = $state(false);
-    let completed = $state(0);
-    let total = $state(0);
+    import toast from "svelte-5-french-toast";
+    import Port from "$shared/port.svelte";
 
     async function checkAll() {
         if(!confirm("Do you want to try to update all plugins and all libraries?")) return;
-        showingProgress = true;
-
-        let promises = [];
-        for(let plugin of PluginManager.plugins) {
-            if(!plugin.headers.downloadUrl) continue;
-            promises.push(new Promise<void>(async (res, rej) => {
-                let resp = await fetch(plugin.headers.downloadUrl)
-                    .catch(() => rej(`Failed to update ${plugin.headers.name} from ${plugin.headers.downloadUrl}`));
-                if(!resp) return;
-                let text = await resp.text();
-                    
-                completed = completed + 1;
-
-                let headers = parsePluginHeader(text);
-                let comparison = compareVersions(plugin.headers.version ?? '', headers.version ?? '');
-
-                if(comparison !== 'older') return res();
-
-                PluginManager.editPlugin(plugin, text);
-            }))
-        }
-
-        for(let lib of LibManager.libs) {
-            if(!lib.headers.downloadUrl) continue;
-            promises.push(new Promise<void>(async (res, rej) => {
-                let resp = await fetch(lib.headers.downloadUrl)
-                    .catch(() => rej(`Failed to update ${lib.headers.name} from ${lib.headers.downloadUrl}`));
-                if(!resp) return;
-                let text = await resp.text();
-
-                completed = completed + 1;
-
-                let headers = parseLibHeader(text);
-                let comparison = compareVersions(lib.headers.version ?? '', headers.version ?? '');
-
-                if(comparison !== 'older') return res();
-
-                LibManager.editLibrary(lib, text);
-            }));
-        }
-
-        total = promises.length;
-
-        let results = await Promise.allSettled(promises);
-        let failed = results.filter((r) => r.status === 'rejected') as PromiseRejectedResult[];
-
-        if(failed.length > 0) {
-            let msg = `Failed to update ${failed.length} items:\n`
-                + failed.map((f) => f.reason).join('\n')
-                + '\nDid you allow Gimloader to make Cross-Origin requests?';
-            showErrorMessage(msg, "Some Updates Failed");
-        }
-
-        showingProgress = false;
+        let names: string[] = await Port.sendAndRecieve("updateAll");
+        
+        let namesFmt: string;
+        if(names.length === 0) return toast.success("All scripts are up to date!");
+        else if(names.length === 1) namesFmt = names[0];
+        else if(names.length === 2) namesFmt = `${names[0]} and ${names[1]}`;
+        else namesFmt = `${names.slice(0, -1).join(", ")}, and ${names.at(-1)}`; 
+        toast.success(`Updated ${namesFmt}`);
     }
 </script>
 
 <div class="h-full overflow-y-auto">
-    <div class="flex items-center">
+    <div class="flex names-center">
         <button onclick={checkAll}>
             <Update size={25} />
         </button>
         Check all updates
     </div>
-    {#if showingProgress}
-        <Progressbar progress={completed / total * 100} labelInside />
-    {/if}
     <h1 class="font-bold text-xl">Gimloader</h1>
     <div class="flex items-center">
         Gimloader v{version}

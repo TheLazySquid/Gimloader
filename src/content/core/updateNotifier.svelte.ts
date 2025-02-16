@@ -1,13 +1,13 @@
 import UpdateToast from "$content/ui/UpdateToast.svelte";
 import Port from "$shared/port.svelte";
-import { mount } from "svelte";
-import toast, { Toaster } from "svelte-5-french-toast";
+import toast from "svelte-5-french-toast";
+import { confirmToast, toasterReady } from "./toaster";
 
 export default class UpdateNotifier {
     static toastId: string | null = null;
 
     static async init(availableUpdates: string[]) {
-        this.mountToaster().then(() => {
+        toasterReady.then(() => {
             if(availableUpdates.length > 0) {
                 this.showToast(availableUpdates);
             }
@@ -20,18 +20,18 @@ export default class UpdateNotifier {
     }
 
     static showToast(availableUpdates: string[]) {
-        // @ts-ignore (library uses SvelteComponent which is outdated)
-        this.toastId = toast(UpdateToast, { duration: Infinity, props: { availableUpdates } });
-    }
-
-    static async mountToaster() {
-        if(document.readyState !== "complete") {
-            await new Promise((res) => document.addEventListener("DOMContentLoaded", res, { once: true }));
+        let message: string;
+        if(availableUpdates.length === 1) {
+            message = `${availableUpdates[0]} has an update available. Would you like to download it?`;
+        } else if(availableUpdates.length === 2) {
+            message = `${availableUpdates[0]} and ${availableUpdates[1]} both have updates available. Would you like to download them?`;
+        } else {
+            message = `${availableUpdates.slice(0, -1).join(", ")}, and ${availableUpdates[availableUpdates.length - 1]} ` +
+            "all have updates available. Would you like to download them?";
         }
 
-        mount(Toaster, {
-            target: document.body,
-            props: { position: "bottom-right" }
+        confirmToast(message, (apply) => {
+            Port.sendAndRecieve("applyUpdates", { apply });
         });
     }
 }

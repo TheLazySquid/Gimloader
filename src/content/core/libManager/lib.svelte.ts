@@ -2,17 +2,18 @@ import Net from "$content/core/net/net";
 import { log } from "$content/utils";
 import { parseLibHeader } from "$shared/parseHeader";
 import { uuidRegex } from "$content/scopedApi";
+import type { LibHeaders } from "$types/headers";
 
 export default class Lib {
     script: string;
     library: any;
-    headers: Record<string, any> = $state();
+    headers: LibHeaders = $state();
     usedBy = new Set<string>();
     blobUuid: string | null = null;
     onStop: (() => void)[] = [];
     enablePromise: Promise<boolean> | null = null;
     
-    constructor(script: string, headers?: Record<string, any>) {
+    constructor(script: string, headers?: LibHeaders) {
         this.script = script;
 
         if(headers) {
