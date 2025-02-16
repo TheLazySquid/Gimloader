@@ -1,16 +1,15 @@
 import type Lib from "$content/core/libManager/lib.svelte";
 import { parsePluginHeader } from "$shared/parseHeader";
-import showErrorMessage from "$content/ui/showErrorMessage";
 import { confirmLibReload, log } from "$content/utils";
 import Net from "$content/core/net/net";
 import LibManager from "$core/libManager/libManager.svelte";
-import PluginManager from "./pluginManager.svelte";
 import { uuidRegex } from "$content/scopedApi";
+import type { PluginHeaders } from "$types/headers";
 
 export default class Plugin {
     script: string;
     enabled: boolean = $state();
-    headers: Record<string, any> = $state();
+    headers: PluginHeaders = $state();
     return: any = $state();
     blobUuid: string | null = null;
     onStop: (() => void)[] = [];
