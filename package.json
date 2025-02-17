@@ -8,6 +8,8 @@
   "scripts": {
     "build": "node build.js",
     "watch": "node build.js -w",
+    "buildFirefox": "node build.js --firefox",
+    "watchFirefox": "node build.js -w --firefox",
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "repository": {

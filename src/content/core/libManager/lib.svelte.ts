@@ -56,6 +56,8 @@ export default class Lib {
                     URL.revokeObjectURL(url);
                 });
         });
+
+        return this.enablePromise;
     }
 
     addUsed(pluginName: string) {
