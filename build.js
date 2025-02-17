@@ -39,12 +39,15 @@ function importStyles() {
     }
 }
 
+let entryPoints = ["src/content/index.ts", "src/background/index.ts", "src/installApi/index.ts", "src/popup/index.ts"];
+if(process.argv.includes("--firefox")) entryPoints.push("src/relay/index.ts");
+
 let config = {
-    entryPoints: ["src/content/index.ts", "src/background/index.ts", "src/installApi/index.ts", "src/popup/index.ts"],
+    entryPoints,
     mainFields: ["svelte", "browser", "module", "main"],
     conditions: ["svelte", "browser", "production"],
     bundle: true,
-    outdir: "extension/dist",
+    outdir: "extension/build/js",
     plugins: [
         sveltePlugin({
             preprocess: sveltePreprocess(),
@@ -58,7 +61,7 @@ let config = {
         ".svg": "text",
         ".css": "empty"
     },
-    minify: true
+    // minify: true
 }
 
 

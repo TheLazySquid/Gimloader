@@ -1,3 +1,2 @@
 node_modules
-extension/dist
-extension/_metadata
+extension/build

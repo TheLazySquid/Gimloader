@@ -10,27 +10,54 @@ export default new class Port extends EventEmitter {
     disconnected = $state(false);
     pendingMessages = new Map<string, (response?: any) => void>();
 
-    init(callback: (state: State) => void) {      
+    init(callback: (state: State) => void) {
         this.firstMessageCallback = callback;
-        this.port = chrome.runtime.connect(extensionId);  
 
-        // @ts-ignore prevent scripts from using the apis
-        chrome.runtime = {};
+        if(typeof chrome === "undefined") {
+            window.addEventListener("message", (e) => {
+                if(e.data?.source !== "gimloader-in") return;
+                if(e.data?.type === "portDisconnected") {
+                    this.disconnected = true;
+                    return;
+                }
 
-        this.port.onMessage.addListener(this.onMessage.bind(this));
+                this.onMessage(e.data);
+            });
+        } else {
+            if(navigator.userAgent.includes("Firefox")) {
+                this.port = chrome.runtime.connect();
+            } else {
+                this.port = chrome.runtime.connect(extensionId);
+            }
+    
+            // @ts-ignore prevent scripts from using the apis
+            chrome.runtime = {};
+    
+            this.port.onMessage.addListener(this.onMessage.bind(this));
+    
+            // remind chrome that we're still alive every 10 seconds so it doesn't kill the service worker
+            let pingInterval = setInterval(() => { 
+                this.send("ping");
+            }, 10000);
+    
+            this.port.onDisconnect.addListener(() => {
+                this.disconnected = true;
+                clearInterval(pingInterval);
+            });
+        }
+    }
 
-        // remind chrome that we're still alive every 10 seconds so it doesn't kill the service worker
-        let pingInterval = setInterval(() => { 
-            this.send("ping");
-        }, 10000);
-
-        this.port.onDisconnect.addListener(() => {
-            this.disconnected = true;
-            clearInterval(pingInterval);
-        });
+    postMessage(message: any) {
+        if(typeof chrome === "undefined") {
+            window.postMessage({ source: "gimloader-out", ...message });
+        } else {
+            this.port.postMessage(message);
+        }
     }
 
     onMessage(data: any) {
+        console.log("Got message:", data);
+
         // the first message will contain the state, others will contain updates to it
         if(this.firstMessage) {
             this.firstMessageCallback(data);
@@ -51,14 +78,14 @@ export default new class Port extends EventEmitter {
     }
 
     send(type: string, message: any = undefined) {
-        this.port.postMessage({ type, message });
+        this.postMessage({ type, message });
     }
 
     sendAndRecieve(type: string, message: any = undefined) {
         return new Promise<any>((res) => {
             let returnId = crypto.randomUUID();
             this.pendingMessages.set(returnId, res);
-            this.port.postMessage({ type, message, returnId });
+            this.postMessage({ type, message, returnId });
         });
     }
 }
