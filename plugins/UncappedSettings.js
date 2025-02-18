@@ -2,7 +2,7 @@
  * @name UncappedSettings
  * @description Lets you start games with a much wider range of settings than normal
  * @author TheLazySquid
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/UncappedSettings.js
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/uncappedsettings
  * @reloadRequired true
@@ -11,7 +11,7 @@
 const api = new GL();
 
 function changeHooks(res) {
-    for(let hook of res.data.hooks) {
+    for(let hook of res.hooks) {
         let key = hook.key.toLowerCase();
 
         if(key.includes("duration")) {
@@ -26,22 +26,15 @@ function changeHooks(res) {
     }
 }
 
-api.parcel.getLazy(exports => exports?.default?.toString?.().includes("response:new(0"), exports => {
-    let Requester = exports.default;
-    delete exports.default;
-    exports.default = class extends Requester {
-        request(e, t) {
-            let req = super.request(e, t);
+api.parcel.getLazy(e => e?.requestAsPromise, exports => {
+    api.patcher.before(exports, "request", (_, args) => {
+        if(args[0].url !== "/api/experience/map/hooks") return;
+        if(!args[0].success) return;
 
-            if (e.url === "/api/experience/map/hooks") {
-                req.then((res) => {
-                    changeHooks(res);
-                });
-            }
-
-            return req;
+        let success = args[0].success;
+        args[0].success = function(res) {
+            changeHooks(res);
+            return success.apply(this, arguments);
         }
-    }
-
-    api.onStop(() => exports.default = Requester);
+    });
 });
