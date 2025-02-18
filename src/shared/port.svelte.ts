@@ -23,6 +23,8 @@ export default new class Port extends EventEmitter {
 
                 this.onMessage(e.data);
             });
+
+            window.postMessage({ source: "gimloader-out", type: "ready" });
         } else {
             if(navigator.userAgent.includes("Firefox")) {
                 this.port = chrome.runtime.connect();
