@@ -12,7 +12,7 @@ port.onDisconnect.addListener(() => {
 });
 
 port.onMessage.addListener((e) => {
-    window.postMessage({ source: "gimloader-in", ...e });
+    window.postMessage({ ...e, source: "gimloader-in" });
 });
 
 window.addEventListener("message", (e) => {
