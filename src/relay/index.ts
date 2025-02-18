@@ -11,13 +11,30 @@ port.onDisconnect.addListener(() => {
     clearInterval(pingInterval);
 });
 
+let ready = false;
+let messageQueue = [];
+
 port.onMessage.addListener((e) => {
-    window.postMessage({ ...e, source: "gimloader-in" });
+    let message = { ...e, source: "gimloader-in" };
+    if(ready) {
+        window.postMessage(message);
+    } else {
+        messageQueue.push(message);
+    }
 });
 
 window.addEventListener("message", (e) => {
     if(e.data?.source !== "gimloader-out") return;
     if(!e.data?.type) return;
+
+    if(e.data.type === "ready") {
+        ready = true;
+        for(let message of messageQueue) {
+            window.postMessage(message);
+        }
+        messageQueue = [];
+        return;
+    }
 
     port.postMessage(e.data);
 });
