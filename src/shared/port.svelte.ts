@@ -56,8 +56,6 @@ export default new class Port extends EventEmitter {
     }
 
     onMessage(data: any) {
-        console.log("Got message:", data);
-
         // the first message will contain the state, others will contain updates to it
         if(this.firstMessage) {
             this.firstMessageCallback(data);
