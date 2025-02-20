@@ -97,7 +97,6 @@ export default class LibrariesHandler {
             
             let message = { name: downloadable[i].name, script: res.value };
             this.onLibraryCreate(state, message);
-            console.log("sent create");
             Server.send("libraryCreate", message);
         }
     

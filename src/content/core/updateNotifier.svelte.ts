@@ -1,4 +1,3 @@
-import UpdateToast from "$content/ui/UpdateToast.svelte";
 import Port from "$shared/port.svelte";
 import toast from "svelte-5-french-toast";
 import { confirmToast, toasterReady } from "./toaster";

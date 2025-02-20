@@ -14,7 +14,7 @@ export default class HotkeysHandler {
 
     static onHotkeyUpdate(state: State, message: any) {
         state.hotkeys[message.id] = message.trigger;
-        this.save;
+        this.save();
     }
 
     static onHotkeysUpdate(state: State, message: any) {

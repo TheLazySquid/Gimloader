@@ -13,13 +13,13 @@ export const toasterReady = new Promise<void>(async (res) => {
     res();
 });
 
-export function confirmToast(text: string, onconfirm: (confirmed: boolean) => void) {
+export function confirmToast(text: string, onconfirmed: (confirmed: boolean) => void) {
     // @ts-ignore
     return toast(ConfirmToast, {
         duration: Infinity,
         props: {
             text,
-            onconfirm
+            onconfirmed
         }
     });
 }

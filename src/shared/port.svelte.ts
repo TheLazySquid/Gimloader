@@ -1,5 +1,6 @@
 import type { State } from "$types/state";
 import EventEmitter from "eventemitter2";
+import { isFirefox } from "./env";
 
 const extensionId = "ngbhofnofkggjbpkpnogcdfdgjkpmgka";
 
@@ -26,7 +27,7 @@ export default new class Port extends EventEmitter {
 
             window.postMessage({ source: "gimloader-out", type: "ready" });
         } else {
-            if(navigator.userAgent.includes("Firefox")) {
+            if(isFirefox) {
                 this.port = chrome.runtime.connect();
             } else {
                 this.port = chrome.runtime.connect(extensionId);
@@ -78,6 +79,9 @@ export default new class Port extends EventEmitter {
     }
 
     send(type: string, message: any = undefined) {
+        // strip non-serializable things or firefox complains
+        if(message) message = JSON.parse(JSON.stringify(message));
+
         this.postMessage({ type, message });
     }
 

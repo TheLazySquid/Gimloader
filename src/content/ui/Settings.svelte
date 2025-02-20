@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Toggle } from "flowbite-svelte";
     import Storage from "$content/core/storage.svelte";
+    import { isFirefox } from "$shared/env";
 
     function saveAutoUpdate() {
         Storage.updateSetting('autoUpdate', Storage.settings.autoUpdate);
@@ -35,9 +36,14 @@
     Attempt to automatically download missing libraries
 </div>
 <h1 class="text-xl font-bold">Developer Settings</h1>
-<div class="flex items-center">
+<div class="flex items-center {isFirefox && "opacity-50 pointer-events-none"}">
     <Toggle bind:checked={Storage.settings.pollerEnabled} on:change={() => {
         Storage.updateSetting("pollerEnabled", Storage.settings.pollerEnabled);
-    }} />
+    }} disabled={isFirefox} />
     Poll for plugins/libraries being served locally
 </div>
+{#if isFirefox}
+    <div>
+        Polling for local plugins/libraries is unavailable for Firefox.
+    </div>
+{/if}
