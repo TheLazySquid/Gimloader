@@ -110,6 +110,8 @@ export default class Updater {
             if(newPart < oldPart) return false;
         }
 
+        if(newParts.length > oldParts.length) return true;
+
         return false;
     }
 

@@ -56,7 +56,6 @@
         "declarativeNetRequest"
     ],
     "host_permissions": [
-        "https://www.gimkit.com/*",
-        "http://localhost:5822/*"
+        "https://www.gimkit.com/*"
     ]
 }

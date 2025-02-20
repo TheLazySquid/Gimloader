@@ -115,13 +115,13 @@ export default new class Hotkeys {
     }
 
     saveConfigurable(id: string, trigger: HotkeyTrigger | null) {
-        this.savedHotkeys[id] = trigger;
+        this.savedHotkeys[id] = $state.snapshot(trigger);
         Port.send("hotkeyUpdate", { id, trigger });
     }
 
     saveAllConfigurable() {
         for(let hotkey of this.configurableHotkeys) {
-            this.savedHotkeys[hotkey.id] = hotkey.trigger;
+            this.savedHotkeys[hotkey.id] = $state.snapshot(hotkey.trigger);
         }
 
         Port.send("hotkeysUpdate", { hotkeys: this.savedHotkeys });

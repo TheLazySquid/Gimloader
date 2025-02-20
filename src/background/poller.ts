@@ -2,6 +2,7 @@ import SettingsHandler from './messageHandlers/settings';
 import { saveDebounced, statePromise } from './state';
 import { parseLibHeader, parsePluginHeader } from '$shared/parseHeader';
 import Server from './server';
+import { isFirefox } from '$shared/env';
 
 export default class Poller {
     static enabled = false;
@@ -22,19 +23,17 @@ export default class Poller {
     }
 
     static async sendRequest() {
+        if(isFirefox) return;
         if(!this.enabled) return;
 
         const tryAgain = () => {
             setTimeout(() => this.sendRequest(), 5000);
         }
 
-        let res = await fetch("http://localhost:5822/getUpdate", { headers: { uid: this.uid }})
-            .catch((e) => {
-                console.log(e);
-                tryAgain()
-        });
+        let res = await fetch("https://localhost:5822/", { headers: { uid: this.uid }})
+            .catch(() => tryAgain());
         if(!res) return;
-       
+        
         if(res.status !== 200) return tryAgain();
         let text = await res.text();
         let state = await statePromise;

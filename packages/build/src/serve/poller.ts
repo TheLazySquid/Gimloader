@@ -14,6 +14,7 @@ export default class Poller {
 
         if(this.longPollRes) {
             this.longPollRes.setHeader('is-library', this.isLibrary.toString());
+            this.longPollRes.setHeader('access-control-allow-origin', '*');
             this.longPollRes.write(this.code);
             this.longPollRes.end();
             this.codeSent = true;
@@ -31,6 +32,7 @@ export default class Poller {
                 if(this.code) {
                     res.setHeader('is-library', this.isLibrary.toString());
                     res.setHeader('content-type', 'application/javascript');
+                    res.setHeader('access-control-allow-origin', '*');
                     res.write(this.code);
                 } else {
                     res.writeHead(500);
@@ -41,6 +43,7 @@ export default class Poller {
                 let uid = req.headers.uid as string;
 
                 res.setHeader('content-type', 'application/javascript');
+                res.setHeader('access-control-allow-origin', '*');
                 if((this.codeSent && uid === lastUid) || !this.code) {
                     // disregard duplicate requests
                     if(this.longPollRes) {
