@@ -8,8 +8,14 @@
   "scripts": {
     "build": "node build.js",
     "watch": "node build.js -w",
+    "buildExt": "cd extension && node scripts/build.js chrome",
+    "buildAll": "npm run build && npm run buildExt",
+    
     "buildFirefox": "node build.js --firefox",
     "watchFirefox": "node build.js -w --firefox",
+    "buildExtFirefox": "cd extension && node scripts/build.js firefox",
+    "buildAllFirefox": "npm run buildFirefox && npm run buildExtFirefox",
+
     "buildTypes": "tsc -p declaration.tsconfig.json"
   },
   "repository": {
