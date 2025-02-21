@@ -9,8 +9,14 @@ fs.cpSync('./images', './build/images', { recursive: true });
 fs.copyFileSync('./edit_csp.json', './build/edit_csp.json');
 fs.copyFileSync('./popup.html', './build/popup.html');
 
+let manifest;
 if(type === "firefox") {
-    fs.copyFileSync('./manifest.firefox.json', './build/manifest.json');
+    manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json'));
 } else {
-    fs.copyFileSync('./manifest.chrome.json', './build/manifest.json');
+    manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json'));
 }
+
+let pkg = JSON.parse(fs.readFileSync('../package.json'));
+manifest.version = pkg.version;
+
+fs.writeFileSync('./build/manifest.json', JSON.stringify(manifest, null, 4));

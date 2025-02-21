@@ -1,6 +1,6 @@
 {
   "name": "gimloader",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A plugin loader and manager for Gimkit",
   "main": "build/bundle.js",
   "type": "module",
@@ -10,7 +10,7 @@
     "watch": "node build.js -w",
     "buildExt": "cd extension && node scripts/build.js chrome",
     "buildAll": "npm run build && npm run buildExt",
-    
+
     "buildFirefox": "node build.js --firefox",
     "watchFirefox": "node build.js -w --firefox",
     "buildExtFirefox": "cd extension && node scripts/build.js firefox",
