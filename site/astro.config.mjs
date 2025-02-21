@@ -19,7 +19,6 @@ export default defineConfig({
                         label: "Using Gimloader",
                         items: [
                             'usage/installation',
-                            'usage/updating',
                             'usage/plugins'
                         ]
                     },
