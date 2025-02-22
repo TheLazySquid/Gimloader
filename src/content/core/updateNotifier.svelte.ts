@@ -5,17 +5,19 @@ import { confirmToast, toasterReady } from "./toaster";
 export default class UpdateNotifier {
     static toastId: string | null = null;
 
-    static async init(availableUpdates: string[]) {
+    static init(availableUpdates: string[]) {
         toasterReady.then(() => {
             if(availableUpdates.length > 0) {
                 this.showToast(availableUpdates);
             }
         });
 
-        Port.on("availableUpdates", (availableUpdates) => {
-            if(this.toastId) toast.dismiss(this.toastId);
-            if(availableUpdates.length > 0) this.showToast(availableUpdates);
-        });
+        Port.on("availableUpdates", this.onUpdate.bind(this));
+    }
+
+    static onUpdate(availableUpdates: string[]) {
+        if(this.toastId) toast.dismiss(this.toastId);
+        if(availableUpdates.length > 0) this.showToast(availableUpdates);
     }
 
     static showToast(availableUpdates: string[]) {

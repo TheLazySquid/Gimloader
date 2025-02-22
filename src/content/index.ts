@@ -30,6 +30,14 @@ Port.init((state) => {
     PluginManager.init(state.plugins);
     Hotkeys.init(state.hotkeys);
     UpdateNotifier.init(state.availableUpdates);
+}, (state) => {
+    log("Resynchronizing with state", state);
+
+    Storage.updateState(state.pluginStorage, state.settings);
+    LibManager.updateState(state.libraries);
+    PluginManager.updateState(state.plugins);
+    Hotkeys.updateState(state.hotkeys);
+    UpdateNotifier.onUpdate(state.availableUpdates);
 });
 
 fixRDT();

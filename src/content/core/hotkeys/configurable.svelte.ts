@@ -22,10 +22,14 @@ export default class ConfigurableHotkey {
         this.callback = callback;
         this.pluginName = pluginName;
 
-        if(Hotkeys.savedHotkeys[id] === null) {
+        this.loadTrigger();
+    }
+
+    loadTrigger() {
+        if(Hotkeys.savedHotkeys[this.id] === null) {
             this.trigger = null;
-        } else if(Hotkeys.savedHotkeys[id]) {
-            this.trigger = Object.assign({}, Hotkeys.savedHotkeys[id]);
+        } else if(Hotkeys.savedHotkeys[this.id]) {
+            this.trigger = Object.assign({}, Hotkeys.savedHotkeys[this.id]);
         } else if(this.default) {
             this.trigger = Object.assign({}, this.default);
         }

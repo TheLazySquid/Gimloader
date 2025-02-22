@@ -28,6 +28,17 @@ export default new class Storage {
         Port.on("pluginValuesDelete", ({ id }) => this.deletePluginValues(id, false));
     }
 
+    updateState(values: PluginStorage, settings: Settings) {
+        this.values = values;
+        this.settings = settings;
+
+        if(this.settings.showPluginButtons) {
+            document.documentElement.classList.remove("noPluginButtons");
+        } else {
+            document.documentElement.classList.add("noPluginButtons");
+        }
+    }
+
     updateSetting(key: string, value: any, emit = true) {        
         this.settings[key] = value;
         if(emit) Port.send("settingUpdate", { key, value });

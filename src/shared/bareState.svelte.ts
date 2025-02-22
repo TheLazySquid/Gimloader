@@ -47,6 +47,9 @@ export default new class BareState {
             Port.on("settingUpdate", ({ key, value }) => {
                 this.settings[key] = value;
             });
+        }, (data) => {
+            this.plugins = data.plugins;
+            this.settings = data.settings;
         });
     }
 }

@@ -36,6 +36,14 @@ export default new class Hotkeys {
         Port.on('hotkeysUpdate', ({ hotkeys }) => this.updateAllConfigurable(hotkeys));
     }
 
+    updateState(saved: ConfigurableHotkeysState) {
+        this.savedHotkeys = saved;
+
+        for(let hotkey of this.configurableHotkeys) {
+            hotkey.loadTrigger();
+        }
+    }
+
     addHotkey(id: any, options: HotkeyOptions, callback: Callback) {
         let obj = { ...options, id, callback };
         this.hotkeys.push(obj);
