@@ -61,7 +61,7 @@ let config = {
         ".svg": "text",
         ".css": "empty"
     },
-    // minify: true
+    minify: true
 }
 
 

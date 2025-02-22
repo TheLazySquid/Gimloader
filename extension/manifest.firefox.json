@@ -55,9 +55,6 @@
         "unlimitedStorage",
         "declarativeNetRequest"
     ],
-    "host_permissions": [
-        "https://www.gimkit.com/*"
-    ],
     "browser_specific_settings": {
         "gecko": {
             "id": "gimloader@thelazysquid.github.io"
