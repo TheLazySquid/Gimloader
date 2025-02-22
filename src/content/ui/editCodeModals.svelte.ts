@@ -123,7 +123,7 @@ export function showLibCodeEditor(lib: Lib) {
                 style: "primary",
                 onClick() {
                     let code = editor.state.doc.toString();
-                    LibManager.editLibrary(lib, code);
+                    LibManager.editLib(lib, code);
                 }
             }
         ]

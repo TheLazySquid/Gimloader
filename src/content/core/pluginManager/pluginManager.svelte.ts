@@ -36,6 +36,57 @@ export default new class PluginManager {
         log('All plugins loaded');
     }
 
+    updateState(pluginInfo: PluginInfo[]) {
+        // check for plugins that were added
+        for(let info of pluginInfo) {
+            if(!this.getPlugin(info.name)) {
+                this.createPlugin(info.script, false);
+            }
+        }
+
+        // check for plugins that were removed
+        for(let plugin of this.plugins) {
+            if(!pluginInfo.find(i => i.name === plugin.headers.name)) {
+                this.deletePlugin(plugin);
+            }
+        }
+
+        // check if any scripts were updated
+        for(let info of pluginInfo) {
+            let plugin = this.getPlugin(info.name);
+            if(!plugin) continue;
+
+            if(plugin.script !== info.script) {
+                this.editPlugin(plugin, info.script);
+            }
+        }
+
+        // check if any plugins were enabled/disabled
+        for(let info of pluginInfo) {
+            let plugin = this.getPlugin(info.name);
+            if(!plugin) continue;
+
+            if(plugin.enabled !== info.enabled) {
+                if(info.enabled) {
+                    plugin.launch()
+                        .catch((e: Error) => {
+                            showErrorMessage(e.message, `Failed to enable plugin ${info.name}`);
+                        });
+                }
+                else plugin.stop();
+            }
+        }
+
+        // move the plugins into the correct order
+        let newOrder = [];
+        for (let info of pluginInfo) {
+            let plugin = this.getPlugin(info.name);
+            if (plugin) newOrder.push(plugin);
+        }
+
+        this.plugins = newOrder;
+    }
+
     getPlugin(name: string) {
         return this.plugins.find(p => p.headers.name === name) ?? null;
     }

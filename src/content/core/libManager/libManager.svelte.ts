@@ -15,11 +15,44 @@ export default new class LibManagerClass {
             this.libs.push(lib);
         }
 
-        Port.on("libraryEdit", ({ name, script }) => this.editLibrary(name, script, false));
+        Port.on("libraryEdit", ({ name, script }) => this.editLib(name, script, false));
         Port.on("libraryDelete", ({ name }) => this.deleteLib(this.getLib(name), false));
         Port.on("librariesDeleteAll", () => this.deleteAll());
         Port.on("libraryCreate", ({ script }) => this.createLib(script, true, false));
         Port.on("librariesArrange", ({ order }) => this.arrangeLibs(order, false));
+    }
+
+    updateState(libInfo: LibraryInfo[]) {
+        // check if any libraries were added
+        for(let info of libInfo) {
+            if(!this.getLib(info.name)) {
+                this.createLib(info.script);
+            }
+        }
+
+        // check if any libraries were removed
+        for(let lib of this.libs) {
+            if(!libInfo.some(i => i.name === lib.headers.name)) {
+                this.deleteLib(lib);
+            }
+        }
+
+        // check if any libraries were updated
+        for(let info of libInfo) {
+            let existing = this.getLib(info.name);
+            if(existing.script !== info.script) {
+                this.editLib(existing, info.script);
+            }
+        }
+
+        // move the libraries into the correct order
+        let newOrder = [];
+        for (let info of libInfo) {
+            let setLib = this.getLib(info.name);
+            if (setLib) newOrder.push(setLib);
+        }
+
+        this.libs = newOrder;
     }
 
     get(libName: string) {
@@ -91,7 +124,7 @@ export default new class LibManagerClass {
         return this.libs.map(lib => lib.headers.name);
     }
 
-    async editLibrary(library: Lib | string, script: string, emit = true) {
+    async editLib(library: Lib | string, script: string, emit = true) {
         let lib = typeof library === "string" ? this.getLib(library) : library;
         if(!lib) return;
 

@@ -13,7 +13,7 @@ let manifest;
 if(type === "firefox") {
     manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json'));
 } else {
-    manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json'));
+    manifest = JSON.parse(fs.readFileSync('./manifest.chrome.json'));
 }
 
 let pkg = JSON.parse(fs.readFileSync('../package.json'));

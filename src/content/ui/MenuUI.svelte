@@ -30,7 +30,9 @@
                 <div class="z-50 absolute top-[-16px] left-0 w-full h-full bg-gray-500
                     rounded-lg opacity-70 flex flex-col items-center justify-center">
                     <h2 class="text-3xl text-white">Connection lost with extension</h2>
-                    <div class="xl text-white">You may have disabled or reloaded the Gimloader extension. Please reload the page.</div>
+                    <div class="xl text-white">
+                        Attempting to reconnect... you can always refresh the page if this fails
+                    </div>
                 </div>
             {/if}
             <Tabs contentClass="bg-white">
