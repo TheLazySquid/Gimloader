@@ -1,0 +1,63 @@
+{
+    "name": "Gimloader",
+    "description": "An extension that lets you use plugins to customize Gimkit",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "images/icon128.png"
+    },
+    "icons": {
+        "16": "images/icon16.png",
+        "32": "images/icon32.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "js": ["js/relay/index.js"],
+            "matches": [
+                "https://www.gimkit.com/*",
+                "https://thelazysquid.github.io/Gimloader/*"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "js": ["js/content/index.js"],
+            "matches": [
+                "https://www.gimkit.com/*"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
+        }, {
+            "js": ["js/installApi/index.js"],
+            "matches": [
+                "https://thelazysquid.github.io/Gimloader/*"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
+        }
+    ],
+    "background": {
+        "scripts": ["js/background/index.js"]
+    },
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "edit_csp",
+                "enabled": true,
+                "path": "edit_csp.json"
+            }
+        ]
+    },
+    "permissions": [
+        "storage",
+        "unlimitedStorage",
+        "declarativeNetRequest"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "gimloader@thelazysquid.github.io"
+        }
+    }
+}

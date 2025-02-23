@@ -26,7 +26,7 @@
                 let resp = await fetch(url);
                 let text = await resp.text();
     
-                (window as any).GLInstall(text);
+                installing = (window as any).GLInstall(text);
                 res();
             } catch (e) { rej (e) }
         });

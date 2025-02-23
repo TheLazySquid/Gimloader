@@ -1,68 +1,159 @@
-declare module "src/utils" {
-    import type Lib from "src/core/libManager/lib.svelte";
-    export function log(...args: any[]): void;
-    export function error(...args: any[]): void;
-    export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]): boolean;
-    export const onGimkit: boolean;
-    export function splicer(array: any[], obj: any): () => void;
-    export function confirmLibReload(libs: Lib[]): boolean;
-    export function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
-    export function stopOverrideKeydown(): void;
-    export function readUserFile(accept: string): Promise<string>;
+declare module "types/headers" {
+    export interface PluginHeaders {
+        name: string;
+        description: string;
+        author: string;
+        version: string | null;
+        reloadRequired: string;
+        isLibrary: string;
+        downloadUrl: string | null;
+        needsLib: string[];
+        optionalLib: string[];
+        hasSettings: string;
+        webpage: string | null;
+    }
+    export interface LibHeaders {
+        name: string;
+        description: string;
+        author: string;
+        version: string | null;
+        reloadRequired: string;
+        isLibrary: string;
+        downloadUrl: string | null;
+        webpage: string | null;
+    }
+    export type ScriptHeaders = PluginHeaders | LibHeaders;
 }
-declare module "src/parseHeader" {
-    export function parsePluginHeader(code: string): Record<string, any>;
-    export function parseLibHeader(code: string): Record<string, any>;
-    export default function parseHeader(code: string, headers: Record<string, any>): Record<string, any>;
+declare module "shared/parseHeader" {
+    import type { LibHeaders, PluginHeaders } from "types/headers";
+    export function parsePluginHeader(code: string): PluginHeaders;
+    export function parseLibHeader(code: string): LibHeaders;
+    export function parseHeader<T>(code: string, headers: T): T;
 }
-declare module "src/ui/showErrorMessage" {
+declare module "content/ui/showErrorMessage" {
     export default function showErrorMessage(msg: string, title?: string): void;
 }
-declare module "src/core/storage" {
-    export default class Storage {
-        static getValue(key: string, defaultVal?: any): any;
-        static setValue(key: string, value: any): void;
-        static deleteValue(key: string): void;
-        static getPluginValue(id: string, key: string, defaultVal?: any): any;
-        static setPluginValue(id: string, key: string, value: any): void;
-        static deletePluginValue(id: string, key: string): void;
-        static removeAllValues(pluginName: string): void;
+declare module "types/hotkeys" {
+    /** @inline */
+    export interface HotkeyTrigger {
+        /** Should be a keyboardevent [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
+        key?: string;
+        /** Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
+        keys?: string[];
+        ctrl?: boolean;
+        shift?: boolean;
+        alt?: boolean;
+    }
+    /** @inline */
+    export interface HotkeyOptions extends HotkeyTrigger {
+        preventDefault?: boolean;
+    }
+    /** @inline */
+    export interface ConfigurableHotkeyOptions {
+        category: string;
+        /** There should be no duplicate titles within a category */
+        title: string;
+        preventDefault?: boolean;
+        default?: HotkeyTrigger;
     }
 }
-declare module "src/consts.svelte" {
-    export const version: string;
-    export const settings: {
-        autoUpdate: any;
-        autoDownloadMissingLibs: any;
-        menuView: any;
-        showPluginButtons: any;
-    };
+declare module "types/state" {
+    import type { HotkeyTrigger } from "types/hotkeys";
+    export interface PluginInfo {
+        script: string;
+        name: string;
+        enabled: boolean;
+    }
+    export interface LibraryInfo {
+        script: string;
+        name: string;
+    }
+    export type PluginStorage = Record<string, Record<string, any>>;
+    export type ConfigurableHotkeysState = Record<string, HotkeyTrigger | null>;
+    export interface Settings {
+        pollerEnabled: boolean;
+        autoUpdate: boolean;
+        autoDownloadMissingLibs: boolean;
+        menuView: 'grid' | 'list';
+        showPluginButtons: boolean;
+    }
+    export interface SavedState {
+        plugins: PluginInfo[];
+        libraries: LibraryInfo[];
+        pluginStorage: PluginStorage;
+        settings: Settings;
+        hotkeys: ConfigurableHotkeysState;
+    }
+    export interface State extends SavedState {
+        availableUpdates: string[];
+    }
 }
-declare module "src/core/libManager/libManager.svelte" {
-    import Lib from "src/core/libManager/lib.svelte";
-    export class LibManagerClass {
+declare module "shared/port.svelte" {
+    import type { State } from "types/state";
+    const _default: {
+        port: chrome.runtime.Port;
+        firstMessage: boolean;
+        firstMessageCallback: (state: State) => void;
+        disconnected: boolean;
+        pendingMessages: Map<string, (response?: any) => void>;
+        init(callback: (state: State) => void): void;
+        onMessage(data: any): void;
+        send(type: string, message?: any): void;
+        sendAndRecieve(type: string, message?: any): Promise<any>;
+        emit(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): boolean;
+        emitAsync(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): Promise<any[]>;
+        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any | import("eventemitter2").Listener;
+        on(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
+        onAny(listener: import("eventemitter2").EventAndListener): any;
+        prependAny(listener: import("eventemitter2").EventAndListener): any;
+        offAny(listener: import("eventemitter2").ListenerFn): any;
+        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
+        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
+        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): any;
+        setMaxListeners(n: number): void;
+        getMaxListeners(): number;
+        eventNames(nsAsArray?: boolean): (import("eventemitter2").event | import("eventemitter2").eventNS)[];
+        listenerCount(event?: import("eventemitter2").event | import("eventemitter2").eventNS): number;
+        listeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): import("eventemitter2").ListenerFn[];
+        listenersAny(): import("eventemitter2").ListenerFn[];
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, timeout?: number): import("eventemitter2").CancelablePromise<any[]>;
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, filter?: import("eventemitter2").WaitForFilter): import("eventemitter2").CancelablePromise<any[]>;
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").WaitForOptions): import("eventemitter2").CancelablePromise<any[]>;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): any;
+        stopListeningTo(target?: import("eventemitter2").GeneralEventEmitter, event?: import("eventemitter2").event | import("eventemitter2").eventNS): Boolean;
+        hasListeners(event?: String): Boolean;
+    };
+    export default _default;
+}
+declare module "content/core/libManager/libManager.svelte" {
+    import Lib from "content/core/libManager/lib.svelte";
+    import type { LibraryInfo } from "types/state";
+    const _default_1: {
         libs: Lib[];
-        destroyed: boolean;
-        constructor();
+        init(libInfo: LibraryInfo[]): void;
         get(libName: string): any;
         getLib(libName: string): Lib;
-        saveFn(): void;
-        saveDebounced?: () => void;
-        save(): void;
-        createLib(script: string, headers?: Record<string, any>, ignoreDuplicates?: boolean): Lib;
-        deleteLib(lib: Lib): void;
-        editLib(lib: Lib, code: string, headers?: Record<string, any>): Promise<void>;
-        wipe(): void;
+        createLib(script: string, ignoreDuplicates?: boolean, emit?: boolean): Lib;
+        deleteLib(lib: Lib, emit?: boolean): void;
+        deleteAll(emit?: boolean): void;
         getLibHeaders(name: string): {
             [x: string]: any;
         };
         isEnabled(name: string): boolean;
         getLibNames(): string[];
-    }
-    const libManager: LibManagerClass;
-    export default libManager;
+        editLibrary(library: Lib | string, script: string, emit?: boolean): Promise<void>;
+        arrangeLibs(order: string[], emit?: boolean): void;
+    };
+    export default _default_1;
 }
-declare module "src/core/pluginManager/plugin.svelte" {
+declare module "content/core/pluginManager/plugin.svelte" {
     export default class Plugin {
         script: string;
         enabled: boolean;
@@ -71,69 +162,14 @@ declare module "src/core/pluginManager/plugin.svelte" {
         blobUuid: string | null;
         onStop: (() => void)[];
         openSettingsMenu: (() => void)[];
+        enablePromise: Promise<void> | null;
+        errored: boolean;
         constructor(script: string, enabled?: boolean);
-        enable(initial?: boolean, temp?: boolean): Promise<void>;
-        disable(temp?: boolean): void;
-        edit(script: string, headers: Record<string, string>): void;
+        launch(initial?: boolean): Promise<void>;
+        stop(): void;
     }
 }
-declare module "src/core/pluginManager/pluginManager.svelte" {
-    import debounce from "debounce";
-    import Plugin from "src/core/pluginManager/plugin.svelte";
-    class PluginManager {
-        plugins: Plugin[];
-        runPlugins: boolean;
-        destroyed: boolean;
-        constructor(runPlugins?: boolean);
-        init(): Promise<void>;
-        saveFn(): void;
-        saveDebounced: debounce.DebouncedFunction<() => void>;
-        save(newPlugins?: Plugin[]): void;
-        getPlugin(name: string): Plugin;
-        isEnabled(name: string): boolean;
-        createPlugin(script: string, saveFirst?: boolean): Promise<void>;
-        deletePlugin(plugin: Plugin): void;
-        enableAll(): void;
-        disableAll(): void;
-        wipe(): void;
-        getExports(pluginName: string): any;
-        getHeaders(pluginName: string): {
-            [x: string]: any;
-        };
-        getPluginNames(): string[];
-    }
-    const pluginManager: PluginManager;
-    export default pluginManager;
-}
-declare module "src/scopedApi" {
-    export const uuidRegex: RegExp;
-    interface ScopedInfo {
-        id: string;
-        onStop: (cb: () => void) => void;
-        openSettingsMenu?: (cb: () => void) => void;
-    }
-    export default function setupScoped(): ScopedInfo;
-}
-declare module "src/core/libManager/lib.svelte" {
-    export default class Lib {
-        script: string;
-        library: any;
-        headers: Record<string, any>;
-        enabling: boolean;
-        enableError?: Error;
-        enableSuccessCallbacks: ((needsReload: boolean) => void)[];
-        enableFailCallbacks: ((e: any) => void)[];
-        usedBy: Set<string>;
-        blobUuid: string | null;
-        onStop: (() => void)[];
-        constructor(script: string, headers?: Record<string, any>);
-        enable(initial?: boolean): Promise<boolean>;
-        addUsed(pluginName: string): void;
-        removeUsed(pluginName: string): void;
-        disable(): void;
-    }
-}
-declare module "src/core/patcher" {
+declare module "content/core/patcher" {
     /** @inline */
     export type PatcherAfterCallback = (thisVal: any, args: IArguments, returnVal: any) => any;
     /** @inline */
@@ -165,71 +201,7 @@ declare module "src/core/patcher" {
         static unpatchAll(id: string): void;
     }
 }
-declare module "src/core/hotkeys.svelte" {
-    /** @inline */
-    export interface HotkeyTrigger {
-        /** Should be a keyboardevent [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
-        key?: string;
-        /** Should be keyboardevent [codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) */
-        keys?: string[];
-        ctrl?: boolean;
-        shift?: boolean;
-        alt?: boolean;
-    }
-    /** @inline */
-    export interface HotkeyOptions extends HotkeyTrigger {
-        preventDefault?: boolean;
-    }
-    /** @inline */
-    export interface ConfigurableHotkeyOptions {
-        category: string;
-        /** There should be no duplicate titles within a category */
-        title: string;
-        preventDefault?: boolean;
-        default?: HotkeyTrigger;
-    }
-    type Callback = (e: KeyboardEvent) => void;
-    type DefaultHotkey = HotkeyOptions & {
-        callback: Callback;
-        id: string;
-    };
-    export class ConfigurableHotkey {
-        id: string;
-        category: string;
-        title: string;
-        preventDefault: boolean;
-        callback: Callback;
-        trigger: HotkeyTrigger | null;
-        default?: HotkeyTrigger;
-        pluginName?: string;
-        constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string);
-        reset(): void;
-    }
-    class Hotkeys {
-        hotkeys: DefaultHotkey[];
-        configurableHotkeys: ConfigurableHotkey[];
-        pressedKeys: Set<string>;
-        pressed: Set<string>;
-        savedHotkeys: Record<string, any>;
-        init(): void;
-        addHotkey(id: any, options: HotkeyOptions, callback: Callback): () => void;
-        removeHotkeys(id: any): void;
-        addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback, pluginName?: string): () => void;
-        removeConfigurableHotkey(id: string): void;
-        removeConfigurableFromPlugin(pluginName: string): void;
-        releaseAll(): void;
-        checkHotkeys(e: KeyboardEvent): void;
-        checkTrigger(e: KeyboardEvent, trigger: HotkeyTrigger): boolean;
-        saveConfigurableHotkeys(): void;
-    }
-    const hotkeys: Hotkeys;
-    export default hotkeys;
-}
-declare module "src/core/ui/addPluginButtons" {
-    export function setShowPluginButtons(value: boolean): void;
-    export function addPluginButtons(): void;
-}
-declare module "src/core/ui/ui" {
+declare module "content/core/ui/ui" {
     import type * as React from 'react';
     import type * as ReactDOM from 'react-dom/client';
     export default class UI {
@@ -242,7 +214,132 @@ declare module "src/core/ui/ui" {
         static addCoreStyles(): void;
     }
 }
-declare module "src/core/parcel" {
+declare module "content/core/hotkeys/configurable.svelte" {
+    import type { ConfigurableHotkeyOptions, HotkeyTrigger } from "types/hotkeys";
+    type Callback = (e: KeyboardEvent) => void;
+    export default class ConfigurableHotkey {
+        id: string;
+        category: string;
+        title: string;
+        preventDefault: boolean;
+        callback: Callback;
+        trigger: HotkeyTrigger | null;
+        default?: HotkeyTrigger;
+        pluginName?: string;
+        constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string);
+        reset(): void;
+    }
+}
+declare module "content/core/hotkeys/hotkeys.svelte" {
+    import type { ConfigurableHotkeyOptions, HotkeyOptions, HotkeyTrigger } from "types/hotkeys";
+    import type { ConfigurableHotkeysState } from "types/state";
+    import ConfigurableHotkey from "content/core/hotkeys/configurable.svelte";
+    type Callback = (e: KeyboardEvent) => void;
+    type DefaultHotkey = HotkeyOptions & {
+        callback: Callback;
+        id: string;
+    };
+    const _default_2: {
+        hotkeys: DefaultHotkey[];
+        configurableHotkeys: ConfigurableHotkey[];
+        pressedKeys: Set<string>;
+        pressed: Set<string>;
+        savedHotkeys: ConfigurableHotkeysState;
+        init(saved: ConfigurableHotkeysState): void;
+        addHotkey(id: any, options: HotkeyOptions, callback: Callback): () => void;
+        removeHotkeys(id: any): void;
+        addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback, pluginName?: string): () => void;
+        removeConfigurableHotkey(id: string): void;
+        removeConfigurableFromPlugin(pluginName: string): void;
+        releaseAll(): void;
+        checkHotkeys(e: KeyboardEvent): void;
+        checkTrigger(e: KeyboardEvent, trigger: HotkeyTrigger): boolean;
+        saveConfigurable(id: string, trigger: HotkeyTrigger | null): void;
+        saveAllConfigurable(): void;
+        updateConfigurable(id: string, trigger: HotkeyTrigger | null): void;
+        updateAllConfigurable(hotkeys: ConfigurableHotkeysState): void;
+    };
+    export default _default_2;
+}
+declare module "content/core/ui/addPluginButtons" {
+    export function setShowPluginButtons(value: boolean): void;
+    export function addPluginButtons(): void;
+}
+declare module "content/core/storage.svelte" {
+    import type { PluginStorage, Settings } from "types/state";
+    const _default_3: {
+        settings: Settings;
+        values: PluginStorage;
+        init(values: PluginStorage, settings: Settings): void;
+        updateSetting(key: string, value: any, emit?: boolean): void;
+        getPluginValue(id: string, key: string, defaultVal?: any): any;
+        setPluginValue(id: string, key: string, value: any, emit?: boolean): void;
+        deletePluginValue(id: string, key: string, emit?: boolean): void;
+        deletePluginValues(id: string, emit?: boolean): void;
+    };
+    export default _default_3;
+}
+declare module "content/core/pluginManager/pluginManager.svelte" {
+    import Plugin from "content/core/pluginManager/plugin.svelte";
+    import type { PluginInfo } from "types/state";
+    const _default_4: {
+        plugins: Plugin[];
+        destroyed: boolean;
+        init(pluginInfo: PluginInfo[]): Promise<void>;
+        getPlugin(name: string): Plugin;
+        isEnabled(name: string): boolean;
+        createPlugin(script: string, emit?: boolean): Promise<void>;
+        deletePlugin(name: Plugin | string, emit?: boolean): void;
+        deleteAll(emit?: boolean): void;
+        setAll(enabled: boolean, emit?: boolean): void;
+        getExports(pluginName: string): any;
+        getHeaders(pluginName: string): {
+            [x: string]: any;
+        };
+        getPluginNames(): string[];
+        editPlugin(name: Plugin | string, script: string, emit?: boolean): Promise<void>;
+        arrangePlugins(order: string[], emit?: boolean): void;
+        setEnabled(name: Plugin | string, enabled: boolean, emit?: boolean): Promise<void>;
+    };
+    export default _default_4;
+}
+declare module "content/scopedApi" {
+    export const uuidRegex: RegExp;
+    interface ScopedInfo {
+        id: string;
+        onStop: (cb: () => void) => void;
+        openSettingsMenu?: (cb: () => void) => void;
+    }
+    export default function setupScoped(): ScopedInfo;
+}
+declare module "content/core/libManager/lib.svelte" {
+    export default class Lib {
+        script: string;
+        library: any;
+        headers: Record<string, any>;
+        usedBy: Set<string>;
+        blobUuid: string | null;
+        onStop: (() => void)[];
+        enablePromise: Promise<boolean> | null;
+        constructor(script: string, headers?: Record<string, any>);
+        enable(initial?: boolean): Promise<boolean>;
+        addUsed(pluginName: string): void;
+        removeUsed(pluginName: string): void;
+        disable(): void;
+    }
+}
+declare module "content/utils" {
+    import type Lib from "content/core/libManager/lib.svelte";
+    export function log(...args: any[]): void;
+    export function error(...args: any[]): void;
+    export function validate(fnName: string, args: IArguments, ...schema: [string, string | object][]): boolean;
+    export function splicer(array: any[], obj: any): () => void;
+    export function confirmLibReload(libs: Lib[]): boolean;
+    export function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
+    export function stopOverrideKeydown(): void;
+    export function readUserFile(accept: string): Promise<string>;
+}
+declare module "content/core/parcel" {
     interface ModuleObject {
         id: string;
         exports: any;
@@ -257,20 +354,14 @@ declare module "src/core/parcel" {
     export default class Parcel {
         static _parcelModuleCache: Record<string, ModuleObject>;
         static _parcelModules: Record<string, any>;
-        static readyToIntercept: boolean;
         static lazyChecks: LazyCheck[];
         static init(): void;
-        static redirect(to: string): Promise<void>;
-        static emptyModules(): void;
-        static reloadExistingScripts(existingScripts: NodeListOf<HTMLScriptElement>): Promise<void>;
-        static nukeDom(): void;
-        static setup(): void;
         static query(matcher: Matcher, multiple?: boolean): any;
         static getLazy(id: string | null, matcher: Matcher, callback: (exports: any) => any, initial?: boolean): () => void;
         static stopLazy(id: string): void;
     }
 }
-declare module "src/core/internals" {
+declare module "content/core/internals" {
     export default class GimkitInternals {
         static stores: any;
         static notification: any;
@@ -278,8 +369,7 @@ declare module "src/core/internals" {
         static init(): void;
     }
 }
-declare module "src/core/net/net" {
-    import EventEmitter from "eventemitter2";
+declare module "content/core/net/net" {
     interface BlueboatConnection {
         type: "Blueboat";
         room: any;
@@ -297,14 +387,12 @@ declare module "src/core/net/net" {
         callback: (type: Connection["type"]) => void;
         id: string;
     }
-    class Net extends EventEmitter {
+    const _default_5: {
         type: Connection["type"];
         room: Connection["room"];
         loaded: boolean;
         is1dHost: boolean;
         loadCallbacks: LoadCallback[];
-        constructor();
-        corsRequest: <TContext = any>(details: Tampermonkey.Request<TContext>) => Promise<Tampermonkey.Response<TContext>>;
         init(): void;
         waitForColyseusLoad(): void;
         send(channel: string, message: any): void;
@@ -313,13 +401,41 @@ declare module "src/core/net/net" {
         onLoad(type: Connection["type"]): void;
         pluginOnLoad(id: string, callback: (type: Connection["type"]) => void): () => void;
         pluginOffLoad(id: string): void;
-        get isHost(): any;
-    }
-    const net: Net;
-    export default net;
+        readonly isHost: any;
+        emit(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): boolean;
+        emitAsync(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): Promise<any[]>;
+        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): import("eventemitter2").Listener | any;
+        on(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
+        onAny(listener: import("eventemitter2").EventAndListener): any;
+        prependAny(listener: import("eventemitter2").EventAndListener): any;
+        offAny(listener: import("eventemitter2").ListenerFn): any;
+        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
+        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
+        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): any;
+        setMaxListeners(n: number): void;
+        getMaxListeners(): number;
+        eventNames(nsAsArray?: boolean): (import("eventemitter2").event | import("eventemitter2").eventNS)[];
+        listenerCount(event?: import("eventemitter2").event | import("eventemitter2").eventNS): number;
+        listeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): import("eventemitter2").ListenerFn[];
+        listenersAny(): import("eventemitter2").ListenerFn[];
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, timeout?: number): import("eventemitter2").CancelablePromise<any[]>;
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, filter?: import("eventemitter2").WaitForFilter): import("eventemitter2").CancelablePromise<any[]>;
+        waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").WaitForOptions): import("eventemitter2").CancelablePromise<any[]>;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): any;
+        stopListeningTo(target?: import("eventemitter2").GeneralEventEmitter, event?: import("eventemitter2").event | import("eventemitter2").eventNS): Boolean;
+        hasListeners(event?: String): Boolean;
+    };
+    export default _default_5;
 }
-declare module "src/api/hotkeys" {
-    import type { ConfigurableHotkeyOptions, HotkeyOptions } from "src/core/hotkeys.svelte";
+declare module "content/api/hotkeys" {
+    import type { HotkeyOptions, ConfigurableHotkeyOptions } from "types/hotkeys";
     interface OldConfigurableOptions {
         category: string;
         title: string;
@@ -395,8 +511,8 @@ declare module "src/api/hotkeys" {
     }
     export { HotkeysApi, ScopedHotkeysApi };
 }
-declare module "src/api/parcel" {
-    import type { Matcher } from "src/core/parcel";
+declare module "content/api/parcel" {
+    import type { Matcher } from "content/core/parcel";
     class BaseParcelApi {
         /**
          * Gets a module based on a filter, returns null if none are found
@@ -443,8 +559,8 @@ declare module "src/api/parcel" {
     }
     export { ParcelApi, ScopedParcelApi };
 }
-declare module "src/api/net" {
-    import type { Connection } from "src/core/net/net";
+declare module "content/api/net" {
+    import type { Connection } from "content/core/net/net";
     import EventEmitter from "eventemitter2";
     class BaseNetApi extends EventEmitter {
         constructor();
@@ -454,8 +570,6 @@ declare module "src/api/net" {
         get room(): Connection["room"];
         /** Whether the user is the one hosting the current game */
         get isHost(): any;
-        /** The userscript manager's xmlHttpRequest, which bypasses the CSP */
-        corsRequest: <TContext = any>(details: Tampermonkey.Request<TContext>) => Promise<Tampermonkey.Response<TContext>>;
         /** Sends a message to the server on a specific channel */
         send(channel: string, message: any): void;
     }
@@ -542,10 +656,10 @@ declare module "src/api/net" {
     }
     export { NetApi, ScopedNetApi };
 }
-declare module "src/ui/stores" {
+declare module "content/ui/stores" {
     export let focusTrapEnabled: import("svelte/store").Writable<boolean>;
 }
-declare module "src/core/ui/modal" {
+declare module "content/core/ui/modal" {
     import type { ReactElement } from "react";
     interface ModalButton {
         text: string;
@@ -564,8 +678,8 @@ declare module "src/core/ui/modal" {
     }
     export default function showModal(content: HTMLElement | ReactElement, options?: Partial<ModalOptions>): () => void;
 }
-declare module "src/api/ui" {
-    import type { ModalOptions } from "src/core/ui/modal";
+declare module "content/api/ui" {
+    import type { ModalOptions } from "content/core/ui/modal";
     import type { ReactElement } from "react";
     class BaseUIApi {
         /** Shows a customizable modal to the user */
@@ -591,7 +705,7 @@ declare module "src/api/ui" {
     }
     export { UIApi, ScopedUIApi };
 }
-declare module "src/api/storage" {
+declare module "content/api/storage" {
     class StorageApi {
         /** Gets a value that has previously been saved */
         getValue(pluginName: string, key: string, defaultValue?: any): any;
@@ -617,8 +731,8 @@ declare module "src/api/storage" {
     }
     export { StorageApi, ScopedStorageApi };
 }
-declare module "src/api/patcher" {
-    import type { PatcherAfterCallback, PatcherBeforeCallback, PatcherInsteadCallback } from "src/core/patcher";
+declare module "content/api/patcher" {
+    import type { PatcherAfterCallback, PatcherBeforeCallback, PatcherInsteadCallback } from "content/core/patcher";
     class PatcherApi {
         /**
          * Runs a callback after a function on an object has been run
@@ -661,7 +775,7 @@ declare module "src/api/patcher" {
     }
     export { PatcherApi, ScopedPatcherApi };
 }
-declare module "src/api/libs" {
+declare module "content/api/libs" {
     class LibsApi {
         /** A list of all the libraries installed */
         get list(): string[];
@@ -676,7 +790,7 @@ declare module "src/api/libs" {
     }
     export default LibsApi;
 }
-declare module "src/api/plugins" {
+declare module "content/api/plugins" {
     class PluginsApi {
         /** A list of all the plugins installed */
         get list(): string[];
@@ -698,16 +812,16 @@ declare module "src/api/plugins" {
     }
     export default PluginsApi;
 }
-declare module "src/api/api" {
-    import type { Connection } from "src/core/net/net";
-    import { HotkeysApi, ScopedHotkeysApi } from "src/api/hotkeys";
-    import { ParcelApi, ScopedParcelApi } from "src/api/parcel";
-    import { NetApi, ScopedNetApi } from "src/api/net";
-    import { UIApi, ScopedUIApi } from "src/api/ui";
-    import { StorageApi, ScopedStorageApi } from "src/api/storage";
-    import { PatcherApi, ScopedPatcherApi } from "src/api/patcher";
-    import LibsApi from "src/api/libs";
-    import PluginsApi from "src/api/plugins";
+declare module "content/api/api" {
+    import type { Connection } from "content/core/net/net";
+    import { HotkeysApi, ScopedHotkeysApi } from "content/api/hotkeys";
+    import { ParcelApi, ScopedParcelApi } from "content/api/parcel";
+    import { NetApi, ScopedNetApi } from "content/api/net";
+    import { UIApi, ScopedUIApi } from "content/api/ui";
+    import { StorageApi, ScopedStorageApi } from "content/api/storage";
+    import { PatcherApi, ScopedPatcherApi } from "content/api/patcher";
+    import LibsApi from "content/api/libs";
+    import PluginsApi from "content/api/plugins";
     class Api {
         /** Functions used to modify Gimkit's internal modules */
         static parcel: Readonly<ParcelApi>;

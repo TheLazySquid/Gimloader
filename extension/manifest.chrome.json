@@ -1,0 +1,61 @@
+{
+    "name": "Gimloader",
+    "description": "An extension that lets you use plugins to customize Gimkit",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnJ+raFLBT4vvRqp3FrkOfDkxG6ooOdOqwKq5dC/iige8+1/Os+DwdNqjwp6Eom6nYHIHJEeO+YOdpBqWcd59bjYLBfm4a8Cish9zqj+VfM5kOi+ANSbEIIXzcDGCUIIimhh6YKnn6Ldze/J0urnHGCltl8BRQqPn/fEyTESVkH21gYOSIpfN25KAH0IwKzdkexBc2iWrh0hkhzKe0T+nfS13gQaQNH0FthUR/2xIKXiaTJBvMZok7fEDIWqq+J3UoSYOnHro9cW5GN9IviRy2UYaJMbtnriY+SQy4aquFKF1Bjn0qIOQ4Ic9kJ/VMjGwuhsdyj1F4rIkDWWHW3YRMQIDAQAB",
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "images/icon128.png"
+    },
+    "icons": {
+        "16": "images/icon16.png",
+        "32": "images/icon32.png",
+        "48": "images/icon48.png",
+        "128": "images/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "js": ["js/content/index.js"],
+            "matches": [
+                "https://www.gimkit.com/*"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
+        }, {
+            "js": ["js/installApi/index.js"],
+            "matches": [
+                "https://thelazysquid.github.io/Gimloader/*"
+            ],
+            "run_at": "document_start",
+            "world": "MAIN"
+        }
+    ],
+    "externally_connectable": {
+        "matches": [
+            "https://www.gimkit.com/*",
+            "https://thelazysquid.github.io/Gimloader/*"
+        ]
+    },
+    "background": {
+        "service_worker": "js/background/index.js"
+    },
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "edit_csp",
+                "enabled": true,
+                "path": "edit_csp.json"
+            }
+        ]
+    },
+    "permissions": [
+        "storage",
+        "unlimitedStorage",
+        "declarativeNetRequest"
+    ],
+    "host_permissions": [
+        "https://www.gimkit.com/*",
+        "http://localhost:5822/*"
+    ]
+}

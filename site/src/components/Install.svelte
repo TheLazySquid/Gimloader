@@ -60,12 +60,14 @@
     }
 
     let installComplete = $state(false);
+    let installError: string | null = $state(null);
+    let installing: Promise<void> | null = $state(null);
 
     function installScript(script: string) {
         if(GLInstallMissing) return;
 
-        (window as any).GLInstall(script);
-        installComplete = true;
+        installing = (window as any).GLInstall(script);
+        installing!.then(() => installComplete = true, (e) => installError = e);
     }
 </script>
 
@@ -85,6 +87,11 @@
                     {/if}
                 </h1>
                 <p>You may now close this page.</p>
+            {:else if installError}
+                <h1 class="w-full text-center font-bold text-5xl">
+                    An error occured
+                </h1>
+                <pre>{installError}</pre>
             {:else}
                 {#if installUrl}
                     {#if !GLInstallMissing}
@@ -119,10 +126,12 @@
                                     </div>
                                     <button onclick={() => installScript(script)}
                                     class="bg-green-700 rounded-full mt-3 p-1">
-                                        {#if mode === 'update'}
-                                            Update
+                                        {#if installing}
+                                            {#await installing}
+                                                Installing...
+                                            {/await}
                                         {:else}
-                                            Install
+                                            {mode === "update" ? "Update" : "Install"}
                                         {/if}
                                     </button>
                                 {/if}
