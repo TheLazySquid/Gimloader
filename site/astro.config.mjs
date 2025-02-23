@@ -42,6 +42,7 @@ export default defineConfig({
                             'plugins/autosplitter',
                             'plugins/bringbackboosts',
                             'plugins/dldtas',
+                            'plugins/showhitboxes',
                             'plugins/inputrecorder',
                             'plugins/customui',
                             'plugins/movementtas',
