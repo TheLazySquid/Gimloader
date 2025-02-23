@@ -12,6 +12,7 @@ import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { log, onGimkit } from "./utils";
 import { version } from "./consts.svelte";
 import UpdateChecker from "$core/updateChecker";
+import { showDeprecated } from "./deprecated";
 
 Object.defineProperty(unsafeWindow, "GL", {
     value: Api,
@@ -44,3 +45,5 @@ GM.registerMenuCommand("Wipe All Plugins and Libraries", () => {
 
     location.reload();
 });
+
+showDeprecated();
