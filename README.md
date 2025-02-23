@@ -4,9 +4,8 @@ This is a Gimkit plugin loader and manager, based on a trick first used in [Gimh
 
 ## Installation
 
-1. Install [ViolentMonkey](https://violentmonkey.github.io/get-it/) for your browser.
-2. Click on [this link](https://raw.githubusercontent.com/TheLazySquid/GimLoader/main/build/bundle.user.js) and hit install.
-3. Go to [gimkit.com/join](https://www.gimkit.com/join) and there should be a wrench icon next to the join button.
+1. Install the extension for your browser: [Chrome Webstore](https://chromewebstore.google.com/detail/gimloader/ngbhofnofkggjbpkpnogcdfdgjkpmgka) for Chromium browser such as Chrome, Edge, Opera, Brave, etc and [Mozilla Addons](https://addons.mozilla.org/en-US/firefox/addon/gimloader/) for Firefox.
+2. Confirm it's working by going to [gimkit.com/join](https://www.gimkit.com/join). There should be a wrench icon next to the join button.
 
 ![UI Preview](/images/UIPreview.png)
 
