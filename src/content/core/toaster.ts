@@ -1,4 +1,5 @@
 import ConfirmToast from "$content/ui/ConfirmToast.svelte";
+import Port from "$shared/port.svelte";
 import { mount } from "svelte";
 import toast, { Toaster } from "svelte-5-french-toast";
 
@@ -11,6 +12,12 @@ export const toasterReady = new Promise<void>(async (res) => {
     });
 
     res();
+});
+
+Port.on("toast", (msg) => {
+    if(msg.type === "success") toast.success(msg.message);
+    else if(msg.type === "error") toast.error(msg.message);
+    else toast(msg.message);
 });
 
 export function confirmToast(text: string, onconfirmed: (confirmed: boolean) => void) {
