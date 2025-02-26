@@ -103,7 +103,7 @@ export default new class PluginManager {
             let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);
             if(!conf) return;
 
-            existing.stop();
+            this.deletePlugin(existing);
         }
 
         let plugin = new Plugin(script, true);

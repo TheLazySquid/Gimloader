@@ -8,19 +8,22 @@
     import { readUserFile } from "$content/utils";
     import LibManager from "$core/libManager/libManager.svelte";
     import Storage from "$content/core/storage.svelte";
+    import Search from "../components/Search.svelte";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
     import ViewModule from 'svelte-material-icons/ViewModule.svelte';
     import ViewList from 'svelte-material-icons/ViewList.svelte';
-    import Search from "../components/Search.svelte";
-    import Port from "$shared/port.svelte";
+    
+    let { onDrop }: { onDrop: (callback: (text: string) => void) => void } = $props();
+
+    onDrop((text: string) => {
+        LibManager.createLib(text);
+    });
 
     const flipDurationMs = 300;
-
     let searchValue = $state("");
-
     let items = $state(LibManager.libs.map((lib: Lib) => ({ id: lib.headers.name })));
     $effect(() => {
         items = LibManager.libs
