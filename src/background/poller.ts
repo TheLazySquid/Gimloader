@@ -30,8 +30,8 @@ export default class Poller {
             setTimeout(() => this.sendRequest(), 5000);
         }
 
-        let res = await fetch("https://localhost:5822/", { headers: { uid: this.uid }})
-            .catch(() => tryAgain());
+        let res = await fetch("http://localhost:5822/getUpdate", { headers: { uid: this.uid }})
+            .catch(tryAgain);
         if(!res) return;
         
         if(res.status !== 200) return tryAgain();
@@ -39,7 +39,7 @@ export default class Poller {
         let state = await statePromise;
         if(!this.enabled) return;
 
-        tryAgain();
+        this.sendRequest();
 
         if(res.headers.get('is-library') === 'true') {
             let headers = parseLibHeader(text);
@@ -53,6 +53,7 @@ export default class Poller {
                 Server.send("libraryCreate", obj);
             }
             
+            Server.send("toast", { type: "success", message: `Hot reloaded library ${headers.name}`});
             saveDebounced('libraries');
         } else {
             let headers = parsePluginHeader(text);
@@ -66,6 +67,7 @@ export default class Poller {
                 Server.send("pluginCreate", obj);
             }
             
+            Server.send("toast", { type: "success", message: `Hot reloaded plugin ${headers.name}`});
             saveDebounced('plugins');
         }
     }
