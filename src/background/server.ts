@@ -26,6 +26,10 @@ export default new class Server {
         chrome.runtime.onConnectExternal.addListener(this.onConnect.bind(this));
         chrome.runtime.onConnect.addListener(this.onConnect.bind(this));
 
+        // these are only used to keep the worker alive
+        chrome.runtime.onMessageExternal.addListener(() => {});
+        chrome.runtime.onMessage.addListener(() => {});
+
         HotkeysHandler.init();
         LibrariesHandler.init();
         PluginsHandler.init();

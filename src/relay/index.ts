@@ -20,20 +20,19 @@ window.addEventListener("message", (e) => {
     port.postMessage(e.data);
 });
 
+// remind firefox that we're still alive every 20 seconds so it doesn't kill the background script
+let pingInterval = setInterval(() => { 
+    chrome.runtime.sendMessage("ping");
+}, 20000);
+
 connect();
 
 function connect() {
     port = chrome.runtime.connect();
     
-    // remind firefox that we're still alive every 10 seconds so it doesn't kill the background script
-    let pingInterval = setInterval(() => { 
-        port.postMessage({ type: "ping" });
-    }, 10000);
-    
     port.onDisconnect.addListener(() => {
         disconnected = true;
         window.postMessage({ source: "gimloader-in", type: "portDisconnected" });
-        clearInterval(pingInterval);
 
         if(chrome.runtime.lastError) {
             // this probably will never come up since I think firefox

@@ -44,6 +44,7 @@ export default new class Port extends EventEmitter {
             chrome.runtime = {};
     
             this.connectPort();
+            this.keepBackgroundAlive();
         }
     }
 
@@ -58,14 +59,9 @@ export default new class Port extends EventEmitter {
         
         this.port.onMessage.addListener(this.onMessage.bind(this));
 
-        let pingInterval = setInterval(() => { 
-            this.send("ping");
-        }, 10000);
-
         this.port.onDisconnect.addListener(() => {
             console.log("Port disconnected, reconnecting...");
             this.disconnected = true;
-            clearInterval(pingInterval);
 
             if(this.runtime.lastError) {
                 // extension is likely removed entirely (if reinstalled we can reconnect)
@@ -128,5 +124,16 @@ export default new class Port extends EventEmitter {
             this.pendingMessages.set(returnId, res);
             this.postMessage({ type, message, returnId });
         });
+    }
+
+    keepBackgroundAlive() {
+        // send a message every 20 seconds
+        setInterval(() => {
+            if(isFirefox) {
+                this.runtime.sendMessage("ping");
+            } else {
+                this.runtime.sendMessage(extensionId, "ping");
+            }
+        }, 20000);
     }
 }
