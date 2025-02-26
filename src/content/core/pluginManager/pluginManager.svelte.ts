@@ -5,6 +5,7 @@ import Plugin from "./plugin.svelte";
 import Storage from "$core/storage.svelte";
 import type { PluginInfo } from "$types/state";
 import Port from "$shared/port.svelte";
+import toast from "svelte-5-french-toast";
 
 export default new class PluginManager {
     plugins: Plugin[] = $state([]);
@@ -98,6 +99,12 @@ export default new class PluginManager {
 
     async createPlugin(script: string, emit = true) {
         let headers = parsePluginHeader(script);
+
+        if(headers.isLibrary !== "false") {
+            toast.error("That script doesn't appear to be a plugin! If it should be, please remove the isLibrary header, and if not, please import it as a library.");
+            return;
+        }
+
         let existing = this.getPlugin(headers.name);
         if(existing) {
             let conf = confirm(`A plugin named ${headers.name} already exists! Do you want to overwrite it?`);

@@ -16,6 +16,7 @@
     import Cog from 'svelte-material-icons/Cog.svelte';
     import FileUploadOutline from 'svelte-material-icons/FileUploadOutline.svelte';
     import { onMount } from "svelte";
+    import toast from "svelte-5-french-toast";
 
     interface Props {
         onClose: () => void;
@@ -45,6 +46,10 @@
             let file = e.dataTransfer.files[0];
             if(!file) return;
 
+            if(file.type !== "text/javascript") {
+                toast.error("That doesn't appear to be a script you can install");
+                return;
+            }
             let text = await file.text();
             dropCallback(text);
         });
