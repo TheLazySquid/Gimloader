@@ -4,23 +4,26 @@
     import Plugin from "./Plugin.svelte";
     import { createPlugin } from "../editCodeModals.svelte";
     import { readUserFile } from "$content/utils";
-    import { Button, Dropdown, DropdownItem, P } from "flowbite-svelte";
+    import { Button, Dropdown, DropdownItem } from "flowbite-svelte";
     import Search from '../components/Search.svelte';
     import PluginManager from "$core/pluginManager/pluginManager.svelte";
     import Storage from "$core/storage.svelte";
+    import Port from "$shared/port.svelte";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';
     import Import from 'svelte-material-icons/Import.svelte';
     import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
     import ViewModule from 'svelte-material-icons/ViewModule.svelte';
     import ViewList from 'svelte-material-icons/ViewList.svelte';
-    import Port from "$shared/port.svelte";
 
+    let { onDrop }: { onDrop: (callback: (text: string) => void) => void } = $props();
 
+    onDrop((text: string) => {
+        PluginManager.createPlugin(text);
+    });
+    
     const flipDurationMs = 300;
-
     let searchValue = $state("");
-
     let items = $state(PluginManager.plugins.map((plugin) => ({ id: plugin.headers.name })));
 
     $effect(() => {

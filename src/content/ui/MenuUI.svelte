@@ -4,26 +4,55 @@
     import { Tabs, TabItem } from "flowbite-svelte";
     import Modal from './flowbite/Modal.svelte';
     import { focusTrapEnabled } from "./stores";
+    import Updates from "./Updates.svelte";
+    import Settings from "./Settings.svelte";
+    import Hotkeys from "./Hotkeys.svelte";
+    import Port from "$shared/port.svelte";
     
     import Wrench from 'svelte-material-icons/Wrench.svelte';
     import Book from 'svelte-material-icons/Book.svelte';
     import KeyboardOutline from 'svelte-material-icons/KeyboardOutline.svelte';
     import Update from 'svelte-material-icons/Update.svelte';
     import Cog from 'svelte-material-icons/Cog.svelte';
-    import Updates from "./Updates.svelte";
-    import Settings from "./Settings.svelte";
-    import Hotkeys from "./Hotkeys.svelte";
-    import Port from "$shared/port.svelte";
+    import FileUploadOutline from 'svelte-material-icons/FileUploadOutline.svelte';
+    import { onMount } from "svelte";
 
     interface Props {
         onClose: () => void;
     }
+    type DropCallback = (text: string) => void;
 
     let { onClose }: Props = $props();
+
+    let dropCallback: DropCallback | null = $state(null);
+    const onDrop = (callback: DropCallback) => {
+        dropCallback = callback;
+    }
+    
+    let wrapper: HTMLDivElement;
+    let modalDragCounter = $state(0);
+    onMount(() => {
+        let modal: HTMLElement = wrapper.querySelector(".max-w-7xl");
+        if(!modal) return;
+
+        modal.addEventListener("dragenter", () => modalDragCounter++);
+        modal.addEventListener("dragleave", () => modalDragCounter--);
+        modal.addEventListener("dragover", (e) => e.preventDefault());
+        modal.addEventListener("drop", async (e) => {
+            e.preventDefault();
+            modalDragCounter = 0;
+
+            let file = e.dataTransfer.files[0];
+            if(!file) return;
+
+            let text = await file.text();
+            dropCallback(text);
+        });
+    });
 </script>
 
 <div class="h-full">
-    <div class="preflight fadeBg fixMargin changeModalButtonIndex">
+    <div class="preflight fadeBg fixMargin changeModalButtonIndex" bind:this={wrapper}>
         <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"
             size="xl" on:close={onClose} open outsideclose focusTrapEnabled={$focusTrapEnabled}>
             {#if Port.disconnected}
@@ -35,36 +64,43 @@
                     </div>
                 </div>
             {/if}
+            {#if dropCallback && modalDragCounter > 0}
+                <div class="z-50 absolute top-[-16px] left-0 w-full h-full pointer-events-none
+                    rounded-lg opacity-70 flex items-center justify-center
+                    bg-gray-500 border-white border-4 border-dashed" role="dialog">
+                    <FileUploadOutline size={128} color="white" />
+                </div>
+            {/if}
             <Tabs contentClass="bg-white">
                 <TabItem open>
                     <div class="flex items-center" slot="title">
                         <Wrench size={24} />
                         <span class="ml-2">Plugins</span>
                     </div>
-                    <PluginCardsList />
+                    <PluginCardsList {onDrop} />
                 </TabItem>
                 <TabItem>
                     <div class="flex items-center" slot="title">
                         <Book size={24} />
                         <span class="ml-2">Libraries</span>
                     </div>
-                    <LibraryCardsList />
+                    <LibraryCardsList {onDrop} />
                 </TabItem>
-                <TabItem>
+                <TabItem on:click={() => dropCallback = null}>
                     <div class="flex items-center" slot="title">
                         <KeyboardOutline size={24} />
                         <span class="ml-2">Hotkeys</span>
                     </div>
                     <Hotkeys />
                 </TabItem>
-                <TabItem>
+                <TabItem on:click={() => dropCallback = null}>
                     <div class="flex items-center" slot="title">
                         <Update size={24} />
                         <span class="ml-2">Updates</span>
                     </div>
                     <Updates />
                 </TabItem>
-                <TabItem>
+                <TabItem on:click={() => dropCallback = null}>
                     <div class="flex items-center" slot="title">
                         <Cog size={24} />
                         <span class="ml-2">Settings</span>
