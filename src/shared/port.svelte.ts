@@ -1,6 +1,6 @@
 import type { State } from "$types/state";
 import EventEmitter from "eventemitter2";
-import { isFirefox } from "./env";
+import { algorithm, isFirefox } from "./consts";
 
 const extensionId = "ngbhofnofkggjbpkpnogcdfdgjkpmgka";
 type StateCallback = (state: State) => void;
@@ -14,6 +14,8 @@ export default new class Port extends EventEmitter {
     disconnected = $state(false);
     pendingMessages = new Map<string, (response?: any) => void>();
     runtime: typeof chrome.runtime;
+    signKeyRes: (key: CryptoKey) => void;''
+    signKey = new Promise<CryptoKey>((res) => this.signKeyRes = res);
 
     init(callback: StateCallback, subsequentCallback: StateCallback) {
         this.firstCallback = callback;
@@ -31,7 +33,7 @@ export default new class Port extends EventEmitter {
                 this.onMessage(e.data);
             });
 
-            window.postMessage({ source: "gimloader-out", type: "ready" });
+            window.postMessage({ source: "gimloader-out", json: '{"type": "ready"}' });
         } else {
             if(isFirefox) {
                 this.port = chrome.runtime.connect();
@@ -40,8 +42,11 @@ export default new class Port extends EventEmitter {
             }
     
             this.runtime = chrome.runtime;
-            // @ts-ignore prevent scripts from using the apis
-            chrome.runtime = {};
+
+            if(location.hostname === "www.gimkit.com") {
+                // @ts-ignore prevent scripts from using the apis
+                chrome.runtime = {};
+            }
     
             this.connectPort();
             this.keepBackgroundAlive();
@@ -77,7 +82,7 @@ export default new class Port extends EventEmitter {
         if(this.disconnected) return;
 
         if(typeof chrome === "undefined") {
-            window.postMessage({ source: "gimloader-out", ...message });
+            window.postMessage({ ...message, source: "gimloader-out" });
         } else {
             this.port.postMessage(message);
         }
@@ -85,6 +90,12 @@ export default new class Port extends EventEmitter {
 
     onMessage(data: any) {
         this.disconnected = false;
+
+        if(data?.type === "key") {
+            crypto.subtle.importKey("jwk", data.key, algorithm, true, ['sign', 'verify'])
+                .then((key) => this.signKeyRes(key));
+            return;
+        }
 
         // the first message will contain the state, others will contain updates to it
         if(this.firstMessage) {
@@ -111,18 +122,28 @@ export default new class Port extends EventEmitter {
         }
     }
 
-    send(type: string, message: any = undefined) {
-        // strip non-serializable things or firefox complains
-        if(message) message = JSON.parse(JSON.stringify(message));
+    async send(type: string, message: any = undefined, returnId?: string) {
+        if(isFirefox) {
+            // disclaimer: I know nothing about cryptography
+            let str = JSON.stringify({ type, message, returnId });
 
-        this.postMessage({ type, message });
+            // generate a signature for the json
+            let arr = new TextEncoder().encode(str);
+            let key = await this.signKey;  
+            let signed = await crypto.subtle.sign(algorithm, key, arr);
+            let signature = Array.from(new Uint8Array(signed));
+
+            this.postMessage({ json: str, signature })
+        } else {
+            this.postMessage({ type, message });
+        }
     }
 
     sendAndRecieve(type: string, message: any = undefined) {
         return new Promise<any>((res) => {
             let returnId = crypto.randomUUID();
             this.pendingMessages.set(returnId, res);
-            this.postMessage({ type, message, returnId });
+            this.send(type, message, returnId);
         });
     }
 

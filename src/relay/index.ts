@@ -1,13 +1,23 @@
+import { algorithm } from "$shared/consts";
+
 let port: chrome.runtime.Port;
 let disconnected = false;
 let ready = false;
 let messageQueue: any[] = [];
 
-window.addEventListener("message", (e) => {
-    if(e.data?.source !== "gimloader-out") return;
-    if(!e.data?.type) return;
+let keyPromise = crypto.subtle.generateKey(algorithm, true, ['sign', 'verify']);
 
-    if(e.data.type === "ready") {
+window.addEventListener("message", async (e) => {
+    if(!e.data?.json || e.data?.source !== "gimloader-out") return;
+
+    let data = JSON.parse(e.data.json);
+    if(!data.type) return;
+
+    let key = await keyPromise;
+    if(data.type === "ready") {
+        let json = await crypto.subtle.exportKey("jwk", key);
+        messageQueue.unshift({ source: "gimloader-in", type: "key", key: json });
+
         ready = true;
         for(let message of messageQueue) {
             window.postMessage(message);
@@ -17,11 +27,20 @@ window.addEventListener("message", (e) => {
     }
 
     if(disconnected) return;
-    port.postMessage(e.data);
+
+    // verify that the signature checks out
+    let signatureArr: number[] = e.data.signature;
+    if(!signatureArr) return;
+    let arr = new TextEncoder().encode(e.data.json);
+    let signature = new Uint8Array(signatureArr).buffer;
+    let matches = await crypto.subtle.verify(algorithm, key, signature, arr);
+    if(!matches) return;
+
+    port.postMessage(data);
 });
 
 // remind firefox that we're still alive every 20 seconds so it doesn't kill the background script
-let pingInterval = setInterval(() => { 
+setInterval(() => { 
     chrome.runtime.sendMessage("ping");
 }, 20000);
 
