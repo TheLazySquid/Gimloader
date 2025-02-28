@@ -2,7 +2,7 @@ import SettingsHandler from './messageHandlers/settings';
 import { saveDebounced, statePromise } from './state';
 import { parseLibHeader, parsePluginHeader } from '$shared/parseHeader';
 import Server from './server';
-import { isFirefox } from '$shared/env';
+import { isFirefox } from '$shared/consts';
 
 export default class Poller {
     static enabled = false;
