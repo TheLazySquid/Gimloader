@@ -1,4 +1,4 @@
-import type Lib from "$content/core/libManager/lib.svelte";
+import type Lib from "$core/libManager/lib.svelte";
 
 export function log(...args: any[]) {
     console.log('%c[GL]', 'color:#5030f2', ...args);

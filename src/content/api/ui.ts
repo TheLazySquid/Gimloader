@@ -1,6 +1,6 @@
-import type { ModalOptions } from "$content/core/ui/modal";
-import showModal from "$content/core/ui/modal";
-import UI from "$content/core/ui/ui";
+import type { ModalOptions } from "$core/ui/modal";
+import showModal from "$core/ui/modal";
+import UI from "$core/ui/ui";
 import { validate } from "$content/utils";
 import type { ReactElement } from "react";
 

@@ -1,7 +1,7 @@
-import showModal from "$content/core/ui/modal";
+import showModal from "$core/ui/modal";
 import Plugin from "$core/pluginManager/plugin.svelte";
 import { parsePluginHeader } from "$shared/parseHeader";
-import Lib from "$content/core/libManager/lib.svelte";
+import Lib from "$core/libManager/lib.svelte";
 import { javascript } from "@codemirror/lang-javascript";
 import { basicSetup } from "codemirror";
 import { EditorView, keymap } from "@codemirror/view";

@@ -1,4 +1,4 @@
-import Storage from "$content/core/storage.svelte";
+import Storage, { type ValueChangeCallback } from "$core/storage.svelte";
 import { validate } from "$content/utils";
 
 class StorageApi {
@@ -28,6 +28,27 @@ class StorageApi {
      * @hidden
      */
     get removeValue() { return this.deleteValue };
+
+    /** Adds a listener for when a plugin's stored value with a certain key changes */
+    onChange(pluginName: string, key: string, callback: ValueChangeCallback) {
+        if(!validate("storage.onChange", arguments, ['pluginName', 'string'], ['key', 'string'], ['callback', 'function'])) return;
+
+        return Storage.onPluginValueUpdate(pluginName, key, callback);
+    }
+
+    /** Removes a listener added by onChange */
+    offChange(pluginName: string, key: string, callback: ValueChangeCallback) {
+        if(!validate("storage.offChange", arguments, ['pluginName', 'string'], ['key', 'string'], ['callback', 'function'])) return;
+
+        Storage.offPluginValueUpdate(pluginName, key, callback);
+    }
+
+    /** Removes all listeners added by onChange for a certain plugin */
+    offAllChanges(pluginName: string) {
+        if(!validate("storage.offAllChanges", arguments, ['pluginName', 'string'])) return;
+
+        Storage.removeUpdateListeners(pluginName);
+    }
 }
 
 class ScopedStorageApi {
@@ -52,6 +73,11 @@ class ScopedStorageApi {
         if(!validate("storage.deleteValue", arguments, ['key', 'string'])) return;
 
         Storage.deletePluginValue(this.id, key);
+    }
+
+    /** Adds a listener for when a stored value with a certain key changes  */
+    onChange(key: string, callback: ValueChangeCallback) {
+        return Storage.onPluginValueUpdate(this.id, key, callback);
     }
 }
 

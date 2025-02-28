@@ -1,10 +1,10 @@
-import Internal from "$content/core/internals";
+import Internal from "$core/internals";
 import Parcel from "../parcel";
 import EventEmitter from "eventemitter2";
 import { log, splicer } from "$content/utils";
 import Patcher from "../patcher";
 import LibManager from "$core/libManager/libManager.svelte";
-import GimkitInternals from "$content/core/internals";
+import GimkitInternals from "$core/internals";
 
 interface BlueboatConnection {
     type: "Blueboat";

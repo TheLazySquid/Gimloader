@@ -1,7 +1,7 @@
-import type Lib from "$content/core/libManager/lib.svelte";
+import type Lib from "$core/libManager/lib.svelte";
 import { parsePluginHeader } from "$shared/parseHeader";
 import { confirmLibReload, log } from "$content/utils";
-import Net from "$content/core/net/net";
+import Net from "$core/net/net";
 import LibManager from "$core/libManager/libManager.svelte";
 import { uuidRegex } from "$content/scopedApi";
 import type { PluginHeaders } from "$types/headers";

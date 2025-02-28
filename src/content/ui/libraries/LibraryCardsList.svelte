@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type Lib from "$content/core/libManager/lib.svelte";
+    import type Lib from "$core/libManager/lib.svelte";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import Library from "./Library.svelte";
@@ -7,7 +7,7 @@
     import { createLib } from "../editCodeModals.svelte";
     import { readUserFile } from "$content/utils";
     import LibManager from "$core/libManager/libManager.svelte";
-    import Storage from "$content/core/storage.svelte";
+    import Storage from "$core/storage.svelte";
     import Search from "../components/Search.svelte";
 
     import PlusBoxOutline from 'svelte-material-icons/PlusBoxOutline.svelte';

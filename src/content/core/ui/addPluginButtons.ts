@@ -1,10 +1,10 @@
 import wrench from "$assets/wrench.svg";
 import { mount, unmount } from "svelte";
 import MenuUI from "$content/ui/MenuUI.svelte";
-import Storage from "$content/core/storage.svelte";
-import Parcel from "$content/core/parcel";
-import Patcher from "$content/core/patcher";
-import UI from "$content/core/ui/ui";
+import Storage from "$core/storage.svelte";
+import Parcel from "$core/parcel";
+import Patcher from "$core/patcher";
+import UI from "$core/ui/ui";
 import Hotkeys from '$core/hotkeys/hotkeys.svelte';
 
 let open = false;

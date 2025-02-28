@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Toggle } from "flowbite-svelte";
-    import Storage from "$content/core/storage.svelte";
+    import Storage from "$core/storage.svelte";
     import { isFirefox } from "$shared/env";
 
     function saveAutoUpdate() {

@@ -20,3 +20,10 @@ let pkg = JSON.parse(fs.readFileSync('../package.json'));
 manifest.version = pkg.version;
 
 fs.writeFileSync('./build/manifest.json', JSON.stringify(manifest, null, 4));
+
+// remove js/relay when not on firefox
+if(type !== "firefox") {
+    if(fs.existsSync("./build/js/relay")) {
+        fs.rmSync("./build/js/relay", { recursive: true });
+    }
+}

@@ -1,19 +1,20 @@
-import type { Connection } from "$content/core/net/net";
+import type { Connection } from "$core/net/net";
 import { HotkeysApi, ScopedHotkeysApi } from "./hotkeys";
 import { ParcelApi, ScopedParcelApi } from "./parcel";
 import { NetApi, ScopedNetApi } from "./net";
 import { UIApi, ScopedUIApi } from "./ui";
 import { StorageApi, ScopedStorageApi } from "./storage";
 import { PatcherApi, ScopedPatcherApi } from "./patcher";
-import GimkitInternals from "$content/core/internals";
-import Net from "$content/core/net/net";
-import UI from "$content/core/ui/ui";
+import GimkitInternals from "$core/internals";
+import Net from "$core/net/net";
+import UI from "$core/ui/ui";
 import LibsApi from "./libs";
 import PluginsApi from "./plugins";
 import setupScoped from "$content/scopedApi";
-import Parcel from "$content/core/parcel";
+import Parcel from "$core/parcel";
 import Hotkeys from "$core/hotkeys/hotkeys.svelte";
-import Patcher from "$content/core/patcher";
+import Patcher from "$core/patcher";
+import Storage from "$core/storage.svelte";
 
 class Api {
     /** Functions used to modify Gimkit's internal modules */
@@ -131,6 +132,7 @@ class Api {
             Net.pluginOffLoad(scoped.id);
             UI.removeStyles(scoped.id);
             Patcher.unpatchAll(scoped.id);
+            Storage.removeUpdateListeners(scoped.id);
         }
         
         this.onStop(cleanup);
