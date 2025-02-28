@@ -1,5 +1,4 @@
 import { splicer } from "$content/utils";
-import PluginManager from "./pluginManager/pluginManager.svelte";
 
 type RequireHookFn = (moduleName: string) => void;
 

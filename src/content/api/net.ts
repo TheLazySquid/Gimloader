@@ -1,5 +1,5 @@
-import type { Connection } from "$content/core/net/net";
-import Net from "$content/core/net/net";
+import type { Connection } from "$core/net/net";
+import Net from "$core/net/net";
 import { validate } from "$content/utils";
 import EventEmitter from "eventemitter2";
 

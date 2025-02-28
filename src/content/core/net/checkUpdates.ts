@@ -1,4 +1,4 @@
-import type Lib from "$content/core/libManager/lib.svelte";
+import type Lib from "$core/libManager/lib.svelte";
 import type Plugin from '../pluginManager/plugin.svelte';
 import toast from "svelte-5-french-toast";
 import Port from "$shared/port.svelte";

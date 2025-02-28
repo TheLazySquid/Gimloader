@@ -1,4 +1,4 @@
-import Parcel from "$content/core/parcel";
+import Parcel from "$core/parcel";
 
 export default class GimkitInternals {
     static stores: any;

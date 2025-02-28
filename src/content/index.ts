@@ -1,12 +1,12 @@
 import Api from "./api/api";
 import Hotkeys from "$core/hotkeys/hotkeys.svelte";
-import Net from "$content/core/net/net";
-import Parcel from "$content/core/parcel";
-import UI from "$content/core/ui/ui";
-import GimkitInternals from "$content/core/internals";
+import Net from "$core/net/net";
+import Parcel from "$core/parcel";
+import UI from "$core/ui/ui";
+import GimkitInternals from "$core/internals";
 import { log } from "./utils";
 import Port from "$shared/port.svelte";
-import Storage from "$content/core/storage.svelte";
+import Storage from "$core/storage.svelte";
 import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { version } from "../../package.json";

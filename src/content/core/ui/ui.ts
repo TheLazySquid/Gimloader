@@ -1,6 +1,6 @@
 import type * as React from 'react';
 import type * as ReactDOM from 'react-dom/client';
-import Parcel from "$content/core/parcel";
+import Parcel from "$core/parcel";
 import { addPluginButtons } from './addPluginButtons';
 import styles from "../../css/styles.scss";
 

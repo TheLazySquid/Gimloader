@@ -1,5 +1,5 @@
-import type { PatcherAfterCallback, PatcherBeforeCallback, PatcherInsteadCallback } from "$content/core/patcher";
-import Patcher from "$content/core/patcher";
+import type { PatcherAfterCallback, PatcherBeforeCallback, PatcherInsteadCallback } from "$core/patcher";
+import Patcher from "$core/patcher";
 import { validate } from "$content/utils";
 
 class PatcherApi {

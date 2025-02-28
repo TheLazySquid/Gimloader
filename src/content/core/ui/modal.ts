@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { focusTrapEnabled } from "$content/ui/stores";
-import UI from "$content/core/ui/ui";
+import UI from "$core/ui/ui";
 
 interface ModalButton {
     text: string;
