@@ -3,6 +3,7 @@ import HotkeysHandler from "./messageHandlers/hotkeys";
 import LibrariesHandler from "./messageHandlers/library";
 import PluginsHandler from "./messageHandlers/plugin";
 import SettingsHandler from "./messageHandlers/settings";
+import StateHandler from "./messageHandlers/state";
 import StorageHandler from "./messageHandlers/storage";
 import { statePromise } from "./state";
 
@@ -14,7 +15,7 @@ interface Message {
     returnId?: string;
 }
 
-type UpdateCallback = (state: State, message: any) => void;
+type UpdateCallback = (state: State, message: any) => boolean | void;
 type MessageCallback = (state: State, message: any, respond: (response?: any) => void) => void;
 
 export default new class Server {
@@ -35,6 +36,7 @@ export default new class Server {
         PluginsHandler.init();
         StorageHandler.init();
         SettingsHandler.init();
+        StateHandler.init();
     }
 
     onConnect(port: Port) {
@@ -67,8 +69,9 @@ export default new class Server {
             let callback = this.listeners.get(type);
             if(!callback) return;
     
-            callback(await statePromise, message);
-    
+            let noForward = callback(await statePromise, message);
+            if(noForward) return;
+
             // send the message to other connected ports
             for(let openPort of this.open) {
                 if(openPort === port) continue;

@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { Toggle } from "flowbite-svelte";
+    import { Toggle, Button } from "flowbite-svelte";
     import Storage from "$core/storage.svelte";
     import { isFirefox } from "$shared/consts";
+    import StateManager from "$core/state";
 
     function saveAutoUpdate() {
         Storage.updateSetting('autoUpdate', Storage.settings.autoUpdate);
@@ -35,7 +36,8 @@
     <Toggle bind:checked={Storage.settings.autoDownloadMissingLibs} on:change={saveAutoDownloadLibs} />
     Attempt to automatically download missing libraries
 </div>
-<h1 class="text-xl font-bold">Developer Settings</h1>
+
+<h1 class="text-xl font-bold mt-3">Developer Settings</h1>
 <div class="flex items-center {isFirefox && "opacity-50 pointer-events-none"}">
     <Toggle bind:checked={Storage.settings.pollerEnabled} on:change={() => {
         Storage.updateSetting("pollerEnabled", Storage.settings.pollerEnabled);
@@ -47,3 +49,8 @@
         Polling for local plugins/libraries is unavailable for Firefox.
     </div>
 {/if}
+
+<h1 class="text-xl font-bold mt-3">Export/Import Config</h1>
+<div>Your config consists of plugins, plugin values, libraries, hotkeys, and settings.</div>
+<Button onclick={StateManager.downloadState}>Export Config</Button>
+<Button onclick={StateManager.loadState}>Import Config</Button>

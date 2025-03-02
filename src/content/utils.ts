@@ -103,11 +103,23 @@ export function readUserFile(accept: string) {
         let input = document.createElement('input');
         input.type = 'file';
         input.accept = accept;
-    
+
+        let changed = false;
+        setTimeout(() => {
+            window.addEventListener("focus", () => {
+                setTimeout(() => {
+                    if(changed) return;
+                    rej('No file selected');
+                }, 500);
+            }, { once: true });
+        });
+        
         input.addEventListener('change', () => {
+            changed = true;
+            
             let file = input.files?.[0];
             if(!file) return rej('No file selected');
-
+            
             let reader = new FileReader();
             reader.onload = () => {
                 res(reader.result as string);

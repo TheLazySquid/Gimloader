@@ -135,7 +135,7 @@ export default new class Port extends EventEmitter {
 
             this.postMessage({ json: str, signature })
         } else {
-            this.postMessage({ type, message });
+            this.postMessage({ type, message, returnId });
         }
     }
 
