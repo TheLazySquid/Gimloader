@@ -54,6 +54,50 @@ Gets the headers of a plugin, such as version, author, and description
 
 `object`
 
+##### author
+
+> **author**: `string`
+
+##### description
+
+> **description**: `string`
+
+##### downloadUrl
+
+> **downloadUrl**: `string`
+
+##### hasSettings
+
+> **hasSettings**: `string`
+
+##### isLibrary
+
+> **isLibrary**: `string`
+
+##### name
+
+> **name**: `string`
+
+##### needsLib
+
+> **needsLib**: `string`[]
+
+##### optionalLib
+
+> **optionalLib**: `string`[]
+
+##### reloadRequired
+
+> **reloadRequired**: `string`
+
+##### version
+
+> **version**: `string`
+
+##### webpage
+
+> **webpage**: `string`
+
 ***
 
 ### isEnabled()

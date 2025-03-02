@@ -88,18 +88,34 @@ declare module "types/state" {
         availableUpdates: string[];
     }
 }
+declare module "shared/consts" {
+    import type { Settings } from "types/state";
+    export const isFirefox: boolean;
+    export const algorithm: HmacKeyGenParams;
+    export const defaultSettings: Settings;
+}
 declare module "shared/port.svelte" {
     import type { State } from "types/state";
+    type StateCallback = (state: State) => void;
     const _default: {
         port: chrome.runtime.Port;
         firstMessage: boolean;
-        firstMessageCallback: (state: State) => void;
+        firstState: boolean;
+        firstCallback: StateCallback;
+        subsequentCallback: StateCallback;
         disconnected: boolean;
         pendingMessages: Map<string, (response?: any) => void>;
-        init(callback: (state: State) => void): void;
+        runtime: typeof chrome.runtime;
+        signKeyRes: (key: CryptoKey) => void;
+        '': any;
+        signKey: Promise<CryptoKey>;
+        init(callback: StateCallback, subsequentCallback: StateCallback): void;
+        connectPort(): void;
+        postMessage(message: any): void;
         onMessage(data: any): void;
-        send(type: string, message?: any): void;
+        send(type: string, message?: any, returnId?: string): Promise<void>;
         sendAndRecieve(type: string, message?: any): Promise<any>;
+        keepBackgroundAlive(): void;
         emit(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): boolean;
         emitAsync(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): Promise<any[]>;
         addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any | import("eventemitter2").Listener;
@@ -138,26 +154,35 @@ declare module "content/core/libManager/libManager.svelte" {
     const _default_1: {
         libs: Lib[];
         init(libInfo: LibraryInfo[]): void;
+        updateState(libInfo: LibraryInfo[]): void;
         get(libName: string): any;
         getLib(libName: string): Lib;
         createLib(script: string, ignoreDuplicates?: boolean, emit?: boolean): Lib;
         deleteLib(lib: Lib, emit?: boolean): void;
         deleteAll(emit?: boolean): void;
         getLibHeaders(name: string): {
-            [x: string]: any;
+            name: string;
+            description: string;
+            author: string;
+            version: string | null;
+            reloadRequired: string;
+            isLibrary: string;
+            downloadUrl: string | null;
+            webpage: string | null;
         };
         isEnabled(name: string): boolean;
         getLibNames(): string[];
-        editLibrary(library: Lib | string, script: string, emit?: boolean): Promise<void>;
+        editLib(library: Lib | string, script: string, emit?: boolean): Promise<void>;
         arrangeLibs(order: string[], emit?: boolean): void;
     };
     export default _default_1;
 }
 declare module "content/core/pluginManager/plugin.svelte" {
+    import type { PluginHeaders } from "types/headers";
     export default class Plugin {
         script: string;
         enabled: boolean;
-        headers: Record<string, any>;
+        headers: PluginHeaders;
         return: any;
         blobUuid: string | null;
         onStop: (() => void)[];
@@ -227,6 +252,7 @@ declare module "content/core/hotkeys/configurable.svelte" {
         default?: HotkeyTrigger;
         pluginName?: string;
         constructor(id: string, callback: Callback, options: ConfigurableHotkeyOptions, pluginName?: string);
+        loadTrigger(): void;
         reset(): void;
     }
 }
@@ -246,6 +272,7 @@ declare module "content/core/hotkeys/hotkeys.svelte" {
         pressed: Set<string>;
         savedHotkeys: ConfigurableHotkeysState;
         init(saved: ConfigurableHotkeysState): void;
+        updateState(saved: ConfigurableHotkeysState): void;
         addHotkey(id: any, options: HotkeyOptions, callback: Callback): () => void;
         removeHotkeys(id: any): void;
         addConfigurableHotkey(id: string, options: ConfigurableHotkeyOptions, callback: Callback, pluginName?: string): () => void;
@@ -267,15 +294,26 @@ declare module "content/core/ui/addPluginButtons" {
 }
 declare module "content/core/storage.svelte" {
     import type { PluginStorage, Settings } from "types/state";
+    export type ValueChangeCallback = (value: any, remote: boolean) => void;
+    interface ValueChangeListener {
+        id: string;
+        key: string;
+        callback: ValueChangeCallback;
+    }
     const _default_3: {
         settings: Settings;
         values: PluginStorage;
+        updateListeners: ValueChangeListener[];
         init(values: PluginStorage, settings: Settings): void;
+        updateState(values: PluginStorage, settings: Settings): void;
         updateSetting(key: string, value: any, emit?: boolean): void;
         getPluginValue(id: string, key: string, defaultVal?: any): any;
         setPluginValue(id: string, key: string, value: any, emit?: boolean): void;
         deletePluginValue(id: string, key: string, emit?: boolean): void;
         deletePluginValues(id: string, emit?: boolean): void;
+        onPluginValueUpdate(id: string, key: string, callback: ValueChangeCallback): () => void;
+        offPluginValueUpdate(id: string, key: string, callback: ValueChangeCallback): void;
+        removeUpdateListeners(id: string): void;
     };
     export default _default_3;
 }
@@ -286,6 +324,7 @@ declare module "content/core/pluginManager/pluginManager.svelte" {
         plugins: Plugin[];
         destroyed: boolean;
         init(pluginInfo: PluginInfo[]): Promise<void>;
+        updateState(pluginInfo: PluginInfo[]): void;
         getPlugin(name: string): Plugin;
         isEnabled(name: string): boolean;
         createPlugin(script: string, emit?: boolean): Promise<void>;
@@ -294,7 +333,17 @@ declare module "content/core/pluginManager/pluginManager.svelte" {
         setAll(enabled: boolean, emit?: boolean): void;
         getExports(pluginName: string): any;
         getHeaders(pluginName: string): {
-            [x: string]: any;
+            name: string;
+            description: string;
+            author: string;
+            version: string | null;
+            reloadRequired: string;
+            isLibrary: string;
+            downloadUrl: string | null;
+            needsLib: string[];
+            optionalLib: string[];
+            hasSettings: string;
+            webpage: string | null;
         };
         getPluginNames(): string[];
         editPlugin(name: Plugin | string, script: string, emit?: boolean): Promise<void>;
@@ -313,15 +362,16 @@ declare module "content/scopedApi" {
     export default function setupScoped(): ScopedInfo;
 }
 declare module "content/core/libManager/lib.svelte" {
+    import type { LibHeaders } from "types/headers";
     export default class Lib {
         script: string;
         library: any;
-        headers: Record<string, any>;
+        headers: LibHeaders;
         usedBy: Set<string>;
         blobUuid: string | null;
         onStop: (() => void)[];
         enablePromise: Promise<boolean> | null;
-        constructor(script: string, headers?: Record<string, any>);
+        constructor(script: string, headers?: LibHeaders);
         enable(initial?: boolean): Promise<boolean>;
         addUsed(pluginName: string): void;
         removeUsed(pluginName: string): void;
@@ -337,7 +387,7 @@ declare module "content/utils" {
     export function confirmLibReload(libs: Lib[]): boolean;
     export function overrideKeydown(callback: (e: KeyboardEvent) => void): void;
     export function stopOverrideKeydown(): void;
-    export function readUserFile(accept: string): Promise<string>;
+    export function readUserFile(accept: string, callback: (text: string) => void): void;
 }
 declare module "content/core/parcel" {
     interface ModuleObject {
@@ -396,7 +446,6 @@ declare module "content/core/net/net" {
         init(): void;
         waitForColyseusLoad(): void;
         send(channel: string, message: any): void;
-        downloadLibraries(needsLibs: string[], confirmName?: string): Promise<void>;
         downloadLibrary(url: string): Promise<void>;
         onLoad(type: Connection["type"]): void;
         pluginOnLoad(id: string, callback: (type: Connection["type"]) => void): () => void;
@@ -706,6 +755,7 @@ declare module "content/api/ui" {
     export { UIApi, ScopedUIApi };
 }
 declare module "content/api/storage" {
+    import { type ValueChangeCallback } from "content/core/storage.svelte";
     class StorageApi {
         /** Gets a value that has previously been saved */
         getValue(pluginName: string, key: string, defaultValue?: any): any;
@@ -718,6 +768,12 @@ declare module "content/api/storage" {
          * @hidden
          */
         get removeValue(): (pluginName: string, key: string) => void;
+        /** Adds a listener for when a plugin's stored value with a certain key changes */
+        onChange(pluginName: string, key: string, callback: ValueChangeCallback): () => void;
+        /** Removes a listener added by onChange */
+        offChange(pluginName: string, key: string, callback: ValueChangeCallback): void;
+        /** Removes all listeners added by onChange for a certain plugin */
+        offAllChanges(pluginName: string): void;
     }
     class ScopedStorageApi {
         private readonly id;
@@ -728,6 +784,8 @@ declare module "content/api/storage" {
         setValue(key: string, value: any): void;
         /** Removes a value which has been saved */
         deleteValue(key: string): void;
+        /** Adds a listener for when a stored value with a certain key changes  */
+        onChange(key: string, callback: ValueChangeCallback): () => void;
     }
     export { StorageApi, ScopedStorageApi };
 }
@@ -783,7 +841,14 @@ declare module "content/api/libs" {
         isEnabled(name: string): boolean;
         /** Gets the headers of a library, such as version, author, and description */
         getHeaders(name: string): {
-            [x: string]: any;
+            name: string;
+            description: string;
+            author: string;
+            version: string | null;
+            reloadRequired: string;
+            isLibrary: string;
+            downloadUrl: string | null;
+            webpage: string | null;
         };
         /** Gets the exported values of a library */
         get(name: string): any;
@@ -798,7 +863,17 @@ declare module "content/api/plugins" {
         isEnabled(name: string): boolean;
         /** Gets the headers of a plugin, such as version, author, and description */
         getHeaders(name: string): {
-            [x: string]: any;
+            name: string;
+            description: string;
+            author: string;
+            version: string | null;
+            reloadRequired: string;
+            isLibrary: string;
+            downloadUrl: string | null;
+            needsLib: string[];
+            optionalLib: string[];
+            hasSettings: string;
+            webpage: string | null;
         };
         /** Gets the exported values of a plugin, if it has been enabled */
         get(name: string): any;

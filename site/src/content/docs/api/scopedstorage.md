@@ -43,6 +43,29 @@ Gets a value that has previously been saved
 
 ***
 
+### onChange()
+
+> **onChange**(`key`, `callback`): () => `void`
+
+Adds a listener for when a stored value with a certain key changes
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+| `callback` | (`value`, `remote`) => `void` |
+
+#### Returns
+
+`Function`
+
+##### Returns
+
+`void`
+
+***
+
 ### setValue()
 
 > **setValue**(`key`, `value`): `void`

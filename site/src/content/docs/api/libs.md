@@ -54,6 +54,38 @@ Gets the headers of a library, such as version, author, and description
 
 `object`
 
+##### author
+
+> **author**: `string`
+
+##### description
+
+> **description**: `string`
+
+##### downloadUrl
+
+> **downloadUrl**: `string`
+
+##### isLibrary
+
+> **isLibrary**: `string`
+
+##### name
+
+> **name**: `string`
+
+##### reloadRequired
+
+> **reloadRequired**: `string`
+
+##### version
+
+> **version**: `string`
+
+##### webpage
+
+> **webpage**: `string`
+
 ***
 
 ### isEnabled()
