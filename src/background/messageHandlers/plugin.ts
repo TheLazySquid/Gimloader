@@ -1,6 +1,7 @@
 import type { State } from "$types/state";
 import { saveDebounced } from "$bg/state";
 import Server from "$bg/server";
+import type { StateMessages } from "$types/messages";
 
 export default class PluginsHandler {
     static init() {
@@ -17,14 +18,14 @@ export default class PluginsHandler {
         saveDebounced('plugins');
     }
 
-    static onPluginEdit(state: State, message: any) {
+    static onPluginEdit(state: State, message: StateMessages["pluginEdit"]) {
         let edit = state.plugins.find((plugin) => plugin.name === message.name);
         edit.script = message.script;
         edit.name = message.newName;
         this.save();
     }
     
-    static onPluginCreate(state: State, message: any) {
+    static onPluginCreate(state: State, message: StateMessages["pluginCreate"]) {
         state.plugins.unshift({
             name: message.name,
             script: message.script,
@@ -33,18 +34,18 @@ export default class PluginsHandler {
         this.save();
     }
     
-    static onPluginDelete(state: State, message: any) {
+    static onPluginDelete(state: State, message: StateMessages["pluginDelete"]) {
         state.plugins = state.plugins.filter(p => p.name !== message.name);
         this.save();
     }
     
-    static onPluginToggled(state: State, message: any) {
+    static onPluginToggled(state: State, message: StateMessages["pluginToggled"]) {
         let toggle = state.plugins.find(p => p.name === message.name);
         toggle.enabled = message.enabled;
         this.save();
     }
     
-    static onPluginsArrange(state: State, message: any) {
+    static onPluginsArrange(state: State, message: StateMessages["pluginsArrange"]) {
         let newPlugins = [];
         for(let name of message.order) {
             let plugin = state.plugins.find((plugin) => plugin.name === name);
@@ -54,7 +55,7 @@ export default class PluginsHandler {
         this.save();
     }
     
-    static onPluginsSetAll(state: State, message: any) {
+    static onPluginsSetAll(state: State, message: StateMessages["pluginsSetAll"]) {
         for(let plugin of state.plugins) {
             plugin.enabled = message.enabled;
         }

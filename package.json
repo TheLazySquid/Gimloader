@@ -14,7 +14,8 @@
     "watchFirefox": "node build.js -w --firefox",
     "buildExtFirefox": "cd extension && node scripts/build.js firefox",
     "buildAllFirefox": "npm run buildFirefox && npm run buildExtFirefox",
-    "buildTypes": "tsc -p declaration.tsconfig.json"
+    "buildTypes": "tsc -p declaration.tsconfig.json",
+    "typeCheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,6 @@
-import Server from "$bg/server";
+import type { StateMessages } from "$types/messages";
 import type { State } from "$types/state";
+import Server from "$bg/server";
 import { saveDebounced } from "../state";
 
 export default class StorageHandler {
@@ -13,18 +14,18 @@ export default class StorageHandler {
         saveDebounced('pluginStorage');
     }
 
-    static onPluginValueUpdate(state: State, message: any) {
+    static onPluginValueUpdate(state: State, message: StateMessages["pluginValueUpdate"]) {
         if(!state.pluginStorage[message.id]) state.pluginStorage[message.id] = {};
         state.pluginStorage[message.id][message.key] = message.value;
         this.save();
     }
 
-    static onPluginValueDelete(state: State, message: any) {
+    static onPluginValueDelete(state: State, message: StateMessages["pluginValueDelete"]) {
         delete state.pluginStorage[message.id]?.[message.key];
         this.save();
     }
 
-    static onPluginValuesDelete(state: State, message: any) {
+    static onPluginValuesDelete(state: State, message: StateMessages["pluginValuesDelete"]) {
         delete state.pluginStorage[message.id];
         this.save();
     }
