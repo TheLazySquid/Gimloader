@@ -11,6 +11,8 @@ export interface LibraryInfo {
     name: string;
 }
 
+export type ScriptInfo = PluginInfo | LibraryInfo;
+
 export type PluginStorage = Record<string, Record<string, any>>
 
 export type ConfigurableHotkeysState = Record<string, HotkeyTrigger | null>;

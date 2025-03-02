@@ -1,5 +1,5 @@
 import { defaultSettings } from "$shared/consts";
-import type { ConfigurableHotkeysState, LibraryInfo, PluginInfo, PluginStorage, SavedState, Settings, State } from "$types/state";
+import type { ConfigurableHotkeysState, LibraryInfo, PluginInfo, PluginStorage, SavedState, ScriptInfo, Settings, State } from "$types/state";
 import debounce from "debounce";
 
 export let statePromise = new Promise<State>(async (res) => {
@@ -34,35 +34,46 @@ export function saveDebounced(key: keyof SavedState) {
     debounced[key]();
 }
 
-export function sanatizeArray<T>(array: T[], strings: (keyof T)[] = [], booleans: (keyof T)[] = []) {
-    if(!Array.isArray(array)) return [];
+export function sanatizeScriptInfo(scripts: PluginInfo[], needsEnabled: true): PluginInfo[];
+export function sanatizeScriptInfo(scripts: LibraryInfo[], needsEnabled: false): LibraryInfo[];
+export function sanatizeScriptInfo(scripts: ScriptInfo[], needsEnabled: boolean) {
+    if(!Array.isArray(scripts)) return [];
 
-    for(let i = 0; i < array.length; i++) {
-        let item = array[i];
+    for(let i = 0; i < scripts.length; i++) {
+        let item = scripts[i];
         if(
-            strings.some(key => typeof item[key] !== "string") ||
-            booleans.some(key => typeof item[key] !== "boolean")
+            typeof item.name !== "string" ||
+            typeof item.script !== "string" ||
+            (needsEnabled && typeof (item as PluginInfo).enabled !== "boolean")
         ) {
-            array.splice(i, 1);
+            scripts.splice(i, 1);
             i--;
             continue;
         };
 
-        let obj: Partial<T> = {};
-        for(let key of strings) obj[key] = item[key];
-        for(let key of booleans) obj[key] = item[key];
-        array[i] = obj as T;
+        scripts[i] = { name: item.name, script: item.script };
+        if(needsEnabled) (scripts[i] as PluginInfo).enabled = (item as PluginInfo).enabled;
     }
 
-    return array;
+    // remove duplicates
+    for(let i = 0; i < scripts.length - 1; i++) {
+        for(let j = i + 1; j < scripts.length; j++) {
+            if(scripts[j].name === scripts[i].name) {
+                scripts.splice(j, 1);
+                j--;
+            }
+        }
+    }
+
+    return scripts;
 }
 
 export function sanitizePlugins(plugins: PluginInfo[]) {
-    return sanatizeArray(plugins, ['name', 'script'], ['enabled']);
+    return sanatizeScriptInfo(plugins, true);
 }
 
 export function sanitizeLibraries(libraries: LibraryInfo[]) {
-    return sanatizeArray(libraries, ['name', 'script']);
+    return sanatizeScriptInfo(libraries, false);
 }
 
 export function sanitizePluginStorage(storage: PluginStorage) {
