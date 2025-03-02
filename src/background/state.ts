@@ -34,32 +34,35 @@ export function saveDebounced(key: keyof SavedState) {
     debounced[key]();
 }
 
-export function sanitizePlugins(plugins: PluginInfo[]) {
-    if(!Array.isArray(plugins)) return [];
+export function sanatizeArray<T>(array: T[], strings: (keyof T)[] = [], booleans: (keyof T)[] = []) {
+    if(!Array.isArray(array)) return [];
 
-    for(let i = 0; i < plugins.length; i++) {
-        let plugin = plugins[i];
-        if(!plugin?.name || !plugin?.script || !plugin?.enabled) return;
+    for(let i = 0; i < array.length; i++) {
+        let item = array[i];
+        if(
+            strings.some(key => typeof item[key] !== "string") ||
+            booleans.some(key => typeof item[key] !== "boolean")
+        ) {
+            array.splice(i, 1);
+            i--;
+            continue;
+        };
 
-        let { name, script, enabled } = plugin;
-        plugins[i] = { name, script, enabled };
+        let obj: Partial<T> = {};
+        for(let key of strings) obj[key] = item[key];
+        for(let key of booleans) obj[key] = item[key];
+        array[i] = obj as T;
     }
 
-    return plugins;
+    return array;
+}
+
+export function sanitizePlugins(plugins: PluginInfo[]) {
+    return sanatizeArray(plugins, ['name', 'script'], ['enabled']);
 }
 
 export function sanitizeLibraries(libraries: LibraryInfo[]) {
-    if(!Array.isArray(libraries)) return [];
-
-    for(let i = 0; i < libraries.length; i++) {
-        let library = libraries[i];
-        if(!library?.name || !library?.script) return;
-
-        let { name, script } = library;
-        libraries[i] = { name, script };
-    }
-
-    return libraries;
+    return sanatizeArray(libraries, ['name', 'script']);
 }
 
 export function sanitizePluginStorage(storage: PluginStorage) {
