@@ -1,4 +1,5 @@
 import { splicer } from "$content/utils";
+import { defaultSettings } from "$shared/consts";
 import Port from "$shared/port.svelte";
 import type { PluginStorage, Settings } from "$types/state";
 import { setShowPluginButtons } from "./ui/addPluginButtons";
@@ -9,14 +10,6 @@ interface ValueChangeListener {
     id: string;
     key: string;
     callback: ValueChangeCallback;
-}
-
-const defaultSettings: Settings = {
-    pollerEnabled: false,
-    autoUpdate: true,
-    autoDownloadMissingLibs: true,
-    menuView: 'grid',
-    showPluginButtons: true
 }
 
 export default new class Storage {

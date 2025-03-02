@@ -11,7 +11,8 @@ import LibManager from "$core/libManager/libManager.svelte";
 import PluginManager from "$core/pluginManager/pluginManager.svelte";
 import { version } from "../../package.json";
 import { fixRDT } from "$core/rdt";
-import UpdateNotifier from "./core/updateNotifier.svelte";
+import UpdateNotifier from "$core/updateNotifier.svelte";
+import StateManager from "$core/state";
 
 Object.defineProperty(window, "GL", {
     value: Api,
@@ -23,6 +24,7 @@ Parcel.init();
 UI.init();
 Net.init();
 GimkitInternals.init();
+StateManager.init();
 
 Port.init((state) => {
     Storage.init(state.pluginStorage, state.settings);
@@ -32,12 +34,7 @@ Port.init((state) => {
     UpdateNotifier.init(state.availableUpdates);
 }, (state) => {
     log("Resynchronizing with state", state);
-
-    Storage.updateState(state.pluginStorage, state.settings);
-    LibManager.updateState(state.libraries);
-    PluginManager.updateState(state.plugins);
-    Hotkeys.updateState(state.hotkeys);
-    UpdateNotifier.onUpdate(state.availableUpdates);
+    StateManager.syncWithState(state);
 });
 
 fixRDT();
