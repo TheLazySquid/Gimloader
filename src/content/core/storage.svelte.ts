@@ -4,6 +4,7 @@ import Port from "$shared/port.svelte";
 import type { PluginStorage, Settings } from "$types/state";
 import { setShowPluginButtons } from "./ui/addPluginButtons";
 
+/** @inline */
 export type ValueChangeCallback = (value: any, remote: boolean) => void;
 
 interface ValueChangeListener {
