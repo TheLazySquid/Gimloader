@@ -52,12 +52,10 @@
     }
 
     function importPlugin() {
-        readUserFile(".js")
-            .then((code) => {
-                code = code.replaceAll("\r\n", "\n");
-                PluginManager.createPlugin(code);
-            })
-            .catch(() => {});
+        readUserFile(".js", (code) => {
+            code = code.replaceAll("\r\n", "\n");
+            PluginManager.createPlugin(code);
+        });
     }
 
     let sortOpen = $state(false);
