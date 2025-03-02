@@ -1,3 +1,4 @@
+import type { Messages, OnceMessages, OnceResponses, StateMessages } from "$types/messages";
 import type { State } from "$types/state";
 import HotkeysHandler from "./messageHandlers/hotkeys";
 import LibrariesHandler from "./messageHandlers/library";
@@ -10,18 +11,20 @@ import { statePromise } from "./state";
 type Port = chrome.runtime.Port;
 
 interface Message {
-    type: string;
+    type: keyof StateMessages;
     message: any;
     returnId?: string;
 }
 
-type UpdateCallback = (state: State, message: any) => boolean | void;
-type MessageCallback = (state: State, message: any, respond: (response?: any) => void) => void;
+type UpdateCallback<Channel extends keyof StateMessages> = 
+    (state: State, message: StateMessages[Channel]) => void;
+type MessageCallback<Channel extends keyof OnceMessages> =
+    (state: State, message: OnceMessages[Channel], respond: (response?: OnceResponses[Channel]) => void) => void;
 
 export default new class Server {
     open = new Set<Port>();
-    listeners = new Map<string, UpdateCallback>();
-    messageListeners = new Map<string, MessageCallback>();
+    listeners = new Map<string, UpdateCallback<any>>();
+    messageListeners = new Map<string, MessageCallback<any>>();
 
     init() {
         chrome.runtime.onConnectExternal.addListener(this.onConnect.bind(this));
@@ -53,9 +56,6 @@ export default new class Server {
     async onPortMessage(port: Port, msg: Message) {
         let { type, message, returnId } = msg;
 
-        // pings are just to keep the service worker alive
-        if(type === "ping") return;
-
         if(returnId) {
             // message with a response (not done with .sendMessage to avoid race conditions)
             let callback = this.messageListeners.get(type);
@@ -69,8 +69,7 @@ export default new class Server {
             let callback = this.listeners.get(type);
             if(!callback) return;
     
-            let noForward = callback(await statePromise, message);
-            if(noForward) return;
+            callback(await statePromise, message);
 
             // send the message to other connected ports
             for(let openPort of this.open) {
@@ -81,15 +80,26 @@ export default new class Server {
 
     }
 
-    on(type: string, callback: UpdateCallback) {
+    on<Channel extends keyof StateMessages>(type: Channel, callback: UpdateCallback<Channel>) {
         this.listeners.set(type, callback);
     }
 
-    onMessage(type: string, callback: MessageCallback) {
+    onMessage<Channel extends keyof OnceMessages>(type: Channel, callback: MessageCallback<Channel>) {
         this.messageListeners.set(type, callback);
     }
 
-    send(type: string, message: any) {
+    send<Channel extends keyof Messages>(type: Channel, message: Messages[Channel]) {
+        for(let port of this.open) {
+            port.postMessage({ type, message });
+        }
+    }
+
+    async executeAndSend<Channel extends keyof Messages>(type: Channel, message: Messages[Channel]) {
+        let callback = this.listeners.get(type);
+        if(callback) {
+            callback(await statePromise, message);
+        }
+
         for(let port of this.open) {
             port.postMessage({ type, message });
         }

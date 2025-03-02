@@ -1,6 +1,7 @@
 import type { State } from "$types/state";
 import EventEmitter from "eventemitter2";
 import { algorithm, isFirefox } from "./consts";
+import type { Messages, StateMessages } from "$types/messages";
 
 const extensionId = "ngbhofnofkggjbpkpnogcdfdgjkpmgka";
 type StateCallback = (state: State) => void;
@@ -156,5 +157,14 @@ export default new class Port extends EventEmitter {
                 this.runtime.sendMessage(extensionId, "ping");
             }
         }, 20000);
+    }
+
+    // add types for emit and on, the others aren't used
+    emit<Channel extends keyof StateMessages>(channel: Channel, value: StateMessages[Channel]) {
+        return super.emit(channel, value);
+    }
+
+    on<Channel extends keyof Messages>(channel: Channel, callback: (value: Messages[Channel]) => void) {
+        return super.on(channel, callback);
     }
 }

@@ -1,7 +1,10 @@
 import { parseLibHeader, parsePluginHeader } from "$shared/parseHeader";
 import type { ScriptHeaders } from "$types/headers";
+import type { OnceMessages, OnceResponses } from "$types/messages";
 import type { LibraryInfo, PluginInfo, State } from "$types/state";
 import type { Update, UpdateResponse } from "$types/updater";
+import LibrariesHandler from "./messageHandlers/library";
+import PluginsHandler from "./messageHandlers/plugin";
 import Server from "./server";
 import { saveDebounced, statePromise } from "./state";
 
@@ -131,6 +134,13 @@ export default class Updater {
         let { type, ...message } = update;
     
         if(type === "plugin") {
+            // if a plugin with the new name exists, just overwrite it
+            // not the best solution but this should almost never happen and the consequences are bad if it's not adressed
+            let existing = state.plugins.find(p => p.name === update.newName);
+            if(existing) {
+                Server.executeAndSend("pluginDelete", { name: update.newName });
+            }
+
             let plugin = state.plugins.find(p => p.name === update.name);
             if(!plugin) return;
             plugin.name = update.newName;
@@ -139,6 +149,11 @@ export default class Updater {
             saveDebounced("plugins");
             Server.send("pluginEdit", message);
         } else {
+            let existing = state.libraries.find(p => p.name === update.newName);
+            if(existing) {
+                Server.executeAndSend("libraryDelete", { name: update.newName });
+            }
+
             let plugin = state.libraries.find(p => p.name === update.name);
             if(!plugin) return;
             plugin.name = update.newName;
@@ -161,13 +176,13 @@ export default class Updater {
         Server.send("availableUpdates", []);
     }
 
-    static onApplyUpdates(state: State, message: any, respond: () => void) {
+    static onApplyUpdates(state: State, message: OnceMessages["applyUpdates"], respond: () => void) {
         this.applyUpdates(state, message.apply);
 
         respond();
     }
 
-    static async updateAll(state: State, _: any, respond: (names: string[]) => void) {
+    static async updateAll(state: State, _: OnceMessages["updateAll"], respond: (names: OnceResponses["updateAll"]) => void) {
         await this.checkUpdates(false);
         let names = this.updates.map(u => u.name);
 
@@ -175,7 +190,7 @@ export default class Updater {
         respond(names);
     }
 
-    static async updateSingle(state: State, message: any, respond: (updated: UpdateResponse) => void) {
+    static async updateSingle(state: State, message: OnceMessages["updateSingle"], respond: (updated: OnceResponses["updateSingle"]) => void) {
         let script: PluginInfo | LibraryInfo;
         if(message.type === "plugin") script = state.plugins.find(p => p.name === message.name);
         else script = state.libraries.find(l => l.name === message.name);

@@ -1,4 +1,5 @@
 import type { State } from "$types/state";
+import type { OnceMessages, OnceResponses, StateMessages } from "$types/messages";
 import { saveDebounced } from "$bg/state";
 import Server from "$bg/server";
 
@@ -27,14 +28,14 @@ export default class LibrariesHandler {
         saveDebounced('libraries');
     }
 
-    static onLibraryEdit(state: State, message: any) {
+    static onLibraryEdit(state: State, message: StateMessages["libraryEdit"]) {
         let lib = state.libraries.find((lib) => lib.name === message.name);
         lib.script = message.script;
         lib.name = message.newName;
         this.save();
     }
 
-    static onLibraryDelete(state: State, message: any) {
+    static onLibraryDelete(state: State, message: StateMessages["libraryDelete"]) {
         state.libraries = state.libraries.filter((lib => lib.name !== message.name));
         this.save();
     }
@@ -44,7 +45,7 @@ export default class LibrariesHandler {
         this.save();
     }
 
-    static onLibraryCreate(state: State, message: any) {
+    static onLibraryCreate(state: State, message: StateMessages["libraryCreate"]) {
         state.libraries.unshift({
             name: message.name,
             script: message.script
@@ -52,7 +53,7 @@ export default class LibrariesHandler {
         this.save();
     }
 
-    static onLibrariesArrange(state: State, message: any) {
+    static onLibrariesArrange(state: State, message: StateMessages["librariesArrange"]) {
         let newLibraries = [];
         for(let name of message.order) {
             let lib = state.libraries.find((lib) => lib.name === name);
@@ -62,7 +63,8 @@ export default class LibrariesHandler {
         this.save();
     }
 
-    static async downloadLibraries(state: State, message: any, reply: (response: LibraryDownloadRes) => void) {
+    static async downloadLibraries(state: State, message: OnceMessages["downloadLibraries"],
+        reply: (response: OnceResponses["downloadLibraries"]) => void) {
         let missing: MissingLib[] = [];
     
         for(let lib of message.libraries) {
