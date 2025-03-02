@@ -64,12 +64,10 @@
     }
 
     function importLib() {
-        readUserFile(".js")
-            .then((code) => {
-                code = code.replaceAll("\r\n", "\n");
-                LibManager.createLib(code);
-            })
-            .catch(() => {});
+        readUserFile(".js", (code) => {
+            code = code.replaceAll("\r\n", "\n");
+            LibManager.createLib(code);
+        });
     }
 
     function setView(mode: string) {

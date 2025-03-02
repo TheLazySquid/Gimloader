@@ -42,7 +42,7 @@ export default class StateManager {
         if(!e.isTrusted) return;
         if(!confirm("Do you want to load a new config? You will lose everything, including plugins, libraries, settings, and hotkeys.")) return;
 
-        readUserFile(".json").then((text) => {
+        readUserFile(".json", (text) => {
             try {
                 let state = JSON.parse(text);
                 let { plugins, libraries, pluginStorage, settings, hotkeys, ...rest } = state;
@@ -62,6 +62,6 @@ export default class StateManager {
             } catch {
                 toast.error("That config appears to be invalid!");
             }
-        }, () => {});
+        });
     }
 }
