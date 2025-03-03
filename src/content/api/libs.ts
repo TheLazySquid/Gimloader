@@ -20,7 +20,7 @@ class LibsApi {
     }
 
     /** Gets the exported values of a library */
-    get(name: string) {
+    get<T = any>(name: string): T {
         return LibManager.get(name);
     }
 }
