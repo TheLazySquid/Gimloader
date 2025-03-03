@@ -2,9 +2,7 @@ import { parseLibHeader, parsePluginHeader } from "$shared/parseHeader";
 import type { ScriptHeaders } from "$types/headers";
 import type { OnceMessages, OnceResponses } from "$types/messages";
 import type { LibraryInfo, PluginInfo, State } from "$types/state";
-import type { Update, UpdateResponse } from "$types/updater";
-import LibrariesHandler from "./messageHandlers/library";
-import PluginsHandler from "./messageHandlers/plugin";
+import type { Update } from "$types/updater";
 import Server from "./server";
 import { saveDebounced, statePromise } from "./state";
 
@@ -130,7 +128,7 @@ export default class Updater {
         });
     }
 
-    static applyUpdate(state: State, update: Update) {
+    static async applyUpdate(state: State, update: Update) {
         let { type, ...message } = update;
     
         if(type === "plugin") {
@@ -138,7 +136,7 @@ export default class Updater {
             // not the best solution but this should almost never happen and the consequences are bad if it's not adressed
             let existing = state.plugins.find(p => p.name === update.newName);
             if(existing) {
-                Server.executeAndSend("pluginDelete", { name: update.newName });
+                await Server.executeAndSend("pluginDelete", { name: update.newName });
             }
 
             let plugin = state.plugins.find(p => p.name === update.name);
@@ -151,7 +149,7 @@ export default class Updater {
         } else {
             let existing = state.libraries.find(p => p.name === update.newName);
             if(existing) {
-                Server.executeAndSend("libraryDelete", { name: update.newName });
+                await Server.executeAndSend("libraryDelete", { name: update.newName });
             }
 
             let plugin = state.libraries.find(p => p.name === update.name);

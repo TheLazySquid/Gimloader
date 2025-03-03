@@ -58,7 +58,7 @@ export default class StateManager {
                     toast("That config may be invalid, attempting to load anyways...");
                 }
 
-                Port.send("setState", { plugins, libraries, pluginStorage, settings, hotkeys });
+                Port.sendAndRecieve("setState", { plugins, libraries, pluginStorage, settings, hotkeys });
             } catch {
                 toast.error("That config appears to be invalid!");
             }
