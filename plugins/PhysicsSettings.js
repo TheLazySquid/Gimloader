@@ -1,7 +1,7 @@
 /**
  * @name PhysicsSettings
  * @description Allows you to configure various things about the physics in platformer modes (client-side only)
- * @version 0.1.0
+ * @version 0.1.1
  * @author TheLazySquid
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PhysicsSettings.js
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/physicssettings
@@ -60,9 +60,13 @@ api.net.onLoad(() => {
         applyAll();
     });
 
+    GL.plugin("DLDTAS")?.setMoveSpeed(settings.speed);
     api.stores.me.movementSpeed = settings.speed;
 
     settings.listen("jumps", (jumps) => updateMapOption("maxJumps", jumps));
     settings.listen("jumpheight", (height) => updateMapOption("jumpHeight", height));
-    settings.listen("speed", (speed) => api.stores.me.movementSpeed = speed);
+    settings.listen("speed", (speed) => {
+        GL.plugin("DLDTAS")?.setMoveSpeed(settings.speed);
+        api.stores.me.movementSpeed = speed
+    });
 });

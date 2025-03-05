@@ -30,3 +30,13 @@ GL.parcel.getLazy(exports => exports?.PhysicsManager, exports => {
         }
     }
 });
+
+let moveSpeed = 310;
+
+export function getMoveSpeed() {
+    return moveSpeed;
+}
+
+export function setMoveSpeed(speed: number) {
+    moveSpeed = speed;
+}

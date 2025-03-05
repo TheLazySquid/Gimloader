@@ -2,6 +2,7 @@ import GL from 'gimloader';
 import { ISharedValues, Keycodes } from "../types"
 import { defaultState, generatePhysicsInput } from "./util";
 import { initLasers, updateLasers } from "./updateLasers";
+import { getMoveSpeed } from './index';
 
 export default class TASTools {
     physicsManager: any;
@@ -171,6 +172,6 @@ export default class TASTools {
     }
 
     setMoveSpeed() {
-        GL.stores.me.movementSpeed = 310;
+        GL.stores.me.movementSpeed = getMoveSpeed();
     }
 }

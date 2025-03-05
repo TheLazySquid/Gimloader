@@ -2,7 +2,7 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author TheLazySquid
- * @version 0.3.1
+ * @version 0.3.2
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/DLDTAS/build/DLDTAS.js
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/dldtas
  * @reloadRequired ingame
@@ -392,7 +392,7 @@ var TASTools = class {
     this.physics.state = JSON.parse(frame.state);
   }
   setMoveSpeed() {
-    gimloader_default.stores.me.movementSpeed = 310;
+    gimloader_default.stores.me.movementSpeed = getMoveSpeed();
   }
 };
 
@@ -698,3 +698,14 @@ gimloader_default.parcel.getLazy((exports) => exports?.PhysicsManager, (exports)
     }
   };
 });
+var moveSpeed = 310;
+function getMoveSpeed() {
+  return moveSpeed;
+}
+function setMoveSpeed(speed) {
+  moveSpeed = speed;
+}
+export {
+  getMoveSpeed,
+  setMoveSpeed
+};
