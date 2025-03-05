@@ -22,7 +22,6 @@
         LibManager.createLib(text);
     });
 
-    const flipDurationMs = 300;
     let searchValue = $state("");
     let items = $state(LibManager.libs.map((lib: Lib) => ({ id: lib.headers.name })));
     $effect(() => {
@@ -73,6 +72,9 @@
     function setView(mode: string) {
         Storage.updateSetting('menuView', mode);
     }
+
+    let flipDurationMs = $state(0);
+    setTimeout(() => flipDurationMs = 300);
 </script>
 
 <div class="flex flex-col">
