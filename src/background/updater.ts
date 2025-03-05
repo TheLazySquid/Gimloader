@@ -134,9 +134,11 @@ export default class Updater {
         if(type === "plugin") {
             // if a plugin with the new name exists, just overwrite it
             // not the best solution but this should almost never happen and the consequences are bad if it's not adressed
-            let existing = state.plugins.find(p => p.name === update.newName);
-            if(existing) {
-                await Server.executeAndSend("pluginDelete", { name: update.newName });
+            if(update.name !== update.newName) {
+                let existing = state.plugins.find(p => p.name === update.newName);
+                if(existing) {
+                    await Server.executeAndSend("pluginDelete", { name: update.newName });
+                }
             }
 
             let plugin = state.plugins.find(p => p.name === update.name);
@@ -147,15 +149,17 @@ export default class Updater {
             saveDebounced("plugins");
             Server.send("pluginEdit", message);
         } else {
-            let existing = state.libraries.find(p => p.name === update.newName);
-            if(existing) {
-                await Server.executeAndSend("libraryDelete", { name: update.newName });
+            if(update.name !== update.newName) {
+                let existing = state.libraries.find(l => l.name === update.newName);
+                if(existing) {
+                    await Server.executeAndSend("libraryDelete", { name: update.newName });
+                }
             }
 
-            let plugin = state.libraries.find(p => p.name === update.name);
-            if(!plugin) return;
-            plugin.name = update.newName;
-            plugin.script = update.script;
+            let library = state.libraries.find(l => l.name === update.name);
+            if(!library) return;
+            library.name = update.newName;
+            library.script = update.script;
 
             saveDebounced("libraries");
             Server.send("libraryEdit", message);
