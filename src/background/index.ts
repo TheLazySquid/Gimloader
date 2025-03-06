@@ -7,5 +7,6 @@ Server.init();
 Updater.init();
 
 statePromise.then((state) => {
+    console.log(state);
     Poller.init(state.settings.pollerEnabled);
 });

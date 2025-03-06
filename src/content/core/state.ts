@@ -7,6 +7,7 @@ import UpdateNotifier from "$core/updateNotifier.svelte";
 import Port from "$shared/port.svelte";
 import { readUserFile } from "$content/utils";
 import toast from "svelte-5-french-toast";
+import CustomServer from "$core/customServer.svelte";
 
 export default class StateManager {
     static init() {
@@ -16,12 +17,22 @@ export default class StateManager {
         });
     }
 
+    static initState(state: State) {
+        Storage.init(state.pluginStorage, state.settings);
+        LibManager.init(state.libraries);
+        PluginManager.init(state.plugins);
+        Hotkeys.init(state.hotkeys);
+        UpdateNotifier.init(state.availableUpdates);
+        CustomServer.init(state.customServer);
+    }
+
     static syncWithState(state: State) {
         Storage.updateState(state.pluginStorage, state.settings);
         LibManager.updateState(state.libraries);
         PluginManager.updateState(state.plugins);
         Hotkeys.updateState(state.hotkeys);
         UpdateNotifier.onUpdate(state.availableUpdates);
+        CustomServer.updateState(state.customServer);
     }
 
     static async downloadState() {
@@ -45,10 +56,10 @@ export default class StateManager {
         readUserFile(".json", (text) => {
             try {
                 let state = JSON.parse(text);
-                let { plugins, libraries, pluginStorage, settings, hotkeys, ...rest } = state;
+                let { plugins, libraries, pluginStorage, settings, hotkeys, customServer, ...rest } = state;
 
                 // confirm that at least one of the keys is present
-                if(!plugins && !libraries && !pluginStorage && !settings && !hotkeys) {
+                if(!plugins && !libraries && !pluginStorage && !settings && !hotkeys && !customServer) {
                     toast.error("That config appears to be invalid!");
                     return;
                 }
@@ -58,7 +69,7 @@ export default class StateManager {
                     toast("That config may be invalid, attempting to load anyways...");
                 }
 
-                Port.sendAndRecieve("setState", { plugins, libraries, pluginStorage, settings, hotkeys });
+                Port.sendAndRecieve("setState", { plugins, libraries, pluginStorage, settings, hotkeys, customServer });
             } catch {
                 toast.error("That config appears to be invalid!");
             }

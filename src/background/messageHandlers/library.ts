@@ -8,11 +8,6 @@ interface MissingLib {
     url?: string;
 }
 
-interface LibraryDownloadRes {
-    allDownloaded: boolean;
-    error?: string;
-}
-
 export default class LibrariesHandler {
     static init() {
         Server.on("libraryEdit", this.onLibraryEdit.bind(this));

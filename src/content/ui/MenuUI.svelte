@@ -14,9 +14,11 @@
     import KeyboardOutline from 'svelte-material-icons/KeyboardOutline.svelte';
     import Update from 'svelte-material-icons/Update.svelte';
     import Cog from 'svelte-material-icons/Cog.svelte';
+    import Web from 'svelte-material-icons/Web.svelte';
     import FileUploadOutline from 'svelte-material-icons/FileUploadOutline.svelte';
     import { onMount } from "svelte";
     import toast from "svelte-5-french-toast";
+    import CustomServer from "./CustomServer.svelte";
 
     interface Props {
         onClose: () => void;
@@ -104,6 +106,13 @@
                         <span class="ml-2">Updates</span>
                     </div>
                     <Updates />
+                </TabItem>
+                <TabItem on:click={() => dropCallback = null}>
+                    <div class="flex items-center" slot="title">
+                        <Web size={24} />
+                        <span class="ml-2">Server</span>
+                    </div>
+                    <CustomServer />
                 </TabItem>
                 <TabItem on:click={() => dropCallback = null}>
                     <div class="flex items-center" slot="title">
