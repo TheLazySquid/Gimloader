@@ -1,6 +1,5 @@
 import type { CustomServerConfig } from "$types/state";
 import Port from "$shared/port.svelte";
-import toast from "svelte-5-french-toast";
 
 export default new class CustomServer {
     config: CustomServerConfig = $state();
@@ -15,12 +14,7 @@ export default new class CustomServer {
         this.config = config;
     }
 
-    async save() {
-        let worked = await Port.sendAndRecieve("updateCustomServer", $state.snapshot(this.config));
-        if(worked) {
-            toast.success("Updated custom server!");
-        } else {
-            toast.error("Invalid custom server address");
-        }
+    save() {
+        Port.send("customServerUpdate", $state.snapshot(this.config));
     }
 }

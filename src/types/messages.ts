@@ -25,6 +25,8 @@ export interface StateMessages {
     pluginValueUpdate: { id: string, key: string, value: string };
     pluginValueDelete: { id: string, key: string };
     pluginValuesDelete: { id: string };
+
+    customServerUpdate: CustomServerConfig;
 }
 
 // These only go from the background to content
@@ -42,7 +44,6 @@ export interface OnceMessages {
     applyUpdates: { apply: boolean };
     updateAll: void;
     updateSingle: { type: "plugin" | "library", name: string };
-    updateCustomServer: CustomServerConfig;
 }
 
 export interface OnceResponses {
@@ -52,5 +53,4 @@ export interface OnceResponses {
     applyUpdates: void;
     updateAll: string[];
     updateSingle: { updated: boolean, failed?: boolean, version?: string };
-    updateCustomServer: boolean;
 }
