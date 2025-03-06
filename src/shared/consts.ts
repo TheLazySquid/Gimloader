@@ -14,9 +14,10 @@ export const defaultSettings: Settings = {
     menuView: 'grid',
     showPluginButtons: true
 }
+
 export const defaultCustomServer: CustomServerConfig = {
     enabled: false,
-    address: "",
+    address: "localhost",
     type: "game",
     port: 5823
 }
