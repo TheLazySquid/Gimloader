@@ -1,5 +1,6 @@
-import { defaultSettings } from "$shared/consts";
-import type { ConfigurableHotkeysState, LibraryInfo, PluginInfo, PluginStorage, SavedState, ScriptInfo, Settings, State } from "$types/state";
+import type { ConfigurableHotkeysState, CustomServerConfig, LibraryInfo, PluginInfo, PluginStorage,
+    SavedState, ScriptInfo, Settings, State } from "$types/state";
+import { defaultCustomServer, defaultSettings } from "$shared/consts";
 import debounce from "debounce";
 
 export let statePromise = new Promise<State>(async (res) => {
@@ -8,7 +9,8 @@ export let statePromise = new Promise<State>(async (res) => {
         libraries: [],
         pluginStorage: {},
         settings: defaultSettings,
-        hotkeys: {}
+        hotkeys: {},
+        customServer: defaultCustomServer
     });
 
     res({
@@ -17,6 +19,7 @@ export let statePromise = new Promise<State>(async (res) => {
         pluginStorage: sanitizePluginStorage(savedState.pluginStorage),
         settings: sanitizeSettings(savedState.settings),
         hotkeys: sanitizeHotkeys(savedState.hotkeys),
+        customServer: sanitizeCustomServer(savedState.customServer),
         availableUpdates: []
     });
 });
@@ -34,9 +37,9 @@ export function saveDebounced(key: keyof SavedState) {
     debounced[key]();
 }
 
-export function sanatizeScriptInfo(scripts: PluginInfo[], needsEnabled: true): PluginInfo[];
-export function sanatizeScriptInfo(scripts: LibraryInfo[], needsEnabled: false): LibraryInfo[];
-export function sanatizeScriptInfo(scripts: ScriptInfo[], needsEnabled: boolean) {
+export function sanitizeScriptInfo(scripts: PluginInfo[], needsEnabled: true): PluginInfo[];
+export function sanitizeScriptInfo(scripts: LibraryInfo[], needsEnabled: false): LibraryInfo[];
+export function sanitizeScriptInfo(scripts: ScriptInfo[], needsEnabled: boolean) {
     if(!Array.isArray(scripts)) return [];
 
     for(let i = 0; i < scripts.length; i++) {
@@ -69,11 +72,11 @@ export function sanatizeScriptInfo(scripts: ScriptInfo[], needsEnabled: boolean)
 }
 
 export function sanitizePlugins(plugins: PluginInfo[]) {
-    return sanatizeScriptInfo(plugins, true);
+    return sanitizeScriptInfo(plugins, true);
 }
 
 export function sanitizeLibraries(libraries: LibraryInfo[]) {
-    return sanatizeScriptInfo(libraries, false);
+    return sanitizeScriptInfo(libraries, false);
 }
 
 export function sanitizePluginStorage(storage: PluginStorage) {
@@ -86,24 +89,6 @@ export function sanitizePluginStorage(storage: PluginStorage) {
     }
 
     return storage;
-}
-
-export function sanitizeSettings(settings: Settings) {
-    let newSettings = Object.assign({}, defaultSettings);
-    if(typeof settings !== "object" || settings === null) return newSettings;
-
-    for(let key in defaultSettings) {
-        if(typeof settings[key] === typeof defaultSettings[key]) {
-            newSettings[key] = settings[key];
-        }
-    }
-
-    // make sure menu view is either "grid" or "list"
-    if(newSettings.menuView !== "grid" && newSettings.menuView !== "list") {
-        newSettings.menuView = "grid";
-    }
-
-    return newSettings;
 }
 
 export function sanitizeHotkeys(hotkeys: ConfigurableHotkeysState) {
@@ -144,4 +129,38 @@ export function sanitizeHotkeys(hotkeys: ConfigurableHotkeysState) {
     }
 
     return hotkeys;
+}
+
+export function copyOverDefault<T extends Record<string, any>>(obj: T, defaultVal: T): T {
+    let newObj = Object.assign({}, defaultVal);
+    if(typeof obj !== "object" || obj === null) return newObj;
+
+    for(let key in defaultVal) {
+        if(typeof obj[key] === typeof defaultVal[key]) {
+            newObj[key] = obj[key];
+        }
+    }
+
+    return newObj;
+}
+
+export function sanitizeSettings(settings: Settings) {
+    let newSettings = copyOverDefault(settings, defaultSettings);
+
+    // make sure menu view is either "grid" or "list"
+    if(newSettings.menuView !== "grid" && newSettings.menuView !== "list") {
+        newSettings.menuView = "grid";
+    }
+
+    return newSettings;
+}
+
+export function sanitizeCustomServer(server: CustomServerConfig) {
+    let newServer = copyOverDefault(server, defaultCustomServer);
+
+    if(newServer.type !== "game" && newServer.type !== "all") {
+        newServer.type = "game";
+    }
+
+    return newServer;
 }

@@ -1,5 +1,6 @@
 import type { Messages, OnceMessages, OnceResponses, StateMessages } from "$types/messages";
 import type { State } from "$types/state";
+import CustomServerHandler from "./messageHandlers/customServer";
 import HotkeysHandler from "./messageHandlers/hotkeys";
 import LibrariesHandler from "./messageHandlers/library";
 import PluginsHandler from "./messageHandlers/plugin";
@@ -40,6 +41,7 @@ export default new class Server {
         StorageHandler.init();
         SettingsHandler.init();
         StateHandler.init();
+        CustomServerHandler.init();
     }
 
     onConnect(port: Port) {

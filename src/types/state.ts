@@ -25,12 +25,20 @@ export interface Settings {
     showPluginButtons: boolean;
 }
 
+export interface CustomServerConfig {
+    enabled: boolean;
+    address: string;
+    type: "all" | "game";
+    port: number;
+}
+
 export interface SavedState {
     plugins: PluginInfo[];
     libraries: LibraryInfo[];
     pluginStorage: PluginStorage;
     settings: Settings;
     hotkeys: ConfigurableHotkeysState;
+    customServer: CustomServerConfig;
 }
 
 export interface State extends SavedState {

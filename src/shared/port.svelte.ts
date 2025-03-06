@@ -1,7 +1,7 @@
 import type { State } from "$types/state";
 import EventEmitter from "eventemitter2";
 import { algorithm, isFirefox } from "./consts";
-import type { Messages, StateMessages } from "$types/messages";
+import type { Messages, OnceMessages, StateMessages } from "$types/messages";
 
 const extensionId = "ngbhofnofkggjbpkpnogcdfdgjkpmgka";
 type StateCallback = (state: State) => void;
@@ -78,15 +78,25 @@ export default new class Port extends EventEmitter {
         });
     }
 
-    postMessage(message: any) {
+    async postMessage(type: string, message: any, returnId?: string ) {
         // just discard messages sent while disconnected, we'll resynchronize to before they mattered
         if(this.disconnected) return;
 
-        if(typeof chrome === "undefined") {
-            window.postMessage({ ...message, source: "gimloader-out" });
-        } else {
-            this.port.postMessage(message);
+        if(typeof chrome !== "undefined") {
+            this.port.postMessage({ type, message, returnId, source: "gimloader-out" });
+            return;
         }
+
+        // disclaimer: I know nothing about cryptography
+        let str = JSON.stringify({ type, message, returnId });
+
+        // generate a signature for the json
+        let arr = new TextEncoder().encode(str);
+        let key = await this.signKey;  
+        let signed = await crypto.subtle.sign(algorithm, key, arr);
+        let signature = Array.from(new Uint8Array(signed));
+
+        window.postMessage({ json: str, signature, source: "gimloader-out" });
     }
 
     onMessage(data: any) {
@@ -123,28 +133,15 @@ export default new class Port extends EventEmitter {
         }
     }
 
-    async send(type: string, message: any = undefined, returnId?: string) {
-        if(isFirefox) {
-            // disclaimer: I know nothing about cryptography
-            let str = JSON.stringify({ type, message, returnId });
-
-            // generate a signature for the json
-            let arr = new TextEncoder().encode(str);
-            let key = await this.signKey;  
-            let signed = await crypto.subtle.sign(algorithm, key, arr);
-            let signature = Array.from(new Uint8Array(signed));
-
-            this.postMessage({ json: str, signature })
-        } else {
-            this.postMessage({ type, message, returnId });
-        }
+    async send<Channel extends keyof StateMessages>(type: Channel, message: StateMessages[Channel] = undefined) {
+        this.postMessage(type, message);
     }
 
-    sendAndRecieve(type: string, message: any = undefined) {
+    sendAndRecieve<Channel extends keyof OnceMessages>(type: Channel, message: OnceMessages[Channel] = undefined) {
         return new Promise<any>((res) => {
             let returnId = crypto.randomUUID();
             this.pendingMessages.set(returnId, res);
-            this.send(type, message, returnId);
+            this.postMessage(type, message, returnId);
         });
     }
 
