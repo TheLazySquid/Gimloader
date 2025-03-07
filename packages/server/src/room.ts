@@ -1,14 +1,20 @@
 import { Client, Room } from "colyseus";
+import Matchmaker from "./matchmaker.js";
 
 interface RoomOptions {
-    code: string;   
+    intentId: string;
+    authToken: string; // not currently used
 }
 
 export class GameRoom extends Room {
-    code: string;
-
     onCreate(options: RoomOptions) {
-        this.code = options.code;
+        let game = Matchmaker.getByHostIntent(options.intentId);
+
+        if(game) {
+            game.colyseusRoomId = this.roomId;
+        } else {
+            this.disconnect();
+        }
     }
 
     onJoin(client: Client) {
