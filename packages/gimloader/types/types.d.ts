@@ -68,6 +68,7 @@ declare module "types/state" {
         script: string;
         name: string;
     }
+    export type ScriptInfo = PluginInfo | LibraryInfo;
     export type PluginStorage = Record<string, Record<string, any>>;
     export type ConfigurableHotkeysState = Record<string, HotkeyTrigger | null>;
     export interface Settings {
@@ -94,8 +95,115 @@ declare module "shared/consts" {
     export const algorithm: HmacKeyGenParams;
     export const defaultSettings: Settings;
 }
+declare module "types/messages" {
+    import type { HotkeyTrigger } from "types/hotkeys";
+    import type { ConfigurableHotkeysState, SavedState, State } from "types/state";
+    export interface StateMessages {
+        hotkeyUpdate: {
+            id: string;
+            trigger: HotkeyTrigger;
+        };
+        hotkeysUpdate: {
+            hotkeys: ConfigurableHotkeysState;
+        };
+        libraryEdit: {
+            name: string;
+            newName: string;
+            script: string;
+        };
+        libraryDelete: {
+            name: string;
+        };
+        librariesDeleteAll: void;
+        libraryCreate: {
+            name: string;
+            script: string;
+        };
+        librariesArrange: {
+            order: string[];
+        };
+        pluginEdit: {
+            name: string;
+            newName: string;
+            script: string;
+        };
+        pluginDelete: {
+            name: string;
+        };
+        pluginsDeleteAll: void;
+        pluginCreate: {
+            name: string;
+            script: string;
+        };
+        pluginsArrange: {
+            order: string[];
+        };
+        pluginToggled: {
+            name: string;
+            enabled: boolean;
+        };
+        pluginsSetAll: {
+            enabled: boolean;
+        };
+        settingUpdate: {
+            key: string;
+            value: any;
+        };
+        pluginValueUpdate: {
+            id: string;
+            key: string;
+            value: string;
+        };
+        pluginValueDelete: {
+            id: string;
+            key: string;
+        };
+        pluginValuesDelete: {
+            id: string;
+        };
+    }
+    export interface Messages extends StateMessages {
+        setState: SavedState;
+        toast: {
+            type: "success" | "error" | "normal";
+            message: string;
+        };
+        availableUpdates: string[];
+    }
+    export interface OnceMessages {
+        getState: void;
+        setState: SavedState;
+        downloadLibraries: {
+            libraries: string;
+        };
+        applyUpdates: {
+            apply: boolean;
+        };
+        updateAll: void;
+        updateSingle: {
+            type: "plugin" | "library";
+            name: string;
+        };
+    }
+    export interface OnceResponses {
+        getState: State;
+        setState: void;
+        downloadLibraries: {
+            allDownloaded: boolean;
+            error?: string;
+        };
+        applyUpdates: void;
+        updateAll: string[];
+        updateSingle: {
+            updated: boolean;
+            failed?: boolean;
+            version?: string;
+        };
+    }
+}
 declare module "shared/port.svelte" {
     import type { State } from "types/state";
+    import type { Messages, StateMessages } from "types/messages";
     type StateCallback = (state: State) => void;
     const _default: {
         port: chrome.runtime.Port;
@@ -116,21 +224,21 @@ declare module "shared/port.svelte" {
         send(type: string, message?: any, returnId?: string): Promise<void>;
         sendAndRecieve(type: string, message?: any): Promise<any>;
         keepBackgroundAlive(): void;
-        emit(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): boolean;
+        emit<Channel extends keyof StateMessages>(channel: Channel, value: StateMessages[Channel]): boolean;
+        on<Channel extends keyof Messages>(channel: Channel, callback: (value: Messages[Channel]) => void): /*elided*/ any | import("eventemitter2").Listener;
         emitAsync(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): Promise<any[]>;
-        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any | import("eventemitter2").Listener;
-        on(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): any | import("eventemitter2").Listener;
-        onAny(listener: import("eventemitter2").EventAndListener): any;
-        prependAny(listener: import("eventemitter2").EventAndListener): any;
-        offAny(listener: import("eventemitter2").ListenerFn): any;
-        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
-        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
-        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): any;
+        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): /*elided*/ any | import("eventemitter2").Listener;
+        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): /*elided*/ any | import("eventemitter2").Listener;
+        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): /*elided*/ any | import("eventemitter2").Listener;
+        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): /*elided*/ any | import("eventemitter2").Listener;
+        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): /*elided*/ any | import("eventemitter2").Listener;
+        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): /*elided*/ any | import("eventemitter2").Listener;
+        onAny(listener: import("eventemitter2").EventAndListener): /*elided*/ any;
+        prependAny(listener: import("eventemitter2").EventAndListener): /*elided*/ any;
+        offAny(listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): /*elided*/ any;
         setMaxListeners(n: number): void;
         getMaxListeners(): number;
         eventNames(nsAsArray?: boolean): (import("eventemitter2").event | import("eventemitter2").eventNS)[];
@@ -140,9 +248,9 @@ declare module "shared/port.svelte" {
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, timeout?: number): import("eventemitter2").CancelablePromise<any[]>;
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, filter?: import("eventemitter2").WaitForFilter): import("eventemitter2").CancelablePromise<any[]>;
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").WaitForOptions): import("eventemitter2").CancelablePromise<any[]>;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): any;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): any;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
         stopListeningTo(target?: import("eventemitter2").GeneralEventEmitter, event?: import("eventemitter2").event | import("eventemitter2").eventNS): Boolean;
         hasListeners(event?: String): Boolean;
     };
@@ -294,6 +402,7 @@ declare module "content/core/ui/addPluginButtons" {
 }
 declare module "content/core/storage.svelte" {
     import type { PluginStorage, Settings } from "types/state";
+    /** @inline */
     export type ValueChangeCallback = (value: any, remote: boolean) => void;
     interface ValueChangeListener {
         id: string;
@@ -453,19 +562,19 @@ declare module "content/core/net/net" {
         readonly isHost: any;
         emit(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): boolean;
         emitAsync(event: import("eventemitter2").event | import("eventemitter2").eventNS, ...values: any[]): Promise<any[]>;
-        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): import("eventemitter2").Listener | any;
-        on(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | any;
-        onAny(listener: import("eventemitter2").EventAndListener): any;
-        prependAny(listener: import("eventemitter2").EventAndListener): any;
-        offAny(listener: import("eventemitter2").ListenerFn): any;
-        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
-        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): any;
-        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): any;
+        addListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): import("eventemitter2").Listener | /*elided*/ any;
+        on(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        prependListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        once(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: true | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        prependOnceListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        many(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        prependMany(event: import("eventemitter2").event | import("eventemitter2").eventNS, timesToListen: number, listener: import("eventemitter2").ListenerFn, options?: boolean | import("eventemitter2").OnOptions): import("eventemitter2").Listener | /*elided*/ any;
+        onAny(listener: import("eventemitter2").EventAndListener): /*elided*/ any;
+        prependAny(listener: import("eventemitter2").EventAndListener): /*elided*/ any;
+        offAny(listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        removeListener(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        off(event: import("eventemitter2").event | import("eventemitter2").eventNS, listener: import("eventemitter2").ListenerFn): /*elided*/ any;
+        removeAllListeners(event?: import("eventemitter2").event | import("eventemitter2").eventNS): /*elided*/ any;
         setMaxListeners(n: number): void;
         getMaxListeners(): number;
         eventNames(nsAsArray?: boolean): (import("eventemitter2").event | import("eventemitter2").eventNS)[];
@@ -475,9 +584,9 @@ declare module "content/core/net/net" {
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, timeout?: number): import("eventemitter2").CancelablePromise<any[]>;
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, filter?: import("eventemitter2").WaitForFilter): import("eventemitter2").CancelablePromise<any[]>;
         waitFor(event: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").WaitForOptions): import("eventemitter2").CancelablePromise<any[]>;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): any;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): any;
-        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event | import("eventemitter2").eventNS, options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: import("eventemitter2").event[], options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
+        listenTo(target: import("eventemitter2").GeneralEventEmitter, events: Object, options?: import("eventemitter2").ListenToOptions): /*elided*/ any;
         stopListeningTo(target?: import("eventemitter2").GeneralEventEmitter, event?: import("eventemitter2").event | import("eventemitter2").eventNS): Boolean;
         hasListeners(event?: String): Boolean;
     };
@@ -851,7 +960,7 @@ declare module "content/api/libs" {
             webpage: string | null;
         };
         /** Gets the exported values of a library */
-        get(name: string): any;
+        get<T = any>(name: string): T;
     }
     export default LibsApi;
 }
@@ -876,7 +985,7 @@ declare module "content/api/plugins" {
             webpage: string | null;
         };
         /** Gets the exported values of a plugin, if it has been enabled */
-        get(name: string): any;
+        get<T = any>(name: string): T;
         /**
          * @deprecated Use {@link get} instead
          * @hidden
@@ -916,11 +1025,11 @@ declare module "content/api/api" {
         /** Methods for getting info on libraries */
         static libs: Readonly<LibsApi>;
         /** Gets the exported values of a library */
-        static lib: (name: string) => any;
+        static lib: <T = any>(name: string) => T;
         /** Methods for getting info on plugins */
         static plugins: Readonly<PluginsApi>;
         /** Gets the exported values of a plugin, if it has been enabled */
-        static plugin: (name: string) => any;
+        static plugin: <T = any>(name: string) => T;
         /** Gimkit's internal react instance */
         static get React(): typeof import("react");
         /** Gimkit's internal reactDom instance */
@@ -980,11 +1089,11 @@ declare module "content/api/api" {
         /** Methods for getting info on libraries */
         libs: Readonly<LibsApi>;
         /** Gets the exported values of a library */
-        lib: (name: string) => any;
+        lib: <T = any>(name: string) => T;
         /** Methods for getting info on plugins */
         plugins: Readonly<PluginsApi>;
         /** Gets the exported values of a plugin, if it has been enabled */
-        plugin: (name: string) => any;
+        plugin: <T = any>(name: string) => T;
         /** Gimkit's internal react instance */
         get React(): typeof import("react");
         /** Gimkit's internal reactDom instance */

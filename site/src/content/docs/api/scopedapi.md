@@ -17,9 +17,15 @@ Functions to listen for key combinations
 
 ### lib()
 
-> **lib**: (`name`) => `any` = `Api.libs.get`
+> **lib**: \<`T`\>(`name`) => `T` = `Api.libs.get`
 
 Gets the exported values of a library
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `any` |
 
 #### Parameters
 
@@ -29,7 +35,7 @@ Gets the exported values of a library
 
 #### Returns
 
-`any`
+`T`
 
 ***
 
@@ -106,9 +112,15 @@ Functions for intercepting the arguments and return values of functions
 
 ### plugin()
 
-> **plugin**: (`name`) => `any` = `Api.plugins.get`
+> **plugin**: \<`T`\>(`name`) => `T` = `Api.plugins.get`
 
 Gets the exported values of a plugin, if it has been enabled
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `any` |
 
 #### Parameters
 
@@ -118,7 +130,7 @@ Gets the exported values of a plugin, if it has been enabled
 
 #### Returns
 
-`any`
+`T`
 
 ***
 
