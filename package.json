@@ -6,14 +6,14 @@
   "type": "module",
   "types": "index.d.ts",
   "scripts": {
-    "build": "node build.js",
-    "watch": "node build.js -w",
-    "buildExt": "cd extension && node scripts/build.js chrome",
-    "buildAll": "npm run build && npm run buildExt",
-    "buildFirefox": "node build.js --firefox",
-    "watchFirefox": "node build.js -w --firefox",
-    "buildExtFirefox": "cd extension && node scripts/build.js firefox",
-    "buildAllFirefox": "npm run buildFirefox && npm run buildExtFirefox",
+    "build": "bun run build.js",
+    "watch": "bun run build.js -w",
+    "buildExt": "cd extension && bun run scripts/build.js chrome",
+    "buildAll": "bun run build && bun run buildExt",
+    "buildFirefox": "bun run build.js --firefox",
+    "watchFirefox": "bun run build.js -w --firefox",
+    "buildExtFirefox": "cd extension && bun run scripts/build.js firefox",
+    "buildAllFirefox": "bun run buildFirefox && bun run buildExtFirefox",
     "buildTypes": "tsc -p declaration.tsconfig.json",
     "typeCheck": "tsc --noEmit"
   },
@@ -35,10 +35,13 @@
     "svelte": "$svelte"
   },
   "workspaces": [
+    "site",
     "packages/*"
   ],
   "devDependencies": {
+    "@types/bun": "^1.2.4",
     "@types/chrome": "^0.0.299",
+    "@types/deno": "^2.2.0",
     "@types/node": "^22.5.5",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
