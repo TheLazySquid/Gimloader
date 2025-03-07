@@ -17,9 +17,15 @@ Functions to listen for key combinations
 
 ### lib()
 
-> `static` **lib**: (`name`) => `any`
+> `static` **lib**: \<`T`\>(`name`) => `T`
 
 Gets the exported values of a library
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `any` |
 
 #### Parameters
 
@@ -29,7 +35,7 @@ Gets the exported values of a library
 
 #### Returns
 
-`any`
+`T`
 
 ***
 
@@ -68,9 +74,15 @@ Functions for intercepting the arguments and return values of functions
 
 ### plugin()
 
-> `static` **plugin**: (`name`) => `any`
+> `static` **plugin**: \<`T`\>(`name`) => `T`
 
 Gets the exported values of a plugin, if it has been enabled
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `any` |
 
 #### Parameters
 
@@ -80,7 +92,7 @@ Gets the exported values of a plugin, if it has been enabled
 
 #### Returns
 
-`any`
+`T`
 
 ***
 

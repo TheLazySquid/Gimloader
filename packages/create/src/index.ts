@@ -4,6 +4,7 @@ import { resolve, join } from "path";
 import fs from 'fs';
 import { createPackage } from './createPackage.js';
 import chalk from 'chalk';
+import { packageManager } from './env.js';
 
 process.on('uncaughtException', (error) => {
     if(error instanceof Error && error.name === "ExitPromptError") return;
@@ -94,5 +95,5 @@ export default {
 
     createPackage(path, name, description, author);
 
-    console.log(`Done! Run ${chalk.italic('npm run build')} or ${chalk.italic('npm run serve')} to get started.`);
+    console.log(`Done! Run ${chalk.italic(`${packageManager} run build`)} or ${chalk.italic(`${packageManager} run serve`)} to get started.`);
 }

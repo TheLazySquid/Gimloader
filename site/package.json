@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generateDocs": "node scripts/generateDocs.js"
+    "generateDocs": "bun runa scripts/generateDocs.js"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.31.0",

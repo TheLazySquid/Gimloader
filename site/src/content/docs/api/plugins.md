@@ -22,9 +22,15 @@ A list of all the plugins installed
 
 ### get()
 
-> **get**(`name`): `any`
+> **get**\<`T`\>(`name`): `T`
 
 Gets the exported values of a plugin, if it has been enabled
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `any` |
 
 #### Parameters
 
@@ -34,7 +40,7 @@ Gets the exported values of a plugin, if it has been enabled
 
 #### Returns
 
-`any`
+`T`
 
 ***
 
