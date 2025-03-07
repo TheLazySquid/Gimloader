@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     defaults:
       run:
         working-directory: ./packages/create
@@ -21,5 +23,3 @@ jobs:
       - run: bun i --frozen-lockfile
       - run: bun run build
       - run: bun publish --access public
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
