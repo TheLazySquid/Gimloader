@@ -9,6 +9,9 @@ class BaseNetApi extends EventEmitter {
             wildcard: true,
             delimiter: ':'
         });
+
+        // @ts-ignore do this for eventemitter2 as it gets frozen
+        this._all = [];
     }
 
     /** Which type of server the client is currently connected to */
@@ -150,6 +153,8 @@ class ScopedNetApi extends BaseNetApi {
     }
 }
 
+Object.freeze(EventEmitter);
+Object.freeze(EventEmitter.prototype);
 Object.freeze(BaseNetApi);
 Object.freeze(BaseNetApi.prototype);
 Object.freeze(NetApi);
