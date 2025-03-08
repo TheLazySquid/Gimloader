@@ -5,7 +5,7 @@ interface ClientIntent {
     name: string;
 }
 
-interface Game {
+export interface Game {
     intentId: string;
     clientIntents: Map<string, ClientIntent>;
     roomId: string;
