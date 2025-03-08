@@ -5,7 +5,9 @@ let type = process.argv[2];
 
 if(!fs.existsSync("./build")) fs.mkdirSync("./build");
 
-fs.cpSync('./images', './build/images', { recursive: true });
+if(!fs.existsSync("./build/images")) {
+    fs.cpSync('./images', './build/images', { recursive: true });
+}
 fs.copyFileSync('./edit_csp.json', './build/edit_csp.json');
 fs.copyFileSync('./popup.html', './build/popup.html');
 
