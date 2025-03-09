@@ -1,11 +1,10 @@
 /**
  * @name PhysicsSettings
  * @description Allows you to configure various things about the physics in platformer modes (client-side only)
- * @version 0.1.1
+ * @version 0.1.2
  * @author TheLazySquid
  * @downloadUrl https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/plugins/PhysicsSettings.js
  * @webpage https://thelazysquid.github.io/Gimloader/plugins/physicssettings
- * @needsLib DLDUtils | https://raw.githubusercontent.com/TheLazySquid/Gimloader/main/libraries/DLDUtils.js
  * @needsLib QuickSettings | https://raw.githubusercontent.com/TheLazySquid/Gimloader/refs/heads/main/libraries/QuickSettings/build/QuickSettings.js
  */
 
@@ -37,6 +36,23 @@ const settings = api.lib("QuickSettings")("PhysicsSettings", [
         default: 310
     }
 ]);
+
+// prevent the client from being snapped back
+api.net.onLoad(() => {
+    let allowNext = true;
+    let unsub = api.net.room.state.session.listen("phase", () => {
+        allowNext = true;
+    });
+    api.onStop(() => unsub());
+
+    api.net.on("PHYSICS_STATE", (_, editFn) => {
+        if(allowNext) {
+            allowNext = false;
+            return;
+        }
+        editFn(null);
+    });
+});
 
 api.openSettingsMenu(settings.openSettingsMenu);
 
