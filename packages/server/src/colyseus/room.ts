@@ -1,12 +1,12 @@
 import { Client, Room } from "colyseus";
 import Matchmaker, { Game } from "./matchmaker.js";
-import { CharactersItem, GimkitState } from "./schema.js";
+import { GimkitState } from "./schema.js";
 import fs from 'fs';
 import DeviceManager from "./deviceManager.js";
 import { MapInfo } from "../types.js";
-import { randomItem } from "../utils.js";
 import TileManager from "./tileManager.js";
-import { defaultPhysicsState, worldOptions } from "../consts.js";
+import { defaultPhysicsState } from "../consts.js";
+import Player from "./player.js";
 
 interface RoomOptions {
     intentId: string;
@@ -24,6 +24,7 @@ export class GameRoom extends Room<GimkitState> {
     mapSettings = this.devices.getMapSettings();
     terrain = new TileManager(this.map, this);
     updateTimeInterval: Timer;
+    players = new Map<Client, Player>();
 
     onCreate(options: RoomOptions) {
         this.game = Matchmaker.getByHostIntent(options.intentId);
@@ -56,6 +57,13 @@ export class GameRoom extends Room<GimkitState> {
                 physicsState: JSON.stringify(defaultPhysicsState)
             });
         });
+
+        this.onMessage("INPUT", (client, input) => {
+            let player = this.players.get(client);
+            if(!player) return;
+
+            player.onInput(input);
+        });
         
         this.onMessage("*", () => {});
 
@@ -87,39 +95,25 @@ export class GameRoom extends Room<GimkitState> {
         }
         client.userData = { id: options.intentId };
 
-        // determine where to put the client
-        let spawnPads = this.devices.getDevices("characterSpawnPad");
-        
-        let x = 16000, y = 16000;
-        if(spawnPads.length > 0) {
-            let pad = randomItem(spawnPads);
-            x = pad.x;
-            y = pad.y;
-        }
-
-        let player = new CharactersItem({
-            id: options.intentId,
-            x, y, name,
-            infiniteAmmo: this.mapSettings.infiniteAmmo
-        });
-        this.state.characters.set(options.intentId, player);
-
-        client.send("AUTH_ID", options.intentId);
-        client.send("MY_TEAM", "__NO_TEAM_ID");
-
-        // Unsure what these are for, but the client wants them
-        client.send("MEMORY_COSTS_AND_LIMITS", [
-            100000, 500, 3, 10, 10, 2, 10, 999999999999,
-            2500, 5000, 999999, 999999999999, 75, 6
-        ]);
-
-        client.send("INFO_BEFORE_WORLD_SYNC", { x, y });
-
-        // TODO: Only send needed world options
-        client.send("WORLD_OPTIONS", worldOptions);
-
-        player.completedInitialPlacement = true;
+        let player = new Player(this, client, options.intentId, name);
+        this.players.set(client, player);
 
         console.log(name, "joined the game!");
+    }
+
+    onLeave(client: Client, consented: boolean) {
+        const kickPlayer = () => {
+            let player = this.players.get(client);
+            if(!player) return;
+
+            player.leaveGame();
+            this.players.delete(client);
+        }
+
+        if(consented) {
+            kickPlayer();
+        } else {
+            this.allowReconnection(client, 30).catch(kickPlayer);
+        }
     }
 }
