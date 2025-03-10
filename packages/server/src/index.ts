@@ -1,13 +1,14 @@
 import express from './express.js';
 import { Server } from "colyseus";
 import { BunWebSockets } from "@colyseus/bun-websockets";
-import { GameRoom } from './room.js';
-import Matchmaker from './matchmaker.js';
+import { GameRoom } from './colyseus/room.js';
+import Matchmaker from './colyseus/matchmaker.js';
+import { colyseusPort } from './consts.js';
 
 const server = new Server({ transport: new BunWebSockets() });
 
 server.define("MapRoom", GameRoom);
-server.listen(5824);
+server.listen(colyseusPort);
 
 Matchmaker.init();
 

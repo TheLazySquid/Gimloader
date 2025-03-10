@@ -1,5 +1,6 @@
-import express from './express.js';
-import { generateGameCode } from './utils.js';
+import { colyseusPort } from '../consts.js';
+import express from '../express.js';
+import { generateGameCode } from '../utils.js';
 
 interface ClientIntent {
     name: string;
@@ -16,7 +17,7 @@ export interface Game {
 
 export default class Matchmaker {
     static games: Game[] = [];
-    static serverUrl = "http://localhost:5824";
+    static serverUrl = `http://localhost:${colyseusPort}`;
 
     static getByHostIntent(intentId: string) {
         let game = this.games.find(g => g.intentId === intentId);

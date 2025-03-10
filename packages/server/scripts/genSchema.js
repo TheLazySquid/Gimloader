@@ -4,7 +4,7 @@
 	let state = GL.net.room.state;
 
 	function generateClass(name, schema) {
-		let classStr = `class ${name} extends Schema {\n`;
+		let classStr = `export class ${name} extends Schema {\n`;
         let foundItem = false;
 
 		for (let key in schema._definition.schema) {
