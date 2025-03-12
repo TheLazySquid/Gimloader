@@ -53,6 +53,9 @@ let config = {
             preprocess: sveltePreprocess(),
             compilerOptions: {
                 css: "injected"
+            },
+            esbuildTsTransformOptions: {
+                loader: "ts"
             }
         }),
         importStyles()
