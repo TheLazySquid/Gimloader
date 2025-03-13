@@ -25,28 +25,7 @@ export default defineConfig({
                     },
                     {
                         label: "Official Plugins",
-                        items: [
-                            'plugins/cameracontrol',
-                            'plugins/charactercustomization',
-                            'plugins/savestates',
-                            'plugins/physicssettings',
-                            'plugins/performantgims',
-                            'plugins/idleforxp',
-                            'plugins/infolines',
-                            'plugins/autokicker',
-                            'plugins/quickreset',
-                            'plugins/instantuse',
-                            'plugins/crazyflag',
-                            'plugins/toggleterraintype',
-                            'plugins/uncappedsettings',
-                            'plugins/autosplitter',
-                            'plugins/bringbackboosts',
-                            'plugins/dldtas',
-                            'plugins/showhitboxes',
-                            'plugins/inputrecorder',
-                            'plugins/customui',
-                            'plugins/movementtas',
-                        ]
+                        autogenerate: { directory: "plugins" }
                     }
                 ]
             },
