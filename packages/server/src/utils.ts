@@ -11,6 +11,10 @@ export function randomItem<T>(array: T[]): T {
     return array[random(0, array.length - 1)];
 }
 
+export function degToRad(deg: number) {
+    return deg * Math.PI / 180;
+}
+
 export function createValuesArray<T>(): [T[], (value: T) => number] {
     let arr: T[] = [];
     let indexes = new Map<T, number>();
@@ -26,4 +30,33 @@ export function createValuesArray<T>(): [T[], (value: T) => number] {
     }
 
     return [arr, add];
+}
+
+export enum CollisionGroups {
+    everything,
+    characterMainBody,
+    characterAround,
+    characterFeet,
+    staticWorldSensor,
+    staticWorldCollider,
+    dynamicWorldSensor,
+    dynamicWorldCollider,
+    inactiveStaticWorldCollider,
+    ball,
+    ballZone
+}
+
+export function createCollisionGroup(options: { belongs: number[], collidesWith?: number[], notCollidesWith?: number[] }) {
+    let high = 0;
+    let low = options.collidesWith ? 0 : 65535;
+    options.belongs.forEach((n) => {
+        high |= 1 << n
+    });
+    options.collidesWith?.forEach((n) => {
+        low |= 1 << n;
+    });
+    options.notCollidesWith?.forEach((n) => {
+        low &= ~(1 << n);
+    });
+    return high << 16 | low;
 }

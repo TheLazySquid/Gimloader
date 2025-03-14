@@ -1,3 +1,5 @@
+import RAPIER from "@dimforge/rapier2d-compat";
+
 export interface DeviceInfo {
     id: string;
     x: number;
@@ -14,6 +16,8 @@ export interface TileInfo {
     terrain: string;
     depth: number;
     collides: boolean;
+    rb: RAPIER.RigidBody;
+    collider: RAPIER.Collider;
 }
 
 export interface CodeGrid {
@@ -63,3 +67,41 @@ export interface PhysicsState {
     groundedTicks: number;
     lastGroundedAngle: number;
 }
+
+export interface PhysicsObjects {
+    rb: RAPIER.RigidBody;
+    controller: RAPIER.KinematicCharacterController;
+    collider: RAPIER.Collider;
+}
+
+export interface ColliderInfo {
+    rb: RAPIER.RigidBody;
+    collider: RAPIER.Collider;
+}
+
+export interface BoxCollider {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    angle: number;
+    type: "box";
+}
+
+export interface CircleCollider {
+    x: number;
+    y: number;
+    r: number;
+    type: "circle";
+}
+
+export interface CapsuleCollider {
+    x: number;
+    y: number;
+    angle: number;
+    r: number;
+    height: number;
+    type: "capsule";
+}
+
+export type ColliderOptions = BoxCollider | CircleCollider | CapsuleCollider;

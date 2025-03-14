@@ -4,6 +4,9 @@ import { BunWebSockets } from "@colyseus/bun-websockets";
 import { GameRoom } from './colyseus/room.js';
 import Matchmaker from './colyseus/matchmaker.js';
 import { colyseusPort } from './consts.js';
+import RAPIER from "@dimforge/rapier2d-compat";
+
+RAPIER.init();
 
 const server = new Server({ transport: new BunWebSockets() });
 

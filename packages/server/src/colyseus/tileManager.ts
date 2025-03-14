@@ -1,15 +1,19 @@
-import type { Room } from "colyseus";
 import type { MapInfo, TileInfo } from "../types.js";
+import { physicsScale, tileSize } from "../consts.js";
+import RAPIER from "@dimforge/rapier2d-compat";
+import { GameRoom } from "./room.js";
 
 export default class TileManager {
     map: MapInfo;
     tiles: TileInfo[];
-    room: Room;
+    room: GameRoom;
     
-    constructor(map: MapInfo, room: Room) {
+    constructor(map: MapInfo, room: GameRoom) {
         this.map = map;
         this.tiles = this.map.tiles;
         this.room = room;
+
+        this.createHitboxes();
     }
 
     getInitialMessage() {
@@ -33,6 +37,28 @@ export default class TileManager {
             initial: true,
             removedTiles: [],
             updateId: 0
+        }
+    }
+
+    createHitboxes() {
+        for(let tile of this.tiles) {
+            let x = (tile.x * tileSize + tileSize / 2) / physicsScale;
+            let y = (tile.y * tileSize + tileSize / 2) / physicsScale;
+            let width = tileSize / 2 / physicsScale;
+            let height = tileSize / 2 / physicsScale;
+
+            let rbDesc = RAPIER.RigidBodyDesc.fixed().setTranslation(x, y);
+            let colliderDesc = RAPIER.ColliderDesc.cuboid(width, height);
+            colliderDesc.setRestitution(0);
+            colliderDesc.setFriction(0);
+            colliderDesc.setRestitutionCombineRule(RAPIER.CoefficientCombineRule.Min);
+            colliderDesc.setFriction(RAPIER.CoefficientCombineRule.Min);
+
+            let rb = this.room.world.createRigidBody(rbDesc);
+            let collider = this.room.world.createCollider(colliderDesc, rb);
+
+            tile.rb = rb;
+            tile.collider = collider;
         }
     }
 }

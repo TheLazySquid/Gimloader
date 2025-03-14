@@ -6,7 +6,8 @@ import DeviceManager from "./deviceManager.js";
 import { MapInfo } from "../types.js";
 import TileManager from "./tileManager.js";
 import { defaultPhysicsState } from "../consts.js";
-import Player from "./player.js";
+import Player from "../objects/player.js";
+import PhysicsManager from "./physics.js";
 
 interface RoomOptions {
     intentId: string;
@@ -20,6 +21,8 @@ interface ClientOptions {
 export class GameRoom extends Room<GimkitState> {
     game: Game;
     map: MapInfo = JSON.parse(fs.readFileSync("./maps/test.json").toString());
+    physics = new PhysicsManager(this);
+    world = this.physics.world;
     devices = new DeviceManager(this.map, this);
     mapSettings = this.devices.getMapSettings();
     terrain = new TileManager(this.map, this);
@@ -74,6 +77,7 @@ export class GameRoom extends Room<GimkitState> {
 
     onDispose() {
         clearInterval(this.updateTimeInterval);
+        this.physics.dispose();
     }
 
     onJoin(client: Client, options: ClientOptions) {

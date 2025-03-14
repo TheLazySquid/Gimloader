@@ -1,17 +1,28 @@
-import type { Room } from "colyseus";
 import type { DeviceInfo, MapInfo } from "../types.js";
 import { propOptions } from "../consts.js";
 import { createValuesArray } from "../utils.js";
+import { GameRoom } from "./room.js";
+import BaseDevice from "../objects/devices/base.js";
+import PropDevice from "../objects/devices/prop.js";
 
 export default class DeviceManager {
     map: MapInfo;
-    devices: DeviceInfo[];
-    room: Room;
+    devices: BaseDevice[];
+    room: GameRoom;
     
-    constructor(map: MapInfo, room: Room) {
+    constructor(map: MapInfo, room: GameRoom) {
         this.map = map;
-        this.devices = this.map.devices;
         this.room = room;
+        this.devices = this.map.devices.map((d) => this.createDevice(d));
+    }
+
+    createDevice(info: DeviceInfo) {
+        switch(info.deviceId) {
+            case "prop":
+                return new PropDevice(this.room, info);
+            default:
+                return new BaseDevice(this.room, info);
+        }
     }
 
     getDevices(type: string) {
