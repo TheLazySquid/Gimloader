@@ -11,14 +11,14 @@ if(!fs.existsSync("./build/images")) {
 fs.copyFileSync('./edit_csp.json', './build/edit_csp.json');
 fs.copyFileSync('./popup.html', './build/popup.html');
 
-let manifest;
+let manifest: any;
 if(type === "firefox") {
-    manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json'));
+    manifest = JSON.parse(fs.readFileSync('./manifest.firefox.json').toString());
 } else {
-    manifest = JSON.parse(fs.readFileSync('./manifest.chrome.json'));
+    manifest = JSON.parse(fs.readFileSync('./manifest.chrome.json').toString());
 }
 
-let pkg = JSON.parse(fs.readFileSync('../package.json'));
+let pkg = JSON.parse(fs.readFileSync('../package.json').toString());
 manifest.version = pkg.version;
 
 fs.writeFileSync('./build/manifest.json', JSON.stringify(manifest, null, 4));

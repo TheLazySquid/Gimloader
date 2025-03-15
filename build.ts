@@ -1,4 +1,4 @@
-import { build, context } from 'esbuild';
+import { build, BuildOptions, context } from 'esbuild';
 import sveltePlugin from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
 import postcss from 'postcss';
@@ -42,7 +42,7 @@ function importStyles() {
 let entryPoints = ["src/content/index.ts", "src/background/index.ts", "src/installApi/index.ts", "src/popup/index.ts"];
 if(process.argv.includes("--firefox")) entryPoints.push("src/relay/index.ts");
 
-let config = {
+let config: BuildOptions = {
     entryPoints,
     mainFields: ["svelte", "browser", "module", "main"],
     conditions: ["svelte", "browser", "production"],
@@ -69,7 +69,7 @@ let config = {
 
 
 if(process.argv.includes("-w") || process.argv.includes("--watch")) {
-    config.plugins.push({
+    config.plugins!.push({
         name: "rebuild-notify",
         setup(build) {
             build.onStart(() => {
@@ -90,8 +90,8 @@ if(process.argv.includes("-w") || process.argv.includes("--watch")) {
         }
     })
 
-    const ctx = await context(config)
-    await ctx.watch()
+    const ctx = await context(config);
+    await ctx.watch();
 } else {
     await build(config);
     console.timeEnd("Built")
