@@ -14,9 +14,8 @@
     }
 
     .checkboxes {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto;
         gap: 5px;
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "autokicker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Automatically kicks users in a Gimkit game who match certain rules",
   "main": "build/AutoKicker.js",
   "type": "module",
@@ -23,6 +23,7 @@
     "esbuild-sass-plugin": "^3.3.1"
   },
   "dependencies": {
-    "gimloader": "^1.0.2"
+    "gimloader": "^1.0.2",
+    "out-of-character": "^1.2.2"
   }
 }

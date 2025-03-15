@@ -7,6 +7,7 @@ export default function UI({ autoKicker }: { autoKicker: AutoKicker }) {
 
     let [kickDuplicated, setKickDuplicated] = React.useState(autoKicker.kickDuplicateNames);
     let [kickSkinless, setKickSkinless] = React.useState(autoKicker.kickSkinless);
+    let [kickBlank, setKickBlank] = React.useState(autoKicker.kickBlank);
     let [kickIdle, setKickIdle] = React.useState(autoKicker.kickIdle);
     let [kickIdleDelay, setKickIdleDelay] = React.useState(autoKicker.idleDelay);
     let [blacklist, setBlacklist] = React.useState(autoKicker.blacklist);
@@ -31,7 +32,16 @@ export default function UI({ autoKicker }: { autoKicker: AutoKicker }) {
                 autoKicker.saveSettings();
             }}
             onKeyDown={(e) => e.preventDefault()} />
-            <label>Kick Idle</label>
+            <label>Kick blank</label>
+            <input type="checkbox" checked={kickBlank}
+            onChange={(e) => {
+                autoKicker.kickBlank = e.target.checked;
+                setKickBlank(e.target.checked);
+                autoKicker.scanPlayers();
+                autoKicker.saveSettings();
+            }}
+            onKeyDown={(e) => e.preventDefault()} />
+            <label>Kick idle</label>
             <input type="checkbox" checked={kickIdle}
             onChange={(e) => {
                 setKickIdle(e.target.checked);

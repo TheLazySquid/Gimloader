@@ -1,5 +1,6 @@
 import GL from 'gimloader';
 import { IBlacklistedName } from "./types";
+import outOfCharacter from "out-of-character";
 
 export default class AutoKicker {
     myId: string;
@@ -8,6 +9,7 @@ export default class AutoKicker {
     kickDuplicateNames = false;
     kickSkinless = false;
     kickIdle = false;
+    kickBlank = false;
     blacklist: IBlacklistedName[] = [];
     idleDelay = 20000;
 
@@ -30,6 +32,7 @@ export default class AutoKicker {
         this.kickDuplicateNames = settings.kickDuplicateNames ?? false;
         this.kickSkinless = settings.kickSkinless ?? false;
         this.blacklist = settings.blacklist ?? [];
+        this.kickBlank = settings.kickBlank ?? false;
         this.kickIdle = settings.kickIdle ?? false;
         this.idleDelay = settings.idleDelay ?? 20000;
     }
@@ -39,6 +42,7 @@ export default class AutoKicker {
             kickDuplicateNames: this.kickDuplicateNames,
             kickSkinless: this.kickSkinless,
             blacklist: this.blacklist,
+            kickBlank: this.kickBlank,
             kickIdle: this.kickIdle,
             idleDelay: this.idleDelay
         });
@@ -167,6 +171,10 @@ export default class AutoKicker {
             if(this.checkIfNameBlacklisted(item.name)) {
                 this.blueboatKick(item.id, 'blacklisted name');
             }
+
+            if(this.kickBlank && this.checkIfNameBlank(item.name)) {
+                this.blueboatKick(item.id, 'blank name');
+            }
         }
     }
 
@@ -198,6 +206,10 @@ export default class AutoKicker {
             // check filters
             if(this.checkIfNameBlacklisted(name)) {
                 this.colyseusKick(id, 'blacklisted name');
+            }
+            
+            if(this.kickBlank && this.checkIfNameBlank(name)) {
+                this.colyseusKick(id, 'blank name');
             }
 
             // check the player's skin
@@ -231,6 +243,13 @@ export default class AutoKicker {
             }
         }
 
+        return false;
+    }
+
+    checkIfNameBlank(name: string) {
+        let newName = outOfCharacter.replace(name).replaceAll(/\s/g, "");
+        console.log("name", name.length, "new name", newName.length);
+        if(newName.length === 0) return true;
         return false;
     }
 
