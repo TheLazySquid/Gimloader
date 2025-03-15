@@ -51,14 +51,8 @@ export class GameRoom extends Room<GimkitState> {
             client.send("TERRAIN_CHANGES", this.terrain.getInitialMessage());
             client.send("WORLD_CHANGES", this.devices.getInitialMessage());
 
-            let character = this.state.characters.get(client.userData.id);
-            client.send("PHYSICS_STATE", {
-                packetId: 0,
-                x: character.x,
-                y: character.y,
-                teleport: false,
-                physicsState: JSON.stringify(defaultPhysicsState)
-            });
+            let player = this.players.get(client);
+            player.syncPhysics(true);
         });
 
         this.onMessage("INPUT", (client, input) => {
@@ -66,6 +60,34 @@ export class GameRoom extends Room<GimkitState> {
             if(!player) return;
 
             player.onInput(input);
+        });
+
+        this.onMessage("START_GAME", (client) => {
+            if(client.userData?.id !== this.game.intentId) return;
+            if(this.state.session.phase !== "preGame") return;
+
+            this.state.session.phase = "game";
+            this.state.session.gameSession.phase = "game";
+            this.showLoading(1200, () => {
+                for(let p of this.players.values()) p.moveToSpawnpoint();
+            });
+        });
+
+        this.onMessage("END_GAME", (client) => {
+            if(client.userData?.id !== this.game.intentId) return;
+            if(this.state.session.phase !== "game") return;
+
+            this.state.session.gameSession.phase = "results";
+        });
+
+        this.onMessage("RESTORE_MAP_EARLIER", (client) => {
+            if(client.userData?.id !== this.game.intentId) return;
+            if(this.state.session.phase !== "game" || this.state.session.gameSession.phase !== "results") return;
+
+            this.state.session.phase = "preGame";
+            this.showLoading(1200, () => {
+                for(let p of this.players.values()) p.moveToSpawnpoint();
+            });
         });
         
         this.onMessage("*", () => {});
@@ -119,5 +141,18 @@ export class GameRoom extends Room<GimkitState> {
         } else {
             this.allowReconnection(client, 30).catch(kickPlayer);
         }
+    }
+
+    // as far as I can tell the loading screens are purely to mask teleports
+    showLoading(duration: number, halfCallback?: () => void) {
+        this.state.session.loadingPhase = true;
+
+        if(halfCallback) {
+            setTimeout(halfCallback, duration / 2);
+        }
+
+        setTimeout(() => {
+            this.state.session.loadingPhase = false;
+        }, duration);
     }
 }

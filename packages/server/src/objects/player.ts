@@ -2,9 +2,9 @@ import type { Client } from "colyseus";
 import type { GameRoom } from "../colyseus/room.js";
 import { CollisionGroups, createCollisionGroup, degToRad, randomItem } from "../utils.js";
 import { CharactersItem } from "../colyseus/schema.js";
-import { physicsConsts, physicsScale, worldOptions } from "../consts.js";
+import { defaultPhysicsState, physicsConsts, physicsScale, worldOptions } from "../consts.js";
 import RAPIER from "@dimforge/rapier2d-compat";
-import { PhysicsObjects } from "../types.js";
+import { PhysicsObjects, PhysicsState } from "../types.js";
 
 export default class Player {
     room: GameRoom;
@@ -13,6 +13,7 @@ export default class Player {
     name: string;
     player: CharactersItem;
     physicsObjects: PhysicsObjects;
+    physicsState: PhysicsState = defaultPhysicsState;
     
     constructor(room: GameRoom, client: Client, id: string, name: string) {
         this.room = room;
@@ -24,15 +25,7 @@ export default class Player {
     }
 
     init() {
-        // determine where to put the client
-        let spawnPads = this.room.devices.getDevices("characterSpawnPad");
-        
-        let x = 16000, y = 16000;
-        if(spawnPads.length > 0) {
-            let pad = randomItem(spawnPads);
-            x = pad.x;
-            y = pad.y;
-        }
+        let { x, y } = this.getSpawnpoint();
 
         this.player = new CharactersItem({
             id: this.id,
@@ -86,6 +79,37 @@ export default class Player {
         this.physicsObjects = { controller, rb, collider };
 
         this.player.completedInitialPlacement = true;
+    }
+
+    syncPhysics(teleport: boolean) {
+        this.client.send("PHYSICS_STATE", {
+            x: this.player.x,
+            y: this.player.y,
+            teleport,
+            physicsState: JSON.stringify(this.physicsState)
+        });
+    }
+
+    getSpawnpoint() {
+        let spawnPads = this.room.devices.getDevices("characterSpawnPad");
+        
+        let x = 16000, y = 16000;
+        if(spawnPads.length > 0) {
+            let pad = randomItem(spawnPads);
+            x = pad.x;
+            y = pad.y;
+        }
+
+        return { x, y }
+    }
+
+    moveToSpawnpoint() {
+        let { x, y } = this.getSpawnpoint();
+
+        this.player.x = x;
+        this.player.y = y;
+        this.physicsObjects.rb.setTranslation({ x, y }, true);
+        this.syncPhysics(true);
     }
 
     leaveGame() {
