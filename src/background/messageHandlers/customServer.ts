@@ -46,10 +46,10 @@ export default class CustomServerHandler {
                 removeRuleIds: [2]
             });
         } else {
-            let route = config.type === "all" ? "api/" : "api/matchmaker";
-            let regexSubstitution = `${address}:${config.port}/${route}`;
-            let regexFilter = `^https://www\\.gimkit\\.com/${route}`;
-            console.log(regexSubstitution, regexFilter);
+            // redirect all urls that have /gimloader somewhere in them to the custom server
+            // unfortunately this doesn't work for root pages, but it can still be used for custom assets etc
+            let regexFilter = "^https:\\/\\/www\\.gimkit\\.com(.*?)\\/gimloader";
+            let regexSubstitution = `${address}:${config.port}\\1`;
 
             chrome.declarativeNetRequest.updateDynamicRules({
                 removeRuleIds: [2],

@@ -21,6 +21,6 @@ export default class GimkitInternals {
         Parcel.getLazy(null, exports => exports?.CharacterPhysicsConsts, exports => {
             this.platformerPhysics = exports.CharacterPhysicsConsts;
             window.platformerPhysics = exports.CharacterPhysicsConsts;
-        })
+        });
     }
 }
