@@ -1,4 +1,4 @@
-import { build, BuildOptions, context } from 'esbuild';
+import { build, BuildOptions, context, Plugin } from 'esbuild';
 import sveltePlugin from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
 import postcss from 'postcss';
@@ -11,7 +11,7 @@ console.time("Built");
 let timerRunning = true;
 
 // unholy amalgamation of esbuild-postcss-inline-styles and esbuild-style-plugin
-function importStyles() {
+function importStyles(): Plugin {
     return {
         name: "import-styles",
         setup(build) {
@@ -53,9 +53,6 @@ let config: BuildOptions = {
             preprocess: sveltePreprocess(),
             compilerOptions: {
                 css: "injected"
-            },
-            esbuildTsTransformOptions: {
-                loader: "ts"
             }
         }),
         importStyles()
