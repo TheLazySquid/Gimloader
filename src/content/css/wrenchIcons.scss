@@ -22,16 +22,14 @@
 .gl-join {
     width: 100%;
     display: flex;
-    align-items: center;
     gap: 8px;
 
     .openPlugins {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: center;
         border: none;
         background-color: rgb(30, 7, 107);
-        height: 36px;
         width: 40px;
         border-radius: 4px;
         cursor: pointer;

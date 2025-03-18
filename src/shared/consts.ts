@@ -12,7 +12,8 @@ export const defaultSettings: Settings = {
     autoUpdate: true,
     autoDownloadMissingLibs: true,
     menuView: 'grid',
-    showPluginButtons: true
+    showPluginButtons: true,
+    joiningCustomServer: true
 }
 
 export const defaultCustomServer: CustomServerConfig = {

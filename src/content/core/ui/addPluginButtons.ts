@@ -23,14 +23,6 @@ function openPluginManager() {
     });
 }
 
-export function setShowPluginButtons(value: boolean) {
-    if(!value) {
-        document.documentElement.classList.add("noPluginButtons");
-    } else {
-        document.documentElement.classList.remove("noPluginButtons");
-    }
-}
-
 export function addPluginButtons() {
     document.documentElement.classList.add("noPluginButtons");
 

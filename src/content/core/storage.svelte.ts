@@ -2,7 +2,7 @@ import { splicer } from "$content/utils";
 import { defaultSettings } from "$shared/consts";
 import Port from "$shared/port.svelte";
 import type { PluginStorage, Settings } from "$types/state";
-import { setShowPluginButtons } from "./ui/addPluginButtons";
+import EventEmitter from "eventemitter2";
 
 /** @inline */
 export type ValueChangeCallback = (value: any, remote: boolean) => void;
@@ -13,7 +13,7 @@ interface ValueChangeListener {
     callback: ValueChangeCallback;
 }
 
-export default new class Storage {
+export default new class Storage extends EventEmitter {
     settings: Settings = $state(defaultSettings);
     values: PluginStorage;
     updateListeners: ValueChangeListener[] = [];
@@ -36,20 +36,17 @@ export default new class Storage {
         this.values = values;
         this.settings = settings;
 
-        if(this.settings.showPluginButtons) {
-            document.documentElement.classList.remove("noPluginButtons");
-        } else {
-            document.documentElement.classList.add("noPluginButtons");
-        }
+        document.documentElement.classList.toggle("noPluginButtons", !this.settings.showPluginButtons);
     }
 
     updateSetting(key: string, value: any, emit = true) {        
         this.settings[key] = value;
         if(emit) Port.send("settingUpdate", { key, value });
+        else this.emit(key, value);
 
         switch(key) {
             case "showPluginButtons":
-                setShowPluginButtons(value);
+                document.documentElement.classList.toggle("noPluginButtons", !value);
                 break;
         }
     }

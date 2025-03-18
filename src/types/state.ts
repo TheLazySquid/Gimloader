@@ -23,12 +23,12 @@ export interface Settings {
     autoDownloadMissingLibs: boolean;
     menuView: 'grid' | 'list';
     showPluginButtons: boolean;
+    joiningCustomServer: boolean;
 }
 
 export interface CustomServerConfig {
     enabled: boolean;
     address: string;
-    type: "all" | "game";
     port: number;
 }
 

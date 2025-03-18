@@ -158,9 +158,5 @@ export function sanitizeSettings(settings: Settings) {
 export function sanitizeCustomServer(server: CustomServerConfig) {
     let newServer = copyOverDefault(server, defaultCustomServer);
 
-    if(newServer.type !== "game" && newServer.type !== "all") {
-        newServer.type = "game";
-    }
-
     return newServer;
 }

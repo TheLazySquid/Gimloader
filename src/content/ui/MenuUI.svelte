@@ -8,6 +8,9 @@
     import Settings from "./Settings.svelte";
     import Hotkeys from "./Hotkeys.svelte";
     import Port from "$shared/port.svelte";
+    import { onMount } from "svelte";
+    import toast from "svelte-5-french-toast";
+    import CustomServer from "./server/CustomServer.svelte";
     
     import Wrench from 'svelte-material-icons/Wrench.svelte';
     import Book from 'svelte-material-icons/Book.svelte';
@@ -16,9 +19,6 @@
     import Cog from 'svelte-material-icons/Cog.svelte';
     import Web from 'svelte-material-icons/Web.svelte';
     import FileUploadOutline from 'svelte-material-icons/FileUploadOutline.svelte';
-    import { onMount } from "svelte";
-    import toast from "svelte-5-french-toast";
-    import CustomServer from "./CustomServer.svelte";
 
     interface Props {
         onClose: () => void;

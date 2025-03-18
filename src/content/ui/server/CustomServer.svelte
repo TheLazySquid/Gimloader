@@ -36,14 +36,6 @@
     </div>
     <h1 class="font-bold text-xl mt-3">Advanced Settings</h1>
     <div class="text-sm">You shouldn't touch these unless you know what you're doing</div>
-    <div class="text-xl flex items-center gap-2">
-        <select class="border-b border-x-0 border-t-0 border-gray-700 w-[200px] text-lg"
-        bind:value={CustomServer.config.type} onchange={() => CustomServer.save()}>
-            <option value="game">Game</option>
-            <option value="all">Game + API</option>
-        </select>
-        Server Type
-    </div>
     <div class="flex items-center gap-2 text-xl mt-1"> 
         <input class="border-b border-x-0 border-t-0 border-gray-700 w-[200px] text-lg"
         type="number" placeholder="5823" bind:value={CustomServer.config.port} onchange={() => CustomServer.save()} />
