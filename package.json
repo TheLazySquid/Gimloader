@@ -33,12 +33,6 @@
   "overrides": {
     "svelte": "$svelte"
   },
-  "workspaces": [
-    "site",
-    "packages/create",
-    "packages/gimloader",
-    "packages/build"
-  ],
   "devDependencies": {
     "@types/bun": "^1.2.4",
     "@types/chrome": "^0.0.299",
