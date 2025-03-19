@@ -5,6 +5,7 @@ import type { LibraryInfo, PluginInfo, State } from "$types/state";
 import type { Update } from "$types/updater";
 import Server from "./server";
 import { saveDebounced, statePromise } from "./state";
+import { formatDownloadUrl } from "../shared/net";
 
 export default class Updater {
     static updates: Update[] = [];
@@ -37,7 +38,7 @@ export default class Updater {
             const checkUpdate = (headers: ScriptHeaders, type: "plugin" | "library") => {
                 return () => {
                     return new Promise<void>(async (res) => {
-                        let text = await this.getText(headers.downloadUrl);
+                        let text = await this.getText(formatDownloadUrl(headers.downloadUrl));
                         if(!text) return res();
                         
                         // it doesn't matter whether we use parse lib or plugin header here
@@ -200,7 +201,7 @@ export default class Updater {
         let headers = parsePluginHeader(script.script);
         if(!headers.downloadUrl) return respond({ updated: false });
 
-        let text = await this.getText(headers.downloadUrl);
+        let text = await this.getText(formatDownloadUrl(headers.downloadUrl));
         if(!text) return respond({ updated: false, failed: true });
 
         let newHeaders = parsePluginHeader(text);

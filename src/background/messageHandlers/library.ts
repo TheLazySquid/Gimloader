@@ -2,15 +2,11 @@ import type { State } from "$types/state";
 import type { OnceMessages, OnceResponses, StateMessages } from "$types/messages";
 import { saveDebounced } from "$bg/state";
 import Server from "$bg/server";
+import { formatDownloadUrl } from "$shared/net";
 
 interface MissingLib {
     name: string;
     url?: string;
-}
-
-interface LibraryDownloadRes {
-    allDownloaded: boolean;
-    error?: string;
 }
 
 export default class LibrariesHandler {
@@ -82,7 +78,7 @@ export default class LibrariesHandler {
         let downloadable = missing.filter(m => m.url);
         let results = await Promise.allSettled(downloadable.map(({ name, url }) => {
             return new Promise<string>(async (res, rej) => {
-                let resp = await fetch(url)
+                let resp = await fetch(formatDownloadUrl(url))
                     .catch(() => rej(`Failed to download library ${name} from ${url}`));
                 if(!resp) return;
                 if(resp.status !== 200) return rej(`Failed to download library ${name} from ${url}\nRecieved response status of ${resp.status}`);

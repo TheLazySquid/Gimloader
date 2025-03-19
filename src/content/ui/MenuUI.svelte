@@ -8,6 +8,8 @@
     import Settings from "./Settings.svelte";
     import Hotkeys from "./Hotkeys.svelte";
     import Port from "$shared/port.svelte";
+    import { onMount } from "svelte";
+    import toast from "svelte-5-french-toast";
     
     import Wrench from 'svelte-material-icons/Wrench.svelte';
     import Book from 'svelte-material-icons/Book.svelte';
@@ -15,8 +17,6 @@
     import Update from 'svelte-material-icons/Update.svelte';
     import Cog from 'svelte-material-icons/Cog.svelte';
     import FileUploadOutline from 'svelte-material-icons/FileUploadOutline.svelte';
-    import { onMount } from "svelte";
-    import toast from "svelte-5-french-toast";
 
     interface Props {
         onClose: () => void;
@@ -57,7 +57,7 @@
 </script>
 
 <div class="h-full">
-    <div class="preflight fadeBg fixMargin changeModalButtonIndex" bind:this={wrapper}>
+    <div class="preflight fadeBg changeStyles" bind:this={wrapper}>
         <Modal class="zoomIn space-y-0 text-gray-600 min-h-[65vh]"
             size="xl" on:close={onClose} open outsideclose focusTrapEnabled={$focusTrapEnabled}>
             {#if Port.disconnected}
@@ -126,27 +126,32 @@
         animation: zoomIn ease-out 0.15s;
     }
 
-    .fixMargin .h-px {
+    .changeStyles .h-px {
         margin-top: 0 !important;
     }
 
-    .fixMargin div:has(:global(> div[role="tabpanel"])) {
+    .changeStyles div:has(> div[role="tabpanel"]) {
         display: flex;
         flex-direction: column;
     }
 
-    .fixMargin div[role="tabpanel"] {
+    .changeStyles div[role="tabpanel"] {
         margin-top: 2px !important;
         flex-grow: 1;
         min-width: 0;
         min-height: 0;
     }
 
-    .fixMargin div[role="tabpanel"] > div {
+    .changeStyles div[role="tabpanel"] > div {
         height: 100%;
     }
 
-    .changeModalButtonIndex :global(div[role="document"] > button) {
+    .changeStyles div[role="document"] > button {
         z-index: 100;
+    }
+
+    /* Prevent disabled toggles from becoming grayscale */
+    .changeStyles label.grayscale {
+        filter: none !important;
     }
 </style>
