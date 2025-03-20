@@ -5,6 +5,7 @@ import { log, splicer } from "$content/utils";
 import Patcher from "../patcher";
 import LibManager from "$core/libManager/libManager.svelte";
 import GimkitInternals from "$core/internals";
+import { formatDownloadUrl } from "$shared/net";
 
 interface BlueboatConnection {
     type: "Blueboat";
@@ -164,7 +165,7 @@ export default new class Net extends EventEmitter {
 
     downloadLibrary(url: string) {
         return new Promise<void>(async (res, rej) => {
-            let resp = await fetch(url)
+            let resp = await fetch(formatDownloadUrl(url))
                 .catch(() => rej(`Failed to download library from ${url}`));
             if(!resp) return;
             

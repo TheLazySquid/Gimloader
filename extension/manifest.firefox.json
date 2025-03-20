@@ -18,7 +18,7 @@
             "js": ["js/relay/index.js"],
             "matches": [
                 "https://www.gimkit.com/*",
-                "https://thelazysquid.github.io/Gimloader/*"
+                "https://gimloader.github.io/*"
             ],
             "run_at": "document_start"
         },
@@ -32,7 +32,7 @@
         }, {
             "js": ["js/installApi/index.js"],
             "matches": [
-                "https://thelazysquid.github.io/Gimloader/*"
+                "https://gimloader.github.io/*"
             ],
             "run_at": "document_start",
             "world": "MAIN"
